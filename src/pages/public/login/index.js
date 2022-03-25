@@ -2,17 +2,17 @@ import React from "react";
 import { Typography, TextField, Button, Grid, Divider } from "@mui/material";
 import { Formik, Field } from "formik";
 import AppDispatcher from "redux/dispatchers/appDispatcher";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const userLogin = () => {
     AppDispatcher.setUserLoggedIn({
       token: "djkhfkdhfdhfs",
       user: { name: "Test", email: "test@gmail.com" }
     });
-    history.push("/u/dashboard");
+    navigate("/u/dashboard");
   };
 
   return (

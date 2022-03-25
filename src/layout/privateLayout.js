@@ -16,7 +16,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { DashboardMenus } from "router/routes/dashboardRoutes";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -67,7 +67,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 export default function PrivateLayout({ children }) {
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [open, setOpen] = React.useState(true);
 
   const handleDrawerOpen = () => {
@@ -76,10 +76,6 @@ export default function PrivateLayout({ children }) {
 
   const handleDrawerClose = () => {
     setOpen(false);
-  };
-
-  const navigate = (route) => {
-    history.push(route);
   };
 
   return (
