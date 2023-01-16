@@ -1,30 +1,32 @@
 import React from "react";
-import { Redirect, Route } from "react-router";
+import { Navigate } from "react-router-dom";
 import PublicLayout from "../layout/publicLayout";
 import { useIsLoggedIn } from "hooks";
 
-const PublicWrapper = ({ component: Component, ...rest }) => {
+const PublicWrapper = ({ component: Component }) => {
   const isLoggedIn = useIsLoggedIn();
 
-  return (
-    <Route
-      {...rest}
-      render={(props) =>
-        isLoggedIn !== true ? (
+  const Wrapper = (props) => {
+    return (
+      <>
+        {isLoggedIn !== true ? (
           <PublicLayout {...props}>
             <Component {...props} />
           </PublicLayout>
         ) : (
-          <Redirect
+          <Navigate
             to={{
               pathname: "/u/dashboard",
               state: { from: props.location }
             }}
+            replace
           />
-        )
-      }
-    />
-  );
+        )}
+      </>
+    );
+  };
+
+  return <Wrapper />;
 };
 
 export default PublicWrapper;

@@ -1,30 +1,31 @@
 import React from "react";
-import { Route, Redirect } from "react-router";
+import { Navigate } from "react-router-dom";
 import { useIsLoggedIn } from "hooks";
 import PrivateLayout from "../layout/privateLayout";
 
-const AuthWrapper = ({ component: Component, ...rest }) => {
+const AuthWrapper = ({ component: Component }) => {
   const isLoggedIn = useIsLoggedIn();
-
-  return (
-    <Route
-      {...rest}
-      render={(props) =>
-        isLoggedIn === true ? (
+  const Wrapper = (props) => {
+    return (
+      <>
+        {isLoggedIn === true ? (
           <PrivateLayout {...props}>
             <Component {...props} />
           </PrivateLayout>
         ) : (
-          <Redirect
+          <Navigate
             to={{
               pathname: "/auth/login",
               state: { from: props.location }
             }}
+            replace
           />
-        )
-      }
-    />
-  );
+        )}
+      </>
+    );
+  };
+
+  return <Wrapper />;
 };
 
 export default AuthWrapper;
