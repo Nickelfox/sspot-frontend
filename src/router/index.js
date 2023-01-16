@@ -1,15 +1,15 @@
-import React, { Suspense } from "react";
-import { BrowserRouter, Route, Navigate, Routes } from "react-router-dom";
-import { AuthContext } from "../auth/AuthContext";
-import { PrivateRoutes, PublicRoutes } from "./routes";
-import Error404 from "pages/Error404";
-import AppLoader from "components/Loader/AppLoader";
-import PublicWrapper from "../hoc/PublicWrapper";
-import AuthWrapper from "../hoc/AuthWrapper";
-import { useIsLoggedIn } from "hooks";
+import React, { Suspense } from "react"
+import { BrowserRouter, Route, Navigate, Routes } from "react-router-dom"
+import { AuthContext } from "../auth/AuthContext"
+import { PrivateRoutes, PublicRoutes } from "./routes"
+import Error404 from "pages/Error404"
+import AppLoader from "components/Loader/AppLoader"
+import PublicWrapper from "../hoc/PublicWrapper"
+import AuthWrapper from "../hoc/AuthWrapper"
+import { useIsLoggedIn } from "hooks/state"
 
 const Router = () => {
-  const isLoggedIn = useIsLoggedIn();
+  const isLoggedIn = useIsLoggedIn()
 
   return (
     <AuthContext.Provider value={isLoggedIn}>
@@ -36,11 +36,11 @@ const Router = () => {
           ))}
 
           {/* 404 page route */}
-          <Route exact path="*" element={Error404} />
+          <Route exact path="*" element={<Error404 />} />
         </Routes>
       </BrowserRouter>
     </AuthContext.Provider>
-  );
-};
+  )
+}
 
-export default Router;
+export default Router

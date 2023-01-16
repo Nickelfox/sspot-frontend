@@ -1,10 +1,10 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
-import PublicLayout from "../layout/publicLayout";
-import { useIsLoggedIn } from "hooks";
+import React from "react"
+import { Navigate } from "react-router-dom"
+import PublicLayout from "../layout/publicLayout"
+import { useIsLoggedIn } from "hooks/state"
 
 const PublicWrapper = ({ component: Component }) => {
-  const isLoggedIn = useIsLoggedIn();
+  const isLoggedIn = useIsLoggedIn()
 
   const Wrapper = (props) => {
     return (
@@ -23,10 +23,10 @@ const PublicWrapper = ({ component: Component }) => {
           />
         )}
       </>
-    );
-  };
+    )
+  }
 
-  return <Wrapper />;
-};
+  return <Wrapper />
+}
 
-export default PublicWrapper;
+export default PublicWrapper

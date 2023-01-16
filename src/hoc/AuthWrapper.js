@@ -1,10 +1,10 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
-import { useIsLoggedIn } from "hooks";
-import PrivateLayout from "../layout/privateLayout";
+import React from "react"
+import { Navigate } from "react-router-dom"
+import { useIsLoggedIn } from "hooks/state"
+import PrivateLayout from "../layout/privateLayout"
 
 const AuthWrapper = ({ component: Component }) => {
-  const isLoggedIn = useIsLoggedIn();
+  const isLoggedIn = useIsLoggedIn()
   const Wrapper = (props) => {
     return (
       <>
@@ -22,10 +22,10 @@ const AuthWrapper = ({ component: Component }) => {
           />
         )}
       </>
-    );
-  };
+    )
+  }
 
-  return <Wrapper />;
-};
+  return <Wrapper />
+}
 
-export default AuthWrapper;
+export default AuthWrapper
