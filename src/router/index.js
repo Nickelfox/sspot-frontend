@@ -7,7 +7,6 @@ import AppLoader from "components/Loader/AppLoader";
 import PublicWrapper from "../hoc/PublicWrapper";
 import AuthWrapper from "../hoc/AuthWrapper";
 import { useIsLoggedIn } from "hooks";
-import {} from "react-router-dom";
 
 const Router = () => {
   const isLoggedIn = useIsLoggedIn();
@@ -37,7 +36,7 @@ const Router = () => {
           ))}
 
           {/* 404 page route */}
-          <Route exact path="*" component={Error404} />
+          <Route exact path="*" element={Error404} />
         </Routes>
       </BrowserRouter>
     </AuthContext.Provider>
