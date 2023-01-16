@@ -4,9 +4,9 @@ import { AuthContext } from "../auth/AuthContext"
 import { PrivateRoutes, PublicRoutes } from "./routes"
 import Error404 from "pages/Error404"
 import AppLoader from "components/Loader/AppLoader"
-import PublicWrapper from "../hoc/PublicWrapper"
-import AuthWrapper from "../hoc/AuthWrapper"
 import { useIsLoggedIn } from "hooks/state"
+import PublicLayout from "layout/publicLayout"
+import PrivateLayout from "layout/privateLayout"
 
 const Router = () => {
   const isLoggedIn = useIsLoggedIn()
@@ -18,21 +18,35 @@ const Router = () => {
         <Routes>
           <Route path="/" element={<Navigate to="/u/dashboard" replace />} />
           {/* All the public routes */}
-          {PublicRoutes.map((route) => (
-            <Route
-              path={route.path}
-              key={`Route-${route.path}`}
-              element={<PublicWrapper {...route} />}
-            />
+          {PublicRoutes.map(({ component: Component, ...route }) => (
+            <Route key={`Route-${route.path}`} element={<PublicLayout />}>
+              <Route
+                path={route.path}
+                element={
+                  isLoggedIn === true ? (
+                    <Navigate to="/u/dashboard" replace={true} />
+                  ) : (
+                    <Component />
+                  )
+                }
+              />
+            </Route>
           ))}
 
           {/* All the private routes */}
           {PrivateRoutes.map((route) => (
-            <Route
-              path={route.path}
-              key={`Route-${route.path}`}
-              element={<AuthWrapper {...route} />}
-            />
+            <Route key={`Route-${route.path}`} element={<PrivateLayout />}>
+              <Route
+                path={route.path}
+                element={
+                  isLoggedIn !== true ? (
+                    <Navigate to="/auth/login" replace={true} />
+                  ) : (
+                    <Component />
+                  )
+                }
+              />
+            </Route>
           ))}
 
           {/* 404 page route */}
