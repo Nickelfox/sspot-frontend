@@ -20,7 +20,7 @@ export const useStyles = () => {
       }
     },
     drawerHeader: {
-      color: theme.palette.text.white
+      color: theme.palette.text.main
     },
     divider: {
       border: `1px solid rgba(255, 255, 255, 0.1)`,
@@ -28,17 +28,17 @@ export const useStyles = () => {
     },
     activeListItem: {
       color: theme.palette.text.white,
-      backgroundColor: theme.palette.secondary.main,
+      backgroundColor: theme.palette.primary.main,
       width: "90%",
       margin: "auto",
       borderRadius: "5px",
       padding: "16px",
       "&:hover": {
-        backgroundColor: theme.palette.primary.main
+        backgroundColor: theme.palette.secondary.main
       }
     },
     listItem: {
-      color: theme.palette.text.white,
+      color: theme.palette.text.main,
       width: "90%",
       margin: "auto",
       borderRadius: "5px",
@@ -51,7 +51,7 @@ export const useStyles = () => {
       lineHeight: "16px"
     },
     icon: {
-      color: theme.palette.text.white
+      color: theme.palette.text.main
     },
     logout: {
       position: "absolute",

@@ -10,7 +10,7 @@ import PrivateLayout from "layout/privateLayout"
 
 const Router = () => {
   const isLoggedIn = useIsLoggedIn()
-
+  console.log("islogged ", isLoggedIn)
   return (
     <AuthContext.Provider value={isLoggedIn}>
       <Suspense fallback={AppLoader} />
@@ -34,7 +34,7 @@ const Router = () => {
           ))}
 
           {/* All the private routes */}
-          {PrivateRoutes.map((route) => (
+          {PrivateRoutes.map(({ component: Component, ...route }) => (
             <Route key={`Route-${route.path}`} element={<PrivateLayout />}>
               <Route
                 path={route.path}
