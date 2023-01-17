@@ -2,7 +2,7 @@
 export const defaultTheme = {
   palette: {
     primary: {
-      main: "#FD2B88"
+      main: "#c5001a"
     },
     secondary: {
       main: "#FD2B88"
@@ -12,6 +12,10 @@ export const defaultTheme = {
     },
     background: {
       default: "#FFFFFF"
+    },
+    text: {
+      main: "#111111",
+      white: "#EEEEEE"
     }
   },
   typography: {
@@ -81,4 +85,4 @@ export const defaultTheme = {
   },
   shadows: ["1", "2", "3", "4", "none"],
   overrides: {}
-};
+}

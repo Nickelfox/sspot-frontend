@@ -1,4 +1,8 @@
-import { useSelector } from "react-redux";
+import { useCookies } from "react-cookie"
+import { CookieKeys } from "constants/cookieKeys"
 
 // custom hooks to get state stored in redux
-export const useIsLoggedIn = () => useSelector(state => state.app.isLogged);
+export const useIsLoggedIn = () => {
+  const [cookies] = useCookies([CookieKeys.Auth])
+  return Object.keys(cookies).length > 0
+}

@@ -1,24 +1,23 @@
-import * as React from "react";
-import { styled, useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import CssBaseline from "@mui/material/CssBaseline";
-import MuiAppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import { DashboardMenus } from "router/routes/dashboardRoutes";
-import { useNavigate } from "react-router-dom";
+import * as React from "react"
+import { styled } from "@mui/material/styles"
+import {
+  Box,
+  Drawer,
+  List,
+  Typography,
+  ListItemIcon,
+  Divider,
+  ListItemText,
+  ListItemButton
+} from "@mui/material"
+import { DashboardMenus } from "router/routes/dashboardRoutes"
+import { Outlet, useNavigate } from "react-router-dom"
+import { useStyles } from "./privateLayoutStyles"
+import LogoutIcon from "@mui/icons-material/Logout"
+import { useCookies } from "react-cookie"
+import { CookieKeys } from "constants/cookieKeys"
 
-const drawerWidth = 240;
+const drawerWidth = 270
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
   ({ theme, open }) => ({
@@ -37,103 +36,81 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
       marginLeft: 0
     })
   })
-);
-
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== "open"
-})(({ theme, open }) => ({
-  transition: theme.transitions.create(["margin", "width"], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen
-  }),
-  ...(open && {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: `${drawerWidth}px`,
-    transition: theme.transitions.create(["margin", "width"], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen
-    })
-  })
-}));
+)
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   padding: theme.spacing(0, 1),
+  height: "100px",
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
-  justifyContent: "flex-end"
-}));
+  justifyContent: "center"
+}))
 
-export default function PrivateLayout({ children }) {
-  const theme = useTheme();
-  const navigate = useNavigate();
-  const [open, setOpen] = React.useState(true);
+export default function PrivateLayout() {
+  const navigateTo = useNavigate()
+  const styles = useStyles()
+  const currentRoute = window.location.pathname
+  // eslint-disable-next-line no-unused-vars
+  const [cookies, setCookie, removeCookie] = useCookies([CookieKeys.Auth])
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
+  const navigate = (route) => {
+    navigateTo(route)
+  }
 
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+  React.useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
+  const handleLogout = () => {
+    removeCookie(CookieKeys.Auth)
+  }
+
+  const activeMenu = (item) => currentRoute.includes(item.route)
 
   return (
     <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <AppBar position="fixed" open={open}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{ mr: 2, ...(open && { display: "none" }) }}>
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h5" noWrap component="div">
-            React Scaffolding
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: drawerWidth,
-            boxSizing: "border-box"
-          }
-        }}
-        variant="persistent"
-        anchor="left"
-        open={open}>
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
+      <Drawer sx={styles.drawer} variant="persistent" anchor="left" open={true}>
         <List>
-          {DashboardMenus.map((item) => (
-            <ListItem
-              button
-              key={item.alias}
-              onClick={() => navigate(item.route)}>
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.title} />
-            </ListItem>
-          ))}
+          <DrawerHeader>
+            <Typography sx={styles.drawerHeader} variant="h4">
+              React Web
+            </Typography>
+          </DrawerHeader>
+          <Divider sx={styles.divider} />
+          {DashboardMenus.map((item) => {
+            return (
+              <ListItemButton
+                sx={activeMenu(item) ? styles.activeListItem : styles.listItem}
+                key={item.alias}
+                onClick={() => navigate(item.route)}>
+                <ListItemIcon
+                  sx={activeMenu(item) ? styles.iconActive : styles.icon}>
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText>
+                  <Typography sx={styles.listItemText}>{item.title}</Typography>
+                </ListItemText>
+              </ListItemButton>
+            )
+          })}
+        </List>
+        <List sx={styles.logout}>
+          <Divider sx={styles.divider} />
+          <ListItemButton onClick={handleLogout}>
+            <ListItemIcon sx={styles.icon}>
+              <LogoutIcon color="secondary" />
+            </ListItemIcon>
+            <ListItemText>
+              <Typography sx={styles.listItemText}>Logout</Typography>
+            </ListItemText>
+          </ListItemButton>
         </List>
       </Drawer>
       <Main open={open}>
-        <DrawerHeader />
-        {children}
+        <Outlet />
       </Main>
     </Box>
-  );
+  )
 }
