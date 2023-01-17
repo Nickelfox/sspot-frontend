@@ -1,5 +1,4 @@
 // Higher Order Class to make all network calls
-import { store } from "redux/store"
 import { HTTP_METHODS } from "./httpMethods"
 import { ServerConfig } from "./serverConfig"
 import { Response } from "./responseParser"
@@ -37,7 +36,6 @@ export class NetworkManager {
     let data = []
     let success = false
     let code = 200
-    const state = store.getState().app
 
     try {
       const url = `${this.baseUrl}/${this.endPointVersion}${this.endpoint}${this.requestParams}`
@@ -46,9 +44,9 @@ export class NetworkManager {
         method: this.method
       }
 
-      if (header && state.authToken) {
-        this.headers.token = state.token ?? ""
-        // this.headers["Authorization"] = `Bearer ${state.token}` ?? "";
+      if (header && document !== undefined && document.cookie) {
+        this.headers.token = document.cookie
+        // this.headers["Authorization"] = `Bearer ${document.cookie}` ?? "";
       }
 
       this.headers["Accept-Language"] = "en"
@@ -69,7 +67,7 @@ export class NetworkManager {
 
       if (code === 401) {
         // refresh the token
-        await refreshToken(state.token)
+        await refreshToken(document.cookie)
         // pass the control back to network manager
         const refRes = await this.httpRequest(header)
         // re-assign response
