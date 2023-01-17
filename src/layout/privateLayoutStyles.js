@@ -53,6 +53,9 @@ export const useStyles = () => {
     icon: {
       color: theme.palette.text.main
     },
+    iconActive: {
+      color: theme.palette.text.white
+    },
     logout: {
       position: "absolute",
       bottom: 0,

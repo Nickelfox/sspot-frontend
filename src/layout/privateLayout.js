@@ -15,6 +15,7 @@ import { Outlet, useNavigate } from "react-router-dom"
 import { useStyles } from "./privateLayoutStyles"
 import LogoutIcon from "@mui/icons-material/Logout"
 import { useCookies } from "react-cookie"
+import { CookieKeys } from "constants/cookieKeys"
 
 const drawerWidth = 270
 
@@ -52,7 +53,7 @@ export default function PrivateLayout() {
   const styles = useStyles()
   const currentRoute = window.location.pathname
   // eslint-disable-next-line no-unused-vars
-  const [cookies, setCookie, removeCookie] = useCookies(["auth-token"])
+  const [cookies, setCookie, removeCookie] = useCookies([CookieKeys.Auth])
 
   const navigate = (route) => {
     navigateTo(route)
@@ -63,8 +64,10 @@ export default function PrivateLayout() {
   }, [])
 
   const handleLogout = () => {
-    removeCookie("auth-token")
+    removeCookie(CookieKeys.Auth)
   }
+
+  const activeMenu = (item) => currentRoute.includes(item.route)
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -79,14 +82,13 @@ export default function PrivateLayout() {
           {DashboardMenus.map((item) => {
             return (
               <ListItemButton
-                sx={
-                  currentRoute.includes(item.route)
-                    ? styles.activeListItem
-                    : styles.listItem
-                }
+                sx={activeMenu(item) ? styles.activeListItem : styles.listItem}
                 key={item.alias}
                 onClick={() => navigate(item.route)}>
-                <ListItemIcon sx={styles.icon}>{item.icon}</ListItemIcon>
+                <ListItemIcon
+                  sx={activeMenu(item) ? styles.iconActive : styles.icon}>
+                  {item.icon}
+                </ListItemIcon>
                 <ListItemText>
                   <Typography sx={styles.listItemText}>{item.title}</Typography>
                 </ListItemText>
