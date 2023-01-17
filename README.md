@@ -37,7 +37,7 @@ This boilerplate is created in the interest of developers to make the basic deve
 # Structure
 
 ```
-📦Project
+Project
  ┣ 📂.vscode
  ┃ ┗ 📜settings.json
  ┣ 📂jest
@@ -50,11 +50,12 @@ This boilerplate is created in the interest of developers to make the basic deve
  ┃ ┣ 📜manifest.json
  ┃ ┗ 📜robots.txt
  ┣ 📂src
+ ┃ ┣ 📂__tests__
+ ┃ ┃ ┗ 📜App.test.js
  ┃ ┣ 📂assets
- ┃ ┃ ┣ 📂fonts
- ┃ ┃ ┣ 📂icons
  ┃ ┃ ┗ 📂images
  ┃ ┃ ┃ ┣ 📂backgrounds
+ ┃ ┃ ┃ ┃ ┣ 📜error-404.png
  ┃ ┃ ┃ ┃ ┗ 📜eugene-golovesov-nr5zYqe0uiQ-unsplash.jpg
  ┃ ┃ ┃ ┗ 📂placeholders
  ┃ ┃ ┃ ┃ ┗ 📜onboardingng.jpg
@@ -63,28 +64,30 @@ This boilerplate is created in the interest of developers to make the basic deve
  ┃ ┣ 📂components
  ┃ ┃ ┣ 📂Loader
  ┃ ┃ ┃ ┗ 📜AppLoader.js
- ┃ ┃ ┗ 📂typography
+ ┃ ┃ ┗ 📂Typography
  ┃ ┃ ┃ ┗ 📜index.js
+ ┃ ┣ 📂constants
+ ┃ ┃ ┗ 📜cookieKeys.js
  ┃ ┣ 📂helpers
  ┃ ┃ ┣ 📂__tests__
  ┃ ┃ ┃ ┣ 📜functionTests.js
  ┃ ┃ ┃ ┗ 📜sorterTests.js
- ┃ ┃ ┣ 📜functions.js
+ ┃ ┃ ┣ 📂validators
+ ┃ ┃ ┃ ┣ 📜forgotPassword.js
+ ┃ ┃ ┃ ┗ 📜login.js
  ┃ ┃ ┣ 📜index.js
  ┃ ┃ ┣ 📜package.json
  ┃ ┃ ┗ 📜sorters.js
- ┃ ┣ 📂hoc
- ┃ ┃ ┣ 📜AuthWrapper.js
- ┃ ┃ ┗ 📜PublicWrapper.js
  ┃ ┣ 📂hooks
- ┃ ┃ ┣ 📜index.js
  ┃ ┃ ┣ 📜providers.js
  ┃ ┃ ┣ 📜state.js
  ┃ ┃ ┣ 📜utils.js
  ┃ ┃ ┗ 📜web.js
  ┃ ┣ 📂layout
  ┃ ┃ ┣ 📜privateLayout.js
- ┃ ┃ ┗ 📜publicLayout.js
+ ┃ ┃ ┣ 📜privateLayoutStyles.js
+ ┃ ┃ ┣ 📜publicLayout.jsx
+ ┃ ┃ ┗ 📜publicLayoutStyles.js
  ┃ ┣ 📂network
  ┃ ┃ ┣ 📂core
  ┃ ┃ ┃ ┣ 📜apiModel.js
@@ -95,30 +98,29 @@ This boilerplate is created in the interest of developers to make the basic deve
  ┃ ┃ ┃ ┣ 📜responseParser.js
  ┃ ┃ ┃ ┣ 📜serverConfig.js
  ┃ ┃ ┃ ┗ 📜tokenRefresher.js
- ┃ ┃ ┣ 📜authService.js
- ┃ ┃ ┣ 📜index.js
- ┃ ┃ ┗ 📜package.json
+ ┃ ┃ ┗ 📜authService.js
  ┃ ┣ 📂pages
  ┃ ┃ ┣ 📂private
  ┃ ┃ ┃ ┣ 📂dashboard
- ┃ ┃ ┃ ┃ ┗ 📜index.js
- ┃ ┃ ┃ ┗ 📂settings
- ┃ ┃ ┃ ┃ ┗ 📜index.js
+ ┃ ┃ ┃ ┃ ┗ 📜index.jsx
+ ┃ ┃ ┃ ┣ 📂settings
+ ┃ ┃ ┃ ┃ ┗ 📜index.jsx
+ ┃ ┃ ┃ ┣ 📂sub-admins
+ ┃ ┃ ┃ ┃ ┗ 📜index.jsx
+ ┃ ┃ ┃ ┗ 📂users
+ ┃ ┃ ┃ ┃ ┗ 📜index.jsx
  ┃ ┃ ┣ 📂public
+ ┃ ┃ ┃ ┣ 📂forgot-password
+ ┃ ┃ ┃ ┃ ┗ 📜index.jsx
  ┃ ┃ ┃ ┣ 📂login
- ┃ ┃ ┃ ┃ ┣ 📂__tests__
- ┃ ┃ ┃ ┃ ┃ ┗ 📜loginTests.js
- ┃ ┃ ┃ ┃ ┗ 📜index.js
- ┃ ┃ ┃ ┗ 📂signup
- ┃ ┃ ┃ ┃ ┗ 📜index.js
+ ┃ ┃ ┃ ┃ ┗ 📜index.jsx
+ ┃ ┃ ┃ ┣ 📂signup
+ ┃ ┃ ┃ ┃ ┗ 📜index.jsx
+ ┃ ┃ ┃ ┗ 📜commonStyles.js
  ┃ ┃ ┗ 📜Error404.js
  ┃ ┣ 📂redux
- ┃ ┃ ┣ 📂actions
- ┃ ┃ ┃ ┗ 📜appActions.js
- ┃ ┃ ┣ 📂dispatchers
- ┃ ┃ ┃ ┗ 📜appDispatcher.js
- ┃ ┃ ┣ 📂reducers
- ┃ ┃ ┃ ┗ 📜appReducer.js
+ ┃ ┃ ┣ 📂slices
+ ┃ ┃ ┃ ┗ 📜appSlice.js
  ┃ ┃ ┗ 📜store.js
  ┃ ┣ 📂router
  ┃ ┃ ┣ 📂routes
@@ -128,11 +130,14 @@ This boilerplate is created in the interest of developers to make the basic deve
  ┃ ┃ ┃ ┗ 📜publicRoutes.js
  ┃ ┃ ┣ 📜index.js
  ┃ ┃ ┗ 📜package.json
+ ┃ ┣ 📂styles
+ ┃ ┃ ┣ 📜global.scss
+ ┃ ┃ ┗ 📜variables.scss
  ┃ ┣ 📂themes
  ┃ ┃ ┗ 📜defaultTheme.js
+ ┃ ┣ 📜.DS_Store
  ┃ ┣ 📜App.css
  ┃ ┣ 📜App.js
- ┃ ┣ 📜App.test.js
  ┃ ┣ 📜index.css
  ┃ ┣ 📜index.js
  ┃ ┣ 📜logo.svg
@@ -176,7 +181,7 @@ To import modules, just start the import path by directory name followed by the 
 For example, If I want to import `AppLoader` from `src/components/Loader/AppLoader.js` then the import would look like
 
 ```js
-import AppLoader from "components/Loader/AppLoader";
+import AppLoader from "components/Loader/AppLoader"
 ```
 
 You need not to write long import paths for most of the times.
@@ -208,7 +213,7 @@ export const API = {
   AUTH: {
     LOGIN: new Endpoint("/auth", HTTP_METHODS.POST)
   }
-};
+}
 ```
 
 Though the call is related to authentication, we'll put this under the `AUTH` property. \
@@ -227,12 +232,12 @@ Now create a new service file in `network/` directory. We'll create `authService
 ```js
 // Sample service to make network call
 
-import { API, NetworkManager } from "./core";
+import { API, NetworkManager } from "./core"
 
 export class AuthService {
   static async loginByEmail(payload) {
-    const instance = new NetworkManager(API.AUTH.LOGIN, payload);
-    return await instance.httpRequest(false);
+    const instance = new NetworkManager(API.AUTH.LOGIN, payload)
+    return await instance.httpRequest(false)
   }
 }
 ```
