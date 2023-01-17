@@ -4,6 +4,7 @@ import AppRouter from "./router"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { defaultTheme } from "./themes/defaultTheme"
 import { store } from "redux/store"
+import { CookiesProvider } from "react-cookie"
 import "./styles/global.scss"
 
 /**
@@ -21,11 +22,13 @@ function App() {
   const currentTheme = createTheme(defaultTheme)
 
   return (
-    <Provider store={store}>
-      <ThemeProvider theme={currentTheme}>
-        <AppRouter />
-      </ThemeProvider>
-    </Provider>
+    <CookiesProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={currentTheme}>
+          <AppRouter />
+        </ThemeProvider>
+      </Provider>
+    </CookiesProvider>
   )
 }
 

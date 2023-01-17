@@ -1,9 +1,9 @@
 // Higher Order Class to make all network calls
-import store from "redux/store";
-import { HTTP_METHODS } from "./httpMethods";
-import { ServerConfig } from "./serverConfig";
-import { Response } from "./responseParser";
-import { refreshToken } from "./tokenRefresher";
+import { store } from "redux/store"
+import { HTTP_METHODS } from "./httpMethods"
+import { ServerConfig } from "./serverConfig"
+import { Response } from "./responseParser"
+import { refreshToken } from "./tokenRefresher"
 
 // ********************
 // Create a new instance of this Network class and make api call
@@ -21,62 +21,62 @@ import { refreshToken } from "./tokenRefresher";
 
 export class NetworkManager {
   constructor(endpoint, body = {}, params = {} | []) {
-    this.baseUrl = ServerConfig.API_URL;
-    this.endpoint = endpoint.endpoint;
-    this.method = endpoint.method;
-    this.endPointVersion = endpoint.version;
-    this.params = params;
-    this.body = body;
+    this.baseUrl = ServerConfig.API_URL
+    this.endpoint = endpoint.endpoint
+    this.method = endpoint.method
+    this.endPointVersion = endpoint.version
+    this.params = params
+    this.body = body
     this.headers = {
       "Content-Type": "application/json"
-    };
+    }
   }
 
   httpRequest = async (header = true) => {
-    let error = "";
-    let data = [];
-    let success = false;
-    let code = 200;
-    const state = store.getState().app;
+    let error = ""
+    let data = []
+    let success = false
+    let code = 200
+    const state = store.getState().app
 
     try {
-      const url = `${this.baseUrl}/${this.endPointVersion}${this.endpoint}${this.requestParams}`;
+      const url = `${this.baseUrl}/${this.endPointVersion}${this.endpoint}${this.requestParams}`
 
       const options = {
         method: this.method
-      };
+      }
 
       if (header && state.authToken) {
-        this.headers.token = state.token ?? "";
+        this.headers.token = state.token ?? ""
         // this.headers["Authorization"] = `Bearer ${state.token}` ?? "";
       }
 
-      this.headers["Accept-Language"] = "en";
-      options.headers = this.headers;
+      this.headers["Accept-Language"] = "en"
+      options.headers = this.headers
 
       if (this.method !== HTTP_METHODS.GET) {
-        options.body = JSON.stringify(this.body);
+        options.body = JSON.stringify(this.body)
       }
 
       // execute fetch call & parse json response
-      const res = await fetch(url, options);
-      const response = await res.json();
+      const res = await fetch(url, options)
+      const response = await res.json()
 
-      data = response.data;
-      success = response.success;
-      code = response.status_code;
-      error = response.error;
+      data = response.data
+      success = response.success
+      code = response.status_code
+      error = response.error
 
       if (code === 401) {
         // refresh the token
-        await refreshToken(state.token);
+        await refreshToken(state.token)
         // pass the control back to network manager
-        const refRes = await this.httpRequest(header);
+        const refRes = await this.httpRequest(header)
         // re-assign response
-        data = refRes.data;
-        success = refRes.success;
-        code = refRes.code;
-        error = refRes.error;
+        data = refRes.data
+        success = refRes.success
+        code = refRes.code
+        error = refRes.error
       }
 
       if (code >= 400 && code !== 401) {
@@ -84,32 +84,32 @@ export class NetworkManager {
       }
     } catch (err) {
       // Catch all errors
-      console.log("err ", err);
+      console.log("err ", err)
       // display error
     } finally {
       // Return whatever is executed and processed
-      return new Response(success, data, error, code);
+      return new Response(success, data, error, code)
     }
-  };
+  }
 
   get requestParams() {
     // Prepare url parameters based on type
-    let param = "";
+    let param = ""
     if (Array.isArray(this.params)) {
       // all params in form of url/id1/id2/id3
       for (let key of this.params) {
-        param += `/${key}`;
+        param += `/${key}`
       }
     } else if (this.params instanceof Object) {
       // all params in form of {param: param1}
       for (let key in this.params) {
-        const sectionParam = `${key}=${this.params[key]}`;
-        const symbol = param.length > 0 ? "&" : "?";
-        param += `${symbol}${sectionParam}`;
+        const sectionParam = `${key}=${this.params[key]}`
+        const symbol = param.length > 0 ? "&" : "?"
+        param += `${symbol}${sectionParam}`
       }
     } else {
       // do nothing
     }
-    return param;
+    return param
   }
 }

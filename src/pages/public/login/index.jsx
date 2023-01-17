@@ -1,5 +1,4 @@
 import React, { useState } from "react"
-import * as Yup from "yup"
 import {
   Typography,
   TextField,
@@ -18,6 +17,7 @@ import LockOpenIcon from "@mui/icons-material/LockOpen"
 import { useCookies } from "react-cookie"
 import { useNavigate } from "react-router-dom"
 import { CookieKeys } from "constants/cookieKeys"
+import { LoginValidator } from "helpers/validators/login"
 
 const Login = () => {
   const styles = useStyles()
@@ -52,16 +52,8 @@ const Login = () => {
         <Divider />
         <Formik
           validateOnMount
-          initialValues={{
-            email: "",
-            password: ""
-          }}
-          validationSchema={Yup.object().shape({
-            email: Yup.string()
-              .email("Enter a valid email")
-              .required("Email is required"),
-            password: Yup.string().required("Password is Required").min(8)
-          })}
+          initialValues={LoginValidator.initialValues}
+          validationSchema={LoginValidator.validationSchema}
           onSubmit={userLogin}>
           {({
             isValid,

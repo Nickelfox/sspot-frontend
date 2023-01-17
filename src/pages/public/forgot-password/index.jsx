@@ -1,5 +1,4 @@
 import React, { useState } from "react"
-import * as Yup from "yup"
 import {
   Typography,
   TextField,
@@ -13,6 +12,7 @@ import { useStyles } from "../commonStyles"
 import { LoadingButton } from "@mui/lab"
 import LockResetIcon from "@mui/icons-material/LockReset"
 import { useNavigate } from "react-router-dom"
+import { FPValidator } from "helpers/validators/forgotPassword"
 
 function ForgotPassword() {
   const styles = useStyles()
@@ -36,14 +36,8 @@ function ForgotPassword() {
         <Divider />
         <Formik
           validateOnMount
-          initialValues={{
-            email: ""
-          }}
-          validationSchema={Yup.object().shape({
-            email: Yup.string()
-              .email("Enter a valid email")
-              .required("Email is required")
-          })}
+          initialValues={FPValidator.initialValues}
+          validationSchema={FPValidator.validationSchema}
           onSubmit={resetPassword}>
           {({
             isValid,
