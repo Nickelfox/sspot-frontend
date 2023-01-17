@@ -3,6 +3,8 @@ import { HTTP_METHODS } from "./httpMethods"
 import { ServerConfig } from "./serverConfig"
 import { Response } from "./responseParser"
 import { refreshToken } from "./tokenRefresher"
+import { Cookies } from "react-cookie"
+import { CookieKeys } from "constants/cookieKeys"
 
 // ********************
 // Create a new instance of this Network class and make api call
@@ -37,6 +39,9 @@ export class NetworkManager {
     let success = false
     let code = 200
 
+    const cookie = new Cookies()
+    const authToken = cookie.get(CookieKeys.Auth)
+
     try {
       const url = `${this.baseUrl}/${this.endPointVersion}${this.endpoint}${this.requestParams}`
 
@@ -44,9 +49,9 @@ export class NetworkManager {
         method: this.method
       }
 
-      if (header && document !== undefined && document.cookie) {
-        this.headers.token = document.cookie
-        // this.headers["Authorization"] = `Bearer ${document.cookie}` ?? "";
+      if (header && authToken) {
+        this.headers.token = authToken
+        // this.headers["Authorization"] = `Bearer ${authToken}` ?? "";
       }
 
       this.headers["Accept-Language"] = "en"
@@ -67,7 +72,7 @@ export class NetworkManager {
 
       if (code === 401) {
         // refresh the token
-        await refreshToken(document.cookie)
+        await refreshToken(authToken)
         // pass the control back to network manager
         const refRes = await this.httpRequest(header)
         // re-assign response

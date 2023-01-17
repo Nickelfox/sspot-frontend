@@ -14,7 +14,7 @@ import { DashboardMenus } from "router/routes/dashboardRoutes"
 import { Outlet, useNavigate } from "react-router-dom"
 import { useStyles } from "./privateLayoutStyles"
 import LogoutIcon from "@mui/icons-material/Logout"
-import { useCookies } from "react-cookie"
+import { useCookies, Cookies } from "react-cookie"
 import { CookieKeys } from "constants/cookieKeys"
 
 const drawerWidth = 270
@@ -54,6 +54,9 @@ export default function PrivateLayout() {
   const currentRoute = window.location.pathname
   // eslint-disable-next-line no-unused-vars
   const [cookies, setCookie, removeCookie] = useCookies([CookieKeys.Auth])
+
+  const ck = new Cookies()
+  console.log("dfhgdskjfgsdk ", ck.get(CookieKeys.Auth))
 
   const navigate = (route) => {
     navigateTo(route)
