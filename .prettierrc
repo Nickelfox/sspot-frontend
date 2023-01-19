@@ -4,5 +4,7 @@
   "singleQuote": false,
   "trailingComma": "none",
   "bracketSameLine": true,
+  "endOfLine": "auto",
+  "arrowParens": "always",
   "semi": false
 }
