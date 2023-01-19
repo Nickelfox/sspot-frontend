@@ -47,7 +47,8 @@ module.exports = {
     "no-trailing-spaces": 0,
     "no-mixed-spaces-and-tabs": 0,
     "space-infix-ops": 0,
-    "space-unary-ops": 0
+    "space-unary-ops": 0,
+    "no-console": "warn"
   },
   settings: {
     "import/resolver": {
