@@ -1,8 +1,14 @@
 // eslint-disable-next-line no-undef
 module.exports = {
+  parser: "@babel/eslint-parser",
   env: {
     browser: true,
-    es2021: true
+    es2021: true,
+    node: true
+  },
+  globals: {
+    window: true,
+    module: true
   },
   extends: [
     "eslint:recommended",
@@ -14,7 +20,12 @@ module.exports = {
       jsx: true
     },
     ecmaVersion: 12,
-    sourceType: "module"
+    sourceType: "module",
+    es6: true,
+    requireConfigFile: false,
+    babelOptions: {
+      presets: ["@babel/preset-react"]
+    }
   },
   plugins: ["react"],
   rules: {
@@ -46,4 +57,4 @@ module.exports = {
       }
     }
   }
-};
+}

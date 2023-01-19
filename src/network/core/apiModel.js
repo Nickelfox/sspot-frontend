@@ -2,8 +2,8 @@
 
 export class Endpoint {
   constructor(endpoint, method, version = "v1") {
-    this.endpoint = endpoint;
-    this.method = method;
-    this.version = version;
+    this.endpoint = endpoint
+    this.method = method
+    this.version = version
   }
 }

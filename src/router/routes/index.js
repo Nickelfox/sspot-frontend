@@ -1,6 +1,6 @@
 // Common export
 
-import { PrivateRoutes } from "./privateRoutes";
-import { PublicRoutes } from "./publicRoutes";
+import { PrivateRoutes } from "./privateRoutes"
+import { PublicRoutes } from "./publicRoutes"
 
-export { PrivateRoutes, PublicRoutes };
+export { PrivateRoutes, PublicRoutes }
