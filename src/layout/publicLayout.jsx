@@ -25,7 +25,7 @@ export default function PublicLayout() {
                 onClick={handleRouting}
                 sx={styles.title}
                 variant={hdTabResolution ? "h5" : "h3"}>
-                Web Template
+                {process.env.REACT_APP_APP_NAME}
               </Typography>
               <Typography
                 sx={styles.subtitle}

@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "start": "env-cmd -f .env.dev react-scripts start",
+    "start:win": "SET env-cmd -f .env.dev react-scripts start",
     "start:qa": "env-cmd -f .env.qa react-scripts start",
+    "start:win:qa": "SET env-cmd -f .env.qa react-scripts start",
     "start:stage": "env-cmd -f .env.staging react-scripts start",
     "build": "react-scripts build",
     "build:dev": "env-cmd -f .env.dev react-scripts build",

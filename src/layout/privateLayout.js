@@ -75,7 +75,7 @@ export default function PrivateLayout() {
         <List>
           <DrawerHeader>
             <Typography sx={styles.drawerHeader} variant="h4">
-              React Web
+              {process.env.REACT_APP_APP_NAME}
             </Typography>
           </DrawerHeader>
           <Divider sx={styles.divider} />
