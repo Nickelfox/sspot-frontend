@@ -35,7 +35,6 @@ const Login = () => {
   const userLogin = async (values) => {
     setShowLoader(true)
     console.log(values)
-    console.log(CookieOptions)
     setCookie(CookieKeys.Auth, "39874yrhf89234y3hu3iy89", CookieOptions)
   }
 

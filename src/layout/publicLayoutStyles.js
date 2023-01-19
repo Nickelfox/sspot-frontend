@@ -37,7 +37,7 @@ export const useStyles = () => {
       paddingRight: "2rem"
     },
     tagline: {
-      color: theme.palette.text.secondary,
+      color: theme.palette.text.white,
       textAlign: "left",
       display: "flex",
       justifyContent: "center",
