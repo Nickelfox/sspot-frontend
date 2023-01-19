@@ -16,8 +16,8 @@ import { LoadingButton } from "@mui/lab"
 import LockOpenIcon from "@mui/icons-material/LockOpen"
 import { useCookies } from "react-cookie"
 import { useNavigate } from "react-router-dom"
-import { CookieKeys } from "constants/cookieKeys"
 import { LoginValidator } from "helpers/validators/login"
+import { CookieKeys, CookieOptions } from "constants/cookieKeys"
 
 const Login = () => {
   const styles = useStyles()
@@ -35,9 +35,8 @@ const Login = () => {
   const userLogin = async (values) => {
     setShowLoader(true)
     console.log(values)
-    setCookie(CookieKeys.Auth, "39874yrhf89234y3hu3iy89", {
-      sameSite: "lax"
-    })
+    console.log(CookieOptions)
+    setCookie(CookieKeys.Auth, "39874yrhf89234y3hu3iy89", CookieOptions)
   }
 
   return (
