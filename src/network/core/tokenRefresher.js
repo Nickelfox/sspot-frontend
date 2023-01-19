@@ -22,6 +22,7 @@ export async function refreshToken(refreshToken) {
       AppDispatcher.setUserLoggedOut()
     }
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.log(err)
   } finally {
     return

@@ -13,6 +13,7 @@ import "./styles/global.scss"
  */
 
 if (window.safari) {
+  // eslint-disable-next-line no-console
   console.log("safari browser detected")
 } else {
   // initializeFirebase();
