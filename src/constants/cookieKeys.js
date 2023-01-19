@@ -8,8 +8,7 @@ export const CookieOptions = {
   expires: Dates().addInCurrent(10, "days")._d,
   sameSite: "strict",
   path: "/",
-  ...(window !== undefined &&
-    window.location.hostname !== "hostname" && {
-      secure: window.location.protocol === "https:"
-    })
+  ...(window !== undefined && {
+    secure: window.location.protocol === "https:"
+  })
 }
