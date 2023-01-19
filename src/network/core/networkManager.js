@@ -87,6 +87,7 @@ export class NetworkManager {
       }
     } catch (err) {
       // Catch all errors
+      // eslint-diable-next-line no-console
       console.log("err ", err)
       // display error
     } finally {
