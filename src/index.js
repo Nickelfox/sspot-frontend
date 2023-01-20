@@ -6,15 +6,13 @@ import reportWebVitals from "./reportWebVitals"
 import * as Sentry from "@sentry/react"
 import { BrowserTracing } from "@sentry/tracing"
 
-Sentry.init({
-  dsn: "https://966db2db179c4c8ca45de91d49b08b34@o880021.ingest.sentry.io/4504536592285696",
-  integrations: [new BrowserTracing()],
-
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
-  tracesSampleRate: 1.0
-})
+if (process.env.REACT_APP_IS_PROD === "false") {
+  Sentry.init({
+    dsn: "https://966db2db179c4c8ca45de91d49b08b34@o880021.ingest.sentry.io/4504536592285696",
+    integrations: [new BrowserTracing()],
+    tracesSampleRate: 1.0
+  })
+}
 
 const root = ReactDOM.createRoot(document.getElementById("root"))
 root.render(<App />)
