@@ -37,7 +37,14 @@ This boilerplate is created in the interest of developers to make the basic deve
 # Structure
 
 ```
-Project
+📦project
+ ┣ 📂.github
+ ┃ ┗ 📜pull_request_template.md
+ ┣ 📂.husky
+ ┃ ┣ 📂_
+ ┃ ┃ ┣ 📜.gitignore
+ ┃ ┃ ┗ 📜husky.sh
+ ┃ ┗ 📜pre-commit
  ┣ 📂.vscode
  ┃ ┗ 📜settings.json
  ┣ 📂jest
@@ -62,22 +69,19 @@ Project
  ┃ ┣ 📂auth
  ┃ ┃ ┗ 📜AuthContext.js
  ┃ ┣ 📂components
- ┃ ┃ ┣ 📂Loader
+ ┃ ┃ ┗ 📂Loader
  ┃ ┃ ┃ ┗ 📜AppLoader.js
- ┃ ┃ ┗ 📂Typography
- ┃ ┃ ┃ ┗ 📜index.js
  ┃ ┣ 📂constants
  ┃ ┃ ┗ 📜cookieKeys.js
  ┃ ┣ 📂helpers
  ┃ ┃ ┣ 📂__tests__
  ┃ ┃ ┃ ┣ 📜functionTests.js
  ┃ ┃ ┃ ┗ 📜sorterTests.js
- ┃ ┃ ┣ 📂validators
+ ┃ ┃ ┣ 📂app-dates
+ ┃ ┃ ┃ ┗ 📜dates.js
+ ┃ ┃ ┗ 📂validators
  ┃ ┃ ┃ ┣ 📜forgotPassword.js
  ┃ ┃ ┃ ┗ 📜login.js
- ┃ ┃ ┣ 📜index.js
- ┃ ┃ ┣ 📜package.json
- ┃ ┃ ┗ 📜sorters.js
  ┃ ┣ 📂hooks
  ┃ ┃ ┣ 📜providers.js
  ┃ ┃ ┣ 📜state.js
@@ -90,14 +94,20 @@ Project
  ┃ ┃ ┗ 📜publicLayoutStyles.js
  ┃ ┣ 📂network
  ┃ ┃ ┣ 📂core
- ┃ ┃ ┃ ┣ 📜apiModel.js
+ ┃ ┃ ┃ ┣ 📜abortController.js
  ┃ ┃ ┃ ┣ 📜endpoints.js
- ┃ ┃ ┃ ┣ 📜httpMethods.js
+ ┃ ┃ ┃ ┣ 📜httpHelper.js
  ┃ ┃ ┃ ┣ 📜index.js
  ┃ ┃ ┃ ┣ 📜networkManager.js
+ ┃ ┃ ┃ ┣ 📜offlineManager.js
  ┃ ┃ ┃ ┣ 📜responseParser.js
  ┃ ┃ ┃ ┣ 📜serverConfig.js
+ ┃ ┃ ┃ ┣ 📜statusCode.js
  ┃ ┃ ┃ ┗ 📜tokenRefresher.js
+ ┃ ┃ ┣ 📂offlineResponse
+ ┃ ┃ ┃ ┣ 📂files
+ ┃ ┃ ┃ ┃ ┗ 📜login.json
+ ┃ ┃ ┃ ┗ 📜index.js
  ┃ ┃ ┗ 📜authService.js
  ┃ ┣ 📂pages
  ┃ ┃ ┣ 📂private
@@ -117,7 +127,7 @@ Project
  ┃ ┃ ┃ ┣ 📂signup
  ┃ ┃ ┃ ┃ ┗ 📜index.jsx
  ┃ ┃ ┃ ┗ 📜commonStyles.js
- ┃ ┃ ┗ 📜Error404.js
+ ┃ ┃ ┗ 📜Error404.jsx
  ┃ ┣ 📂redux
  ┃ ┃ ┣ 📂slices
  ┃ ┃ ┃ ┗ 📜appSlice.js
@@ -128,8 +138,7 @@ Project
  ┃ ┃ ┃ ┣ 📜index.js
  ┃ ┃ ┃ ┣ 📜privateRoutes.js
  ┃ ┃ ┃ ┗ 📜publicRoutes.js
- ┃ ┃ ┣ 📜index.js
- ┃ ┃ ┗ 📜package.json
+ ┃ ┃ ┗ 📜index.jsx
  ┃ ┣ 📂styles
  ┃ ┃ ┣ 📜global.scss
  ┃ ┃ ┗ 📜variables.scss
@@ -152,6 +161,7 @@ Project
  ┣ 📜.eslintrc.js
  ┣ 📜.gitignore
  ┣ 📜.prettierrc
+ ┣ 📜NETWORK.MD
  ┣ 📜README.md
  ┣ 📜jest.config.js
  ┣ 📜jsconfig.json
