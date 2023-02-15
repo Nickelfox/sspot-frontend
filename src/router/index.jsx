@@ -38,11 +38,7 @@ const Router = () => {
               <Route
                 path={route.path}
                 element={
-                  isLoggedIn !== true ? (
-                    <Navigate to="/auth/login" replace={true} />
-                  ) : (
-                    <Component />
-                  )
+                  isLoggedIn !== true ? <Navigate to="/auth/login" replace={true} /> : <Component />
                 }
               />
             </Route>

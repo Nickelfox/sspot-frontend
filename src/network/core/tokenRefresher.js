@@ -3,28 +3,30 @@
  * @description This call will refresh the expired token and will generate a new one
  */
 
+import { Cookies } from "react-cookie"
 import { API } from "./endpoints"
-import { ServerConfig } from "./serverConfig"
-import AppDispatcher from "redux/dispatchers/appDispatcher"
+import { APIConfig } from "./serverConfig"
+import { CookieKeys, CookieOptions } from "constants/cookieKeys"
 
-export async function refreshToken(refreshToken) {
+export async function refreshAuthToken(refreshToken) {
   try {
     const { endpoint, version, method } = API.AUTH.REFRESH_TOKEN
-    const url = `${ServerConfig.API_URL}/${version}${endpoint}`
+    const url = `${APIConfig.API_URL}/${version}${endpoint}`
     const response = await fetch(url, {
       method,
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": APIConfig.CONTENT_TYPE.JSON },
       body: JSON.stringify({ refreshToken })
     }).then((res) => res.json())
+    const cookies = new Cookies()
     if (response.success) {
-      AppDispatcher.updateUserTokens(response.data)
+      cookies.set(CookieKeys.Auth, response.data?.token, CookieOptions)
     } else {
-      AppDispatcher.setUserLoggedOut()
+      cookies.remove(CookieKeys.Auth, CookieOptions)
     }
+    return true
   } catch (err) {
     // eslint-disable-next-line no-console
     console.log(err)
-  } finally {
-    return
+    return false
   }
 }

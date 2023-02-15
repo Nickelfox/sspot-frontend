@@ -236,13 +236,15 @@ import { API, NetworkManager } from "./core"
 
 export class AuthService {
   static async loginByEmail(payload) {
-    const instance = new NetworkManager(API.AUTH.LOGIN, payload)
-    return await instance.httpRequest(false)
+    const instance = NetworkManager(API.TEST.LIST)
+    return await instance.request(payload)
   }
 }
 ```
 
-First you need to create a new instance of the `NetworkManager` by passing the Endpoint and the body parameter.
+First you need to create a new instance of the `NetworkManager` by passing the Endpoint and then pass the body argument in the request method.
+
+**For more detailed information about Network Call, please read [Network Call Docs](/NETWORK.MD)**
 
 ### `npm run test`
 

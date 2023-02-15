@@ -1,19 +1,20 @@
 // List all endpoints here
-// @ts-check
-import { Endpoint } from "./apiModel"
-import { HTTP_METHODS } from "./httpMethods"
+import { OFFLINE } from "network/offlineResponse"
+import { HTTP_METHODS, APIRouter, APIWithOfflineRouter } from "./httpHelper"
 
 // ******************
 // Endpoint class takes 3 params in constructor ==> "endpoint", "http-method", "API-version"
 // By default, version is set to v1
 // ******************
 export const API = {
-  AUTH: {
-    LOGIN: new Endpoint("/auth/", HTTP_METHODS.POST)
+  TEST: {
+    LIST: new APIRouter("/products", HTTP_METHODS.GET),
+    HTTP: new APIRouter("/http", HTTP_METHODS.GET)
   },
-  ORDERS: {
-    LIST: new Endpoint("/orders_list", HTTP_METHODS.GET),
-    CREATE: new Endpoint("new_order", HTTP_METHODS.POST),
-    UPDATE: new Endpoint("order_new", HTTP_METHODS.PUT)
+  AUTH: {
+    LOGIN: new APIWithOfflineRouter("/auth/login", HTTP_METHODS.POST, OFFLINE.LOGIN)
+  },
+  FILE: {
+    UPLOAD: new APIRouter("/test-api/upload.php", HTTP_METHODS.POST)
   }
 }

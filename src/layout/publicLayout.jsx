@@ -27,17 +27,15 @@ export default function PublicLayout() {
                 variant={hdTabResolution ? "h5" : "h3"}>
                 {process.env.REACT_APP_APP_NAME}
               </Typography>
-              <Typography
-                sx={styles.subtitle}
-                variant={hdTabResolution ? "h5" : "h3"}>
+              <Typography sx={styles.subtitle} variant={hdTabResolution ? "h5" : "h3"}>
                 {window.location.pathname === "/auth/forgot-password"
                   ? "Can't recollect your password?"
                   : "Happy to see you back on portal!"}
               </Typography>
               {window.location.pathname === "/auth/forgot-password" ? (
                 <Typography sx={styles.tagline} variant="subtitle">
-                  We have got you covered! Enter your registered Email and then
-                  check your mail for the Password Reset Link.
+                  We have got you covered! Enter your registered Email and then check your mail for
+                  the Password Reset Link.
                 </Typography>
               ) : null}
             </Box>

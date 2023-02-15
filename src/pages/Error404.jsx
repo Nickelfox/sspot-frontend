@@ -28,9 +28,7 @@ function Error404() {
           </Grid>
           <Grid item xs={6}>
             <Typography variant="h1">404</Typography>
-            <Typography variant="subtitle">
-              The page you’re looking for, doesn’t exist.
-            </Typography>
+            <Typography variant="subtitle">The page you’re looking for, doesn’t exist.</Typography>
             <br />
             <br />
             <Button variant="contained" size="large" onClick={backToHome}>

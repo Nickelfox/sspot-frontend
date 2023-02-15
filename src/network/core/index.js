@@ -1,7 +1,7 @@
 // default exporter on required methods
 
-import { NetworkManager } from "./networkManager"
+import NetworkManager from "./networkManager"
 import { API } from "./endpoints"
-import { ServerConfig } from "./serverConfig"
+import { APIConfig } from "./serverConfig"
 
-export { NetworkManager, API, ServerConfig }
+export { NetworkManager, API, APIConfig }
