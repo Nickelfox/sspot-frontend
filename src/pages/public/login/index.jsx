@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import {
   Typography,
   TextField,
@@ -14,35 +14,19 @@ import { Formik } from "formik"
 import { useStyles } from "../commonStyles"
 import { LoadingButton } from "@mui/lab"
 import LockOpenIcon from "@mui/icons-material/LockOpen"
-import { useCookies } from "react-cookie"
-import { useNavigate } from "react-router-dom"
 import { LoginValidator } from "helpers/validators/login"
-import { CookieKeys, CookieOptions } from "constants/cookieKeys"
-import { AuthService } from "network/authService"
+import { useLoginController } from "./login.controller"
 
 const Login = () => {
   const styles = useStyles()
-  const [showPassword, setShowPassword] = useState(false)
-  const [showLoader, setShowLoader] = useState(false)
-  // eslint-disable-next-line no-unused-vars
-  const [cookies, setCookie] = useCookies(["auth-token"])
 
-  const navigate = useNavigate()
-
-  const togglePasswordVisiblity = () => {
-    setShowPassword((prev) => !prev)
-  }
-
-  const userLogin = async (values) => {
-    setShowLoader(true)
-    const response = await AuthService.loginByEmail(values)
-    setShowLoader(false)
-    if (response.success) {
-      setCookie(CookieKeys.Auth, response.data.token, CookieOptions)
-    } else {
-      // TODO: show error toast
-    }
-  }
+  const {
+    showLoader,
+    showPassword,
+    togglePasswordVisiblity,
+    handleLogin,
+    navigateToForgotPassword
+  } = useLoginController()
 
   return (
     <Box sx={styles.container}>
@@ -58,7 +42,7 @@ const Login = () => {
           validateOnMount
           initialValues={LoginValidator.initialValues}
           validationSchema={LoginValidator.validationSchema}
-          onSubmit={userLogin}>
+          onSubmit={handleLogin}>
           {({ isValid, handleSubmit, values, handleChange, handleBlur, touched, errors }) => (
             <React.Fragment>
               <Grid item xs={12}>
@@ -132,7 +116,7 @@ const Login = () => {
                   Sign In
                 </LoadingButton>
                 <Typography
-                  onClick={() => navigate("/auth/forgot-password")}
+                  onClick={navigateToForgotPassword}
                   sx={styles.forgotPassword}
                   variant="c3">
                   Forgot Password?

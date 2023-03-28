@@ -17,7 +17,7 @@
 Once you created the project, please update the `API_URL` in the `.env.dev`, `.env.qa` etc
 
 ```bash
-REACT_APP_API_URL=https://api.example.com
+REACT_APP_BASE_URL=https://api.example.com
 ```
 
 Once you have setup the env file, navigate to [serverConfig.js](/src/network/core/serverConfig.js) file and update these values accordingly.
@@ -25,7 +25,7 @@ Once you have setup the env file, navigate to [serverConfig.js](/src/network/cor
 ```js
 // serverConfig.js
 export const APIConfig = {
-  API_URL: process.env.REACT_APP_API_URL,
+  API_URL: process.env.REACT_APP_BASE_URL,
   TIMEOUT: 15000,
   API_AUTH_HEADER: "Authorization",
   AUTH_TYPE: "Bearer",

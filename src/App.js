@@ -6,6 +6,7 @@ import { defaultTheme } from "./themes/defaultTheme"
 import { store } from "redux/store"
 import { CookiesProvider } from "react-cookie"
 import "./styles/global.scss"
+import AppLoader from "components/Loader/AppLoader"
 
 /**
  * @description Check if browser is Safar
@@ -26,6 +27,7 @@ function App() {
     <CookiesProvider>
       <Provider store={store}>
         <ThemeProvider theme={currentTheme}>
+          <AppLoader />
           <AppRouter />
         </ThemeProvider>
       </Provider>

@@ -1,8 +1,9 @@
 export const APIConfig = {
-  API_URL: process.env.REACT_APP_API_URL,
+  BASE_URL: process.env.REACT_APP_BASE_URL,
   TIMEOUT: 15000,
   API_AUTH_HEADER: "Authorization",
   AUTH_TYPE: "Bearer",
+  DEFAULT_VERSION: "v1", // OR set it to null if no version mentioned
   CONTENT_TYPE: {
     JSON: "application/json",
     MULTIPART: "multipart/form-data"

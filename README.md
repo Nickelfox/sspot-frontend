@@ -211,7 +211,7 @@ You need not to write long import paths for most of the times.
 Setup the API url in `.env.dev` or related environment file
 
 ```bash
-REACT_APP_API_URL=https://dev.example.com
+REACT_APP_BASE_URL=https://dev.example.com
 ```
 
 #### Step 2

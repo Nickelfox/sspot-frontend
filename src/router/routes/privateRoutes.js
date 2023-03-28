@@ -1,9 +1,10 @@
 // Export all the private routes
+import React from "react"
 
-import Dashboard from "pages/private/dashboard"
-import Settings from "pages/private/settings"
-import SubAdmins from "pages/private/sub-admins"
-import Users from "pages/private/users"
+const Dashboard = React.lazy(() => import("pages/private/dashboard"))
+const Settings = React.lazy(() => import("pages/private/settings"))
+const SubAdmins = React.lazy(() => import("pages/private/sub-admins"))
+const Users = React.lazy(() => import("pages/private/users"))
 
 export const PrivateRoutes = [
   { path: "/u/dashboard", exact: true, component: Dashboard },

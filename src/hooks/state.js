@@ -4,5 +4,5 @@ import { CookieKeys } from "constants/cookieKeys"
 // custom hooks to get state stored in redux
 export const useIsLoggedIn = () => {
   const [cookies] = useCookies([CookieKeys.Auth])
-  return Object.keys(cookies).length > 0
+  return cookies[CookieKeys.Auth] !== undefined
 }

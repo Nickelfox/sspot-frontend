@@ -4,8 +4,8 @@
  */
 
 import { Cookies } from "react-cookie"
-import { API } from "./endpoints"
-import { APIConfig } from "./serverConfig"
+import { API } from "../config/endpoints"
+import { APIConfig } from "../config/serverConfig"
 import { CookieKeys, CookieOptions } from "constants/cookieKeys"
 
 export async function refreshAuthToken(refreshToken) {
