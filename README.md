@@ -38,140 +38,141 @@ This boilerplate is created in the interest of developers to make the basic deve
 
 <details>
   <summary>Project Structure</summary>
-  
-  ```
-  📦project
-  ┣ 📂.github
-  ┃ ┗ 📜pull_request_template.md
-  ┣ 📂.husky
-  ┃ ┣ 📂_
-  ┃ ┃ ┣ 📜.gitignore
-  ┃ ┃ ┗ 📜husky.sh
-  ┃ ┗ 📜pre-commit
-  ┣ 📂.vscode
-  ┃ ┗ 📜settings.json
-  ┣ 📂jest
-  ┃ ┗ 📜setup.js
-  ┣ 📂public
-  ┃ ┣ 📜favicon.ico
-  ┃ ┣ 📜index.html
-  ┃ ┣ 📜logo192.png
-  ┃ ┣ 📜logo512.png
-  ┃ ┣ 📜manifest.json
-  ┃ ┗ 📜robots.txt
-  ┣ 📂src
-  ┃ ┣ 📂__tests__
-  ┃ ┃ ┗ 📜App.test.js
-  ┃ ┣ 📂assets
-  ┃ ┃ ┣ 📂animations
-  ┃ ┃ ┃ ┗ 📜default-loader.json
-  ┃ ┃ ┗ 📂images
-  ┃ ┃ ┃ ┣ 📂backgrounds
-  ┃ ┃ ┃ ┃ ┣ 📜error-404.png
-  ┃ ┃ ┃ ┃ ┗ 📜eugene-golovesov-nr5zYqe0uiQ-unsplash.jpg
-  ┃ ┃ ┃ ┗ 📂placeholders
-  ┃ ┃ ┃ ┃ ┗ 📜onboardingng.jpg
-  ┃ ┣ 📂auth
-  ┃ ┃ ┗ 📜AuthContext.js
-  ┃ ┣ 📂components
-  ┃ ┃ ┗ 📂Loader
-  ┃ ┃ ┃ ┣ 📜AppLoader.js
-  ┃ ┃ ┃ ┗ 📜Loader.module.css
-  ┃ ┣ 📂constants
-  ┃ ┃ ┗ 📜cookieKeys.js
-  ┃ ┣ 📂helpers
-  ┃ ┃ ┣ 📂__tests__
-  ┃ ┃ ┃ ┣ 📜functionTests.js
-  ┃ ┃ ┃ ┗ 📜sorterTests.js
-  ┃ ┃ ┣ 📂app-dates
-  ┃ ┃ ┃ ┗ 📜dates.js
-  ┃ ┃ ┗ 📂validators
-  ┃ ┃ ┃ ┣ 📜forgotPassword.js
-  ┃ ┃ ┃ ┗ 📜login.js
-  ┃ ┣ 📂hooks
-  ┃ ┃ ┣ 📜providers.js
-  ┃ ┃ ┣ 📜state.js
-  ┃ ┃ ┣ 📜utils.js
-  ┃ ┃ ┗ 📜web.js
-  ┃ ┣ 📂layout
-  ┃ ┃ ┣ 📜privateLayout.js
-  ┃ ┃ ┣ 📜privateLayoutStyles.js
-  ┃ ┃ ┣ 📜publicLayout.jsx
-  ┃ ┃ ┗ 📜publicLayoutStyles.js
-  ┃ ┣ 📂network
-  ┃ ┃ ┣ 📂config
-  ┃ ┃ ┃ ┣ 📜endpoints.js
-  ┃ ┃ ┃ ┗ 📜serverConfig.js
-  ┃ ┃ ┣ 📂core
-  ┃ ┃ ┃ ┣ 📜abortController.js
-  ┃ ┃ ┃ ┣ 📜httpHelper.js
-  ┃ ┃ ┃ ┣ 📜index.js
-  ┃ ┃ ┃ ┣ 📜networkManager.js
-  ┃ ┃ ┃ ┣ 📜offlineManager.js
-  ┃ ┃ ┃ ┣ 📜responseParser.js
-  ┃ ┃ ┃ ┣ 📜statusCode.js
-  ┃ ┃ ┃ ┗ 📜tokenRefresher.js
-  ┃ ┃ ┗ 📂offline
-  ┃ ┃ ┃ ┣ 📂files
-  ┃ ┃ ┃ ┃ ┗ 📜login.json
-  ┃ ┃ ┃ ┗ 📜index.js
-  ┃ ┣ 📂pages
-  ┃ ┃ ┣ 📂private
-  ┃ ┃ ┃ ┣ 📂dashboard
-  ┃ ┃ ┃ ┃ ┗ 📜index.jsx
-  ┃ ┃ ┃ ┃ ┣ 📜dashboard.controller.js
-  ┃ ┃ ┃ ┃ ┗ 📜dashboard.model.js
-  ┃ ┃ ┣ 📂public
-  ┃ ┃ ┃ ┣ 📂login
-  ┃ ┃ ┃ ┃ ┣ 📜index.jsx
-  ┃ ┃ ┃ ┃ ┣ 📜login.controller.js
-  ┃ ┃ ┃ ┃ ┗ 📜login.model.js
-  ┃ ┃ ┃ ┗ 📜commonStyles.js
-  ┃ ┃ ┗ 📜Error404.jsx
-  ┃ ┣ 📂redux
-  ┃ ┃ ┣ 📂dispatcher
-  ┃ ┃ ┃ ┗ 📜Loader.js
-  ┃ ┃ ┣ 📂slices
-  ┃ ┃ ┃ ┣ 📜appSlice.js
-  ┃ ┃ ┃ ┗ 📜loaderSlice.js
-  ┃ ┃ ┗ 📜store.js
-  ┃ ┣ 📂router
-  ┃ ┃ ┣ 📂routes
-  ┃ ┃ ┃ ┣ 📜dashboardRoutes.js
-  ┃ ┃ ┃ ┣ 📜index.js
-  ┃ ┃ ┃ ┣ 📜privateRoutes.js
-  ┃ ┃ ┃ ┗ 📜publicRoutes.js
-  ┃ ┃ ┗ 📜index.jsx
-  ┃ ┣ 📂styles
-  ┃ ┃ ┣ 📜global.scss
-  ┃ ┃ ┗ 📜variables.scss
-  ┃ ┣ 📂themes
-  ┃ ┃ ┗ 📜defaultTheme.js
-  ┃ ┣ 📜.DS_Store
-  ┃ ┣ 📜App.css
-  ┃ ┣ 📜App.js
-  ┃ ┣ 📜index.css
-  ┃ ┣ 📜index.js
-  ┃ ┣ 📜logo.svg
-  ┃ ┣ 📜reportWebVitals.js
-  ┃ ┗ 📜setupTests.js
-  ┣ 📜.DS_Store
-  ┣ 📜.editorconfig
-  ┣ 📜.env
-  ┣ 📜.env.dev
-  ┣ 📜.env.prod
-  ┣ 📜.env.qa
-  ┣ 📜.env.staging
-  ┣ 📜.eslintrc.js
-  ┣ 📜.gitignore
-  ┣ 📜.prettierrc
-  ┣ 📜NETWORK.MD
-  ┣ 📜README.md
-  ┣ 📜jest.config.js
-  ┣ 📜jsconfig.json
-  ┣ 📜package-lock.json
-  ┗ 📜package.json
-  ```
+
+```
+📦project
+┣ 📂.github
+┃ ┗ 📜pull_request_template.md
+┣ 📂.husky
+┃ ┣ 📂_
+┃ ┃ ┣ 📜.gitignore
+┃ ┃ ┗ 📜husky.sh
+┃ ┗ 📜pre-commit
+┣ 📂.vscode
+┃ ┗ 📜settings.json
+┣ 📂jest
+┃ ┗ 📜setup.js
+┣ 📂public
+┃ ┣ 📜favicon.ico
+┃ ┣ 📜index.html
+┃ ┣ 📜logo192.png
+┃ ┣ 📜logo512.png
+┃ ┣ 📜manifest.json
+┃ ┗ 📜robots.txt
+┣ 📂src
+┃ ┣ 📂__tests__
+┃ ┃ ┗ 📜App.test.js
+┃ ┣ 📂assets
+┃ ┃ ┣ 📂animations
+┃ ┃ ┃ ┗ 📜default-loader.json
+┃ ┃ ┗ 📂images
+┃ ┃ ┃ ┣ 📂backgrounds
+┃ ┃ ┃ ┃ ┣ 📜error-404.png
+┃ ┃ ┃ ┃ ┗ 📜eugene-golovesov-nr5zYqe0uiQ-unsplash.jpg
+┃ ┃ ┃ ┗ 📂placeholders
+┃ ┃ ┃ ┃ ┗ 📜onboardingng.jpg
+┃ ┣ 📂auth
+┃ ┃ ┗ 📜AuthContext.js
+┃ ┣ 📂components
+┃ ┃ ┗ 📂Loader
+┃ ┃ ┃ ┣ 📜AppLoader.js
+┃ ┃ ┃ ┗ 📜Loader.module.css
+┃ ┣ 📂constants
+┃ ┃ ┗ 📜cookieKeys.js
+┃ ┣ 📂helpers
+┃ ┃ ┣ 📂__tests__
+┃ ┃ ┃ ┣ 📜functionTests.js
+┃ ┃ ┃ ┗ 📜sorterTests.js
+┃ ┃ ┣ 📂app-dates
+┃ ┃ ┃ ┗ 📜dates.js
+┃ ┃ ┗ 📂validators
+┃ ┃ ┃ ┣ 📜forgotPassword.js
+┃ ┃ ┃ ┗ 📜login.js
+┃ ┣ 📂hooks
+┃ ┃ ┣ 📜providers.js
+┃ ┃ ┣ 📜state.js
+┃ ┃ ┣ 📜utils.js
+┃ ┃ ┗ 📜web.js
+┃ ┣ 📂layout
+┃ ┃ ┣ 📜privateLayout.js
+┃ ┃ ┣ 📜privateLayoutStyles.js
+┃ ┃ ┣ 📜publicLayout.jsx
+┃ ┃ ┗ 📜publicLayoutStyles.js
+┃ ┣ 📂network
+┃ ┃ ┣ 📂config
+┃ ┃ ┃ ┣ 📜endpoints.js
+┃ ┃ ┃ ┗ 📜serverConfig.js
+┃ ┃ ┣ 📂core
+┃ ┃ ┃ ┣ 📜abortController.js
+┃ ┃ ┃ ┣ 📜httpHelper.js
+┃ ┃ ┃ ┣ 📜index.js
+┃ ┃ ┃ ┣ 📜networkManager.js
+┃ ┃ ┃ ┣ 📜offlineManager.js
+┃ ┃ ┃ ┣ 📜responseParser.js
+┃ ┃ ┃ ┣ 📜statusCode.js
+┃ ┃ ┃ ┗ 📜tokenRefresher.js
+┃ ┃ ┗ 📂offline
+┃ ┃ ┃ ┣ 📂files
+┃ ┃ ┃ ┃ ┗ 📜login.json
+┃ ┃ ┃ ┗ 📜index.js
+┃ ┣ 📂pages
+┃ ┃ ┣ 📂private
+┃ ┃ ┃ ┣ 📂dashboard
+┃ ┃ ┃ ┃ ┗ 📜index.jsx
+┃ ┃ ┃ ┃ ┣ 📜dashboard.controller.js
+┃ ┃ ┃ ┃ ┗ 📜dashboard.model.js
+┃ ┃ ┣ 📂public
+┃ ┃ ┃ ┣ 📂login
+┃ ┃ ┃ ┃ ┣ 📜index.jsx
+┃ ┃ ┃ ┃ ┣ 📜login.controller.js
+┃ ┃ ┃ ┃ ┗ 📜login.model.js
+┃ ┃ ┃ ┗ 📜commonStyles.js
+┃ ┃ ┗ 📜Error404.jsx
+┃ ┣ 📂redux
+┃ ┃ ┣ 📂dispatcher
+┃ ┃ ┃ ┗ 📜Loader.js
+┃ ┃ ┣ 📂slices
+┃ ┃ ┃ ┣ 📜appSlice.js
+┃ ┃ ┃ ┗ 📜loaderSlice.js
+┃ ┃ ┗ 📜store.js
+┃ ┣ 📂router
+┃ ┃ ┣ 📂routes
+┃ ┃ ┃ ┣ 📜dashboardRoutes.js
+┃ ┃ ┃ ┣ 📜index.js
+┃ ┃ ┃ ┣ 📜privateRoutes.js
+┃ ┃ ┃ ┗ 📜publicRoutes.js
+┃ ┃ ┗ 📜index.jsx
+┃ ┣ 📂styles
+┃ ┃ ┣ 📜global.scss
+┃ ┃ ┗ 📜variables.scss
+┃ ┣ 📂themes
+┃ ┃ ┗ 📜defaultTheme.js
+┃ ┣ 📜.DS_Store
+┃ ┣ 📜App.css
+┃ ┣ 📜App.js
+┃ ┣ 📜index.css
+┃ ┣ 📜index.js
+┃ ┣ 📜logo.svg
+┃ ┣ 📜reportWebVitals.js
+┃ ┗ 📜setupTests.js
+┣ 📜.DS_Store
+┣ 📜.editorconfig
+┣ 📜.env
+┣ 📜.env.dev
+┣ 📜.env.prod
+┣ 📜.env.qa
+┣ 📜.env.staging
+┣ 📜.eslintrc.js
+┣ 📜.gitignore
+┣ 📜.prettierrc
+┣ 📜NETWORK.MD
+┣ 📜README.md
+┣ 📜jest.config.js
+┣ 📜jsconfig.json
+┣ 📜package-lock.json
+┗ 📜package.json
+```
+
 </details>
 
 ## Some basic instructions
@@ -198,14 +199,15 @@ Now, we have following components for the perticular view. Let's say we're creat
 - login.controller.js (ViewModel)
 - login.model.js (Model)
 
-**:one: View** The is nothing but the UI, where we would write all of our JSX
-**:two: ViewModel** This is the controller part, where we write all of our business logics. This is nothing but just a hook to perform all the logics.
+**:one: View** The is nothing but the UI, where we would write all of our JSX.\
+**:two: ViewModel** This is the controller part, where we write all of our business logics. This is nothing but just a hook to perform all the logics.\
 **:three: Model** The model is responsible for all the data related operations. This will handle the data, let's say Redux operations and Network call.
 
 ### Example
 
 <details>
   <summary>Example MVVM Code</summary>
+  
   ### View
 
 // login.jsx
