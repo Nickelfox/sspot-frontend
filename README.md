@@ -34,140 +34,144 @@ This boilerplate is created in the interest of developers to make the basic deve
 | staging    | .staging |
 | prod       | .prod    |
 
-# Structure
+# Basic Structure
 
-```
-📦project
- ┣ 📂.github
- ┃ ┗ 📜pull_request_template.md
- ┣ 📂.husky
- ┃ ┣ 📂_
- ┃ ┃ ┣ 📜.gitignore
- ┃ ┃ ┗ 📜husky.sh
- ┃ ┗ 📜pre-commit
- ┣ 📂.vscode
- ┃ ┗ 📜settings.json
- ┣ 📂jest
- ┃ ┗ 📜setup.js
- ┣ 📂public
- ┃ ┣ 📜favicon.ico
- ┃ ┣ 📜index.html
- ┃ ┣ 📜logo192.png
- ┃ ┣ 📜logo512.png
- ┃ ┣ 📜manifest.json
- ┃ ┗ 📜robots.txt
- ┣ 📂src
- ┃ ┣ 📂__tests__
- ┃ ┃ ┗ 📜App.test.js
- ┃ ┣ 📂assets
- ┃ ┃ ┗ 📂images
- ┃ ┃ ┃ ┣ 📂backgrounds
- ┃ ┃ ┃ ┃ ┣ 📜error-404.png
- ┃ ┃ ┃ ┃ ┗ 📜eugene-golovesov-nr5zYqe0uiQ-unsplash.jpg
- ┃ ┃ ┃ ┗ 📂placeholders
- ┃ ┃ ┃ ┃ ┗ 📜onboardingng.jpg
- ┃ ┣ 📂auth
- ┃ ┃ ┗ 📜AuthContext.js
- ┃ ┣ 📂components
- ┃ ┃ ┗ 📂Loader
- ┃ ┃ ┃ ┗ 📜AppLoader.js
- ┃ ┣ 📂constants
- ┃ ┃ ┗ 📜cookieKeys.js
- ┃ ┣ 📂helpers
- ┃ ┃ ┣ 📂__tests__
- ┃ ┃ ┃ ┣ 📜functionTests.js
- ┃ ┃ ┃ ┗ 📜sorterTests.js
- ┃ ┃ ┣ 📂app-dates
- ┃ ┃ ┃ ┗ 📜dates.js
- ┃ ┃ ┗ 📂validators
- ┃ ┃ ┃ ┣ 📜forgotPassword.js
- ┃ ┃ ┃ ┗ 📜login.js
- ┃ ┣ 📂hooks
- ┃ ┃ ┣ 📜providers.js
- ┃ ┃ ┣ 📜state.js
- ┃ ┃ ┣ 📜utils.js
- ┃ ┃ ┗ 📜web.js
- ┃ ┣ 📂layout
- ┃ ┃ ┣ 📜privateLayout.js
- ┃ ┃ ┣ 📜privateLayoutStyles.js
- ┃ ┃ ┣ 📜publicLayout.jsx
- ┃ ┃ ┗ 📜publicLayoutStyles.js
- ┃ ┣ 📂network
- ┃ ┃ ┣ 📂core
- ┃ ┃ ┃ ┣ 📜abortController.js
- ┃ ┃ ┃ ┣ 📜endpoints.js
- ┃ ┃ ┃ ┣ 📜httpHelper.js
- ┃ ┃ ┃ ┣ 📜index.js
- ┃ ┃ ┃ ┣ 📜networkManager.js
- ┃ ┃ ┃ ┣ 📜offlineManager.js
- ┃ ┃ ┃ ┣ 📜responseParser.js
- ┃ ┃ ┃ ┣ 📜serverConfig.js
- ┃ ┃ ┃ ┣ 📜statusCode.js
- ┃ ┃ ┃ ┗ 📜tokenRefresher.js
- ┃ ┃ ┣ 📂offlineResponse
- ┃ ┃ ┃ ┣ 📂files
- ┃ ┃ ┃ ┃ ┗ 📜login.json
- ┃ ┃ ┃ ┗ 📜index.js
- ┃ ┃ ┗ 📜authService.js
- ┃ ┣ 📂pages
- ┃ ┃ ┣ 📂private
- ┃ ┃ ┃ ┣ 📂dashboard
- ┃ ┃ ┃ ┃ ┗ 📜index.jsx
- ┃ ┃ ┃ ┣ 📂settings
- ┃ ┃ ┃ ┃ ┗ 📜index.jsx
- ┃ ┃ ┃ ┣ 📂sub-admins
- ┃ ┃ ┃ ┃ ┗ 📜index.jsx
- ┃ ┃ ┃ ┗ 📂users
- ┃ ┃ ┃ ┃ ┗ 📜index.jsx
- ┃ ┃ ┣ 📂public
- ┃ ┃ ┃ ┣ 📂forgot-password
- ┃ ┃ ┃ ┃ ┗ 📜index.jsx
- ┃ ┃ ┃ ┣ 📂login
- ┃ ┃ ┃ ┃ ┗ 📜index.jsx
- ┃ ┃ ┃ ┣ 📂signup
- ┃ ┃ ┃ ┃ ┗ 📜index.jsx
- ┃ ┃ ┃ ┗ 📜commonStyles.js
- ┃ ┃ ┗ 📜Error404.jsx
- ┃ ┣ 📂redux
- ┃ ┃ ┣ 📂slices
- ┃ ┃ ┃ ┗ 📜appSlice.js
- ┃ ┃ ┗ 📜store.js
- ┃ ┣ 📂router
- ┃ ┃ ┣ 📂routes
- ┃ ┃ ┃ ┣ 📜dashboardRoutes.js
- ┃ ┃ ┃ ┣ 📜index.js
- ┃ ┃ ┃ ┣ 📜privateRoutes.js
- ┃ ┃ ┃ ┗ 📜publicRoutes.js
- ┃ ┃ ┗ 📜index.jsx
- ┃ ┣ 📂styles
- ┃ ┃ ┣ 📜global.scss
- ┃ ┃ ┗ 📜variables.scss
- ┃ ┣ 📂themes
- ┃ ┃ ┗ 📜defaultTheme.js
- ┃ ┣ 📜.DS_Store
- ┃ ┣ 📜App.css
- ┃ ┣ 📜App.js
- ┃ ┣ 📜index.css
- ┃ ┣ 📜index.js
- ┃ ┣ 📜logo.svg
- ┃ ┣ 📜reportWebVitals.js
- ┃ ┗ 📜setupTests.js
- ┣ 📜.DS_Store
- ┣ 📜.env
- ┣ 📜.env.dev
- ┣ 📜.env.prod
- ┣ 📜.env.qa
- ┣ 📜.env.staging
- ┣ 📜.eslintrc.js
- ┣ 📜.gitignore
- ┣ 📜.prettierrc
- ┣ 📜NETWORK.MD
- ┣ 📜README.md
- ┣ 📜jest.config.js
- ┣ 📜jsconfig.json
- ┣ 📜package-lock.json
- ┗ 📜package.json
-```
+<details>
+  <summary>Project Structure</summary>
+  ```
+  📦project
+  ┣ 📂.github
+  ┃ ┗ 📜pull_request_template.md
+  ┣ 📂.husky
+  ┃ ┣ 📂_
+  ┃ ┃ ┣ 📜.gitignore
+  ┃ ┃ ┗ 📜husky.sh
+  ┃ ┗ 📜pre-commit
+  ┣ 📂.vscode
+  ┃ ┗ 📜settings.json
+  ┣ 📂jest
+  ┃ ┗ 📜setup.js
+  ┣ 📂public
+  ┃ ┣ 📜favicon.ico
+  ┃ ┣ 📜index.html
+  ┃ ┣ 📜logo192.png
+  ┃ ┣ 📜logo512.png
+  ┃ ┣ 📜manifest.json
+  ┃ ┗ 📜robots.txt
+  ┣ 📂src
+  ┃ ┣ 📂__tests__
+  ┃ ┃ ┗ 📜App.test.js
+  ┃ ┣ 📂assets
+  ┃ ┃ ┣ 📂animations
+  ┃ ┃ ┃ ┗ 📜default-loader.json
+  ┃ ┃ ┗ 📂images
+  ┃ ┃ ┃ ┣ 📂backgrounds
+  ┃ ┃ ┃ ┃ ┣ 📜error-404.png
+  ┃ ┃ ┃ ┃ ┗ 📜eugene-golovesov-nr5zYqe0uiQ-unsplash.jpg
+  ┃ ┃ ┃ ┗ 📂placeholders
+  ┃ ┃ ┃ ┃ ┗ 📜onboardingng.jpg
+  ┃ ┣ 📂auth
+  ┃ ┃ ┗ 📜AuthContext.js
+  ┃ ┣ 📂components
+  ┃ ┃ ┗ 📂Loader
+  ┃ ┃ ┃ ┣ 📜AppLoader.js
+  ┃ ┃ ┃ ┗ 📜Loader.module.css
+  ┃ ┣ 📂constants
+  ┃ ┃ ┗ 📜cookieKeys.js
+  ┃ ┣ 📂helpers
+  ┃ ┃ ┣ 📂__tests__
+  ┃ ┃ ┃ ┣ 📜functionTests.js
+  ┃ ┃ ┃ ┗ 📜sorterTests.js
+  ┃ ┃ ┣ 📂app-dates
+  ┃ ┃ ┃ ┗ 📜dates.js
+  ┃ ┃ ┗ 📂validators
+  ┃ ┃ ┃ ┣ 📜forgotPassword.js
+  ┃ ┃ ┃ ┗ 📜login.js
+  ┃ ┣ 📂hooks
+  ┃ ┃ ┣ 📜providers.js
+  ┃ ┃ ┣ 📜state.js
+  ┃ ┃ ┣ 📜utils.js
+  ┃ ┃ ┗ 📜web.js
+  ┃ ┣ 📂layout
+  ┃ ┃ ┣ 📜privateLayout.js
+  ┃ ┃ ┣ 📜privateLayoutStyles.js
+  ┃ ┃ ┣ 📜publicLayout.jsx
+  ┃ ┃ ┗ 📜publicLayoutStyles.js
+  ┃ ┣ 📂network
+  ┃ ┃ ┣ 📂config
+  ┃ ┃ ┃ ┣ 📜endpoints.js
+  ┃ ┃ ┃ ┗ 📜serverConfig.js
+  ┃ ┃ ┣ 📂core
+  ┃ ┃ ┃ ┣ 📜abortController.js
+  ┃ ┃ ┃ ┣ 📜httpHelper.js
+  ┃ ┃ ┃ ┣ 📜index.js
+  ┃ ┃ ┃ ┣ 📜networkManager.js
+  ┃ ┃ ┃ ┣ 📜offlineManager.js
+  ┃ ┃ ┃ ┣ 📜responseParser.js
+  ┃ ┃ ┃ ┣ 📜statusCode.js
+  ┃ ┃ ┃ ┗ 📜tokenRefresher.js
+  ┃ ┃ ┗ 📂offline
+  ┃ ┃ ┃ ┣ 📂files
+  ┃ ┃ ┃ ┃ ┗ 📜login.json
+  ┃ ┃ ┃ ┗ 📜index.js
+  ┃ ┣ 📂pages
+  ┃ ┃ ┣ 📂private
+  ┃ ┃ ┃ ┣ 📂dashboard
+  ┃ ┃ ┃ ┃ ┗ 📜index.jsx
+  ┃ ┃ ┃ ┃ ┣ 📜dashboard.controller.js
+  ┃ ┃ ┃ ┃ ┗ 📜dashboard.model.js
+  ┃ ┃ ┣ 📂public
+  ┃ ┃ ┃ ┣ 📂login
+  ┃ ┃ ┃ ┃ ┣ 📜index.jsx
+  ┃ ┃ ┃ ┃ ┣ 📜login.controller.js
+  ┃ ┃ ┃ ┃ ┗ 📜login.model.js
+  ┃ ┃ ┃ ┗ 📜commonStyles.js
+  ┃ ┃ ┗ 📜Error404.jsx
+  ┃ ┣ 📂redux
+  ┃ ┃ ┣ 📂dispatcher
+  ┃ ┃ ┃ ┗ 📜Loader.js
+  ┃ ┃ ┣ 📂slices
+  ┃ ┃ ┃ ┣ 📜appSlice.js
+  ┃ ┃ ┃ ┗ 📜loaderSlice.js
+  ┃ ┃ ┗ 📜store.js
+  ┃ ┣ 📂router
+  ┃ ┃ ┣ 📂routes
+  ┃ ┃ ┃ ┣ 📜dashboardRoutes.js
+  ┃ ┃ ┃ ┣ 📜index.js
+  ┃ ┃ ┃ ┣ 📜privateRoutes.js
+  ┃ ┃ ┃ ┗ 📜publicRoutes.js
+  ┃ ┃ ┗ 📜index.jsx
+  ┃ ┣ 📂styles
+  ┃ ┃ ┣ 📜global.scss
+  ┃ ┃ ┗ 📜variables.scss
+  ┃ ┣ 📂themes
+  ┃ ┃ ┗ 📜defaultTheme.js
+  ┃ ┣ 📜.DS_Store
+  ┃ ┣ 📜App.css
+  ┃ ┣ 📜App.js
+  ┃ ┣ 📜index.css
+  ┃ ┣ 📜index.js
+  ┃ ┣ 📜logo.svg
+  ┃ ┣ 📜reportWebVitals.js
+  ┃ ┗ 📜setupTests.js
+  ┣ 📜.DS_Store
+  ┣ 📜.editorconfig
+  ┣ 📜.env
+  ┣ 📜.env.dev
+  ┣ 📜.env.prod
+  ┣ 📜.env.qa
+  ┣ 📜.env.staging
+  ┣ 📜.eslintrc.js
+  ┣ 📜.gitignore
+  ┣ 📜.prettierrc
+  ┣ 📜NETWORK.MD
+  ┣ 📜README.md
+  ┣ 📜jest.config.js
+  ┣ 📜jsconfig.json
+  ┣ 📜package-lock.json
+  ┗ 📜package.json
+  ```
+</details>
 
 ## Some basic instructions
 
@@ -180,6 +184,160 @@ This boilerplate is created in the interest of developers to make the basic deve
 - All the private routes should be declared in `router/routes/privateRoutes.js` and all the public routes should be declared in `router/routes/privateRoutes.js` file.
 - If you need to update theme and colors, please make those changes in `src/themes/defaultTheme.js` file or create a new one in the same directory.
 - Theme should be loaded in `src/App.js` `createTheme()` function
+
+## The Architecture
+
+#### **Now we're using MVVM architecture for our react projects**
+
+We have migrated our scaffolding to MVVM architecture and the latest scaffolding follows the same. We'll make more optimsiations in future.
+
+Now, we have following components for the perticular view. Let's say we're creating Login page(view), so there would be 3 files for the this view
+
+- index.jsx (OR login.jsx) (View)
+- login.controller.js (ViewModel)
+- login.model.js (Model)
+
+**:one: View** The is nothing but the UI, where we would write all of our JSX
+**:two: ViewModel** This is the controller part, where we write all of our business logics. This is nothing but just a hook to perform all the logics.
+**:three: Model** The model is responsible for all the data related operations. This will handle the data, let's say Redux operations and Network call.
+
+### Example
+
+<details>
+  <summary>Example MVVM Code</summary>
+  ### View
+  ```js
+    // login.jsx
+    import React from "react"
+    import { Typography, TextField, Grid, Divider, Box, InputLabel, InputAdornment, IconButton } from "@mui/material"
+    import { Visibility, VisibilityOff } from "@mui/icons-material"
+    import { Formik } from "formik"
+    import { useStyles } from "../commonStyles"
+    import { LoadingButton } from "@mui/lab"
+    import LockOpenIcon from "@mui/icons-material/LockOpen"
+    import { LoginValidator } from "helpers/validators/login"
+    import { useLoginController } from "./login.controller"
+
+    const Login = () => {
+      const styles = useStyles()
+      const controller = useLoginController()
+
+      return (
+        <Box sx={styles.container}>
+          <Typography align="left" variant="h3">
+            Sign In
+          </Typography>
+          <Typography sx={styles.topLabel} variant="subtitle">
+            Enter Your Credentials
+          </Typography>
+          <Grid sx={styles.form} container spacing={2}>
+            <Divider />
+            <Formik
+              validateOnMount
+              initialValues={LoginValidator.initialValues}
+              validationSchema={LoginValidator.validationSchema}
+              onSubmit={controller.handleLogin}
+            >
+              {(formik) => (
+                <React.Fragment>
+                  <Grid item xs={12}>
+                    <TextField name="email" />
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <TextField name="password" />
+                  </Grid>
+
+                  <Grid sx={styles.buttonContainer} item xs={12}>
+                    <LoadingButton
+                      type="submit"
+                      disabled={!isValid || controller.showLoader}
+                      variant="contained"
+                      sx={styles.submitBtn}
+                      size="large"
+                      onClick={handleSubmit}
+                      loading={controller.showLoader}
+                      loadingPosition="start"
+                      startIcon={<LockOpenIcon />}
+                    >
+                      Sign In
+                    </LoadingButton>
+                  </Grid>
+                </React.Fragment>
+              )}
+            </Formik>
+          </Grid>
+        </Box>
+      )
+    }
+
+    export default Login
+
+````
+
+### Controller
+```js
+  import { useState } from "react"
+  import { useCookies } from "react-cookie"
+  import { CookieKeys, CookieOptions } from "constants/cookieKeys"
+  import { useNavigate } from "react-router-dom"
+  import { useLoginModel } from "./login.model"
+
+  export const useLoginController = () => {
+    const [showPassword, setShowPassword] = useState(false)
+    const [showLoader, setShowLoader] = useState(false)
+    // eslint-disable-next-line no-unused-vars
+    const [cookies, setCookie] = useCookies([CookieKeys.Auth])
+    const navigate = useNavigate()
+    const model = useLoginModel()
+
+    const togglePasswordVisiblity = () => {
+      setShowPassword((prev) => !prev)
+    }
+
+    const handleLogin = async (values) => {
+      setShowLoader(true)
+      const response = await model.loginByEmail(values)
+      setShowLoader(false)
+      if (response.success) {
+        setCookie(CookieKeys.Auth, response.data.token, CookieOptions)
+      } else {
+        // TODO: show error toast
+      }
+    }
+
+    const navigateToForgotPassword = () => {
+      navigate("/auth/forgot-password")
+    }
+
+    return {
+      showPassword,
+      showLoader,
+      togglePasswordVisiblity,
+      handleLogin,
+      navigateToForgotPassword
+    }
+  }
+````
+
+### Model
+
+```js
+import { NetworkManager, API } from "network/core"
+
+export const useLoginModel = () => {
+  const loginByEmail = async (values) => {
+    const instance = NetworkManager(API.AUTH.LOGIN)
+    return await instance.request(values)
+  }
+
+  return {
+    loginByEmail
+  }
+}
+```
+
+</details>
 
 ## Imports
 
@@ -200,9 +358,8 @@ You need not to write long import paths for most of the times.
 
 ## Some other important points
 
-- This boilerplate is set with `redux-persist` and you need not set values explicitly in localStorage.
 - All you need to do is dispatch the action to redux and set/read the values from redux.
-- All the API calls will be done by `NetworkManage.js` using fetch API.
+- All the API calls will be done by `NetworkManage.js` using axios API.
 
 ### Network call Example
 
@@ -237,17 +394,21 @@ The second parameter in the Endpoint Class is `HTTP` method. This will be one of
 
 #### Step 3
 
-Now create a new service file in `network/` directory. We'll create `authService.js` file for our case.
+Make a network call in Model
 
 ```js
-// Sample service to make network call
+// Sample model to make network call
 
-import { API, NetworkManager } from "./core"
+import { NetworkManager, API } from "network/core"
 
-export class AuthService {
-  static async loginByEmail(payload) {
-    const instance = NetworkManager(API.TEST.LIST)
+export const useUserModel = () => {
+  const createUser = async (payload) => {
+    const instance = NetworkManager(API.USERS.CREAT)
     return await instance.request(payload)
+  }
+
+  return {
+    createUser
   }
 }
 ```
@@ -256,16 +417,17 @@ First you need to create a new instance of the `NetworkManager` by passing the E
 
 **For more detailed information about Network Call, please read [Network Call Docs](/NETWORK.MD)**
 
-### `npm run test`
+### Build and deploy the application
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+To build the application run :
 
-### `npm run build`
+```bash
+  npm run build:[env]
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**_env is one of dev/qa or prod_**
 
+This will generate the `build` folder.\
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
