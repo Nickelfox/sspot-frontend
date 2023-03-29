@@ -38,6 +38,7 @@ This boilerplate is created in the interest of developers to make the basic deve
 
 <details>
   <summary>Project Structure</summary>
+  
   ```
   📦project
   ┣ 📂.github
@@ -206,121 +207,134 @@ Now, we have following components for the perticular view. Let's say we're creat
 <details>
   <summary>Example MVVM Code</summary>
   ### View
-  ```js
-    // login.jsx
-    import React from "react"
-    import { Typography, TextField, Grid, Divider, Box, InputLabel, InputAdornment, IconButton } from "@mui/material"
-    import { Visibility, VisibilityOff } from "@mui/icons-material"
-    import { Formik } from "formik"
-    import { useStyles } from "../commonStyles"
-    import { LoadingButton } from "@mui/lab"
-    import LockOpenIcon from "@mui/icons-material/LockOpen"
-    import { LoginValidator } from "helpers/validators/login"
-    import { useLoginController } from "./login.controller"
 
-    const Login = () => {
-      const styles = useStyles()
-      const controller = useLoginController()
+// login.jsx
 
-      return (
-        <Box sx={styles.container}>
-          <Typography align="left" variant="h3">
-            Sign In
-          </Typography>
-          <Typography sx={styles.topLabel} variant="subtitle">
-            Enter Your Credentials
-          </Typography>
-          <Grid sx={styles.form} container spacing={2}>
-            <Divider />
-            <Formik
-              validateOnMount
-              initialValues={LoginValidator.initialValues}
-              validationSchema={LoginValidator.validationSchema}
-              onSubmit={controller.handleLogin}
-            >
-              {(formik) => (
-                <React.Fragment>
-                  <Grid item xs={12}>
-                    <TextField name="email" />
-                  </Grid>
+```js
+import React from "react"
+import {
+  Typography,
+  TextField,
+  Grid,
+  Divider,
+  Box,
+  InputLabel,
+  InputAdornment,
+  IconButton
+} from "@mui/material"
+import { Visibility, VisibilityOff } from "@mui/icons-material"
+import { Formik } from "formik"
+import { useStyles } from "../commonStyles"
+import { LoadingButton } from "@mui/lab"
+import LockOpenIcon from "@mui/icons-material/LockOpen"
+import { LoginValidator } from "helpers/validators/login"
+import { useLoginController } from "./login.controller"
 
-                  <Grid item xs={12}>
-                    <TextField name="password" />
-                  </Grid>
+const Login = () => {
+  const styles = useStyles()
+  const controller = useLoginController()
 
-                  <Grid sx={styles.buttonContainer} item xs={12}>
-                    <LoadingButton
-                      type="submit"
-                      disabled={!isValid || controller.showLoader}
-                      variant="contained"
-                      sx={styles.submitBtn}
-                      size="large"
-                      onClick={handleSubmit}
-                      loading={controller.showLoader}
-                      loadingPosition="start"
-                      startIcon={<LockOpenIcon />}
-                    >
-                      Sign In
-                    </LoadingButton>
-                  </Grid>
-                </React.Fragment>
-              )}
-            </Formik>
-          </Grid>
-        </Box>
-      )
-    }
+  return (
+    <Box sx={styles.container}>
+      <Typography align="left" variant="h3">
+        Sign In
+      </Typography>
+      <Typography sx={styles.topLabel} variant="subtitle">
+        Enter Your Credentials
+      </Typography>
+      <Grid sx={styles.form} container spacing={2}>
+        <Divider />
+        <Formik
+          validateOnMount
+          initialValues={LoginValidator.initialValues}
+          validationSchema={LoginValidator.validationSchema}
+          onSubmit={controller.handleLogin}>
+          {(formik) => (
+            <React.Fragment>
+              <Grid item xs={12}>
+                <TextField name="email" />
+              </Grid>
 
-    export default Login
+              <Grid item xs={12}>
+                <TextField name="password" />
+              </Grid>
 
-````
+              <Grid sx={styles.buttonContainer} item xs={12}>
+                <LoadingButton
+                  type="submit"
+                  disabled={!isValid || controller.showLoader}
+                  variant="contained"
+                  sx={styles.submitBtn}
+                  size="large"
+                  onClick={handleSubmit}
+                  loading={controller.showLoader}
+                  loadingPosition="start"
+                  startIcon={<LockOpenIcon />}>
+                  Sign In
+                </LoadingButton>
+              </Grid>
+            </React.Fragment>
+          )}
+        </Formik>
+      </Grid>
+    </Box>
+  )
+}
+
+export default Login
+```
 
 ### Controller
+
+// login.controller.js
+
 ```js
-  import { useState } from "react"
-  import { useCookies } from "react-cookie"
-  import { CookieKeys, CookieOptions } from "constants/cookieKeys"
-  import { useNavigate } from "react-router-dom"
-  import { useLoginModel } from "./login.model"
+import { useState } from "react"
+import { useCookies } from "react-cookie"
+import { CookieKeys, CookieOptions } from "constants/cookieKeys"
+import { useNavigate } from "react-router-dom"
+import { useLoginModel } from "./login.model"
 
-  export const useLoginController = () => {
-    const [showPassword, setShowPassword] = useState(false)
-    const [showLoader, setShowLoader] = useState(false)
-    // eslint-disable-next-line no-unused-vars
-    const [cookies, setCookie] = useCookies([CookieKeys.Auth])
-    const navigate = useNavigate()
-    const model = useLoginModel()
+export const useLoginController = () => {
+  const [showPassword, setShowPassword] = useState(false)
+  const [showLoader, setShowLoader] = useState(false)
+  // eslint-disable-next-line no-unused-vars
+  const [cookies, setCookie] = useCookies([CookieKeys.Auth])
+  const navigate = useNavigate()
+  const model = useLoginModel()
 
-    const togglePasswordVisiblity = () => {
-      setShowPassword((prev) => !prev)
-    }
+  const togglePasswordVisiblity = () => {
+    setShowPassword((prev) => !prev)
+  }
 
-    const handleLogin = async (values) => {
-      setShowLoader(true)
-      const response = await model.loginByEmail(values)
-      setShowLoader(false)
-      if (response.success) {
-        setCookie(CookieKeys.Auth, response.data.token, CookieOptions)
-      } else {
-        // TODO: show error toast
-      }
-    }
-
-    const navigateToForgotPassword = () => {
-      navigate("/auth/forgot-password")
-    }
-
-    return {
-      showPassword,
-      showLoader,
-      togglePasswordVisiblity,
-      handleLogin,
-      navigateToForgotPassword
+  const handleLogin = async (values) => {
+    setShowLoader(true)
+    const response = await model.loginByEmail(values)
+    setShowLoader(false)
+    if (response.success) {
+      setCookie(CookieKeys.Auth, response.data.token, CookieOptions)
+    } else {
+      // TODO: show error toast
     }
   }
-````
+
+  const navigateToForgotPassword = () => {
+    navigate("/auth/forgot-password")
+  }
+
+  return {
+    showPassword,
+    showLoader,
+    togglePasswordVisiblity,
+    handleLogin,
+    navigateToForgotPassword
+  }
+}
+```
 
 ### Model
+
+// login.model.js
 
 ```js
 import { NetworkManager, API } from "network/core"
