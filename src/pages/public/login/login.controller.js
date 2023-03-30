@@ -23,8 +23,6 @@ export const useLoginController = () => {
     if (response.success) {
       setCookie(CookieKeys.Auth, response.data.access_token, CookieOptions)
       setCookie(CookieKeys.REFRESH_TOKEN, response.data.refresh_token, CookieOptions)
-    } else {
-      // TODO: show error toast
     }
   }
 

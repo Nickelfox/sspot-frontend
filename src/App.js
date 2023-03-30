@@ -7,6 +7,8 @@ import { store } from "redux/store"
 import { CookiesProvider } from "react-cookie"
 import "./styles/global.scss"
 import AppLoader from "components/Loader/AppLoader"
+import { ToastContainer } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 /**
  * @description Check if browser is Safar
@@ -29,6 +31,7 @@ function App() {
         <ThemeProvider theme={currentTheme}>
           <AppLoader />
           <AppRouter />
+          <ToastContainer />
         </ThemeProvider>
       </Provider>
     </CookiesProvider>

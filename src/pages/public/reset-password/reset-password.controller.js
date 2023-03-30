@@ -34,8 +34,6 @@ export const useResetPasswordController = () => {
     setShowLoader(false)
     if (response.success) {
       navigate("/auth/login")
-    } else {
-      // TODO: show error toast
     }
   }
 

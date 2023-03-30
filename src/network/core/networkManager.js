@@ -9,6 +9,7 @@ import { CookieKeys } from "constants/cookieKeys"
 import { APIAborter } from "./abortController"
 import offlineManager from "./offlineManager"
 import { HTTP_STATUS } from "./statusCode"
+import { apiError, offlineNotation } from "./errorParser"
 
 // ********************
 // Create a new Instance of NetworkManager by passing APIRouter argument
@@ -71,8 +72,10 @@ export default function networkManager(router, withFile = false) {
       return new APIResponse(response.data, response.success, result.status, response.data?.message)
     } catch (err) {
       // Catch all errors
+      apiError(err?.response?.data?.error?.message)
       const IsNetworkError = err.code === HTTP_STATUS.NETWORK_ERR
       if (router instanceof APIWithOfflineRouter && AppEnvIsDev && IsNetworkError) {
+        offlineNotation()
         return offlineManager(router.offlineJson)
       }
       return new APIError(err.message, err.code)

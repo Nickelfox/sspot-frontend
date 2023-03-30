@@ -17,8 +17,6 @@ export const useForgotPasswordController = () => {
     setShowLoader(false)
     if (response.success) {
       setIsEmailSent(true)
-    } else {
-      // TODO: show error toast
     }
   }
 
