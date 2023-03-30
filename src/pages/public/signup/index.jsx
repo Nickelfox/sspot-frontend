@@ -5,7 +5,7 @@ import { useSignupController } from "./signup.controller"
 import { useStyles } from "../commonStyles"
 import FormField from "components/Loader/FormField"
 import "react-phone-number-input/style.css"
-import PhoneInput from "react-phone-number-input"
+import PhoneInput, { getCountryCallingCode } from "react-phone-number-input"
 import { LoadingButton } from "@mui/lab"
 import { SignUpValidator } from "helpers/validators/signup"
 import UserImg from "assets/images/backgrounds/DefaultImg.png"
@@ -36,10 +36,8 @@ const SignUp = () => {
         validationSchema={SignUpValidator.validationSchema}
         onSubmit={handleSignup}>
         {(formik) => {
-          console.log("formik==>", formik.errors)
           return (
             <Form onSubmit={formik.handleSubmit}>
-              {/* <Box sx={styles.container}> */}
               <Grid sx={styles.form} container spacing={2}>
                 <Grid item xs={12} sx={styles.imgBox}>
                   <CardMedia
@@ -111,10 +109,10 @@ const SignUp = () => {
                     placeholder="Enter phone number"
                     value={formik.values.phone}
                     style={{ marginTop: "20px" }}
-                    onChange={(value) => {
-                      formik.setFieldValue("phone", value)
-                      console.log("value===>", value)
-                    }}
+                    onCountryChange={(country) =>
+                      formik.setFieldValue("country_code", getCountryCallingCode(country))
+                    }
+                    onChange={(value) => formik.setFieldValue("phone", value)}
                     className={formik.errors.phone ? "input-error" : "input-field"}
                   />
                   <Box sx={styles.errorBox}>
@@ -164,7 +162,6 @@ const SignUp = () => {
                   </Typography>
                 </Grid>
               </Grid>
-              {/* </Box> */}
             </Form>
           )
         }}

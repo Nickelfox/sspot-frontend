@@ -4,8 +4,8 @@
  * @description API Success model
  */
 export class APIResponse {
-  constructor(data = {}, code, message = "") {
-    this.success = true
+  constructor(data = {}, success, code, message = "") {
+    this.success = success
     this.data = data
     this.error = null
     this.message = message

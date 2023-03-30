@@ -61,13 +61,14 @@ export default function networkManager(router, withFile = false) {
         ...(getArrayParams && { params: params })
       })
       // If token expired, get it refreshed
+      const response = result.data
       if (result.status === 401) {
         const refreshToken = cookie.get(CookieKeys.REFRESH_TOKEN)
         await refreshAuthToken(refreshToken)
         // pass the control back to network manager
         return await request(body, params)
       }
-      return new APIResponse(result.data, result.status, result.statusText)
+      return new APIResponse(response.data, response.success, result.status, response.data?.message)
     } catch (err) {
       // Catch all errors
       const IsNetworkError = err.code === HTTP_STATUS.NETWORK_ERR

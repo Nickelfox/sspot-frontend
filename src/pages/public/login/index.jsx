@@ -83,7 +83,7 @@ const Login = () => {
               </Grid>
               <Grid item xs={12}>
                 <Typography onClick={navigateToSignUp} sx={styles.forgotPassword} variant="c3">
-                  SignUp
+                  Create a new account!
                 </Typography>
               </Grid>
             </React.Fragment>

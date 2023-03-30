@@ -21,7 +21,8 @@ export const useLoginController = () => {
     const response = await model.loginByEmail(values)
     setShowLoader(false)
     if (response.success) {
-      setCookie(CookieKeys.Auth, response.data.token, CookieOptions)
+      setCookie(CookieKeys.Auth, response.data.access_token, CookieOptions)
+      setCookie(CookieKeys.REFRESH_TOKEN, response.data.refresh_token, CookieOptions)
     } else {
       // TODO: show error toast
     }
