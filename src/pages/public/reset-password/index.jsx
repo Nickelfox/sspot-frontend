@@ -17,7 +17,6 @@ function ResetPassword() {
     togglePasswordVisiblity,
     navigateToLogin,
     showPassword,
-    showCodeField,
     formikRef,
     showConfirmPassword,
     toggleConfirmPasswordVisiblity
@@ -38,18 +37,6 @@ function ResetPassword() {
           onSubmit={resetPassword}>
           {(formik) => (
             <React.Fragment>
-              {showCodeField && (
-                <Grid item xs={12}>
-                  <FormField
-                    label={"Code"}
-                    placeholder="Enter your code"
-                    formik={formik}
-                    name={"code"}
-                    required
-                    type={"tel"}
-                  />
-                </Grid>
-              )}
               <Grid item xs={12}>
                 <FormField
                   label={"New Password"}

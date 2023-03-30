@@ -11,11 +11,10 @@ import {
   ListItemButton
 } from "@mui/material"
 import { DashboardMenus } from "router/routes/dashboardRoutes"
-import { Outlet, useNavigate } from "react-router-dom"
-import { useStyles } from "./privateLayoutStyles"
+import { Outlet } from "react-router-dom"
 import LogoutIcon from "@mui/icons-material/Logout"
-import { useCookies } from "react-cookie"
-import { CookieKeys, CookieOptions } from "constants/cookieKeys"
+import { usePrivateLayoutController } from "./privateLayout.controller"
+import { useStyles } from "layout/privateLayoutStyles"
 
 const drawerWidth = 270
 
@@ -49,25 +48,9 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }))
 
 export default function PrivateLayout() {
-  const navigateTo = useNavigate()
   const styles = useStyles()
-  const currentRoute = window.location.pathname
-  // eslint-disable-next-line no-unused-vars
-  const [cookies, setCookie, removeCookie] = useCookies([CookieKeys.Auth])
 
-  const navigate = (route) => {
-    navigateTo(route)
-  }
-
-  React.useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
-
-  const handleLogout = () => {
-    removeCookie(CookieKeys.Auth, CookieOptions)
-  }
-
-  const activeMenu = (item) => currentRoute.includes(item.route)
+  const { navigate, handleLogout, activeMenu } = usePrivateLayoutController()
 
   return (
     <Box sx={{ display: "flex" }}>

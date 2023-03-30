@@ -1,10 +1,12 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useForgotPasswordModel } from "./forgot-password.model"
 
 export const useForgotPasswordController = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [showLoader, setShowLoader] = useState(false)
+  const [isEmailSent, setIsEmailSent] = useState(false)
+  const formikRef = useRef()
   const navigate = useNavigate()
   const model = useForgotPasswordModel()
 
@@ -14,7 +16,7 @@ export const useForgotPasswordController = () => {
     const response = await model.sendEmail(values)
     setShowLoader(false)
     if (response.success) {
-      navigate("/auth/reset-password")
+      setIsEmailSent(true)
     } else {
       // TODO: show error toast
     }
@@ -33,6 +35,8 @@ export const useForgotPasswordController = () => {
     showLoader,
     togglePasswordVisiblity,
     sendEmail,
-    navigateToLogin
+    navigateToLogin,
+    isEmailSent,
+    formikRef
   }
 }

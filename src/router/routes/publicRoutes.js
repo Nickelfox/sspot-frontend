@@ -10,5 +10,5 @@ export const PublicRoutes = [
   { path: "/auth/login", exact: true, component: Login },
   { path: "/auth/signup", exact: true, component: SignUp },
   { path: "/auth/forgot-password", exact: true, component: ForgotPassword },
-  { path: "/auth/reset-password", exact: false, component: ResetPassword }
+  { path: "/auth/reset-password/:id", exact: false, component: ResetPassword }
 ]

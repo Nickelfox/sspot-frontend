@@ -11,12 +11,10 @@ export const FPValidator = {
 
 export const RPValidator = {
   initialValues: {
-    code: "",
     password: "",
     confirmPassword: ""
   },
   validationSchema: Yup.object().shape({
-    code: Yup.string().required("Token is required").max(6),
     password: Yup.string().required("Password is Required").min(8),
     confirmPassword: Yup.string()
       .required("Confirm Password is Required")

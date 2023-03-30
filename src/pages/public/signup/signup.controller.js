@@ -25,7 +25,6 @@ export const useSignupController = () => {
   }
 
   const handleSignup = async (values) => {
-    console.log(values)
     setShowLoader(true)
     const payload = {
       email: values.email,

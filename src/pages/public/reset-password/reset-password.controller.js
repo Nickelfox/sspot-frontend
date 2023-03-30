@@ -1,15 +1,18 @@
-import { useEffect, useRef, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useRef, useState } from "react"
+import { useNavigate, useLocation } from "react-router-dom"
 import { useResetPasswordModel } from "./reset-password.model"
 
 export const useResetPasswordController = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setshowConfirmPassword] = useState(false)
   const [showLoader, setShowLoader] = useState(false)
-  const [showCodeField, setShowCodeField] = useState(true)
+  //   const [showCodeField, setShowCodeField] = useState(true)
   const navigate = useNavigate()
   const formikRef = useRef()
   const model = useResetPasswordModel()
+  const location = useLocation()
+
+  const token = location.pathname.split("/")[3]
 
   const togglePasswordVisiblity = () => {
     setShowPassword((prev) => !prev)
@@ -23,9 +26,9 @@ export const useResetPasswordController = () => {
     setShowLoader(true)
     // eslint-disable-next-line no-console
     const payload = {
-      code: values?.code,
-      newPassword: values.password,
-      confirmNewPassword: values.confirmPassword
+      token: token,
+      password: values.password,
+      confirm_password: values.confirmPassword
     }
     const response = await model.resetPassword(payload)
     setShowLoader(false)
@@ -35,15 +38,6 @@ export const useResetPasswordController = () => {
       // TODO: show error toast
     }
   }
-
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search)
-    const myParam = urlParams.get("token")
-    if (myParam) {
-      setShowCodeField(false)
-      formikRef.current.setFieldValue("code", myParam)
-    }
-  }, [])
 
   const navigateToLogin = () => {
     navigate("/auth/login")
@@ -55,7 +49,6 @@ export const useResetPasswordController = () => {
     togglePasswordVisiblity,
     navigateToLogin,
     showPassword,
-    showCodeField,
     formikRef,
     showConfirmPassword,
     toggleConfirmPasswordVisiblity

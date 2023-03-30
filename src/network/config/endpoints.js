@@ -17,11 +17,12 @@ export const API = {
       OFFLINE.FORGOTPASSWORD
     ),
     RESETPASSWORD: new APIWithOfflineRouter(
-      "/user/reset-password",
-      HTTP_METHODS.POST,
+      "/user/reset-password/",
+      HTTP_METHODS.PATCH,
       OFFLINE.RESETPASSWORD
     ),
-    VERIFYOTP: new APIWithOfflineRouter("/auth/login", HTTP_METHODS.POST, OFFLINE.LOGIN)
+    VERIFYOTP: new APIWithOfflineRouter("/auth/login", HTTP_METHODS.POST, OFFLINE.LOGIN),
+    LOGOUT: new APIWithOfflineRouter("/user/logout/", HTTP_METHODS.DEL, OFFLINE.LOGIN)
   },
   FILE: {
     // if you want to upload a file with or without data

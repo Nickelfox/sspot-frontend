@@ -63,6 +63,10 @@ export const useStyles = () => {
     submitBtn: {
       padding: "16px 50px"
     },
+    resendBtn: {
+      padding: "16px 50px",
+      marginBottom: "20px"
+    },
     button: {
       fontWeight: 700,
       color: theme.palette.text.white,
