@@ -41,7 +41,7 @@ export default function networkManager(router, withFile = false) {
   const cookie = new Cookies()
   const authToken = cookie.get(CookieKeys.Auth)
 
-  if (authToken) {
+  if (authToken && authToken !== "undefined") {
     axios.defaults.headers.common[API_AUTH_HEADER] = `${AUTH_TYPE} ${authToken}`
   }
 
