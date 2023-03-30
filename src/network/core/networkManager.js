@@ -78,6 +78,9 @@ export default function networkManager(router, withFile = false) {
         offlineNotation()
         return offlineManager(router.offlineJson)
       }
+      if (err.code === HTTP_STATUS.NETWORK_ERR) {
+        apiError("Internal server error!")
+      }
       return new APIError(err.message, err.code)
     }
   }

@@ -10,6 +10,16 @@ export const API = {
   AUTH: {
     // if you want to return offline json if api fails
     LOGIN: new APIWithOfflineRouter("/user/login/", HTTP_METHODS.POST, OFFLINE.LOGIN),
+    LOGIN_GOOGLE: new APIWithOfflineRouter(
+      "/user/google-login/",
+      HTTP_METHODS.POST,
+      OFFLINE.LOGINGOOGLE
+    ),
+    LOGIN_FACEBOOK: new APIWithOfflineRouter(
+      "/user/facebook-login/",
+      HTTP_METHODS.POST,
+      OFFLINE.LOGINFACEBOOK
+    ),
     SIGNUP: new APIWithOfflineRouter("/user/signup/", HTTP_METHODS.POST, OFFLINE.SIGNUP),
     FORGOTPASSWORD: new APIWithOfflineRouter(
       "/user/forgot-password/",
