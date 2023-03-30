@@ -1,21 +1,12 @@
 import React from "react"
-import {
-  Typography,
-  TextField,
-  Grid,
-  Divider,
-  Box,
-  InputLabel,
-  InputAdornment,
-  IconButton
-} from "@mui/material"
-import { Visibility, VisibilityOff } from "@mui/icons-material"
+import { Typography, Grid, Divider, Box } from "@mui/material"
 import { Formik } from "formik"
 import { useStyles } from "../commonStyles"
 import { LoadingButton } from "@mui/lab"
 import LockOpenIcon from "@mui/icons-material/LockOpen"
 import { LoginValidator } from "helpers/validators/login"
 import { useLoginController } from "./login.controller"
+import FormField from "components/Loader/FormField"
 
 const Login = () => {
   const styles = useStyles()
@@ -25,7 +16,8 @@ const Login = () => {
     showPassword,
     togglePasswordVisiblity,
     handleLogin,
-    navigateToForgotPassword
+    navigateToForgotPassword,
+    navigateToSignUp
   } = useLoginController()
 
   return (
@@ -43,73 +35,40 @@ const Login = () => {
           initialValues={LoginValidator.initialValues}
           validationSchema={LoginValidator.validationSchema}
           onSubmit={handleLogin}>
-          {({ isValid, handleSubmit, values, handleChange, handleBlur, touched, errors }) => (
+          {(formik) => (
             <React.Fragment>
               <Grid item xs={12}>
-                <InputLabel sx={styles.label} htmlFor="email">
-                  Email ID*
-                </InputLabel>
-                <TextField
-                  size="small"
-                  sx={styles.formField}
+                <FormField
+                  label={" Email ID"}
                   placeholder="Enter Your Email"
-                  name="email"
-                  inputProps={{ style: { fontSize: 14, padding: 14 } }}
-                  InputLabelProps={{ style: { fontSize: 14 } }}
-                  value={values.email}
-                  variant="outlined"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  helperText={touched.email ? errors.email : ""}
-                  error={touched.email && Boolean(errors.email)}
-                  type="email"
-                  fullWidth
-                  margin="normal"
+                  formik={formik}
+                  name={"email"}
+                  required
+                  type={"email"}
                 />
               </Grid>
 
               <Grid item xs={12}>
-                <InputLabel sx={styles.label} htmlFor="password">
-                  Password*
-                </InputLabel>
-                <TextField
-                  size="medium"
-                  sx={styles.textField1}
+                <FormField
+                  label={"Password"}
                   placeholder="Enter Your Password"
-                  name="password"
-                  value={values.password}
-                  inputProps={{ style: { fontSize: 14, padding: 14 } }}
-                  InputLabelProps={{ style: { fontSize: 14 } }}
-                  variant="outlined"
-                  onBlur={handleBlur}
-                  helperText={touched.password ? errors.password : ""}
-                  error={touched.password && Boolean(errors.password)}
-                  onChange={handleChange}
+                  formik={formik}
+                  name={"password"}
+                  required
                   type={showPassword ? "text" : "password"}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={togglePasswordVisiblity}>
-                          {showPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    )
-                  }}
-                  fullWidth
-                  margin="normal"
+                  showPassword={showPassword}
+                  togglePasswordVisiblity={togglePasswordVisiblity}
                 />
               </Grid>
 
               <Grid sx={styles.buttonContainer} item xs={12}>
                 <LoadingButton
                   type="submit"
-                  disabled={!isValid || showLoader}
+                  disabled={!formik.isValid || showLoader}
                   variant="contained"
                   sx={styles.submitBtn}
                   size="large"
-                  onClick={handleSubmit}
+                  onClick={formik.handleSubmit}
                   loading={showLoader}
                   loadingPosition="start"
                   startIcon={<LockOpenIcon />}>
@@ -120,6 +79,11 @@ const Login = () => {
                   sx={styles.forgotPassword}
                   variant="c3">
                   Forgot Password?
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography onClick={navigateToSignUp} sx={styles.forgotPassword} variant="c3">
+                  SignUp
                 </Typography>
               </Grid>
             </React.Fragment>

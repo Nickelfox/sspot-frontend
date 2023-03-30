@@ -3,7 +3,7 @@ export const APIConfig = {
   TIMEOUT: 15000,
   API_AUTH_HEADER: "Authorization",
   AUTH_TYPE: "Bearer",
-  DEFAULT_VERSION: "v1", // OR set it to null if no version mentioned
+  DEFAULT_VERSION: null, // OR set it to null if no version mentioned
   CONTENT_TYPE: {
     JSON: "application/json",
     MULTIPART: "multipart/form-data"

@@ -17,7 +17,7 @@ export default function PublicLayout() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Grid sx={{ flexWrap: "nowrap" }} container spacing={2}>
+      <Grid sx={{ flexWrap: "nowrap", overflow: "hidden", height: "100vh" }} container spacing={2}>
         {!tabResolution ? (
           <Grid item xs={5}>
             <Box sx={styles.imageContainer}>
@@ -41,7 +41,7 @@ export default function PublicLayout() {
             </Box>
           </Grid>
         ) : null}
-        <Grid item xs={tabResolution ? 12 : 7}>
+        <Grid sx={{ overflowY: "scroll" }} item xs={tabResolution ? 12 : 7}>
           <Outlet />
         </Grid>
       </Grid>

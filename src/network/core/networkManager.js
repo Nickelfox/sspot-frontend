@@ -8,6 +8,7 @@ import { refreshAuthToken } from "./tokenRefresher"
 import { CookieKeys } from "constants/cookieKeys"
 import { APIAborter } from "./abortController"
 import offlineManager from "./offlineManager"
+import { HTTP_STATUS } from "./statusCode"
 
 // ********************
 // Create a new Instance of NetworkManager by passing APIRouter argument
@@ -69,7 +70,8 @@ export default function networkManager(router, withFile = false) {
       return new APIResponse(result.data, result.status, result.statusText)
     } catch (err) {
       // Catch all errors
-      if (router instanceof APIWithOfflineRouter && AppEnvIsDev) {
+      const IsNetworkError = err.code === HTTP_STATUS.NETWORK_ERR
+      if (router instanceof APIWithOfflineRouter && AppEnvIsDev && IsNetworkError) {
         return offlineManager(router.offlineJson)
       }
       return new APIError(err.message, err.code)

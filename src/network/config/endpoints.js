@@ -9,7 +9,19 @@ import { HTTP_METHODS, APIRouter, APIWithOfflineRouter, APICustomRouter } from "
 export const API = {
   AUTH: {
     // if you want to return offline json if api fails
-    LOGIN: new APIWithOfflineRouter("/auth/login", HTTP_METHODS.POST, OFFLINE.LOGIN)
+    LOGIN: new APIWithOfflineRouter("/user/login/", HTTP_METHODS.POST, OFFLINE.LOGIN),
+    SIGNUP: new APIWithOfflineRouter("/user/signup/", HTTP_METHODS.POST, OFFLINE.SIGNUP),
+    FORGOTPASSWORD: new APIWithOfflineRouter(
+      "/user/forgot-password/",
+      HTTP_METHODS.POST,
+      OFFLINE.FORGOTPASSWORD
+    ),
+    RESETPASSWORD: new APIWithOfflineRouter(
+      "/user/reset-password",
+      HTTP_METHODS.POST,
+      OFFLINE.RESETPASSWORD
+    ),
+    VERIFYOTP: new APIWithOfflineRouter("/auth/login", HTTP_METHODS.POST, OFFLINE.LOGIN)
   },
   FILE: {
     // if you want to upload a file with or without data

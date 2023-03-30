@@ -6,11 +6,21 @@ export const useStyles = () => {
     container: {
       display: "flex",
       flexDirection: "column",
-      justifyContent: "center",
       alignItems: "flex-start",
-      maxWidth: "66%",
+      justifyContent: "center",
       margin: "auto",
-      height: "100vh"
+      height: "100vh",
+      maxWidth: "66%"
+    },
+    signupContainer: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "flex-start",
+      justifyContent: "center",
+      margin: "auto",
+      height: "100vh",
+      maxWidth: "66%",
+      marginTop: "100px"
     },
     headerContainer: {
       position: "relative"
@@ -70,6 +80,39 @@ export const useStyles = () => {
     loader: {
       padding: "0px 15px 1px 16px",
       color: theme.palette.text.white
+    },
+    userimg: {
+      height: "150px",
+      width: "150px",
+      borderRadius: "50%",
+      marginLeft: "1rem"
+    },
+    imgBox: {
+      display: "flex",
+      alignItems: "center",
+      flexDirection: "column"
+    },
+    fileUpload: {
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "left",
+      marginTop: "-0.7rem",
+      marginBottom: "1rem"
+    },
+    fileButton: {
+      marginTop: "1rem",
+      width: "150px",
+      marginLeft: "2rem"
+    },
+    textbox: {
+      textAlign: "left"
+    },
+    errorBox: {
+      height: "16px"
+    },
+    errorText: {
+      color: theme.palette.error.main,
+      fontWeight: 400
     }
   }
 }

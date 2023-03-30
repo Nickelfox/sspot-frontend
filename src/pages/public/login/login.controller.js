@@ -31,11 +31,16 @@ export const useLoginController = () => {
     navigate("/auth/forgot-password")
   }
 
+  const navigateToSignUp = () => {
+    navigate("/auth/signup")
+  }
+
   return {
     showPassword,
     showLoader,
     togglePasswordVisiblity,
     handleLogin,
-    navigateToForgotPassword
+    navigateToForgotPassword,
+    navigateToSignUp
   }
 }
