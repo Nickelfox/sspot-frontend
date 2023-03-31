@@ -2,16 +2,14 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useSignUpModel } from "./signup.model"
 import UserImg from "assets/images/backgrounds/DefaultImg.png"
-import { CookieKeys, CookieOptions } from "constants/cookieKeys"
-import { useCookies } from "react-cookie"
+import { useUserSession } from "hooks/userSession"
 
 export const useSignupController = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setshowConfirmPassword] = useState(false)
   const [showLoader, setShowLoader] = useState(false)
   const [imgData, setImgData] = useState(null)
-  // eslint-disable-next-line no-unused-vars
-  const [cookies, setCookie] = useCookies([CookieKeys.Auth])
+  const userSession = useUserSession()
 
   const navigate = useNavigate()
   const model = useSignUpModel()
@@ -37,8 +35,7 @@ export const useSignupController = () => {
     const response = await model.signup(payload)
     setShowLoader(false)
     if (response.success) {
-      setCookie(CookieKeys.Auth, response.data.access_token, CookieOptions)
-      setCookie(CookieKeys.REFRESH_TOKEN, response.data.refresh_token, CookieOptions)
+      userSession.setSession(response.data)
     }
   }
 

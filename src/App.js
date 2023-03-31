@@ -9,6 +9,7 @@ import "./styles/global.scss"
 import AppLoader from "components/Loader/AppLoader"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import { SessionObserver } from "auth/Observer"
 
 /**
  * @description Check if browser is Safar
@@ -32,6 +33,7 @@ function App() {
           <AppLoader />
           <AppRouter />
           <ToastContainer />
+          <SessionObserver />
         </ThemeProvider>
       </Provider>
     </CookiesProvider>

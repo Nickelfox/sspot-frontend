@@ -32,11 +32,15 @@ export const API = {
       OFFLINE.RESETPASSWORD
     ),
     VERIFYOTP: new APIWithOfflineRouter("/auth/login", HTTP_METHODS.POST, OFFLINE.LOGIN),
-    LOGOUT: new APIWithOfflineRouter("/user/logout/", HTTP_METHODS.DEL, OFFLINE.LOGIN)
+    REFRESH_TOKEN: new APIRouter("/user/token/refresh", HTTP_METHODS.POST)
   },
-  FILE: {
+  USER: {
+    PROFILE: new APIWithOfflineRouter("/user/profile/", HTTP_METHODS.GET, OFFLINE.PROFILE),
+    LOGOUT: new APIWithOfflineRouter("/user/logout/", HTTP_METHODS.DEL, OFFLINE.LOGOUT)
+  },
+  MEDIA: {
     // if you want to upload a file with or without data
-    UPLOAD: new APIRouter("/test-api/upload.php", HTTP_METHODS.POST)
+    UPLOAD: new APIRouter("/user/media/", HTTP_METHODS.POST)
   },
   THIRD_PARTY: {
     // If the base url is different from default

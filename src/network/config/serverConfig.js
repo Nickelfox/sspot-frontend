@@ -7,5 +7,6 @@ export const APIConfig = {
   CONTENT_TYPE: {
     JSON: "application/json",
     MULTIPART: "multipart/form-data"
-  }
+  },
+  MAX_REFRESH_ATTEMPTS: 2
 }

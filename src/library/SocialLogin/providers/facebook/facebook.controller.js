@@ -1,11 +1,9 @@
-import { useCookies } from "react-cookie"
-import { CookieKeys, CookieOptions } from "constants/cookieKeys"
 import { useFacebookModel } from "./facebook.model"
+import { useUserSession } from "hooks/userSession"
 
 export const useFacebookController = () => {
-  // eslint-disable-next-line no-unused-vars
-  const [cookies, setCookie] = useCookies([CookieKeys.Auth])
   const model = useFacebookModel()
+  const userSession = useUserSession()
 
   const handleFacebookLogin = async (data) => {
     const fbPayload = {
@@ -16,8 +14,7 @@ export const useFacebookController = () => {
     const response = await model.loginByFacebook(fbPayload)
 
     if (response.success) {
-      setCookie(CookieKeys.Auth, response.data.access_token, CookieOptions)
-      setCookie(CookieKeys.REFRESH_TOKEN, response.data.refresh_token, CookieOptions)
+      userSession.setSession(response.data)
     }
   }
 

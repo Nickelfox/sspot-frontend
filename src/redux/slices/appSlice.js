@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
   user: {},
-  authToken: null,
-  isLogged: false
+  isLogged: false,
+  observe: null
 }
 
 export const appSlice = createSlice({
@@ -12,13 +12,15 @@ export const appSlice = createSlice({
   reducers: {
     login: (state, action) => {
       state.user = action.payload
-      state.authToken = action.payload.authToken
       state.isLogged = true
     },
     logout: (state) => {
       state.user = {}
-      state.authToken = null
       state.isLogged = false
+      state.observe = null
+    },
+    observe: (state) => {
+      state.observe = new Date().getTime()
     }
   }
 })

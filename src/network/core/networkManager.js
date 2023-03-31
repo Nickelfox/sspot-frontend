@@ -10,6 +10,7 @@ import { APIAborter } from "./abortController"
 import offlineManager from "./offlineManager"
 import { HTTP_STATUS } from "./statusCode"
 import { apiError, offlineNotation } from "./errorParser"
+import { UserState } from "redux/dispatcher/UserState"
 
 // ********************
 // Create a new Instance of NetworkManager by passing APIRouter argument
@@ -46,6 +47,7 @@ export default function networkManager(router, withFile = false) {
   }
 
   const AppEnvIsDev = process.env.REACT_APP_APP_ENV === "dev"
+  let refreshCount = 0
 
   async function request(body = {}, params = {} || []) {
     const url = urlBuilder(router, params)
@@ -63,12 +65,6 @@ export default function networkManager(router, withFile = false) {
       })
       // If token expired, get it refreshed
       const response = result.data
-      if (result.status === 401) {
-        const refreshToken = cookie.get(CookieKeys.REFRESH_TOKEN)
-        await refreshAuthToken(refreshToken)
-        // pass the control back to network manager
-        return await request(body, params)
-      }
       return new APIResponse(response.data, response.success, result.status, response.data?.message)
     } catch (err) {
       // Catch all errors
@@ -78,7 +74,17 @@ export default function networkManager(router, withFile = false) {
         offlineNotation()
         return offlineManager(router.offlineJson)
       }
-      if (err.code === HTTP_STATUS.NETWORK_ERR) {
+      if (err.response?.status === 401) {
+        if (refreshCount < APIConfig.MAX_REFRESH_ATTEMPTS) {
+          const refreshToken = cookie.get(CookieKeys.REFRESH_TOKEN)
+          await refreshAuthToken(refreshToken)
+          refreshCount++
+          // pass the control back to network manager
+          return await request(body, params)
+        } else {
+          UserState.observeLogout()
+        }
+      } else if (err.code === HTTP_STATUS.NETWORK_ERR) {
         apiError("Internal server error!")
       }
       return new APIError(err.message, err.code)

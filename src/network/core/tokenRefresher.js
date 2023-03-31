@@ -12,18 +12,17 @@ export async function refreshAuthToken(refreshToken) {
   try {
     const { endpoint, version, method } = API.AUTH.REFRESH_TOKEN
     const url = `${APIConfig.API_URL}/${version}${endpoint}`
+
     const response = await fetch(url, {
       method,
       headers: { "Content-Type": APIConfig.CONTENT_TYPE.JSON },
-      body: JSON.stringify({ refreshToken })
+      body: JSON.stringify({ refresh: refreshToken })
     }).then((res) => res.json())
     const cookies = new Cookies()
     if (response.success) {
       cookies.set(CookieKeys.Auth, response.data?.token, CookieOptions)
-    } else {
-      cookies.remove(CookieKeys.Auth, CookieOptions)
     }
-    return true
+    return response.success
   } catch (err) {
     // eslint-disable-next-line no-console
     console.log(err)
