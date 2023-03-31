@@ -3,10 +3,11 @@ import Lottie from "lottie-react"
 import AnimationFile from "assets/animations/default-loader.json"
 import styles from "./Loader.module.css"
 import { useSelector } from "react-redux"
+import { Typography } from "@mui/material"
 
 function AppLoader({ visible: isVisible = false }) {
   const [showLoader, setLoader] = useState(false)
-  const { visible } = useSelector((store) => store.loader)
+  const { visible, message } = useSelector((store) => store.loader)
 
   useEffect(() => {
     if (!!visible || !!isVisible) {
@@ -21,6 +22,7 @@ function AppLoader({ visible: isVisible = false }) {
   return (
     <div className={styles.loader}>
       <Lottie animationData={AnimationFile} loop={true} />
+      {Boolean(message) && <Typography>{message}</Typography>}
     </div>
   )
 }
