@@ -10,8 +10,8 @@ import { CookieKeys, CookieOptions } from "constants/cookieKeys"
 
 export async function refreshAuthToken(refreshToken) {
   try {
-    const { endpoint, version, method } = API.AUTH.REFRESH_TOKEN
-    const url = `${APIConfig.API_URL}/${version}${endpoint}`
+    const { method } = API.AUTH.REFRESH_TOKEN
+    const url = urlBuilder(API.AUTH.REFRESH_TOKEN, {})
 
     const response = await fetch(url, {
       method,
@@ -28,4 +28,19 @@ export async function refreshAuthToken(refreshToken) {
     console.log(err)
     return false
   }
+}
+
+function urlBuilder(router, params) {
+  let uri = ""
+  if (typeof router.version === "string") {
+    uri = `/${router.version}`
+  }
+  uri = uri.concat(router.endpoint)
+  // all params in form of uri/id1/id2/id3
+  if (Array.isArray(params)) {
+    for (let key of params) {
+      uri = uri.concat("/", key)
+    }
+  }
+  return uri
 }

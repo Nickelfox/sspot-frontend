@@ -4,15 +4,17 @@ import React from "react"
 import { Loader } from "redux/dispatcher/Loader"
 import { Toast } from "helpers/toasts/toastHelper"
 
-export const usePrivateLayoutController = () => {
+export const usePrivateLayoutController = (props) => {
   const navigateTo = useNavigate()
   const currentRoute = window.location.pathname
   const model = useLogoutModel()
 
   React.useEffect(() => {
     window.scrollTo(0, 0)
-    getUserDetails()
-  }, [])
+    if (props.isLoggedIn) {
+      getUserDetails()
+    }
+  }, [props.isLoggedIn])
 
   const navigate = (route) => {
     navigateTo(route)

@@ -1,3 +1,4 @@
+import { Loader } from "redux/dispatcher/Loader"
 import { useFacebookModel } from "./facebook.model"
 import { useUserSession } from "hooks/userSession"
 
@@ -6,6 +7,7 @@ export const useFacebookController = () => {
   const userSession = useUserSession()
 
   const handleFacebookLogin = async (data) => {
+    Loader.show()
     const fbPayload = {
       auth_token: data.accessToken,
       profile_picture: null,
@@ -16,6 +18,7 @@ export const useFacebookController = () => {
     if (response.success) {
       userSession.setSession(response.data)
     }
+    Loader.hide()
   }
 
   return {

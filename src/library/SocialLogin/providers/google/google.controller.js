@@ -1,3 +1,4 @@
+import { Loader } from "redux/dispatcher/Loader"
 import { useGoogleModel } from "./google.model"
 import { useUserSession } from "hooks/userSession"
 
@@ -6,6 +7,7 @@ export const useGoogleController = () => {
   const userSession = useUserSession()
 
   const handleGoogleLogin = async (data) => {
+    Loader.show()
     const googlePayload = {
       auth_token: data.credential,
       profile_picture: data.picture,
@@ -16,6 +18,7 @@ export const useGoogleController = () => {
     if (response.success) {
       userSession.setSession(response.data)
     }
+    Loader.hide()
   }
 
   return {

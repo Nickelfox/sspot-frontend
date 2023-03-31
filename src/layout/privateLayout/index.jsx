@@ -47,10 +47,10 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "center"
 }))
 
-export default function PrivateLayout() {
+export default function PrivateLayout(props) {
   const styles = useStyles()
 
-  const { navigate, handleLogout, activeMenu } = usePrivateLayoutController()
+  const { navigate, handleLogout, activeMenu } = usePrivateLayoutController(props)
 
   return (
     <Box sx={{ display: "flex" }}>

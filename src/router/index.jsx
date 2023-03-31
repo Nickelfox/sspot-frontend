@@ -34,7 +34,9 @@ const Router = () => {
 
             {/* All the private routes */}
             {PrivateRoutes.map(({ component: Component, ...route }) => (
-              <Route key={`Route-${route.path}`} element={<PrivateLayout />}>
+              <Route
+                key={`Route-${route.path}`}
+                element={<PrivateLayout isLoggedIn={isLoggedIn} />}>
                 <Route
                   path={route.path}
                   element={
