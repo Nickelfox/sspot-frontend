@@ -19,6 +19,6 @@ Please delete options that are not relevant.
 - [ ] I have performed a self-review of my own code
 - [ ] I have commented on my code, particularly in hard-to-understand areas
 - [ ] I have made corresponding changes to the documentation
-- [ ] Have you tested ran this on all applicable platforms? (desktop/mobile web, safari, chrome, firefox, etc.)
+- [ ] This code runs on all applicable platforms? (desktop/mobile web, safari, chrome, firefox, etc.)
 
 ## Screenshots (for ui related updates)
