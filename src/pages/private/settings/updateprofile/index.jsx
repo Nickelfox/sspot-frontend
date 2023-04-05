@@ -7,23 +7,24 @@ import FormField from "components/Loader/FormField"
 import "react-phone-number-input/style.css"
 import PhoneInput, { getCountryCallingCode } from "react-phone-number-input"
 import { LoadingButton } from "@mui/lab"
-import { SignUpValidator } from "helpers/validators/signup"
+import { UpdateProfileValidator } from "helpers/validators/updateProfile"
 import UserImg from "assets/images/backgrounds/DefaultImg.png"
 
 const UpdateProfile = () => {
   const styles = useStyles()
-  const { showLoader, handleSignup, onChangePicture, imgData } = useUpdateProfileController()
+  const { showLoader, initialData, handleUpdateProfile, onChangePicture, imgData } =
+    useUpdateProfileController()
   return (
-    <Box sx={styles.signupContainer}>
+    <Box>
       <Formik
-        initialValues={SignUpValidator.initialValues}
-        validationSchema={SignUpValidator.validationSchema}
-        onSubmit={handleSignup}>
+        initialValues={initialData}
+        validationSchema={UpdateProfileValidator.validationSchema}
+        onSubmit={handleUpdateProfile}>
         {(formik) => {
           return (
             <Form onSubmit={formik.handleSubmit}>
-              <Grid sx={styles.form} container spacing={2}>
-                <Grid item xs={12} sx={styles.imgBox}>
+              <Grid sx={styles.form} xs={6} container spacing={2}>
+                <Grid item sx={styles.imgBox}>
                   <CardMedia
                     sx={styles.userimg}
                     component="img"

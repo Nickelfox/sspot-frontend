@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography"
 import Box from "@mui/material/Box"
 import UpdateProfile from "pages/private/settings/updateprofile"
 import UpdatePassword from "pages/private/settings/updatePassword"
-import Notification from "pages/private/settings/notification"
+import Others from "pages/private/settings/others"
 
 function Settings() {
   const [value, setValue] = React.useState(0)
@@ -53,7 +53,7 @@ function Settings() {
           <UpdatePassword />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <Notification />
+          <Others />
         </TabPanel>
       </Box>
     </div>

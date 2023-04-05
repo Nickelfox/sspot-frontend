@@ -8,47 +8,35 @@ import FormField from "components/Loader/FormField"
 import "react-phone-number-input/style.css"
 
 import { LoadingButton } from "@mui/lab"
-import { SignUpValidator } from "helpers/validators/signup"
+import { UpdatePasswordValidator } from "helpers/validators/updatePassword"
 
 const UpdatePassword = () => {
   const styles = useStyles()
+
   const {
     showPassword,
     showLoader,
     togglePasswordVisiblity,
-    handleSignup,
-
+    handlePasswordUpdate,
     toggleConfirmPasswordVisiblity,
-    showConfirmPassword
+    showConfirmPassword,
+    showNewPassword,
+    togglenewPasswordVisiblity
   } = useUpdatePasswordController()
   return (
-    <Box sx={styles.passwordContainer}>
+    <Box>
       <Formik
-        initialValues={SignUpValidator.initialValues}
-        validationSchema={SignUpValidator.validationSchema}
-        onSubmit={handleSignup}>
+        initialValues={UpdatePasswordValidator.initialValues}
+        validationSchema={UpdatePasswordValidator.validationSchema}
+        onSubmit={handlePasswordUpdate}>
         {(formik) => {
           return (
             <Form onSubmit={formik.handleSubmit}>
-              <Grid sx={styles.form} container spacing={2}>
-                <Grid item xs={12} sx={styles.textbox}>
+              <Grid xs={9} sx={styles.form} container spacing={2}>
+                <Grid item xs={6} sx={styles.textbox}>
                   <FormField
                     label={"Old Password"}
                     placeholder="Enter Your Password"
-                    formik={formik}
-                    name={"oldpassword"}
-                    required
-                    type={showPassword ? "text" : "password"}
-                    showPassword={showPassword}
-                    togglePasswordVisiblity={togglePasswordVisiblity}
-                  />
-                </Grid>
-              </Grid>
-              <Grid sx={styles.form} container spacing={2}>
-                <Grid item xs={12} sx={styles.textbox}>
-                  <FormField
-                    label={"New Password"}
-                    placeholder="Enter New Password"
                     formik={formik}
                     name={"password"}
                     required
@@ -57,7 +45,23 @@ const UpdatePassword = () => {
                     togglePasswordVisiblity={togglePasswordVisiblity}
                   />
                 </Grid>
-                <Grid item xs={12} sx={styles.textbox}>
+              </Grid>
+              <Grid sx={styles.form} xs={9} container spacing={2}>
+                <Grid item xs={6} sx={styles.textbox}>
+                  <FormField
+                    label={"New Password"}
+                    placeholder="Enter New Password"
+                    formik={formik}
+                    name={"newpassword"}
+                    required
+                    type={showNewPassword ? "text" : "password"}
+                    showPassword={showNewPassword}
+                    togglePasswordVisiblity={togglenewPasswordVisiblity}
+                  />
+                </Grid>
+              </Grid>
+              <Grid sx={styles.form} xs={9} container spacing={2}>
+                <Grid item xs={6} sx={styles.textbox}>
                   <FormField
                     label={"Confirm Password"}
                     placeholder="Confirm Password"
