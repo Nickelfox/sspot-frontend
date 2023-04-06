@@ -14,6 +14,7 @@ const UpdateProfile = () => {
   const styles = useStyles()
   const { showLoader, initialData, handleUpdateProfile, onChangePicture, imgData } =
     useUpdateProfileController()
+
   return (
     <Box>
       <Formik
@@ -23,12 +24,13 @@ const UpdateProfile = () => {
         {(formik) => {
           return (
             <Form onSubmit={formik.handleSubmit}>
+              {console.log("bla bla", formik)}
               <Grid sx={styles.form} xs={6} container spacing={2}>
                 <Grid item sx={styles.imgBox}>
                   <CardMedia
                     sx={styles.userimg}
                     component="img"
-                    image={!formik.errors.file && imgData ? imgData : UserImg}
+                    image={formik.values.file ? formik.values.file : UserImg}
                     alt="profile"
                     name="file"
                   />

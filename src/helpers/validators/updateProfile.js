@@ -7,7 +7,7 @@ export const UpdateProfileValidator = {
     firstname: "",
     lastname: "",
     email: "",
-    country_code: "",
+    country_code: "91",
     phone: ""
   },
   validationSchema: Yup.object().shape({

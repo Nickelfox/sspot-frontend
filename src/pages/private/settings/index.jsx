@@ -1,4 +1,5 @@
 import React from "react"
+import { useUpdateSettingsController } from "./settings.controller"
 import { Divider } from "@mui/material"
 import Tabs from "@mui/material/Tabs"
 import Tab from "@mui/material/Tab"
@@ -9,23 +10,20 @@ import UpdatePassword from "pages/private/settings/updatePassword"
 import Others from "pages/private/settings/others"
 
 function Settings() {
-  const [value, setValue] = React.useState(0)
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue)
-  }
+  const { activeTab,handleChange } = useUpdateSettingsController()
+  const value = activeTab ?? "update-profile"
 
   function TabPanel(props) {
-    const { children, value, index, ...other } = props
+    const { children, value, id, ...other } = props
 
     return (
       <div
         role="tabpanel"
-        hidden={value !== index}
-        id={`simple-tabpanel-${index}`}
-        aria-labelledby={`simple-tab-${index}`}
+        hidden={value !== id}
+        id={`simple-tabpanel-${id}`}
+        aria-labelledby={`simple-tab-${id}`}
         {...other}>
-        {value === index && (
+        {value === id && (
           <Box sx={{ p: 3 }}>
             <Typography>{children}</Typography>
           </Box>
@@ -41,18 +39,18 @@ function Settings() {
       <Box sx={{ width: "100%" }}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-            <Tab label="Update Profile" />
-            <Tab label="Update Password" />
-            <Tab label="Others" />
+            <Tab label="Update Profile" value="update-profile" />
+            <Tab label="Update Password" value="update-password" />
+            <Tab label="Others" value="others" />
           </Tabs>
         </Box>
-        <TabPanel value={value} index={0}>
+        <TabPanel value={value} id="update-profile">
           <UpdateProfile />
         </TabPanel>
-        <TabPanel value={value} index={1}>
+        <TabPanel value={value} id="update-password">
           <UpdatePassword />
         </TabPanel>
-        <TabPanel value={value} index={2}>
+        <TabPanel value={value} id="others">
           <Others />
         </TabPanel>
       </Box>

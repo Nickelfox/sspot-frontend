@@ -10,5 +10,9 @@ export const PrivateRoutes = [
   { path: "/u/dashboard", exact: true, component: Dashboard },
   { path: "/u/users", exact: true, component: Users },
   { path: "/u/sub-admins", exact: true, component: SubAdmins },
-  { path: "/u/settings", exact: true, component: Settings }
+  {
+    path: "/u/settings",
+    exact: false,
+    component: Settings
+  }
 ]

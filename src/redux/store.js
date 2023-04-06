@@ -10,3 +10,5 @@ const allReducer = {
 export const store = configureStore({
   reducer: allReducer
 })
+
+export const appActions = AppSlice.actions

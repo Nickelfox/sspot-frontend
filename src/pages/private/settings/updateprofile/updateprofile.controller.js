@@ -3,9 +3,12 @@ import { useUpdateProfileModel } from "./updateprofile.model"
 import UserImg from "assets/images/backgrounds/DefaultImg.png"
 import { useUserSession } from "hooks/userSession"
 import { useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
+import { appActions } from "redux/store"
 
 export const useUpdateProfileController = () => {
   const user = useSelector((state) => state?.app?.user)
+  const dispatch = useDispatch()
   const [uuid, setUuid] = useState(null)
   const [showLoader, setShowLoader] = useState(false)
   const [imgData, setImgData] = useState(user?.profile_pic_url)
@@ -16,10 +19,10 @@ export const useUpdateProfileController = () => {
     firstname: user?.first_name,
     lastname: user?.last_name,
     email: user?.email,
-    country_code: user?.country_code,
+    country_code: user?.country_code && user?.country_code !== "" ? user?.country_code : "+91",
     phone: user?.phone
   }
-
+  console.log("checking", user)
   const handleUpdateProfile = async (values) => {
     const payload = new FormData()
     setShowLoader(true)
@@ -38,6 +41,7 @@ export const useUpdateProfileController = () => {
     if (response.success) {
       const updatedresponse = await model.profile()
       if (response.success) {
+        dispatch(appActions.update(updatedresponse.data))
         userSession.setSession(updatedresponse.data)
       }
     }
