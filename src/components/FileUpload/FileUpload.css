@@ -11,12 +11,20 @@
 }
 
 .file-selector {
-  cursor: pointer;
   background-color: aliceblue;
   padding: 50px;
   width: 240px;
   border-style: dotted;
   text-align: center;
+}
+
+.file-container.dragging-over {
+  border: 2px dashed #aaa;
+  background-color: #f5f5f5;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
 
 .file-selector svg {
@@ -38,6 +46,12 @@
   justify-content: space-between;
 }
 
-.file-preview svg {
+.preview-row span {
+  padding-left: 5px;
+}
+
+.file-preview svg,
+img {
   font-size: 30px;
+  width: 50px;
 }

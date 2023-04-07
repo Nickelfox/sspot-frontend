@@ -7,25 +7,34 @@ import { useFileController } from "./file.controller"
 
 import "./FileUpload.css"
 
-function FileUpload({ label, max_files = 5 }) {
-  const { handleFileEvent, handleCloseFile, fileLimit, uploadedFiles } =
-    useFileController(max_files)
+function FileUpload({ label = "Browse Files", max_files = 5, imagePreview = false }) {
+  const {
+    handleFileEvent,
+    handleCloseFile,
+    fileLimit,
+    uploadedFiles,
+    handleDropEvent,
+    limitFileName
+  } = useFileController(max_files)
 
   return (
     <Box className="file-container">
       <input
-        accept="image/*"
         className="file-input"
         id="contained-button-file"
         type="file"
         multiple
         onChange={handleFileEvent}
         disabled={fileLimit}
+        style={{ display: "none" }}
       />
-      <Box className="file-selector" htmlFor="contained-button-file">
+      <Box
+        className={`file-selector cursor-pointer`}
+        onClick={() => document.getElementById("contained-button-file").click()}
+        onDrop={handleDropEvent}>
         <CloudUploadIcon />
         <Box>
-          <label htmlFor="contained-button-file">{label ? label : "Browse Files"}</label>
+          <label className="cursor-pointer">{label}</label>
         </Box>
       </Box>
       <Box className="file-preview">
@@ -34,10 +43,14 @@ function FileUpload({ label, max_files = 5 }) {
             return (
               <Box key={file.name} className="preview-row">
                 <Box className="file">
-                  <DescriptionIcon />
-                  <span>{file.name}</span>
+                  {!imagePreview || !file.type.startsWith("image/") ? (
+                    <DescriptionIcon />
+                  ) : (
+                    <img src={URL.createObjectURL(file)} alt={file.name} />
+                  )}
+                  <span>{limitFileName(file.name, 25)}</span>
                 </Box>
-                <CloseIcon onClick={() => handleCloseFile(idx)} />
+                <CloseIcon className="cursor-pointer" onClick={() => handleCloseFile(idx)} />
               </Box>
             )
           })}

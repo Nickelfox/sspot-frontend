@@ -36,10 +36,28 @@ export const useFileController = (max_files) => {
     })
   }
 
+  function limitFileName(fileName, maxLength) {
+    if (fileName.length > maxLength) {
+      return fileName.slice(0, maxLength) + "..."
+    }
+    return fileName
+  }
+
+  const handleDropEvent = (e) => {
+    e.preventDefault()
+
+    if (e.dataTransfer && e.dataTransfer.files) {
+      const files = Array.from(e.dataTransfer.files)
+      handleFileEvent({ target: { files } })
+    }
+  }
+
   return {
     handleFileEvent,
     handleCloseFile,
     fileLimit,
-    uploadedFiles
+    uploadedFiles,
+    handleDropEvent,
+    limitFileName
   }
 }
