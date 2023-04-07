@@ -6,6 +6,7 @@ import { useSelector } from "react-redux"
 import { useDispatch } from "react-redux"
 import { appActions } from "redux/store"
 
+import { Toast } from "helpers/toasts/toastHelper"
 export const useUpdateProfileController = () => {
   const user = useSelector((state) => state?.app?.user)
   const dispatch = useDispatch()
@@ -15,14 +16,14 @@ export const useUpdateProfileController = () => {
   const userSession = useUserSession()
   const model = useUpdateProfileModel()
   const initialData = {
-    file: user?.profile_pic_url ? user?.profile_pic_url : null,
+    file: user?.profile_pic_url ? imgData : null,
     firstname: user?.first_name,
     lastname: user?.last_name,
     email: user?.email,
     country_code: user?.country_code && user?.country_code !== "" ? user?.country_code : "+91",
     phone: user?.phone
   }
-  console.log("checking", user)
+
   const handleUpdateProfile = async (values) => {
     const payload = new FormData()
     setShowLoader(true)
@@ -48,33 +49,44 @@ export const useUpdateProfileController = () => {
   }
 
   const onChangePicture = async (e) => {
-    if (e.target.files[0]) {
-      const reader = new FileReader()
-      reader.addEventListener("load", () => {
-        setImgData(reader.result)
-      })
-      reader.readAsDataURL(e.target.files[0])
+    const imgstat = e.target.files[0]
+
+    if (
+      (imgstat.type == "image/jpg" ||
+        imgstat.type == "image/png" ||
+        imgstat.type == "image/jpeg") &&
+      imgstat.size < 2097152 * 5
+    ) {
+      if (e.target.files[0]) {
+        const reader = new FileReader()
+        reader.addEventListener("load", () => {
+          setImgData(reader.result)
+        })
+        reader.readAsDataURL(e.target.files[0])
+        const payload = new FormData()
+
+        payload.set("media_key", e.target.files[0])
+        payload.set("media_type", "IMAGE")
+        payload.set("content_type", "multipart/form-data")
+        const response = await model.media(payload)
+        if (response.success) {
+          setImgData(response.data.media_url)
+          setUuid(response.data.id)
+        }
+      } else {
+        setImgData(UserImg)
+      }
     } else {
-      setImgData(UserImg)
-    }
-
-    const payload = new FormData()
-
-    payload.set("media_key", e.target.files[0])
-    payload.set("media_type", "IMAGE")
-    payload.set("content_type", "multipart/form-data")
-    const response = await model.media(payload)
-    if (response.success) {
-      setImgData(response.data.media_url)
-      setUuid(response.data.id)
+      Toast.warn("Please Upload a valid Image")
     }
   }
-  console.log("hels", imgData)
+
   return {
     showLoader,
     handleUpdateProfile,
     onChangePicture,
     imgData,
-    initialData
+    initialData,
+    setImgData
   }
 }

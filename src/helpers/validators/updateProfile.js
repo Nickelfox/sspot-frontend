@@ -1,5 +1,4 @@
 import * as Yup from "yup"
-import { SUPPORTED_FORMATS } from "constants/validationConstant"
 
 export const UpdateProfileValidator = {
   initialValues: {
@@ -11,20 +10,6 @@ export const UpdateProfileValidator = {
     phone: ""
   },
   validationSchema: Yup.object().shape({
-    file: Yup.mixed()
-      .nullable()
-      .notRequired()
-      .test(
-        "FILE_SIZE",
-        "Error: Allowed file upto 10 MB",
-        (value) => !value || (value && value.size <= 2097152 * 5)
-      )
-
-      .test(
-        "FILE_FORMAT",
-        "Error: Allowed png or jpg file format only.",
-        (value) => !value || (value && SUPPORTED_FORMATS.includes(value.type))
-      ),
     firstname: Yup.string()
       .required("First name is required")
       .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ")

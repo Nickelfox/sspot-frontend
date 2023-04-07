@@ -24,13 +24,12 @@ const UpdateProfile = () => {
         {(formik) => {
           return (
             <Form onSubmit={formik.handleSubmit}>
-              {console.log("bla bla", formik)}
               <Grid sx={styles.form} xs={6} container spacing={2}>
                 <Grid item sx={styles.imgBox}>
                   <CardMedia
                     sx={styles.userimg}
                     component="img"
-                    image={formik.values.file ? formik.values.file : UserImg}
+                    image={initialData.file ? initialData.file : UserImg}
                     alt="profile"
                     name="file"
                   />
@@ -47,7 +46,7 @@ const UpdateProfile = () => {
                         hidden
                         name="file"
                         onChange={(e) => {
-                          formik.setFieldValue("file", e.currentTarget.files[0])
+                          formik.setFieldValue("file", e.currentTarget?.files[0])
                         }}
                       />
                     </Button>
