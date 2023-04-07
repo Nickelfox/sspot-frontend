@@ -14,7 +14,10 @@ function FileUpload({ label = "Browse Files", max_files = 5, imagePreview = fals
     fileLimit,
     uploadedFiles,
     handleDropEvent,
-    limitFileName
+    limitFileName,
+    isDraggingOver,
+    handleDragOverEvent,
+    handleDragLeaveEvent
   } = useFileController(max_files)
 
   return (
@@ -29,9 +32,11 @@ function FileUpload({ label = "Browse Files", max_files = 5, imagePreview = fals
         style={{ display: "none" }}
       />
       <Box
-        className={`file-selector cursor-pointer`}
+        className={`file-selector cursor-pointer ${isDraggingOver ? "dragging-over" : ""}`}
         onClick={() => document.getElementById("contained-button-file").click()}
-        onDrop={handleDropEvent}>
+        onDrop={handleDropEvent}
+        onDragOver={handleDragOverEvent}
+        onDragLeave={handleDragLeaveEvent}>
         <CloudUploadIcon />
         <Box>
           <label className="cursor-pointer">{label}</label>

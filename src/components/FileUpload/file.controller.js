@@ -3,6 +3,7 @@ import { useState } from "react"
 export const useFileController = (max_files) => {
   const [uploadedFiles, setUploadedFiles] = useState([])
   const [fileLimit, setFileLimit] = useState(false)
+  const [isDraggingOver, setIsDraggingOver] = useState(false)
 
   const handleUploadFiles = (files) => {
     const uploaded = [...uploadedFiles]
@@ -52,12 +53,25 @@ export const useFileController = (max_files) => {
     }
   }
 
+  const handleDragOverEvent = (e) => {
+    e.preventDefault()
+    setIsDraggingOver(true)
+  }
+
+  const handleDragLeaveEvent = (e) => {
+    e.preventDefault()
+    setIsDraggingOver(false)
+  }
+
   return {
     handleFileEvent,
     handleCloseFile,
     fileLimit,
     uploadedFiles,
     handleDropEvent,
-    limitFileName
+    limitFileName,
+    isDraggingOver,
+    handleDragOverEvent,
+    handleDragLeaveEvent
   }
 }
