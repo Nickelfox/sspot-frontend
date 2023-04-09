@@ -1,4 +1,8 @@
-import { useState } from "react"
+import React, { useState } from "react"
+
+import DescriptionIcon from "@mui/icons-material/Description"
+import ImageIcon from "@mui/icons-material/Image"
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf"
 
 export const useFileController = (max_files) => {
   const [uploadedFiles, setUploadedFiles] = useState([])
@@ -63,6 +67,19 @@ export const useFileController = (max_files) => {
     setIsDraggingOver(false)
   }
 
+  const getFileIcon = (format) => {
+    switch (format) {
+      case "image/png":
+      case "image/jpg":
+      case "image/jpeg":
+        return <ImageIcon />
+      case "application/pdf":
+        return <PictureAsPdfIcon />
+      default:
+        return <DescriptionIcon />
+    }
+  }
+
   return {
     handleFileEvent,
     handleCloseFile,
@@ -72,6 +89,7 @@ export const useFileController = (max_files) => {
     limitFileName,
     isDraggingOver,
     handleDragOverEvent,
-    handleDragLeaveEvent
+    handleDragLeaveEvent,
+    getFileIcon
   }
 }
