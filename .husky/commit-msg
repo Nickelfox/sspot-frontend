@@ -1,10 +1,14 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+# get the commit message
 commit_msg=$(cat "$1")
+
+# define regex of desired commit message pattern
 regex="^(feat|fix|docs|style|refactor|perf|test|chore)(\([A-Za-z0-9_\-]+\))?: .+$"
 
-if [[ ! "$commit_msg" =~ $regex ]]; then
-  echo "Invalid commit message format. Please use 'type (scope): description'"
+# check if commit message follows commit regex and throw error if not follows
+if ! echo "$commit_msg" | grep -qE "$regex"; then
+  echo "Invalid commit message format. Please use 'type(scope): description'"
   exit 1
 fi
