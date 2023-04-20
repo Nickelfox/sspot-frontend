@@ -7,8 +7,12 @@ commit_msg=$(cat "$1")
 # define regex of desired commit message pattern
 regex="^(feat|fix|docs|style|refactor|perf|test|chore)(\([A-Za-z0-9_\-]+\))?: .+$"
 
+# Define ANSI color escape codes
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+
 # check if commit message follows commit regex and throw error if not follows
 if ! echo "$commit_msg" | grep -qE "$regex"; then
-  echo "Invalid commit message format. Please use 'type(scope): description'"
+  echo "${RED}Invalid commit message format. Please use 'type(scope): description'${NC}"
   exit 1
 fi
