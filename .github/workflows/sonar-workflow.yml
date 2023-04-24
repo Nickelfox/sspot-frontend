@@ -11,4 +11,4 @@ jobs:
     name: SONARQUBE
     runs-on: ubuntu-latest
     steps:
-      - uses: Nickelfox/sonarqube-js-workflow/blob/main/.github/workflows/sonarqube-workflow.yml@main
+      - uses: https://github.com/Nickelfox/sonarqube-js-workflow/blob/main/.github/workflows/sonarqube-workflow.yml@main
