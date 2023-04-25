@@ -13,6 +13,8 @@ NC='\033[0m' # No Color
 
 # check if commit message follows commit regex and throw error if not follows
 if ! echo "$commit_msg" | grep -qE "$regex"; then
-  echo "${RED}ERR: Invalid commit message format.\nFIX: Please use 'type(scope): description' format.${NC}"
+  echo "${RED}-----------------------ERROR-----------------------"
+  echo "ERR: Invalid commit message format.\nFIX: Please use 'type(scope): description' format."
+  echo "---------------------------------------------------${NC}"
   exit 1
 fi
