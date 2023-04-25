@@ -21,4 +21,8 @@ Please delete options that are not relevant.
 - [ ] I have made corresponding changes to the documentation
 - [ ] This code runs on all applicable platforms? (desktop/mobile web, safari, chrome, firefox, etc.)
 
+## Instruction
+
+- [ ] Delete my branch after merge
+
 ## Screenshots (for ui related updates)
