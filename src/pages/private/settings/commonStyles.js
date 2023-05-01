@@ -103,7 +103,7 @@ export const useStyles = () => {
     },
     imgBox: {
       display: "flex",
-      alignItems: "center",
+      alignItems: "flex-start",
       flexDirection: "column"
     },
     fileUpload: {

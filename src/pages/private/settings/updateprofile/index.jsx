@@ -16,7 +16,7 @@ const UpdateProfile = () => {
     useUpdateProfileController()
 
   return (
-    <Box>
+    <div >
       <Formik
         initialValues={initialData}
         validationSchema={UpdateProfileValidator.validationSchema}
@@ -24,8 +24,8 @@ const UpdateProfile = () => {
         {(formik) => {
           return (
             <Form onSubmit={formik.handleSubmit}>
-              <Grid sx={styles.form} xs={6} container spacing={2}>
-                <Grid item sx={styles.imgBox}>
+              <Grid  xs={7} container spacing={2}>
+                <Grid item xs={12} sx={styles.imgBox}>
                   <CardMedia
                     sx={styles.userimg}
                     component="img"
@@ -55,7 +55,7 @@ const UpdateProfile = () => {
                     </Typography>
                   </Box>
                 </Grid>
-                <Grid item xs={6} sx={styles.textbox}>
+                <Grid item xs={12} md={6} sx={styles.textbox}>
                   <FormField
                     label={"Firstname"}
                     placeholder="Enter Your Firstname"
@@ -65,7 +65,7 @@ const UpdateProfile = () => {
                     type={"text"}
                   />
                 </Grid>
-                <Grid item xs={6} sx={styles.textbox}>
+                <Grid item xs={12} md={6}  sx={styles.textbox}>
                   <FormField
                     label={"Lastname"}
                     placeholder="Enter Your Firstname"
@@ -125,7 +125,7 @@ const UpdateProfile = () => {
           )
         }}
       </Formik>
-    </Box>
+    </div>
   )
 }
 

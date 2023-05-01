@@ -15,6 +15,9 @@ export const useUpdateProfileController = () => {
   const [imgData, setImgData] = useState(user?.profile_pic_url)
   const userSession = useUserSession()
   const model = useUpdateProfileModel()
+
+
+
   const initialData = {
     file: user?.profile_pic_url ? imgData : null,
     firstname: user?.first_name,
@@ -22,6 +25,13 @@ export const useUpdateProfileController = () => {
     email: user?.email,
     country_code: user?.country_code && user?.country_code !== "" ? user?.country_code : "+91",
     phone: user?.phone
+  }
+  const cleanHandlers = (filereader) => {
+    filereader.removeEventListener("load", resolveImage)
+  }
+  const resolveImage = (reader) => {
+    cleanHandlers(reader)
+    setImgData(reader.result)
   }
 
   const handleUpdateProfile = async (values) => {
@@ -59,9 +69,7 @@ export const useUpdateProfileController = () => {
     ) {
       if (e.target.files[0]) {
         const reader = new FileReader()
-        reader.addEventListener("load", () => {
-          setImgData(reader.result)
-        })
+        reader.addEventListener("load", ()=> {resolveImage(reader)})
         reader.readAsDataURL(e.target.files[0])
         const payload = new FormData()
 
@@ -72,6 +80,7 @@ export const useUpdateProfileController = () => {
         if (response.success) {
           setImgData(response.data.media_url)
           setUuid(response.data.id)
+          Toast.success("Profile picture uploaded")
         }
       } else {
         setImgData(UserImg)
