@@ -16,8 +16,6 @@ export const useUpdateProfileController = () => {
   const userSession = useUserSession()
   const model = useUpdateProfileModel()
 
-
-
   const initialData = {
     file: user?.profile_pic_url ? imgData : null,
     firstname: user?.first_name,
@@ -69,7 +67,9 @@ export const useUpdateProfileController = () => {
     ) {
       if (e.target.files[0]) {
         const reader = new FileReader()
-        reader.addEventListener("load", ()=> {resolveImage(reader)})
+        reader.addEventListener("load", () => {
+          resolveImage(reader)
+        })
         reader.readAsDataURL(e.target.files[0])
         const payload = new FormData()
 

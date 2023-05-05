@@ -1,4 +1,4 @@
-import { Box, Grid } from "@mui/material"
+import {Grid } from "@mui/material"
 import { Formik, Form } from "formik"
 import React from "react"
 import { useUpdatePasswordController } from "./updatePassword.controller"
@@ -23,7 +23,7 @@ const UpdatePassword = () => {
   } = useUpdatePasswordController()
 
   return (
-    <Box>
+    <div>
       <Formik
         initialValues={UpdatePasswordValidator.initialValues}
         validationSchema={UpdatePasswordValidator.validationSchema}
@@ -89,7 +89,7 @@ const UpdatePassword = () => {
           )
         }}
       </Formik>
-    </Box>
+    </div>
   )
 }
 
