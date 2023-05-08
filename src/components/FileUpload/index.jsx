@@ -1,11 +1,15 @@
-import React from "react"
-import { Box } from "@mui/material"
-import CloudUploadIcon from "@mui/icons-material/CloudUpload"
-import CloseIcon from "@mui/icons-material/Close"
-import { useFileController } from "./file.controller"
-import styles from "./FileUpload.module.css"
+import React from "react";
+import { Box } from "@mui/material";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import CloseIcon from "@mui/icons-material/Close";
+import { useFileController } from "./file.controller";
+import styles from "./FileUpload.module.css";
 
-function FileUpload({ label = "Browse Files", max_files = 5, imagePreview = false }) {
+function FileUpload({
+  label = "Browse Files",
+  max_files = 5,
+  imagePreview = false,
+}) {
   const {
     handleFileEvent,
     handleCloseFile,
@@ -16,8 +20,8 @@ function FileUpload({ label = "Browse Files", max_files = 5, imagePreview = fals
     isDraggingOver,
     handleDragOverEvent,
     handleDragLeaveEvent,
-    getFileIcon
-  } = useFileController(max_files)
+    getFileIcon,
+  } = useFileController(max_files);
 
   return (
     <Box className={styles.file_container}>
@@ -37,7 +41,8 @@ function FileUpload({ label = "Browse Files", max_files = 5, imagePreview = fals
         onClick={() => document.getElementById("contained-button-file").click()}
         onDrop={handleDropEvent}
         onDragOver={handleDragOverEvent}
-        onDragLeave={handleDragLeaveEvent}>
+        onDragLeave={handleDragLeaveEvent}
+      >
         <CloudUploadIcon />
         <Box>
           <label className={styles.cursor_pointer}>{label}</label>
@@ -56,13 +61,16 @@ function FileUpload({ label = "Browse Files", max_files = 5, imagePreview = fals
                   )}
                   <span>{limitFileName(file.name, 25)}</span>
                 </Box>
-                <CloseIcon className={styles.cursor_pointer} onClick={() => handleCloseFile(idx)} />
+                <CloseIcon
+                  className={styles.cursor_pointer}
+                  onClick={() => handleCloseFile(idx)}
+                />
               </Box>
-            )
+            );
           })}
       </Box>
     </Box>
-  )
+  );
 }
 
-export default FileUpload
+export default FileUpload;
