@@ -1,16 +1,16 @@
-.file-input {
+.file_input {
   display: none !important;
 }
 
-.file-container {
+.file_container {
   margin: 20px;
 }
 
-.file-container label {
+.file_container label {
   font-size: 22px;
 }
 
-.file-selector {
+.file_selector {
   background-color: aliceblue;
   padding: 50px;
   width: 240px;
@@ -18,20 +18,20 @@
   text-align: center;
 }
 
-.file-container.dragging-over {
+.file_container.dragging-over {
   border: 2px dashed #aaa;
   background-color: #f5f5f5;
 }
 
-.cursor-pointer {
+.cursor_pointer {
   cursor: pointer;
 }
 
-.file-selector svg {
+.file_selector svg {
   font-size: 50px;
 }
 
-.preview-row {
+.preview_row {
   padding: 12px;
   margin-top: 12px;
   width: 325px;
@@ -41,17 +41,20 @@
   justify-content: space-between;
 }
 
-.preview-row .file {
+.preview_row .file {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
-.preview-row span {
+.preview_row span {
   padding-left: 5px;
 }
 
-.file-preview svg,
+.file_preview svg,
 img {
   font-size: 30px;
   width: 50px;
+  aspect-ratio: 1/1;
+  object-fit: contain;
 }

@@ -1,12 +1,15 @@
-import React from "react"
-import { Box } from "@mui/material"
-import CloudUploadIcon from "@mui/icons-material/CloudUpload"
-import CloseIcon from "@mui/icons-material/Close"
-import { useFileController } from "./file.controller"
+import React from "react";
+import { Box } from "@mui/material";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import CloseIcon from "@mui/icons-material/Close";
+import { useFileController } from "./file.controller";
+import styles from "./FileUpload.module.css";
 
-import "./FileUpload.css"
-
-function FileUpload({ label = "Browse Files", max_files = 5, imagePreview = false }) {
+function FileUpload({
+  label = "Browse Files",
+  max_files = 5,
+  imagePreview = false,
+}) {
   const {
     handleFileEvent,
     handleCloseFile,
@@ -17,13 +20,13 @@ function FileUpload({ label = "Browse Files", max_files = 5, imagePreview = fals
     isDraggingOver,
     handleDragOverEvent,
     handleDragLeaveEvent,
-    getFileIcon
-  } = useFileController(max_files)
+    getFileIcon,
+  } = useFileController(max_files);
 
   return (
-    <Box className="file-container">
+    <Box className={styles.file_container}>
       <input
-        className="file-input"
+        className={styles.file_input}
         id="contained-button-file"
         type="file"
         multiple
@@ -32,22 +35,25 @@ function FileUpload({ label = "Browse Files", max_files = 5, imagePreview = fals
         style={{ display: "none" }}
       />
       <Box
-        className={`file-selector cursor-pointer ${isDraggingOver ? "dragging-over" : ""}`}
+        className={`${styles.file_selector} ${styles.cursor_pointer} ${
+          isDraggingOver ? "dragging-over" : ""
+        }`}
         onClick={() => document.getElementById("contained-button-file").click()}
         onDrop={handleDropEvent}
         onDragOver={handleDragOverEvent}
-        onDragLeave={handleDragLeaveEvent}>
+        onDragLeave={handleDragLeaveEvent}
+      >
         <CloudUploadIcon />
         <Box>
-          <label className="cursor-pointer">{label}</label>
+          <label className={styles.cursor_pointer}>{label}</label>
         </Box>
       </Box>
-      <Box className="file-preview">
+      <Box className={styles.file_preview}>
         {uploadedFiles.length > 0 &&
           uploadedFiles.map((file, idx) => {
             return (
-              <Box key={file.name} className="preview-row">
-                <Box className="file">
+              <Box key={file.name} className={styles.preview_row}>
+                <Box className={styles.file}>
                   {!imagePreview || !file.type.startsWith("image/") ? (
                     getFileIcon(file.type)
                   ) : (
@@ -55,13 +61,16 @@ function FileUpload({ label = "Browse Files", max_files = 5, imagePreview = fals
                   )}
                   <span>{limitFileName(file.name, 25)}</span>
                 </Box>
-                <CloseIcon className="cursor-pointer" onClick={() => handleCloseFile(idx)} />
+                <CloseIcon
+                  className={styles.cursor_pointer}
+                  onClick={() => handleCloseFile(idx)}
+                />
               </Box>
-            )
+            );
           })}
       </Box>
     </Box>
-  )
+  );
 }
 
-export default FileUpload
+export default FileUpload;
