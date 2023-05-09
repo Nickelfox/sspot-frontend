@@ -1,4 +1,4 @@
-import {Grid } from "@mui/material"
+import { Grid } from "@mui/material"
 import { Formik, Form } from "formik"
 import React from "react"
 import { useUpdatePasswordController } from "./updatePassword.controller"
@@ -31,8 +31,8 @@ const UpdatePassword = () => {
         {(formik) => {
           return (
             <Form onSubmit={formik.handleSubmit}>
-              <Grid xs={9} sx={styles.form} container spacing={2}>
-                <Grid item xs={6} sx={styles.textbox}>
+              <Grid xs={11} md={9} container spacing={2}>
+                <Grid item xs={10} md={7} sx={styles.textbox}>
                   <FormField
                     label={"Old Password"}
                     placeholder="Enter Your Password"
@@ -45,8 +45,8 @@ const UpdatePassword = () => {
                   />
                 </Grid>
               </Grid>
-              <Grid sx={styles.form} xs={9} container spacing={2}>
-                <Grid item xs={6} sx={styles.textbox}>
+              <Grid xs={11} md={9} container spacing={2}>
+                <Grid item xs={10} md={7} sx={styles.textbox}>
                   <FormField
                     label={"New Password"}
                     placeholder="Enter New Password"
@@ -59,8 +59,8 @@ const UpdatePassword = () => {
                   />
                 </Grid>
               </Grid>
-              <Grid sx={styles.form} xs={9} container spacing={2}>
-                <Grid item xs={6} sx={styles.textbox}>
+              <Grid xs={11} md={9} container spacing={2}>
+                <Grid item xs={10} md={7} sx={styles.textbox}>
                   <FormField
                     label={"Confirm Password"}
                     placeholder="Confirm Password"
@@ -80,7 +80,8 @@ const UpdatePassword = () => {
                     sx={styles.submitBtn}
                     size="large"
                     loading={showLoader}
-                    loadingPosition="start">
+                    loadingPosition="start"
+                    style={{ width: "30vw" }}>
                     Update
                   </LoadingButton>
                 </Grid>
