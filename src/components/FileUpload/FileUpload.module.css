@@ -58,3 +58,9 @@ img {
   aspect-ratio: 1/1;
   object-fit: contain;
 }
+
+.content {
+  color: rgb(112, 128, 153);
+  font-size: 14px;
+  line-height: 32px;
+}

@@ -32,9 +32,9 @@ A reusable React component for upload multiple files with drag and drop feature.
 - imagePreview (boolean):- It is a flag to show imagw preview, Default:false.
 - acceptedType (Array):- Accepted file type. for image file send ["image/*",],
   for audio file send ["audio/*",],for video file send ["video/*",],
-  for word file send [".docx", ".doc", ".octet-stream", ".msword",""],
+  for word file send [".docx",".doc",".octet-stream",".msword",""],
   for excel file send [".xlsx",".xlsm",".xltx",".xltm",".xml",".xls",".xlt",".xls",".xlam",".xla",".xlw",".xlr",".csv","application/vnd.ms-excel","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"],
-  for pdf file send ["application/pdf", ".pdf"],
+  for pdf file send ["application/pdf",".pdf",],
   for powerpoint file send [".pptx","application/vnd.ms-powerpoint","application/vnd.openxmlformats-officedocument.presentationml.presentation"],
   for text file send ["text/plain",], , Default:All.
 - size_limit (number):- Maximum size (in mb) for files to add. Default value 10MB.
