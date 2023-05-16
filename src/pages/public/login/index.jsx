@@ -6,7 +6,7 @@ import { LoadingButton } from "@mui/lab"
 import LockOpenIcon from "@mui/icons-material/LockOpen"
 import { LoginValidator } from "helpers/validators/login"
 import { useLoginController } from "./login.controller"
-import FormField from "components/Loader/FormField"
+import FormField from "components/FormField"
 import { GoogleLogin, FacebookLogin } from "library/SocialLogin"
 
 const Login = () => {

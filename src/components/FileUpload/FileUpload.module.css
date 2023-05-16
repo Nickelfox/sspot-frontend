@@ -1,0 +1,66 @@
+.file_input {
+  display: none !important;
+}
+
+.file_container {
+  margin: 20px;
+}
+
+.file_container label {
+  font-size: 22px;
+}
+
+.file_selector {
+  background-color: aliceblue;
+  padding: 50px;
+  width: 240px;
+  border-style: dotted;
+  text-align: center;
+}
+
+.file_container.dragging-over {
+  border: 2px dashed #aaa;
+  background-color: #f5f5f5;
+}
+
+.cursor_pointer {
+  cursor: pointer;
+}
+
+.file_selector svg {
+  font-size: 50px;
+}
+
+.preview_row {
+  padding: 12px;
+  margin-top: 12px;
+  width: 325px;
+  background-color: aliceblue;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.preview_row .file {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.preview_row span {
+  padding-left: 5px;
+}
+
+.file_preview svg,
+img {
+  font-size: 30px;
+  width: 50px;
+  aspect-ratio: 1/1;
+  object-fit: contain;
+}
+
+.content {
+  color: rgb(112, 128, 153);
+  font-size: 14px;
+  line-height: 32px;
+}

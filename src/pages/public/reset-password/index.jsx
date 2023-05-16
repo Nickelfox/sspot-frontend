@@ -5,7 +5,7 @@ import { useStyles } from "../commonStyles"
 import { LoadingButton } from "@mui/lab"
 import LockResetIcon from "@mui/icons-material/LockReset"
 import { RPValidator } from "helpers/validators/forgotPassword"
-import FormField from "components/Loader/FormField"
+import FormField from "components/FormField"
 import { useResetPasswordController } from "./reset-password.controller"
 
 function ResetPassword() {

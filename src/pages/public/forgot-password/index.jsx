@@ -6,7 +6,7 @@ import { LoadingButton } from "@mui/lab"
 import LockResetIcon from "@mui/icons-material/LockReset"
 import { FPValidator } from "helpers/validators/forgotPassword"
 import { useForgotPasswordController } from "./forgot-password.controller"
-import FormField from "components/Loader/FormField"
+import FormField from "components/FormField"
 import RefreshIcon from "@mui/icons-material/Refresh"
 
 function ForgotPassword() {
