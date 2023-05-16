@@ -3,13 +3,15 @@ import { Provider } from "react-redux"
 import AppRouter from "./router"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { defaultTheme } from "./themes/defaultTheme"
-import { store } from "redux/store"
+
 import { CookiesProvider } from "react-cookie"
 import "./styles/global.scss"
 import AppLoader from "components/Loader/AppLoader"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { SessionObserver } from "auth/Observer"
+import { persistor, store } from "redux/store"
+import { PersistGate } from "redux-persist/integration/react"
 
 /**
  * @description Check if browser is Safar
@@ -29,12 +31,15 @@ function App() {
   return (
     <CookiesProvider>
       <Provider store={store}>
-        <ThemeProvider theme={currentTheme}>
-          <AppLoader />
-          <AppRouter />
-          <ToastContainer />
-          <SessionObserver />
-        </ThemeProvider>
+        <PersistGate loading={null} persistor={persistor}>
+          <ThemeProvider theme={currentTheme}>
+            <AppLoader />
+
+            <AppRouter />
+            <ToastContainer />
+            <SessionObserver />
+          </ThemeProvider>
+        </PersistGate>
       </Provider>
     </CookiesProvider>
   )
