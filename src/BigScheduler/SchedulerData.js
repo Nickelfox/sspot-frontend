@@ -16,7 +16,7 @@ export default class SchedulerData {
     newConfig = undefined,
     newBehaviors = undefined
   ) {
-    console.log(config, 19);
+    // console.log(config, 19);
     this.resources = [];
     this.events = [];
     this.eventGroups = [];
@@ -270,6 +270,7 @@ export default class SchedulerData {
       this.setScrollToSpecialDayjs(true);
     }
   }
+  setParentViewType = (value) => {};
 
   setSchedulerMaxHeight(newSchedulerMaxHeight) {
     this.config.schedulerMaxHeight = newSchedulerMaxHeight;
@@ -705,11 +706,14 @@ export default class SchedulerData {
   }
 
   _createHeaders() {
+    // console.log("createHeaders");
     let headers = [],
       start = this.localeDayjs(new Date(this.startDate)),
-      end = this.localeDayjs(new Date(this.endDate)),
+      end = this.localeDayjs(
+        new Date(new Date(this.startDate).getFullYear(), 11, 31)
+      ),
       header = start;
-
+    console.log(end, 714);
     if (this.showAgenda) {
       headers.push({
         time: header.format(DATETIME_FORMAT),
@@ -741,22 +745,24 @@ export default class SchedulerData {
           }
         }
       } else {
-        while (header >= start && header <= end) {
-          let time = header.format(DATETIME_FORMAT);
-          let dayOfWeek = header.weekday();
-          if (
-            this.config.displayWeekend ||
-            (dayOfWeek !== 0 && dayOfWeek !== 6)
-          ) {
-            let nonWorkingTime = this.behaviors.isNonWorkingTimeFunc(
-              this,
-              time
-            );
-            headers.push({ time: time, nonWorkingTime: nonWorkingTime });
-          }
+        console.log("here", header <= end);
+        if (header >= start && header <= end)
+          while (header >= start && header <= end) {
+            let time = header.format(DATETIME_FORMAT);
+            let dayOfWeek = header.weekday();
+            if (
+              this.config.displayWeekend ||
+              (dayOfWeek !== 0 && dayOfWeek !== 6)
+            ) {
+              let nonWorkingTime = this.behaviors.isNonWorkingTimeFunc(
+                this,
+                time
+              );
+              headers.push({ time: time, nonWorkingTime: nonWorkingTime });
+            }
 
-          header = header.add(1, "days");
-        }
+            header = header.add(1, "days");
+          }
       }
     }
 
@@ -852,13 +858,14 @@ export default class SchedulerData {
         groupOnly: slot.groupOnly,
         hasSummary: false,
         rowMaxCount: 0,
+        // rowHeight: 44,
         rowHeight:
           this.config.nonAgendaSlotMinHeight !== 0
             ? this.config.nonAgendaSlotMinHeight
             : this.config.eventItemLineHeight + 2,
         headerItems: headerEvents,
         indent: 0,
-        hasChildren: false,
+        hasChildren: slot?.parentId ? false : true,
         expanded: true,
         render: true
       };
@@ -1136,6 +1143,7 @@ export default class SchedulerData {
       let resourceEventsList = initRenderData.filter(
         (x) => x.slotId === this._getEventSlotId(item)
       );
+      // console.log(resourceEventsList, "onThisWeekClick");
       if (resourceEventsList.length > 0) {
         let resourceEvents = resourceEventsList[0];
         let span = this._getSpan(item.start, item.end, this.headers);

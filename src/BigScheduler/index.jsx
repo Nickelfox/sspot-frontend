@@ -40,6 +40,8 @@ import SummaryPos from "./SummaryPos";
 import SchedulerData from "./SchedulerData";
 import DemoData from "./DemoData";
 import SchedulerHeader from "./SchedulerHeader";
+import dayjs from "dayjs";
+import TableTry from "./TableTry";
 
 class Scheduler extends Component {
   constructor(props) {
@@ -69,7 +71,8 @@ class Scheduler extends Component {
       resourceScrollbarHeight: 17,
       resourceScrollbarWidth: 17,
       documentWidth: 0,
-      documentHeight: 0
+      documentHeight: 0,
+      selectedWeek: dayjs().week()
     };
     this.scrollLeft = 0;
     this.scrollTop = 0;
@@ -124,7 +127,8 @@ class Scheduler extends Component {
     onScrollLeft: PropTypes.func,
     onScrollRight: PropTypes.func,
     onScrollTop: PropTypes.func,
-    onScrollBottom: PropTypes.func
+    onScrollBottom: PropTypes.func,
+    onThisWeekClick: PropTypes.func.isRequired
   };
 
   componentDidMount(props, state) {
@@ -199,6 +203,7 @@ class Scheduler extends Component {
       tbodyContent = <AgendaView {...this.props} />;
     } else {
       let resourceTableWidth = schedulerData.getResourceTableWidth();
+      // console.log(resourceTableWidth, 205);
       let schedulerContainerWidth =
         width - (config.resourceViewEnabled ? resourceTableWidth : 0);
       let schedulerWidth = schedulerData.getContentTableWidth() - 1;
@@ -240,7 +245,7 @@ class Scheduler extends Component {
         height: contentHeight,
         overflowX: "auto",
         overflowY: "auto",
-        width: resourceTableWidth + resourceScrollbarWidth - 2,
+        width: "25rem",
         margin: `0px -${contentScrollbarWidth}px 0px 0px`
       };
       if (config.schedulerMaxHeight > 0) {
@@ -257,6 +262,7 @@ class Scheduler extends Component {
       let resourceName = schedulerData.isEventPerspective
         ? config.taskName
         : config.resourceName;
+
       tbodyContent = (
         <tr>
           <td
@@ -334,7 +340,7 @@ class Scheduler extends Component {
                     }}
                   >
                     <table className="scheduler-bg-table">
-                      <HeaderView {...this.props} />
+                      <HeaderView {...this.props} scroller={this.scroller} />
                     </table>
                   </div>
                 </div>
@@ -358,7 +364,7 @@ class Scheduler extends Component {
                       style={{ width: schedulerWidth }}
                       ref={this.schedulerContentBgTableRef}
                     >
-                      <BodyView {...this.props} />
+                      <BodyView {...this.props} scroller={this.bodyScroller} />
                     </table>
                   </div>
                 </div>
@@ -380,11 +386,21 @@ class Scheduler extends Component {
           goBack={this.goBack}
           rightCustomHeader={rightCustomHeader}
           leftCustomHeader={leftCustomHeader}
+          onThisWeekClick={this.onThisWeekClick}
         />
       );
     }
 
     return (
+      // <TableTry
+      //   {...this.props}
+      //   dnd={this.state.dndContext}
+      //   schedulerContentRef={this.schedulerContentRef}
+      //   onSchedulerContentMouseOver={this.onSchedulerContentMouseOver}
+      //   onSchedulerContentMouseOut={this.onSchedulerContentMouseOut}
+      //   onSchedulerContentScroll={this.onSchedulerContentScroll}
+      //   schedulerContentBgTableRef={this.schedulerContentBgTableRef}
+      // />
       <table
         id="RBS-Scheduler-root"
         className="scheduler"
@@ -461,6 +477,52 @@ class Scheduler extends Component {
   onSchedulerHeadMouseOut = () => {
     this.currentArea = -1;
   };
+  scroller = (toWhere, id) => {
+    let element;
+    console.log(toWhere, id);
+    if (toWhere === "prev") {
+      element = document.getElementById(id); // weekDay = newWeekDay;
+      // this.setState({ selectedWeek: newWeekDay });
+    } else if (toWhere === "next") {
+      element = document.getElementById(id); // weekDay = newWeekDay;
+      // this.setState({ selectedWeek: newWeekDay });
+    } else if (toWhere === "current") {
+      // const weekDay = dayjs().week();
+      element = document.getElementById(id);
+    }
+
+    // const element2 = document.getElementById(`${selectedWeek}header`);
+    console.log(element);
+    element.scrollIntoView(true);
+  };
+  // bodyScroller = (toWhere) => {
+  //   console.log("isFiredF");
+  //   const { selectedWeek } = this.state;
+
+  //   if (toWhere === "prev") {
+  //     const newWeekDay = selectedWeek - 1;
+  //     // weekDay = newWeekDay;
+  //     this.setState({ selectedWeek: newWeekDay });
+  //   } else if (toWhere === "next") {
+  //     const newWeekDay = selectedWeek + 1;
+  //     // weekDay = newWeekDay;
+  //     this.setState({ selectedWeek: newWeekDay });
+  //   } else if (toWhere === "current") {
+  //     const weekDay = dayjs().week();
+  //     this.setState({ selectedWeek: weekDay });
+  //   }
+  //   // console.log(weekDay);
+  //   const element = document.getElementById(selectedWeek);
+  //   console.log(element);
+  //   // const element2 = document.getElementById(`${selectedWeek}header`);
+  //   // element.scrollIntoView({ behavior: "smooth" });
+  //   element.scrollIntoView(true, {
+  //     behavior: "smooth",
+  //     block: "end",
+  //     inline: "nearest"
+  //   });
+  //   // element2.scrollIntoView(true);
+  // };
 
   onSchedulerHeadScroll = (proxy, event) => {
     if (
@@ -594,10 +656,22 @@ class Scheduler extends Component {
     const { prevClick, schedulerData } = this.props;
     prevClick(schedulerData);
   };
-
+  onThisWeekClick = (toWhere, id) => {
+    // const { onSelectDate, schedulerData } = this.props;
+    // onSelectDate(schedulerData, date);
+    this.scroller(toWhere, id);
+  };
   onSelect = (date) => {
     const { onSelectDate, schedulerData } = this.props;
     onSelectDate(schedulerData, date);
+    const thisYear = dayjs().year();
+    const checkYear = dayjs(date).year();
+    if (checkYear > thisYear || checkYear < thisYear) {
+      const checkMonth = dayjs(date).week();
+      console.log(checkMonth);
+      const element = document.getElementById(checkMonth);
+      element.scrollIntoView(true);
+    }
   };
 }
 

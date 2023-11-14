@@ -11,45 +11,21 @@ import Scheduler, {
 import dayjs from "dayjs";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import "./BigScheduler/css/style.css"
+import "./BigScheduler/css/style.css";
+import Calender from "./components/Scheuler2";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { defaultTheme } from "./themes/defaultTheme";
+
 function App() {
-  const [schedulerData, setSchedulerData] = useState(null);
-  useEffect(() => {
-    getSchedulerData();
-  }, []);
-  const getSchedulerData = () => {
-    const sd = new SchedulerData(
-      new dayjs(new Date()).format(DATE_FORMAT),
-      ViewType.Month,
-      false,
-      false,
-      {
-        displayWeekend: true,
-        eventItemPopoverEnabled: false,
-        schedulerMaxHeight: 380,
-        // tableHeaderHeight: 60,
-        // dayCellWidth: 100,
-        views: [
-          {
-            viewName: "Team View",
-            viewType: ViewType.Month,
-            showAgenda: false,
-            isEventPerspective: false
-          }
-        ]
-      }
-    );
-    sd.setResources(DemoData.resources);
-    sd.setEvents(DemoData.events);
-    setSchedulerData(sd);
-  };
+  const currentTheme = createTheme(defaultTheme);
+
   return (
     <>
-      {schedulerData && (
+      <ThemeProvider theme={currentTheme}>
         <DndProvider backend={HTML5Backend}>
-          <Scheduler schedulerData={schedulerData} />
+          <Calender />
         </DndProvider>
-      )}
+      </ThemeProvider>
     </>
   );
 }
