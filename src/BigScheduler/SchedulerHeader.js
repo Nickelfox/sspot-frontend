@@ -38,7 +38,7 @@ class SchedulerHeader extends Component {
   };
   componentDidMount() {
     console.log(this.state.selectedWeek, "40");
-    this.props.onThisWeekClick("current", this.state.selectedWeek);
+    // this.props.onThisWeekClick("current", this.state.selectedWeek);
   }
   render() {
     const {

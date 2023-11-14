@@ -184,7 +184,7 @@ const Calender = (props) => {
     const allResources = [...resources, commonObject];
     const sd = new SchedulerData(
       new dayjs(new Date()).format(DATE_FORMAT),
-      ViewType.Year,
+      ViewType.Month,
       false,
       false,
       {
@@ -198,7 +198,7 @@ const Calender = (props) => {
         views: [
           {
             viewName: "Resource View",
-            viewType: ViewType.Year,
+            viewType: ViewType.Month,
             showAgenda: false,
             isEventPerspective: true
           }

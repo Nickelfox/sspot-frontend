@@ -213,6 +213,7 @@ class Scheduler extends Component {
       let eventDndSource = this.state.dndContext.getDndSource();
 
       let displayRenderData = renderData.filter((o) => o.render);
+      console.log(displayRenderData, 216);
       let resourceEventsList = displayRenderData.map((item) => {
         return (
           <DndResourceEvents
@@ -223,6 +224,7 @@ class Scheduler extends Component {
           />
         );
       });
+      console.log(resourceEventsList, 227);
 
       let contentScrollbarHeight = this.state.contentScrollbarHeight,
         contentScrollbarWidth = this.state.contentScrollbarWidth,
@@ -392,27 +394,73 @@ class Scheduler extends Component {
     }
 
     return (
-      // <TableTry
-      //   {...this.props}
-      //   dnd={this.state.dndContext}
-      //   schedulerContentRef={this.schedulerContentRef}
-      //   onSchedulerContentMouseOver={this.onSchedulerContentMouseOver}
-      //   onSchedulerContentMouseOut={this.onSchedulerContentMouseOut}
-      //   onSchedulerContentScroll={this.onSchedulerContentScroll}
-      //   schedulerContentBgTableRef={this.schedulerContentBgTableRef}
-      // />
-      <table
-        id="RBS-Scheduler-root"
-        className="scheduler"
-        style={{ width: `${width}px` }}
-      >
-        <thead>
-          <tr>
-            <td colSpan="2">{schedulerHeader}</td>
-          </tr>
-        </thead>
-        <tbody>{tbodyContent}</tbody>
-      </table>
+      <>
+        <SchedulerHeader
+          onViewChange={this.onViewChange}
+          schedulerData={schedulerData}
+          onSelectDate={this.onSelect}
+          goNext={this.goNext}
+          goBack={this.goBack}
+          rightCustomHeader={rightCustomHeader}
+          leftCustomHeader={leftCustomHeader}
+          onThisWeekClick={this.onThisWeekClick}
+        />
+        <div></div>
+        <div
+          style={{
+            overflow: "hidden",
+            borderBottom: "1px solid #e9e9e9",
+            height: config.tableHeaderHeight
+          }}
+        >
+          <div
+            style={{
+              overflowX: "scroll",
+              overflowY: "hidden"
+              // margin: `0px 0px -${contentScrollbarHeight}px`
+            }}
+            ref={this.schedulerHeadRef}
+            onMouseOver={this.onSchedulerHeadMouseOver}
+            onMouseOut={this.onSchedulerHeadMouseOut}
+            onScroll={this.onSchedulerHeadScroll}
+          >
+            <div
+              style={
+                {
+                  // paddingRight: `${contentScrollbarWidth}px`,
+                  // width: schedulerWidth + contentScrollbarWidth
+                }
+              }
+            >
+              <table className="scheduler-bg-table">
+                <HeaderView {...this.props} scroller={this.scroller} />
+              </table>
+            </div>
+          </div>
+        </div>
+        <TableTry
+          {...this.props}
+          dnd={this.state.dndContext}
+          schedulerContentRef={this.schedulerContentRef}
+          onSchedulerContentMouseOver={this.onSchedulerContentMouseOver}
+          onSchedulerContentMouseOut={this.onSchedulerContentMouseOut}
+          onSchedulerContentScroll={this.onSchedulerContentScroll}
+          schedulerContentBgTableRef={this.schedulerContentBgTableRef}
+          width={width}
+        />
+      </>
+      // <table
+      //   id="RBS-Scheduler-root"
+      //   className="scheduler"
+      //   style={{ width: `${width}px` }}
+      // >
+      //   <thead>
+      //     <tr>
+      //       <td colSpan="2">{schedulerHeader}</td>
+      //     </tr>
+      //   </thead>
+      //   <tbody>{tbodyContent}</tbody>
+      // </table>
     );
   }
 
@@ -479,50 +527,46 @@ class Scheduler extends Component {
   };
   scroller = (toWhere, id) => {
     let element;
-    console.log(toWhere, id);
+    let el = document.querySelectorAll(`.body_${id}`);
+    // console.log(el, `${id}body`);
     if (toWhere === "prev") {
-      element = document.getElementById(id); // weekDay = newWeekDay;
+      element = document.getElementById(id);
+      // weekDay = newWeekDay;
       // this.setState({ selectedWeek: newWeekDay });
     } else if (toWhere === "next") {
       element = document.getElementById(id); // weekDay = newWeekDay;
       // this.setState({ selectedWeek: newWeekDay });
     } else if (toWhere === "current") {
-      // const weekDay = dayjs().week();
+      // const weekDay  = dayjs().week();
       element = document.getElementById(id);
     }
-
+    if (el?.length > 0) {
+      for (let i = 0; i < el.length; i++) {
+        const elementx = el[i];
+        elementx.scrollIntoView(true);
+        console.log(elementx);
+        // const topPosition = firstElement.offsetTop;
+      }
+      // el.forEach((element) => element.scrollIntoView(true));
+      // this.scrollToElements(id);
+    }
     // const element2 = document.getElementById(`${selectedWeek}header`);
-    console.log(element);
+    // console.log(element);
     element.scrollIntoView(true);
+    // el.scrollIntoView(true);
   };
-  // bodyScroller = (toWhere) => {
-  //   console.log("isFiredF");
-  //   const { selectedWeek } = this.state;
+  scrollToElement = (element) => {
+    element.scrollIntoView({ behavior: "smooth" });
+  };
 
-  //   if (toWhere === "prev") {
-  //     const newWeekDay = selectedWeek - 1;
-  //     // weekDay = newWeekDay;
-  //     this.setState({ selectedWeek: newWeekDay });
-  //   } else if (toWhere === "next") {
-  //     const newWeekDay = selectedWeek + 1;
-  //     // weekDay = newWeekDay;
-  //     this.setState({ selectedWeek: newWeekDay });
-  //   } else if (toWhere === "current") {
-  //     const weekDay = dayjs().week();
-  //     this.setState({ selectedWeek: weekDay });
-  //   }
-  //   // console.log(weekDay);
-  //   const element = document.getElementById(selectedWeek);
-  //   console.log(element);
-  //   // const element2 = document.getElementById(`${selectedWeek}header`);
-  //   // element.scrollIntoView({ behavior: "smooth" });
-  //   element.scrollIntoView(true, {
-  //     behavior: "smooth",
-  //     block: "end",
-  //     inline: "nearest"
-  //   });
-  //   // element2.scrollIntoView(true);
-  // };
+  scrollToElements = (id) => {
+    const elements = document.querySelectorAll(`.body_${id}`); // Replace with your class name
+    elements.forEach((element) => {
+      setTimeout(() => {
+        this.scrollToElement(element);
+      }, 0);
+    });
+  };
 
   onSchedulerHeadScroll = (proxy, event) => {
     if (
@@ -666,12 +710,14 @@ class Scheduler extends Component {
     onSelectDate(schedulerData, date);
     const thisYear = dayjs().year();
     const checkYear = dayjs(date).year();
-    if (checkYear > thisYear || checkYear < thisYear) {
-      const checkMonth = dayjs(date).week();
-      console.log(checkMonth);
-      const element = document.getElementById(checkMonth);
-      element.scrollIntoView(true);
-    }
+    // if (checkYear > thisYear || checkYear < thisYear) {
+    //   console.log("fired")
+    const checkMonth = dayjs(date).week();
+    console.log(checkMonth);
+    const element = document.getElementById(checkMonth);
+    console.log(element);
+    element.scrollIntoView(true);
+    // }
   };
 }
 

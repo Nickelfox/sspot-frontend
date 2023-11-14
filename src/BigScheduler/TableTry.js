@@ -53,7 +53,11 @@ const TableTry = (props) => {
     margin: `0px -${contentScrollbarWidth}px 0px 0px`
   };
   let schedulerWidth = schedulerData.getContentTableWidth() - 1;
+  let resourceTableWidth = schedulerData.getResourceTableWidth();
+  const width = schedulerData.getSchedulerWidth();
 
+  let schedulerContainerWidth =
+    width - (config.resourceViewEnabled ? resourceTableWidth : 0);
   console.log(schedulerData, "KYUNIDHR20");
   //   const getTableHeaders = () => {
   //     const requiredArray = headers.map((item) => {
@@ -146,36 +150,51 @@ const TableTry = (props) => {
                 {getExpandButton(item)}
               </div>
               {
-                <div
-                  style={{ position: "relative", ...schedulerContentStyle }}
-                  // style={schedulerContentStyle}
-                  ref={props.schedulerContentRef}
-                  onMouseOver={props.onSchedulerContentMouseOver}
-                  onMouseOut={props.onSchedulerContentMouseOut}
-                  onScroll={props.onSchedulerContentScroll}
-                >
-                  <div style={{}}>
-                    <div className="scheduler-content">
-                      <table className="scheduler-content-table">
-                        <tbody>{resourceEventsList}</tbody>
-                      </table>
-                    </div>
-                    <div className="scheduler-bg">
-                      <table
-                        className="scheduler-bg-table"
-                        style={{ width: schedulerWidth }}
-                        ref={props.schedulerContentBgTableRef}
+                <tr>
+                  <td>
+                    <div
+                      className="scheduler-view"
+                      style={{
+                        width: schedulerContainerWidth,
+                        verticalAlign: "top"
+                      }}
+                    >
+                      <div
+                        style={{
+                          position: "relative",
+                          ...schedulerContentStyle
+                        }}
+                        // style={schedulerContentStyle}
+                        ref={props.schedulerContentRef}
+                        onMouseOver={props.onSchedulerContentMouseOver}
+                        onMouseOut={props.onSchedulerContentMouseOut}
+                        onScroll={props.onSchedulerContentScroll}
                       >
-                        <BodyView
-                          {...props}
-                          // scroller={this.bodyScroller}
-                          scroller={() => {}}
-                          currentItem={item}
-                        />
-                      </table>
+                        <div style={{ width: schedulerWidth }}>
+                          <div className="scheduler-content">
+                            <table className="scheduler-content-table">
+                              <tbody>{resourceEventsList}</tbody>
+                            </table>
+                          </div>
+                          <div className="scheduler-bg">
+                            <table
+                              className="scheduler-bg-table"
+                              style={{ width: schedulerWidth }}
+                              ref={props.schedulerContentBgTableRef}
+                            >
+                              <BodyView
+                                {...props}
+                                // scroller={this.bodyScroller}
+                                scroller={() => {}}
+                                currentItem={item}
+                              />
+                            </table>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  </td>
+                </tr>
               }
               {/* <div>
                 {resourceEventsList}
@@ -228,46 +247,126 @@ const TableTry = (props) => {
             >
               <div
                 style={{ minWidth: "24rem" }}
+                className="bg-[#fff] stickyCell"
+              >
+                {filteredItem?.slotName}
+              </div>
+              {
+                <tr>
+                  <td>
+                    <div
+                      className="scheduler-view"
+                      style={{
+                        width: schedulerContainerWidth,
+                        verticalAlign: "top"
+                      }}
+                    >
+                      <div
+                        style={{
+                          position: "relative",
+                          ...schedulerContentStyle
+                        }}
+                        // style={schedulerContentStyle}
+                        ref={props.schedulerContentRef}
+                        onMouseOver={props.onSchedulerContentMouseOver}
+                        onMouseOut={props.onSchedulerContentMouseOut}
+                        onScroll={props.onSchedulerContentScroll}
+                      >
+                        <div style={{ width: schedulerWidth }}>
+                          <div className="scheduler-content">
+                            <table className="scheduler-content-table">
+                              <tbody>{resourceEventsList}</tbody>
+                            </table>
+                          </div>
+                          <div className="scheduler-bg">
+                            <table
+                              className="scheduler-bg-table"
+                              style={{ width: schedulerWidth }}
+                              ref={props.schedulerContentBgTableRef}
+                            >
+                              <BodyView
+                                {...props}
+                                // scroller={this.bodyScroller}
+                                scroller={() => {}}
+                                currentItem={filteredItem}
+                              />
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </div>
+          );
+          /* <div
+              style={{
+                // maxWidth: "24rem",
+                minWidth: "24rem",
+                backgroundColor: "red",
+                height: "6rem",
+                display: "flex",
+                width: "fit-content"
+              }}
+            >
+              <div
+                style={{ minWidth: "24rem" }}
                 className="stickyCell bg-[#fff]"
               >
                 {filteredItem?.slotName}
               </div>
 
               {
-                <div
-                  style={{ position: "relative", ...schedulerContentStyle }}
-                  // style={schedulerContentStyle}
-                  ref={props.schedulerContentRef}
-                  onMouseOver={props.onSchedulerContentMouseOver}
-                  onMouseOut={props.onSchedulerContentMouseOut}
-                  onScroll={props.onSchedulerContentScroll}
-                >
-                  <div style={{}}>
-                    <div className="scheduler-content">
-                      <table className="scheduler-content-table">
-                        <tbody>{resourceEventsList}</tbody>
-                      </table>
-                    </div>
-                    <div className="scheduler-bg">
-                      <table
-                        className="scheduler-bg-table"
-                        style={{ width: schedulerWidth }}
-                        ref={props.schedulerContentBgTableRef}
+                <tr>
+                  <td>
+                    <div
+                      className="scheduler-view"
+                      style={{
+                        width: schedulerContainerWidth,
+                        verticalAlign: "top"
+                      }}
+                    >
+                      <div
+                        style={{
+                          position: "relative",
+                          ...schedulerContentStyle
+                        }}
+                        // style={schedulerContentStyle}
+                        ref={props.schedulerContentRef}
+                        onMouseOver={props.onSchedulerContentMouseOver}
+                        onMouseOut={props.onSchedulerContentMouseOut}
+                        onScroll={props.onSchedulerContentScroll}
                       >
-                        <BodyView
-                          {...props}
-                          // scroller={this.bodyScroller}
-                          scroller={() => {}}
-                          currentItem={filteredItem}
-                        />
-                      </table>
+                        <div style={{ width: schedulerWidth }}>
+                          <div className="scheduler-content">
+                            <table className="scheduler-content-table">
+                              <tbody>{resourceEventsList}</tbody>
+                            </table>
+                          </div>
+                          <div className="scheduler-bg">
+                            <table
+                              className="scheduler-bg-table"
+                              style={{ width: schedulerWidth }}
+                              ref={props.schedulerContentBgTableRef}
+                            >
+                              <BodyView
+                                {...props}
+                                // scroller={this.bodyScroller}
+                                scroller={() => {}}
+                                currentItem={filteredItem}
+                              />
+                            </table>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  </td>
+                </tr>
               }
-            </div>
-          );
+            </div> */
         })}
+
         <div
           style={{
             backgroundColor: "green",

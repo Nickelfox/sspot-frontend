@@ -218,8 +218,9 @@ class HeaderView extends Component {
       });
       //   console.log(headerHeight, "Height Idhar hei");
       headerList = (
-        <th style={{ width: cellWidth, marginRight: 10 }}>
+        <th style={{ width: cellWidth, marginRight: 10, display: "flex" }}>
           {/* {console.log(schedulerData.getContentCellWidth(), 217)} */}
+
           <tr
             className="header3-text text-[#888888]"
             style={{
@@ -231,6 +232,15 @@ class HeaderView extends Component {
               //   ...style
             }}
           >
+            <div
+              style={{
+                width: "24rem",
+                minWidth: "24rem",
+                height: headerHeight,
+                backgroundColor: "gray"
+              }}
+              className="stickyCell"
+            ></div>
             {Array.from(headerMap).map((item, parentIndex) => {
               return (
                 <span>
@@ -296,7 +306,7 @@ class HeaderView extends Component {
     }
 
     return (
-      <thead>
+      <thead style={{ display: "flex" }}>
         <tr
           style={{
             height: headerHeight,

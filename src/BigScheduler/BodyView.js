@@ -38,7 +38,7 @@ class BodyView extends Component {
     );
     console.log(currentItem);
     // const requiredArray = displayRenderData.map((headerItem) => {});
-    let tableRows = displayRenderData.map((item) => {
+    let tableRows = requiredMap.map((item) => {
       //   let rowCells = headers.map((header, index) => {
       //     let key = item.slotId + "_" + header.time;
       //     let style = index === headers.length - 1 ? {} : { width: 80 };
@@ -115,10 +115,13 @@ class BodyView extends Component {
           {Array.from(headerMap).map((headerItem, parentIndex) => {
             return (
               <span>
-                <span key={parentIndex} className="flex w-full font-md">
+                <span
+                  key={`${currentItem?.slotName}${parentIndex}`}
+                  className="flex w-full font-md"
+                >
                   {Array.from(headerItem[1]).map((childItem, childIndex) => {
                     return (
-                      <span className="flex">
+                      <span className={`body_${childItem[0]} flex`}>
                         {Array.from(childItem[1]).map(
                           (childrenItem, childrenIndex) => {
                             return (
