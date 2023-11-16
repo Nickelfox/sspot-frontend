@@ -4,12 +4,10 @@ import { Radio } from "antd";
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const ViewSelector = (props) => {
-  console.log(props);
   const { schedulerData } = props;
   const { config } = schedulerData;
   const [selectedView, setSelectedView] = useState("");
   let parentViewList = config.parentView.map((item, index) => {
-    console.log(item, "parentItem");
     return (
       <RadioButton
         style={{

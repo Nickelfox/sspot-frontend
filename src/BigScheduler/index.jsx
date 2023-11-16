@@ -525,7 +525,6 @@ class Scheduler extends Component {
   scroller = (toWhere, id) => {
     let element;
     let el = document.querySelectorAll(`.body_${id}`);
-    console.log(el, `${id}body`);
     if (toWhere === "prev") {
       element = document.getElementById(id);
     } else if (toWhere === "next") {
@@ -537,7 +536,6 @@ class Scheduler extends Component {
       for (let i = 0; i < el.length; i++) {
         const elementx = el[i];
         elementx.scrollIntoView(true);
-        console.log(elementx);
       }
     }
 
@@ -557,7 +555,6 @@ class Scheduler extends Component {
   };
 
   onSchedulerHeadScroll = (proxy, event) => {
-    console.log("Fired");
     /**Check
      * If After commenting this function does the divs scroll
      */
@@ -698,7 +695,6 @@ class Scheduler extends Component {
     // nextClick(schedulerData);
     let formattedDate = dayjs(nextWeekDay).format(DATE_FORMAT);
     this.onSelect(formattedDate);
-    console.log(schedulerData);
   };
 
   goBack = () => {
@@ -715,7 +711,6 @@ class Scheduler extends Component {
     this.onSelect(formattedDate);
   };
   onSelect = (date) => {
-    console.log(date);
     const { onSelectDate, schedulerData } = this.props;
 
     onSelectDate(schedulerData, date);

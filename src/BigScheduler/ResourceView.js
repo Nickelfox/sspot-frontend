@@ -56,9 +56,7 @@ class ResourceView extends Component {
     let width = "25rem";
     let paddingBottom = contentScrollbarHeight;
     let displayRenderData = renderData.filter((o) => o.render);
-    console.log(displayRenderData, "lalalal");
     let resourceList = displayRenderData.map((resourceItem) => {
-      console.log(resourceItem?.name === "select", "there34");
       return (
         <>
           {

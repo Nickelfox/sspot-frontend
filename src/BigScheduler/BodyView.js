@@ -102,7 +102,6 @@ class BodyView extends Component {
         };
         return requiredObject;
       });
-      console.log(requiredArray, "97");
       const getWeekDayMap = (headerArray, month) => {
         const weekDayMap = new Map();
         const requiredMonth = headerArray.filter(
@@ -151,12 +150,6 @@ class BodyView extends Component {
                       >
                         {Array.from(childItem[1]).map(
                           (childrenItem, childrenIndex) => {
-                            {
-                              console.log(
-                                getColor(childrenItem),
-                                "childrenIndex"
-                              );
-                            }
 
                             return (
                               <span
@@ -192,7 +185,6 @@ class BodyView extends Component {
                                   />
                                 ) : null}
 
-                                {console.log(currentItem, "Chide")}
                                 {/* {dayjs(childrenItem?.time).day()} */}
                               </span>
                             );

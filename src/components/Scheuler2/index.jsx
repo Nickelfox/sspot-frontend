@@ -208,7 +208,6 @@ const Calender = (props) => {
         ]
       }
     );
-    console.log(id, 214);
     // if(!id){
     //   console.log("Please provide id")
     // }
@@ -270,7 +269,6 @@ const Calender = (props) => {
     triggerRerender(rerender + 1);
   };
   const expandAllItems = (schedulerData) => {
-    console.log(schedulerData);
     const { resources } = schedulerData;
     const newResources = resources.map((resource) => {
       return {
@@ -278,7 +276,6 @@ const Calender = (props) => {
         expanded: !resource?.expanded
       };
     });
-    console.log(newResources);
     schedulerData.setResources(newResources);
     triggerRerender(rerender + 1);
   };
@@ -292,10 +289,8 @@ const Calender = (props) => {
     type,
     item
   ) => {
-    console.log(item);
     setId(slotName);
     const replaceArr = getRenderSd(schedulerData);
-    console.log(replaceArr, "IDHAR");
     // if (slotName) {
     if (
       window.confirm(
@@ -479,9 +474,7 @@ const Calender = (props) => {
           Create Event
         </PrimaryButton> */}
       </Box>
-      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        Hello
-      </button>
+
       <Popup
         open={openPopUp}
         handleClose={handlePopUpClose}
