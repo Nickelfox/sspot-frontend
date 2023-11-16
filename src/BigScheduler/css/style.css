@@ -183,7 +183,9 @@ table.scheduler-table tr:last-child td {
     color: #fff;
     padding-right: 20px !important;
     /* margin-bottom: 4rem; */
-    height: 4rem;
+    height: 5rem;
+    opacity: 0.5;
+    border-radius: 0.5rem;
 }
 
 .overflow-text {
@@ -280,7 +282,7 @@ table.scheduler-table tr:last-child td {
 }
 
 .btn-selected {
-    background: #f6f6f6;
+    background: #d0d0d0;
     background-image: -webkit-linear-gradient(top, #d0d0d0, #d8d8d8);
     background-image: -moz-linear-gradient(top, #d0d0d0, #d8d8d8);
     background-image: -ms-linear-gradient(top, #d0d0d0, #d8d8d8);
@@ -297,6 +299,16 @@ table.scheduler-table tr:last-child td {
     text-decoration: none;
 }
 
+.scheduler-header {
+    background: #d0d0d0;
+    background-image: -webkit-linear-gradient(top, #eeeeee, #e4e4e4);
+    background-image: -moz-linear-gradient(top, #eeeeee, #e4e4e4);
+    background-image: -ms-linear-gradient(top, #eeeeee, #e4e4e4);
+    background-image: -o-linear-gradient(top, #eeeeee, #e4e4e4);
+    background-image: linear-gradient(to bottom, #eeeeee, #e4e4e4);
+    text-decoration: none;
+}
+
 .btn:hover {
     background: #f6f6f6;
     background-image: -webkit-linear-gradient(top, #f6f6f6, #eeeeee);
@@ -310,7 +322,6 @@ table.scheduler-table tr:last-child td {
 .stickyCell {
     position: sticky !important;
     left: 0 !important;
-    background-color: $background-color !important;
     z-index: 10 !important;
 
     /* &--header {

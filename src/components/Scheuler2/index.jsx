@@ -27,80 +27,83 @@ let resources = [
     id: "r1",
     name: "Staff_Val",
     weeklyAvailability: 40,
-    parentId: "r2"
+    parentId: "r2",
+    expanded: false,
+    workDays: [1, 3, 4]
   },
   {
     id: "r2",
     name: "Staff_Tom",
-    weeklyAvailability: 40
-  },
-  {
-    id: "r5",
-    name: "Staff_Ben",
-    weeklyAvailability: 40
-  },
-  {
-    id: "r6",
-    name: "Staff_Lee",
     weeklyAvailability: 40,
-    hasChildren: true
+    expanded: false,
+    workDays: [1, 3, 4]
   },
-  {
-    id: "r3",
-    name: "Manager_A",
-    weeklyAvailability: 40
-  },
+  // {
+  //   id: "r5",
+  //   name: "Staff_Ben",
+  //   weeklyAvailability: 40
+  // },
+  // {
+  //   id: "r6",
+  //   name: "Staff_Lee",
+  //   weeklyAvailability: 40
+  // },
+  // {
+  //   id: "r3",
+  //   name: "Manager_A",
+  //   weeklyAvailability: 40
+  // },
   {
     id: "r4",
     name: "Manager_B",
-    weeklyAvailability: 40
+    weeklyAvailability: 40,
+    expanded: false,
+    workDays: [5, 3]
   },
   {
     id: "r7",
     name: "Manager_C",
-    weeklyAvailability: 40
+    weeklyAvailability: 40,
+    expanded: false,
+    workDays: [2, 4]
   },
   {
     id: "r8",
     name: "Manager_D",
-    weeklyAvailability: 40
+    weeklyAvailability: 40,
+    expanded: false,
+    workDays: [1, 3]
   },
   {
     id: "r9",
     name: "Manager_D",
-    weeklyAvailability: 40
+    weeklyAvailability: 40,
+    expanded: false,
+    workDays: []
   }
 ];
 let events = [
   {
     id: 1,
-    start: "2023-12-18 09:30:00",
-    end: "2023-12-19 23:30:00",
+    start: "2023-11-18 09:30:00",
+    end: "2023-11-19 23:30:00",
     resourceId: "r1",
     title: "A1",
-    bgColor: "#488FAB"
+    bgColor: "#488FAB",
+    type: "parent"
   },
-  {
-    id: 2,
-    start: "2023-12-18 12:30:00",
-    end: "2023-12-26 23:30:00",
-    resourceId: "r2",
-    title: "A2",
-    resizable: true
-  },
-
   {
     id: 3,
-    start: "2023-12-19 12:30:00",
-    end: "2023-12-20 23:30:00",
+    start: "2023-11-19 12:30:00",
+    end: "2023-11-20 23:30:00",
     resourceId: "r3",
     title: "Fixed",
     movable: true
   },
   {
     id: 4,
-    start: "2023-12-19 14:30:00",
-    end: "2023-12-20 23:30:00",
+    start: "2023-11-24 14:30:00",
+    end: "2023-11-26 23:30:00",
     resourceId: "r1",
     title: "Try",
     startResizable: true,
@@ -109,13 +112,17 @@ let events = [
   },
   {
     id: 5,
-    start: "2023-12-19 15:30:00",
-    end: "2023-12-20 23:30:00",
+    start: "2023-11-19 15:30:00",
+    end: "2023-11-20 23:30:00",
     resourceId: "r2",
     title: "R2",
     rrule: "FREQ=WEEKLY;DTSTART=20171219T013000Z;BYDAY=TU,FR", //this is going to be used for availability
     bgColor: "#DCC36B"
   }
+];
+const parentViewArray = [
+  { name: "Projects", value: 0 },
+  { name: "Team", value: 1 }
 ];
 const Calender = (props) => {
   const [rerender, triggerRerender] = useState(1);
@@ -123,6 +130,8 @@ const Calender = (props) => {
   const [triger, setRetrigger] = useState(false);
   const [popupChild, setPopupChild] = useState("");
   const [openPopUp, setOpenPopup] = useState(false);
+  const [view, setView] = useState("");
+  const [id, setId] = useState("");
   useEffect(() => {
     getSchedulerData();
   }, []);
@@ -173,15 +182,8 @@ const Calender = (props) => {
       </div>
     );
   };
-  const commonObject = {
-    id: "select",
-    name: "select",
-    item: <select></select>,
-    parentId: resources.map((item) => item?.id)
-  };
-  console.log(commonObject);
+
   const getSchedulerData = () => {
-    const allResources = [...resources, commonObject];
     const sd = new SchedulerData(
       new dayjs(new Date()).format(DATE_FORMAT),
       ViewType.Month,
@@ -195,6 +197,7 @@ const Calender = (props) => {
         availability: ["Day", "Week"],
         // tableHeaderHeight: 60,
         // dayCellWidth: 100,
+        parentView: parentViewArray,
         views: [
           {
             viewName: "Resource View",
@@ -205,7 +208,11 @@ const Calender = (props) => {
         ]
       }
     );
-    sd.setResources(allResources);
+    console.log(id, 214);
+    // if(!id){
+    //   console.log("Please provide id")
+    // }
+    sd.setResources(resources);
     sd.setEvents(events);
     setSchedulerData(sd);
   };
@@ -262,6 +269,19 @@ const Calender = (props) => {
     schedulerData.toggleExpandStatus(slotId);
     triggerRerender(rerender + 1);
   };
+  const expandAllItems = (schedulerData) => {
+    console.log(schedulerData);
+    const { resources } = schedulerData;
+    const newResources = resources.map((resource) => {
+      return {
+        ...resource,
+        expanded: !resource?.expanded
+      };
+    });
+    console.log(newResources);
+    schedulerData.setResources(newResources);
+    triggerRerender(rerender + 1);
+  };
 
   const newEvent = (
     schedulerData,
@@ -272,12 +292,16 @@ const Calender = (props) => {
     type,
     item
   ) => {
+    console.log(item);
+    setId(slotName);
+    const replaceArr = getRenderSd(schedulerData);
+    console.log(replaceArr, "IDHAR");
+    // if (slotName) {
     if (
       window.confirm(
         `Do you want to create a new event? {slotId: ${slotId}, slotName: ${slotName}, start: ${start}, end: ${end}, type: ${type}, item: ${item}}`
       )
     ) {
-      // console.log("fired", end);
       let newFreshId = 0;
       schedulerData.events.forEach((item) => {
         if (item.id >= newFreshId) newFreshId = item.id + 1;
@@ -291,9 +315,11 @@ const Calender = (props) => {
         resourceId: slotId,
         bgColor: `#${randomColor}`
       };
+      schedulerData.setResources(replaceArr);
       schedulerData.addEvent(newEvent);
       triggerRerender(rerender + 1);
     }
+    // }
   };
   const newEventfromResource = (schedulerData, slotId, start, end) => {
     // console.log("fired", end);
@@ -322,14 +348,21 @@ const Calender = (props) => {
     schedulerContent.scrollLeft = 10;
   };
   const updateEventStart = (schedulerData, event, newStart) => {
+    const replaceArr = getRenderSd(schedulerData);
+    schedulerData?.setResources(replaceArr);
     schedulerData.updateEventStart(event, newStart);
     triggerRerender(render + 1);
   };
+
   const updateEventEnd = (schedulerData, event, newEnd) => {
+    const replaceArr = getRenderSd(schedulerData);
+    schedulerData?.setResources(replaceArr);
     schedulerData.updateEventEnd(event, newEnd);
     triggerRerender(render + 1);
   };
   const moveEvent = (schedulerData, event, slotId, slotName, start, end) => {
+    const requiredSchedulerData = getRenderSd(schedulerData);
+    schedulerData.setResources(requiredSchedulerData);
     schedulerData.moveEvent(event, slotId, slotName, start, end);
     triggerRerender(render + 1);
     setRetrigger((prev) => !prev);
@@ -357,6 +390,25 @@ const Calender = (props) => {
       endDate
     );
   };
+  const getRenderSd = (schedulerData) => {
+    /**@MehranSiddiqui
+     * @function
+     * This Function is responsible for not rerendering scheduler Data and collapsing all Divs
+     */
+    const { renderData } = schedulerData;
+    let displayRenderData = renderData.filter((o) => o.render);
+    const replaceArr = displayRenderData.map((i) => {
+      return {
+        id: i.slotId,
+        name: i.slotName,
+        weeklyAvailability: 40,
+        expanded: i.expanded,
+        parentId: i.parentId,
+        workDays: i.workDays
+      };
+    });
+    return replaceArr;
+  };
   const popUpChildren = {
     addEvent: <AddEvent handleClose={handlePopUpClose} resources={resources} />,
     addResource: (
@@ -368,8 +420,22 @@ const Calender = (props) => {
     )
   };
   return (
-    <div style={{ maxHeight: "100vh" }}>
+    <div
+      style={{
+        maxHeight: "100vh",
+        maxWidth: "100vw",
+        overflowX: "hidden",
+        overflowY: "auto"
+      }}
+    >
       {/* {console.log(schedulerData)} */}
+      <Box
+        style={{
+          minHeight: "7rem",
+          minWidth: "100vw",
+          backgroundColor: "#666666"
+        }}
+      ></Box>
       <DndProvider backend={HTML5Backend}>
         {schedulerData && (
           <Scheduler
@@ -389,11 +455,12 @@ const Calender = (props) => {
             // onScrollLeft={onScrollLeft}
             updateEventStart={updateEventStart}
             updateEventEnd={updateEventEnd}
+            expandAllItems={expandAllItems}
             // {...props}
           />
         )}{" "}
       </DndProvider>
-      <Box className="flex flex-col">
+      <Box className="flex flex-col py-12">
         <PrimaryButton
           style={{
             width: "fit-content",
@@ -403,7 +470,7 @@ const Calender = (props) => {
           }}
           onClick={handleAddEventPopUp.bind(null, "addResource")}
         >
-          Create Resource
+          Add Person
         </PrimaryButton>
         {/* <PrimaryButton
           style={{ width: "fit-content", padding: "2rem", fontSize: "2rem" }}

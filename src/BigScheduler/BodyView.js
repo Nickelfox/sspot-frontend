@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { PropTypes } from "prop-types";
 import dayjs from "dayjs";
+import nonWorking from "../assets/images/nonWorking.webp";
 const months = [
   "Jan",
   "Feb",
@@ -15,6 +16,13 @@ const months = [
   "Nov",
   "Dec"
 ];
+var updateLocale = require("dayjs/plugin/updateLocale");
+
+dayjs.extend(updateLocale);
+const dayArr = ["SUN", "MON", "TUE", "THU", "FRI", "SAT"];
+dayjs.updateLocale("en", {
+  weekdays: dayArr
+});
 class BodyView extends Component {
   constructor(props) {
     super(props);
@@ -36,7 +44,20 @@ class BodyView extends Component {
     const requiredMap = displayRenderData.filter(
       (item) => item?.slotId === currentItem?.slotId
     );
-    console.log(currentItem);
+    const daySet = new Set(currentItem?.workDays);
+
+    const getColor = (childrenItem) => {
+      return daySet.has(dayjs(childrenItem?.time).day()) ||
+        !!childrenItem?.nonWorkingTime
+        ? config?.nonWorkingTimeBodyBgColor
+        : "#fff";
+    };
+    let currentDate = new Date("01-02-2016");
+    const year = dayjs(currentDate).year();
+    let startDate = new Date(currentDate.getFullYear(), 0, 1);
+    const days = Math.floor((currentDate - startDate) / (24 * 60 * 60 * 1000));
+    let month = months[currentDate.getMonth()];
+
     // const requiredArray = displayRenderData.map((headerItem) => {});
     let tableRows = requiredMap.map((item) => {
       //   let rowCells = headers.map((header, index) => {
@@ -70,15 +91,18 @@ class BodyView extends Component {
           (currentDate - startDate) / (24 * 60 * 60 * 1000)
         );
         let month = months[currentDate.getMonth()];
-        const weekNumber = Math.ceil(days / 7);
+        const year = dayjs(currentDate).year();
+        let weekNumber = Math.ceil(days / 7);
+
         const requiredObject = {
           time: item?.time,
           nonWorkingTime: item?.nonWorkingTime,
-          weekDay: weekNumber,
+          weekDay: dayjs(new Date()).year() === year ? weekNumber : year,
           month: month
         };
         return requiredObject;
       });
+      console.log(requiredArray, "97");
       const getWeekDayMap = (headerArray, month) => {
         const weekDayMap = new Map();
         const requiredMonth = headerArray.filter(
@@ -100,41 +124,76 @@ class BodyView extends Component {
       requiredArray.forEach((item) => {
         headerMap.set(item?.month, getWeekDayMap(requiredArray, item?.month));
       });
-      //   console.log(headerMap, "Bhai idhar");
-
       return (
         <tr
           style={{
-            border: "1px solid green",
+            // border: "1px solid green",
             width: "100%",
             display: "flex",
             height: "6rem"
             // marginBottom: 10
           }}
         >
+          {/* <img src={nonWorking} alt="" /> */}
           {Array.from(headerMap).map((headerItem, parentIndex) => {
             return (
-              <span>
+              <span key={parentIndex + 6}>
                 <span
-                  key={`${currentItem?.slotName}${parentIndex}`}
+                  key={`${currentItem?.slotName}${parentIndex + 1}`}
                   className="flex w-full font-md"
                 >
                   {Array.from(headerItem[1]).map((childItem, childIndex) => {
                     return (
-                      <span className={`body_${childItem[0]} flex`}>
+                      <span
+                        key={childIndex + 1}
+                        className={`body_${childItem[0]} flex`}
+                        id={`X_${childItem[0]}`}
+                      >
                         {Array.from(childItem[1]).map(
                           (childrenItem, childrenIndex) => {
+                            {
+                              console.log(
+                                getColor(childrenItem),
+                                "childrenIndex"
+                              );
+                            }
+
                             return (
                               <span
-                                key={childrenIndex}
+                                key={childrenIndex + 1}
                                 className="flex justify-center items-center"
                                 style={{
                                   width: 80,
-                                  border: " 1px solid #eeeeee",
-                                  height: "6rem"
+                                  borderLeft: " 1px solid #eeeeee",
+                                  borderRight: " 1px solid #eeeeee",
+                                  border: "0 1px solid #eeeeee",
+                                  height: "6rem",
+                                  // backgroundColor: getColor(childrenItem),
+                                  // !!childrenItem?.nonWorkingTime
+                                  //   ? config?.nonWorkingTimeBodyBgColor
+                                  //   : "#fff"
+                                  pointerEvents: !!childrenItem?.nonWorkingTime
+                                    ? "none"
+                                    : "auto",
+
+                                  // backgroundImage:
+                                  //   !!childrenItem?.nonWorkingTime
+                                  //     ? nonWorking
+                                  //     : ""
+                                  backgroundColor: getColor(childrenItem)
                                 }}
                               >
-                                {/* {dayjs(childrenItem?.time).format("DD")} */}
+                                {!!childrenItem?.nonWorkingTime ||
+                                daySet.has(dayjs(childrenItem?.time).day()) ? (
+                                  <img
+                                    src={nonWorking}
+                                    alt=""
+                                    style={{ zIndex: 9 }}
+                                  />
+                                ) : null}
+
+                                {console.log(currentItem, "Chide")}
+                                {/* {dayjs(childrenItem?.time).day()} */}
                               </span>
                             );
                           }

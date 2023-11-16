@@ -11,7 +11,7 @@ const OutlinedInputField = styled(OutlinedInput)(({ height = "1.5rem" }) => {
   const theme = useTheme();
 
   return {
-    fontSize: `${theme.typography.c2.fontSize} !important`,
+    fontSize: `${theme.typography.p1.fontSize} !important`,
     fontWeight: `${theme.typography.c2.fontWeight} !important`,
     lineHeight: `${theme.typography.c2.lineHeight} !important`,
     height: height,

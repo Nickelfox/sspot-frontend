@@ -63,3 +63,30 @@ code {
     font-size: 35%;
   }
 }
+
+.avatarContainer {
+  display: "flex";
+  align-items: "center";
+  gap: 1;
+  cursor: "pointer"
+}
+
+avatar {
+  background-color: #000 !important;
+  font-size: 1.6rem;
+  cursor: pointer;
+  width: 5rem;
+  height: 6rem;
+  border-radius: 0;
+}
+
+.MuiOutlinedInput-root .MuiAutocomplete-endAdornment {
+  right: 0 !important;
+}
+
+.MuiAutocomplete-root,
+.MuiOutlinedInput-root,
+.MuiInputBase-sizeSmall {
+  height: 3rem;
+  padding: 0 !important;
+}

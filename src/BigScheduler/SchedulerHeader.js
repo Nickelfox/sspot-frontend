@@ -5,7 +5,9 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { RightOutlined, LeftOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { DATE_FORMAT } from ".";
-import { Button } from "@mui/material";
+import { Box, Button, Grid } from "@mui/material";
+import ViewSelector from "./schedulerComponents/ViewSelector";
+import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 class SchedulerHeader extends Component {
@@ -37,7 +39,7 @@ class SchedulerHeader extends Component {
       : this.setState({ selectedView: value });
   };
   componentDidMount() {
-    console.log(this.state.selectedWeek, "40");
+    // console.log(this.state.selectedWeek, "40");
     // this.props.onThisWeekClick("current", this.state.selectedWeek);
   }
   render() {
@@ -51,7 +53,8 @@ class SchedulerHeader extends Component {
       onThisWeekClick,
       onSelectDate,
       selectedView,
-      selectedParentView
+      selectedParentView,
+      expandAllItems
     } = this.props;
     // console.log(this.props, 42);
     const { viewType, showAgenda, isEventPerspective, config } = schedulerData;
@@ -80,176 +83,177 @@ class SchedulerHeader extends Component {
         />
       </div>
     );
-    let radioButtonList = config.views.map((item) => {
-      return (
-        <RadioButton
-          style={{ border: "1px solid #666666", height: "3.5rem" }}
-          key={`${item.viewType}${item.showAgenda ? 1 : 0}${
-            item.isEventPerspective ? 1 : 0
-          }`}
-          value={`${item.viewType}${item.showAgenda ? 1 : 0}${
-            item.isEventPerspective ? 1 : 0
-          }`}
-          className={`btn text-xl font-semibold flex justify-center items-center`}
-        >
-          <span className={`text-xl font-semibold`}>{item.viewName}</span>
-        </RadioButton>
-      );
-    });
-    let parentViewList = config.parentView.map((item, index) => {
-      return (
-        <RadioButton
-          style={{
-            border: "1px solid #666666",
-            height: "3.5rem",
-            borderRadius: "0.4rem"
-          }}
-          key={`${item.viewType}${item.showAgenda ? 1 : 0}${
-            item.isEventPerspective ? 1 : 0
-          }`}
-          value={`${item.viewName}${index}`}
-          className={`btn text-xl font-semibold flex justify-center items-center`}
-        >
-          <span className={`text-xl font-semibold`}>{item.viewName}</span>
-        </RadioButton>
-      );
-    });
-    const getCustomHeaderItemLeft = () => {
-      return (
-        <div
-          style={{ width: width, borderRight: "1px solid #666666" }}
-          className="flex justify-center items-center"
-        >
-          <RadioGroup
-            buttonStyle="solid"
-            defaultValue={defaultValue}
-            size="default"
-            className="stext-xl font-semibold flex"
-            onChange={(event) => {
-              this.handleEvents(onViewChange, true, event);
-            }}
-            // onChange={(event) => {
-            //   this.handleEvents(onViewChange, true, event);
-            // }}
-          >
-            {parentViewList}
-          </RadioGroup>
-        </div>
-      );
-    };
-    return (
-      <Row
-        gutter={[10, 10]}
-        type="flex"
-        align="middle"
-        justify="space-between"
-        className="bg-[#e9e9e9] py-2 w-full"
-      >
-        {getCustomHeaderItemLeft()}
-        <Col></Col>
-        <Col>
-          <div className="header2-text flex items-center justify-center">
-            <Space>
-              <div style={{ display: "flex" }}>
-                <button
-                  style={{
-                    height: "3.5rem",
-                    width: "3.5rem",
-                    marginRight: "0.5rem"
-                  }}
-                  type="button"
-                  className="btn flex items-center justify-center font-bold py-2 px-4 rounded border-2"
-                  // className="flex items-center justify-center"
-                  onClick={this.handleVisibleChange}
-                >
-                  <CalendarMonthIcon />
-                  {config.calendarPopoverEnabled ? (
-                    <Popover
-                      content={popover}
-                      placement="bottomLeft"
-                      trigger="click"
-                      open={this.state.visible}
-                      onOpenChange={this.handleVisibleChange}
-                    ></Popover>
-                  ) : (
-                    <span className={"header2-text-label"}></span>
-                  )}
-                </button>
-                <button
-                  className={`btn flex justify-center items-center`}
-                  style={{ height: "3.5rem", width: "3.5rem" }}
-                  onClick={() => {
-                    const minus = this.state.selectedWeek - 1;
-                    console.log(minus);
-                    onThisWeekClick("prev", minus);
-                    this.setState({ selectedWeek: minus });
-                  }}
-                >
-                  <LeftOutlined
-                    type="left"
-                    // style={{ marginRight: "8px" }}
-                    className="icon-nav"
-                  />
-                </button>
-                <button
-                  className="btn flex justify-center items-center px-4"
-                  style={{ height: "3.5rem" }}
-                  onClick={() => {
-                    const id = dayjs().week();
-                    onThisWeekClick("current", id);
-                    this.setState({ selectedWeek: id });
-                  }}
-                >
-                  <span
-                    // className={"header2-text-label"}
-                    style={{ cursor: "pointer" }}
-                    className={`text-xl font-semibold`}
-                    // onClick={(date) => {
-                    //   this.handleEvents(
-                    //     selectDate,
-                    //     false,
-                    //     date.format(DATE_FORMAT)
-                    //   );
-                    // }}
-                  >
-                    This Week
-                  </span>
-                </button>
 
-                <button
-                  className={`btn flex justify-center items-center`}
-                  style={{ height: "3.5rem", width: "3.5rem" }}
-                  onClick={() => {
-                    console.log(this.state.selectedWeek);
-                    const plus = this.state.selectedWeek + 1;
-                    console.log(plus);
-                    onThisWeekClick("next", plus);
-                    this.setState({ selectedWeek: plus });
-                  }}
-                >
-                  <RightOutlined type="right" className="icon-nav" />
-                </button>
-              </div>
-              <Spin spinning={this.state.dateSpinning} />
-            </Space>
-            <Space>
-              <Spin spinning={this.state.viewSpinning} />
-              <RadioGroup
-                buttonStyle="solid"
-                defaultValue={defaultValue}
-                size="default"
-                className="text-xl font-semibold"
-                onChange={(event) => {
-                  this.handleEvents(onViewChange, true, event);
-                }}
+    return (
+      <Grid
+        conatainer
+        display={"flex"}
+        height={"4.1rem"}
+        alignItems={"center"}
+        className="scheduler-header"
+      >
+        <Grid item width={"100%"} display={"flex"}>
+          <ViewSelector {...this.props} />{" "}
+          <Box paddingLeft={"1rem"}>
+            <button
+              style={{
+                height: "3rem",
+                width: "6rem",
+                marginRight: "0.5rem"
+              }}
+              type="button"
+              className="btn flex items-center justify-center font-bold py-2 px-4 rounded border-2"
+              // className="flex items-center justify-center"
+              onClick={expandAllItems}
+            >
+              <KeyboardDoubleArrowDownIcon />{" "}
+            </button>
+          </Box>
+        </Grid>
+        <Grid
+          item
+          width={"100%"}
+          display={"flex"}
+          justifyContent={"flex-end"}
+          paddingRight={"3rem"}
+        >
+          <div style={{ display: "flex" }}>
+            <button
+              style={{
+                height: "3rem",
+                width: "3rem",
+                marginRight: "0.5rem"
+              }}
+              type="button"
+              className="btn flex items-center justify-center font-bold py-2 px-4 rounded border-2"
+              // className="flex items-center justify-center"
+              onClick={this.handleVisibleChange}
+            >
+              <CalendarMonthIcon />
+              {config.calendarPopoverEnabled ? (
+                <Popover
+                  content={popover}
+                  placement="bottomLeft"
+                  trigger="click"
+                  open={this.state.visible}
+                  onOpenChange={this.handleVisibleChange}
+                ></Popover>
+              ) : (
+                <span className={"header2-text-label"}></span>
+              )}
+            </button>
+            <button
+              className={`btn flex justify-center items-center`}
+              style={{ height: "3rem", width: "3rem" }}
+              onClick={goBack}
+            >
+              <LeftOutlined type="left" className="icon-nav" />
+            </button>
+            <button
+              className="btn flex justify-center items-center px-4"
+              style={{ height: "3rem" }}
+              onClick={() => {
+                const id = dayjs().week();
+                onThisWeekClick("current", id);
+                this.setState({ selectedWeek: id });
+              }}
+            >
+              <span
+                style={{ cursor: "pointer" }}
+                className={`text-xl font-semibold`}
               >
-                {radioButtonList}
-              </RadioGroup>
-            </Space>
+                This Week
+              </span>
+            </button>
+
+            <button
+              className={`btn flex justify-center items-center`}
+              style={{ height: "3rem", width: "3rem" }}
+              onClick={() => {
+                goNext();
+                // console.log(this.state.selectedWeek);
+                // const plus = this.state.selectedWeek + 1;
+                // console.log(plus);
+                // onThisWeekClick("next", plus);
+                // this.setState({ selectedWeek: plus });
+              }}
+            >
+              <RightOutlined type="right" className="icon-nav" />
+            </button>
           </div>
-        </Col>
-        {rightCustomHeader}
-      </Row>
+          <Spin spinning={this.state.dateSpinning} />
+        </Grid>
+        {/* <Grid item xs={4}>
+          <ViewSelector {...this.props} />
+        </Grid>
+        <Grid item xs={4}>
+          <div style={{ display: "flex" }}>
+            <button
+              style={{
+                height: "4rem",
+                width: "4rem",
+                marginRight: "0.5rem"
+              }}
+              type="button"
+              className="btn flex items-center justify-center font-bold py-2 px-4 rounded border-2"
+              // className="flex items-center justify-center"
+              onClick={this.handleVisibleChange}
+            >
+              <CalendarMonthIcon />
+              {config.calendarPopoverEnabled ? (
+                <Popover
+                  content={popover}
+                  placement="bottomLeft"
+                  trigger="click"
+                  open={this.state.visible}
+                  onOpenChange={this.handleVisibleChange}
+                ></Popover>
+              ) : (
+                <span className={"header2-text-label"}></span>
+              )}
+            </button>
+            <button
+              className={`btn flex justify-center items-center`}
+              style={{ height: "4rem", width: "4rem" }}
+              onClick={goBack}
+            >
+              <LeftOutlined type="left" className="icon-nav" />
+            </button>
+            <button
+              className="btn flex justify-center items-center px-4"
+              style={{ height: "4rem" }}
+              onClick={() => {
+                const id = dayjs().week();
+                onThisWeekClick("current", id);
+                this.setState({ selectedWeek: id });
+              }}
+            >
+              <span
+                style={{ cursor: "pointer" }}
+                className={`text-xl font-semibold`}
+              >
+                This Week
+              </span>
+            </button>
+
+            <button
+              className={`btn flex justify-center items-center`}
+              style={{ height: "4rem", width: "4rem" }}
+              onClick={() => {
+                goNext();
+                // console.log(this.state.selectedWeek);
+                // const plus = this.state.selectedWeek + 1;
+                // console.log(plus);
+                // onThisWeekClick("next", plus);
+                // this.setState({ selectedWeek: plus });
+              }}
+            >
+              <RightOutlined type="right" className="icon-nav" />
+            </button>
+          </div>
+          <Spin spinning={this.state.dateSpinning} />
+        </Grid> */}
+      </Grid>
     );
   }
 

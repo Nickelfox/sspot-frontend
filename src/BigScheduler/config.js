@@ -44,7 +44,7 @@ export default {
   dayStartFrom: 0,
   dayStopTo: 23,
   defaultEventBgColor: "#80C5F6",
-  selectedAreaColor: "#7EC2F3",
+  selectedAreaColor: "#00000033",
   nonWorkingTimeHeadColor: "#999999",
   nonWorkingTimeHeadBgColor: "#fff0f6",
   nonWorkingTimeBodyBgColor: "#fff0f6",
@@ -83,6 +83,7 @@ export default {
 
   minuteStep: 30,
   availability: ["day", "week"],
+
   parentView: [
     {
       viewName: "Projects"
@@ -91,6 +92,7 @@ export default {
       viewName: "Team"
     }
   ],
+  selectedParent: 1,
   views: [
     {
       viewName: "Day",

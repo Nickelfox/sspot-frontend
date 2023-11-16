@@ -7,6 +7,7 @@ import config from "./config";
 import behaviors from "./behaviors";
 import { CellUnit, DATE_FORMAT, DATETIME_FORMAT } from "./index";
 import { ViewTypes as ViewType } from "./helpers";
+import { months } from "../helpers/Months/months";
 export default class SchedulerData {
   constructor(
     date = dayjs(),
@@ -270,7 +271,9 @@ export default class SchedulerData {
       this.setScrollToSpecialDayjs(true);
     }
   }
-  setParentViewType = (value) => {};
+  setParentViewType = (value) => {
+    console.log(this);
+  };
 
   setSchedulerMaxHeight(newSchedulerMaxHeight) {
     this.config.schedulerMaxHeight = newSchedulerMaxHeight;
@@ -452,7 +455,7 @@ export default class SchedulerData {
     let end = this.localeDayjs(new Date(this.endDate));
     let dateLabel = start.format("LL");
 
-    if (start != end) dateLabel = `${start.format("LL")}-${end.format("LL")}`;
+    if (start !== end) dateLabel = `${start.format("LL")}-${end.format("LL")}`;
 
     if (!!this.behaviors.getDateLabelFunc)
       dateLabel = this.behaviors.getDateLabelFunc(
@@ -670,9 +673,12 @@ export default class SchedulerData {
           : this.localeDayjs(this.startDate).add(num, "days");
       this.endDate = this.startDate;
     } else if (this.viewType === ViewType.Month) {
+      /**Check
+       * Here I have removed the month Start Check
+       */
       this.startDate =
         date != undefined
-          ? this.localeDayjs(date).startOf("month")
+          ? this.localeDayjs(date)
           : this.localeDayjs(this.startDate).add(num, "months");
       this.endDate = this.localeDayjs(this.startDate).endOf("month");
     } else if (this.viewType === ViewType.Quarter) {
@@ -706,14 +712,41 @@ export default class SchedulerData {
   }
 
   _createHeaders() {
-    // console.log("createHeaders");
+    const now = new Date(this.startDate);
+    let current;
+
+    // console.log(current, "inHeader");
     let headers = [],
       start = this.localeDayjs(new Date(this.startDate)),
+      header = start;
+    /**Check
+     * Here it is going to bet end of year
+     */
+    let end = this.localeDayjs(
+      new Date(new Date(this.startDate).getFullYear(), 11, 31)
+    );
+    if (now.getMonth() == 11) {
+      end = this.localeDayjs(new Date(now.getFullYear() + 1, 0, 1));
+    } else {
       end = this.localeDayjs(
         new Date(new Date(this.startDate).getFullYear(), 11, 31)
-      ),
-      header = start;
-    console.log(end, 714);
+      );
+    }
+    // if (weekNumber >= 51) {
+    //   console.log(
+    //     this.localeDayjs(
+    //       new Date(new Date(this.startDate).getFullYear() + 1, 11, 31)
+    //     ),
+    //     "inHEader51"
+    //   );
+    // } else {
+    //   console.log(
+    //     this.localeDayjs(
+    //       new Date(new Date(this.startDate).getFullYear(), 11, 31)
+    //     ),
+    //     "inHEader"
+    //   );
+    // }
     if (this.showAgenda) {
       headers.push({
         time: header.format(DATETIME_FORMAT),
@@ -745,8 +778,16 @@ export default class SchedulerData {
           }
         }
       } else {
-        console.log("here", header <= end);
-        if (header >= start && header <= end)
+        console.log(header, start, end, "InIF");
+        const headerStart = dayjs(header).year();
+        const endStart = dayjs(end).year();
+        console.log(endStart, headerStart, "InIF");
+        if (endStart > headerStart) {
+          end = this.localeDayjs(
+            new Date(new Date(this.startDate).getFullYear() + 1, 9, 31)
+          );
+        }
+        if (header >= start && header <= end) {
           while (header >= start && header <= end) {
             let time = header.format(DATETIME_FORMAT);
             let dayOfWeek = header.weekday();
@@ -763,6 +804,7 @@ export default class SchedulerData {
 
             header = header.add(1, "days");
           }
+        }
       }
     }
 
@@ -855,7 +897,7 @@ export default class SchedulerData {
         slotId: slot.id,
         slotName: slot.name,
         parentId: slot.parentId,
-        groupOnly: slot.groupOnly,
+        groupOnly: slot?.parentId ? false : true,
         hasSummary: false,
         rowMaxCount: 0,
         // rowHeight: 44,
@@ -866,8 +908,9 @@ export default class SchedulerData {
         headerItems: headerEvents,
         indent: 0,
         hasChildren: slot?.parentId ? false : true,
-        expanded: true,
-        render: true
+        expanded: slot?.expanded !== undefined ? slot?.expanded : false,
+        render: true,
+        workDays: slot?.workDays
       };
       let id = slot.id;
       let value = undefined;
@@ -915,7 +958,8 @@ export default class SchedulerData {
       }
       if (currentNode.children.length > 0) {
         currentNode.data.hasChildren = true;
-        currentNode.data.expanded = this.config.defaultExpanded;
+        // currentNode.data.expanded = false;
+        // currentNode.data.expanded = this.config.defaultExpanded;
       }
       initRenderData.push(currentNode.data);
 

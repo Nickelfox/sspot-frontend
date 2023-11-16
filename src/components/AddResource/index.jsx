@@ -183,13 +183,13 @@ const items = [
   }
 ];
 const workDays = [
-  { value: "MO", label: "MON" },
-  { value: "TU", label: "TUE" },
-  { value: "WE", label: "WED" },
-  { value: "TH", label: "THU" },
-  { value: "FR", label: "FRI" },
-  { value: "SA", label: "SAT" },
-  { value: "SU", label: "SUN" }
+  { value: 0, label: "SUN" },
+  { value: 1, label: "MON" },
+  { value: 2, label: "TUE" },
+  { value: 3, label: "WED" },
+  { value: 4, label: "THU" },
+  { value: 5, label: "FRI" },
+  { value: 6, label: "SAT" }
 ];
 const AddResourceEvent = (props) => {
   const { handleClose, addResorceInScheduler, resourceLength } = props;
@@ -206,9 +206,10 @@ const AddResourceEvent = (props) => {
       id: resourceLength + 1,
       rrule: `FREQ=WEEKLY;DTSTART=20171219T013000Z;BYDAY=${values?.workDays.toString()}`, //this is going to be used for availability
       groupOnly: false,
-      parentId: resourceLength + 1
+      // parentId: resourceLength + 1,
+      workDays: values?.workDays
     };
-    // console.log(requiredObject);
+    console.log(requiredObject);
     addResorceInScheduler(requiredObject);
   };
   const getStylesforSelector = (workDays, value, index) => {

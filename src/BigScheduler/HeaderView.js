@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { PropTypes } from "prop-types";
 import { CellUnit, DATETIME_FORMAT, DATE_FORMAT } from "./index";
 import dayjs from "dayjs";
+import OutlinedInputField from "../components/OutlinedInput";
 
 class HeaderView extends Component {
   constructor(props) {
@@ -26,7 +27,6 @@ class HeaderView extends Component {
     } = this.props;
     let resourceTableWidth = schedulerData.getResourceTableWidth();
     const { headers, cellUnit, config, localeDayjs } = schedulerData;
-    console.log(headers);
     let headerHeight = schedulerData.getTableHeaderHeight();
     let cellWidth = schedulerData.getContentCellWidth();
     let minuteStepsInHour = schedulerData.getMinuteStepsInHour();
@@ -88,6 +88,9 @@ class HeaderView extends Component {
         }
       });
     } else {
+      /**Check
+       * Previous Code
+       */
       //   headerList = headers.map((item, index) => {
       //     let datetime = localeDayjs(new Date(item.time));
       //     console.log(datetime);
@@ -179,6 +182,7 @@ class HeaderView extends Component {
         "Nov",
         "Dec"
       ];
+
       const requiredArray = headers.map((item) => {
         let currentDate = new Date(item?.time);
         let startDate = new Date(currentDate.getFullYear(), 0, 1);
@@ -187,10 +191,12 @@ class HeaderView extends Component {
         );
         let month = months[currentDate.getMonth()];
         const weekNumber = Math.ceil(days / 7);
+        const year = dayjs(currentDate).year();
+
         const requiredObject = {
           time: item?.time,
           nonWorkingTime: item?.nonWorkingTime,
-          weekDay: weekNumber,
+          weekDay: dayjs(new Date()).year() === year ? weekNumber : year,
           month: month
         };
         return requiredObject;
@@ -236,11 +242,15 @@ class HeaderView extends Component {
               style={{
                 width: "24rem",
                 minWidth: "24rem",
-                height: headerHeight,
-                backgroundColor: "gray"
+                height: headerHeight
               }}
               className="stickyCell"
-            ></div>
+            >
+              <OutlinedInputField
+                sx={{ height: "95%", width: "100%", backgroundColor: "#fff" }}
+                placeholder="Search..."
+              />
+            </div>
             {Array.from(headerMap).map((item, parentIndex) => {
               return (
                 <span>
@@ -249,7 +259,10 @@ class HeaderView extends Component {
                       return (
                         <td
                           style={{
-                            borderTop: 0
+                            borderTop: 0,
+                            borderLeft: 0,
+                            borderRight: 0,
+                            marginLeft: "-2px"
                             // width: 80
                           }}
                           key={childIndex}
@@ -257,7 +270,7 @@ class HeaderView extends Component {
                           id={`${childItem[0]}`}
                         >
                           <span className="flex ">
-                            <span className="w-8 h-8 bg-[#eeeeee] ">
+                            <span className="h-8 bg-[#eeeeee] min-w-[2rem] w-fit px-1">
                               {childItem[0]}
                             </span>
                             <span className="w-full flex justify-center items-center">
@@ -270,7 +283,7 @@ class HeaderView extends Component {
                               (childrenItem, childrenIndex) => {
                                 return (
                                   <span
-                                    key={childrenIndex}
+                                    key={childrenIndex + 2}
                                     className="flex justify-center items-center"
                                     style={{
                                       width: 80,
