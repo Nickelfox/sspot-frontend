@@ -6,7 +6,7 @@ export default {
   besidesWidth: 20,
   schedulerMaxHeight: 0,
   tableHeaderHeight: 40,
-  schedulerContentHeight: "500px",
+  schedulerContentHeight: "fit-content",
 
   responsiveByParent: false,
 
@@ -14,7 +14,7 @@ export default {
   agendaMaxEventWidth: 100,
 
   dayResourceTableWidth: 160,
-  weekResourceTableWidth: "16%",
+  weekResourceTableWidth: "20rem",
   monthResourceTableWidth: 160,
   quarterResourceTableWidth: 160,
   yearResourceTableWidth: 160,
@@ -44,7 +44,7 @@ export default {
   dayStartFrom: 0,
   dayStopTo: 23,
   defaultEventBgColor: "#80C5F6",
-  selectedAreaColor: "#7EC2F3",
+  selectedAreaColor: "#00000033",
   nonWorkingTimeHeadColor: "#999999",
   nonWorkingTimeHeadBgColor: "#fff0f6",
   nonWorkingTimeBodyBgColor: "#fff0f6",
@@ -82,7 +82,17 @@ export default {
   nonAgendaOtherCellHeaderFormat: "ddd M/D",
 
   minuteStep: 30,
+  availability: ["day", "week"],
 
+  parentView: [
+    {
+      viewName: "Projects"
+    },
+    {
+      viewName: "Team"
+    }
+  ],
+  selectedParent: 1,
   views: [
     {
       viewName: "Day",

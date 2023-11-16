@@ -13,7 +13,7 @@ class EventItem extends Component {
         this.state = {
             left: left,
             top: top,
-            width: width,
+            width: 60,
             contentMousePosX: 0,
             eventItemLeftRect: 0,
             eventItemRightRect: 0,

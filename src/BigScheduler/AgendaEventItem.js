@@ -42,7 +42,7 @@ class AgendaEventItem extends Component {
         );
 
         let eventItemTemplate = (
-            <div className={roundCls + ' event-item'} key={eventItem.id}
+            <div className={roundCls + 'event-item'} key={eventItem.id}
                 style={{ height: config.eventItemHeight, maxWidth: config.agendaMaxEventWidth, backgroundColor: bgColor }}>
                 <span style={{ marginLeft: '10px', lineHeight: `${config.eventItemHeight}px` }}>{titleText}</span>
             </div>

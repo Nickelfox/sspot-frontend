@@ -40,6 +40,8 @@ import SummaryPos from "./SummaryPos";
 import SchedulerData from "./SchedulerData";
 import DemoData from "./DemoData";
 import SchedulerHeader from "./SchedulerHeader";
+import dayjs from "dayjs";
+import TableTry from "./TableTry";
 
 class Scheduler extends Component {
   constructor(props) {
@@ -69,7 +71,8 @@ class Scheduler extends Component {
       resourceScrollbarHeight: 17,
       resourceScrollbarWidth: 17,
       documentWidth: 0,
-      documentHeight: 0
+      documentHeight: 0,
+      selectedWeek: dayjs().week()
     };
     this.scrollLeft = 0;
     this.scrollTop = 0;
@@ -124,12 +127,12 @@ class Scheduler extends Component {
     onScrollLeft: PropTypes.func,
     onScrollRight: PropTypes.func,
     onScrollTop: PropTypes.func,
-    onScrollBottom: PropTypes.func
+    onScrollBottom: PropTypes.func,
+    onThisWeekClick: PropTypes.func.isRequired
   };
 
   componentDidMount(props, state) {
     const { schedulerData, parentRef } = this.props;
-
     this.resolveScrollbarSize();
 
     if (parentRef !== undefined) {
@@ -181,8 +184,7 @@ class Scheduler extends Component {
             if (specialDayjs >= header) index++;
           });
           this.schedulerContent.scrollLeft =
-            (index - 1) * schedulerData.getContentCellWidth();
-
+            index + 1 * schedulerData.getContentCellWidth();
           schedulerData.setScrollToSpecialDayjs(false);
         }
       }
@@ -199,6 +201,7 @@ class Scheduler extends Component {
       tbodyContent = <AgendaView {...this.props} />;
     } else {
       let resourceTableWidth = schedulerData.getResourceTableWidth();
+      // console.log(resourceTableWidth, 205);
       let schedulerContainerWidth =
         width - (config.resourceViewEnabled ? resourceTableWidth : 0);
       let schedulerWidth = schedulerData.getContentTableWidth() - 1;
@@ -240,7 +243,7 @@ class Scheduler extends Component {
         height: contentHeight,
         overflowX: "auto",
         overflowY: "auto",
-        width: resourceTableWidth + resourceScrollbarWidth - 2,
+        width: "25rem",
         margin: `0px -${contentScrollbarWidth}px 0px 0px`
       };
       if (config.schedulerMaxHeight > 0) {
@@ -257,6 +260,7 @@ class Scheduler extends Component {
       let resourceName = schedulerData.isEventPerspective
         ? config.taskName
         : config.resourceName;
+
       tbodyContent = (
         <tr>
           <td
@@ -334,7 +338,7 @@ class Scheduler extends Component {
                     }}
                   >
                     <table className="scheduler-bg-table">
-                      <HeaderView {...this.props} />
+                      <HeaderView {...this.props} scroller={this.scroller} />
                     </table>
                   </div>
                 </div>
@@ -358,7 +362,7 @@ class Scheduler extends Component {
                       style={{ width: schedulerWidth }}
                       ref={this.schedulerContentBgTableRef}
                     >
-                      <BodyView {...this.props} />
+                      <BodyView {...this.props} scroller={this.bodyScroller} />
                     </table>
                   </div>
                 </div>
@@ -380,23 +384,80 @@ class Scheduler extends Component {
           goBack={this.goBack}
           rightCustomHeader={rightCustomHeader}
           leftCustomHeader={leftCustomHeader}
+          onThisWeekClick={this.onThisWeekClick}
         />
       );
     }
 
     return (
-      <table
-        id="RBS-Scheduler-root"
-        className="scheduler"
-        style={{ width: `${width}px` }}
-      >
-        <thead>
-          <tr>
-            <td colSpan="2">{schedulerHeader}</td>
-          </tr>
-        </thead>
-        <tbody>{tbodyContent}</tbody>
-      </table>
+      <>
+        <SchedulerHeader
+          onViewChange={this.onViewChange}
+          schedulerData={schedulerData}
+          onSelectDate={this.onSelect}
+          goNext={this.goNext}
+          goBack={this.goBack}
+          rightCustomHeader={rightCustomHeader}
+          leftCustomHeader={leftCustomHeader}
+          onThisWeekClick={this.onThisWeekClick}
+          expandAllItems={this.expandAllItems}
+        />
+        <div></div>
+        <div
+          style={{
+            overflow: "hidden",
+            borderBottom: "1px solid #e9e9e9",
+            height: config.tableHeaderHeight
+          }}
+        >
+          <div
+            style={{
+              overflowX: "scroll",
+              overflowY: "hidden"
+              // margin: `0px 0px -${contentScrollbarHeight}px`
+            }}
+            ref={this.schedulerHeadRef}
+            onMouseOver={this.onSchedulerHeadMouseOver}
+            onMouseOut={this.onSchedulerHeadMouseOut}
+            onScroll={this.onSchedulerHeadScroll}
+          >
+            <div
+              style={
+                {
+                  // paddingRight: `${contentScrollbarWidth}px`,
+                  // width: schedulerWidth + contentScrollbarWidth
+                }
+              }
+            >
+              <table className="scheduler-bg-table">
+                <HeaderView {...this.props} scroller={this.scroller} />
+              </table>
+            </div>
+          </div>
+        </div>
+        <TableTry
+          {...this.props}
+          dnd={this.state.dndContext}
+          schedulerContentRef={this.schedulerContentRef}
+          onSchedulerContentMouseOver={this.onSchedulerContentMouseOver}
+          onSchedulerContentMouseOut={this.onSchedulerContentMouseOut}
+          onSchedulerContentScroll={this.onSchedulerContentScroll}
+          schedulerContentBgTableRef={this.schedulerContentBgTableRef}
+          width={width}
+        />
+      </>
+      // <table
+      //   id="RBS-Scheduler-root"
+      //   className="scheduler"
+      //   style={{ width: `${width}px` }}
+      // >
+      //   <thead>
+      //     <tr>
+      //       <td colSpan="2">{schedulerHeader}</td>
+      //     </tr>
+      //   </thead>
+      //   <tbody>{tbodyContent}</tbody>
+      // </table>
     );
   }
 
@@ -422,25 +483,25 @@ class Scheduler extends Component {
 
     let tmpState = {};
     let needSet = false;
-    if (contentScrollbarHeight != this.state.contentScrollbarHeight) {
+    if (contentScrollbarHeight !== this.state.contentScrollbarHeight) {
       tmpState = {
         ...tmpState,
         contentScrollbarHeight: contentScrollbarHeight
       };
       needSet = true;
     }
-    if (contentScrollbarWidth != this.state.contentScrollbarWidth) {
+    if (contentScrollbarWidth !== this.state.contentScrollbarWidth) {
       tmpState = { ...tmpState, contentScrollbarWidth: contentScrollbarWidth };
       needSet = true;
     }
-    if (resourceScrollbarHeight != this.state.resourceScrollbarHeight) {
+    if (resourceScrollbarHeight !== this.state.resourceScrollbarHeight) {
       tmpState = {
         ...tmpState,
         resourceScrollbarHeight: resourceScrollbarHeight
       };
       needSet = true;
     }
-    if (resourceScrollbarWidth != this.state.resourceScrollbarWidth) {
+    if (resourceScrollbarWidth !== this.state.resourceScrollbarWidth) {
       tmpState = {
         ...tmpState,
         resourceScrollbarWidth: resourceScrollbarWidth
@@ -461,15 +522,55 @@ class Scheduler extends Component {
   onSchedulerHeadMouseOut = () => {
     this.currentArea = -1;
   };
+  scroller = (toWhere, id) => {
+    let element;
+    let el = document.querySelectorAll(`.body_${id}`);
+    console.log(el, `${id}body`);
+    if (toWhere === "prev") {
+      element = document.getElementById(id);
+    } else if (toWhere === "next") {
+      element = document.getElementById(id); // weekDay = newWeekDay;
+    } else if (toWhere === "current") {
+      element = document.getElementById(id);
+    }
+    if (el?.length > 0) {
+      for (let i = 0; i < el.length; i++) {
+        const elementx = el[i];
+        elementx.scrollIntoView(true);
+        console.log(elementx);
+      }
+    }
 
-  onSchedulerHeadScroll = (proxy, event) => {
-    if (
-      (this.currentArea === 2 || this.currentArea === -1) &&
-      this.schedulerContent.scrollLeft != this.schedulerHead.scrollLeft
-    )
-      this.schedulerContent.scrollLeft = this.schedulerHead.scrollLeft;
+    element.scrollIntoView(true);
+  };
+  scrollToElement = (element) => {
+    element.scrollIntoView({ behavior: "smooth" });
   };
 
+  scrollToElements = (id) => {
+    const elements = document.querySelectorAll(`.body_${id}`); // Replace with your class name
+    elements.forEach((element) => {
+      setTimeout(() => {
+        this.scrollToElement(element);
+      }, 0);
+    });
+  };
+
+  onSchedulerHeadScroll = (proxy, event) => {
+    console.log("Fired");
+    /**Check
+     * If After commenting this function does the divs scroll
+     */
+    // if (
+    //   (this.currentArea === 2 || this.currentArea === -1) &&
+    //   this.schedulerContent.scrollLeft != this.schedulerHead.scrollLeft
+    // )
+      // this.schedulerContent.scrollLeft = this.schedulerHead.scrollLeft;
+  };
+  expandAllItems = () => {
+    const { expandAllItems, schedulerData } = this.props;
+    expandAllItems(schedulerData);
+  };
   schedulerResourceRef = (element) => {
     this.schedulerResource = element;
   };
@@ -486,7 +587,7 @@ class Scheduler extends Component {
     if (!!this.schedulerResource) {
       if (
         (this.currentArea === 1 || this.currentArea === -1) &&
-        this.schedulerContent.scrollTop != this.schedulerResource.scrollTop
+        this.schedulerContent.scrollTop !== this.schedulerResource.scrollTop
       )
         this.schedulerContent.scrollTop = this.schedulerResource.scrollTop;
     }
@@ -511,9 +612,11 @@ class Scheduler extends Component {
   onSchedulerContentScroll = (proxy, event) => {
     if (!!this.schedulerResource) {
       if (this.currentArea === 0 || this.currentArea === -1) {
-        if (this.schedulerHead.scrollLeft != this.schedulerContent.scrollLeft)
-          this.schedulerHead.scrollLeft = this.schedulerContent.scrollLeft;
-        if (this.schedulerResource.scrollTop != this.schedulerContent.scrollTop)
+        if (this.schedulerHead.scrollLeft !== this.schedulerContent.scrollLeft)
+          // this.schedulerHead.scrollLeft = this.schedulerContent.scrollLeft;
+        if (
+          this.schedulerResource.scrollTop !== this.schedulerContent.scrollTop
+        )
           this.schedulerResource.scrollTop = this.schedulerContent.scrollTop;
       }
     }
@@ -526,7 +629,10 @@ class Scheduler extends Component {
       onScrollBottom
     } = this.props;
     if (this.schedulerContent.scrollLeft !== this.scrollLeft) {
-      if (this.schedulerContent.scrollLeft === 0 && onScrollLeft != undefined) {
+      if (
+        this.schedulerContent.scrollLeft === 0 &&
+        onScrollLeft !== undefined
+      ) {
         onScrollLeft(
           schedulerData,
           this.schedulerContent,
@@ -537,7 +643,7 @@ class Scheduler extends Component {
         Math.round(this.schedulerContent.scrollLeft) ===
           this.schedulerContent.scrollWidth -
             this.schedulerContent.clientWidth &&
-        onScrollRight != undefined
+        onScrollRight !== undefined
       ) {
         onScrollRight(
           schedulerData,
@@ -546,7 +652,7 @@ class Scheduler extends Component {
         );
       }
     } else if (this.schedulerContent.scrollTop !== this.scrollTop) {
-      if (this.schedulerContent.scrollTop === 0 && onScrollTop != undefined) {
+      if (this.schedulerContent.scrollTop === 0 && onScrollTop !== undefined) {
         onScrollTop(
           schedulerData,
           this.schedulerContent,
@@ -558,7 +664,7 @@ class Scheduler extends Component {
         Math.round(this.schedulerContent.scrollTop) ===
           this.schedulerContent.scrollHeight -
             this.schedulerContent.clientHeight &&
-        onScrollBottom != undefined
+        onScrollBottom !== undefined
       ) {
         onScrollBottom(
           schedulerData,
@@ -568,7 +674,7 @@ class Scheduler extends Component {
         );
       }
     }
-    this.scrollLeft = this.schedulerContent.scrollLeft;
+    // this.scrollLeft = this.schedulerContent.scrollLeft;
     this.scrollTop = this.schedulerContent.scrollTop;
   };
 
@@ -586,17 +692,32 @@ class Scheduler extends Component {
   };
 
   goNext = () => {
-    const { nextClick, schedulerData } = this.props;
-    nextClick(schedulerData);
+    const { schedulerData } = this.props;
+    let date = dayjs(new Date(schedulerData.startDate));
+    let nextWeekDay = dayjs(date).day(8);
+    // nextClick(schedulerData);
+    let formattedDate = dayjs(nextWeekDay).format(DATE_FORMAT);
+    this.onSelect(formattedDate);
+    console.log(schedulerData);
   };
 
   goBack = () => {
-    const { prevClick, schedulerData } = this.props;
-    prevClick(schedulerData);
+    const { schedulerData } = this.props;
+    let date = dayjs(new Date(schedulerData.startDate));
+    let nextWeekDay = dayjs(date).day(-6);
+    // nextClick(schedulerData);
+    let formattedDate = dayjs(nextWeekDay).format(DATE_FORMAT);
+    this.onSelect(formattedDate);
   };
-
+  onThisWeekClick = (toWhere, id) => {
+    let date = dayjs(new Date());
+    let formattedDate = dayjs(date).format(DATE_FORMAT);
+    this.onSelect(formattedDate);
+  };
   onSelect = (date) => {
+    console.log(date);
     const { onSelectDate, schedulerData } = this.props;
+
     onSelectDate(schedulerData, date);
   };
 }
