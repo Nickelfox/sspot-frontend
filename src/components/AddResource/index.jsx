@@ -209,7 +209,6 @@ const AddResourceEvent = (props) => {
       // parentId: resourceLength + 1,
       workDays: values?.workDays
     };
-    console.log(requiredObject);
     addResorceInScheduler(requiredObject);
   };
   const getStylesforSelector = (workDays, value, index) => {

@@ -272,7 +272,6 @@ export default class SchedulerData {
     }
   }
   setParentViewType = (value) => {
-    console.log(this);
   };
 
   setSchedulerMaxHeight(newSchedulerMaxHeight) {
@@ -778,10 +777,8 @@ export default class SchedulerData {
           }
         }
       } else {
-        console.log(header, start, end, "InIF");
         const headerStart = dayjs(header).year();
         const endStart = dayjs(end).year();
-        console.log(endStart, headerStart, "InIF");
         if (endStart > headerStart) {
           end = this.localeDayjs(
             new Date(new Date(this.startDate).getFullYear() + 1, 9, 31)

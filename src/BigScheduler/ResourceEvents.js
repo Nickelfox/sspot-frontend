@@ -344,7 +344,6 @@ class ResourceEvents extends Component {
     );
 
     let eventList = [];
-    console.log(resourceEvents, 347);
     resourceEvents.headerItems.forEach((headerItem, index) => {
       if (headerItem.count > 0 || headerItem.summary != undefined) {
         let isTop =

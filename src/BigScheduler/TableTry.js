@@ -58,7 +58,6 @@ const TableTry = (props) => {
     );
   };
   const displayRenderData = renderData.filter((o) => o.render);
-  console.log(displayRenderData, "DISPLAY RENDER");
   const getDivs = () => {
     let eventDndSource = dnd.getDndSource();
     let DndResourceEvents = dnd.getDropTarget(config.dragAndDropEnabled);
@@ -71,7 +70,6 @@ const TableTry = (props) => {
           dndSource={eventDndSource}
         />
       );
-      console.log(item, "HERE ARE ITEMS");
       return (
         !item?.parentId && (
           <div
@@ -106,7 +104,6 @@ const TableTry = (props) => {
                   <Box>{getExpandButton(item)}</Box>
                 </Box>
               </div>
-              {console.log(displayRenderData?.length, 106)}
               {
                 <tr
                   style={{
@@ -183,11 +180,9 @@ const TableTry = (props) => {
     DndResourceEvents,
     item
   ) => {
-    console.log(item);
     const filteredData = displayRenderData.filter(
       (item) => item?.parentId === slotid
     );
-    console.log(headers, 178);
     const requiredHeaders = headers.map((header) => {
       return {
         ...header,
@@ -200,7 +195,6 @@ const TableTry = (props) => {
         events: []
       };
     });
-    console.log(requiredHeaders, 201);
     const dropDownItem = {
       expanded: false,
       hasChildren: false,
@@ -225,7 +219,6 @@ const TableTry = (props) => {
     return (
       <>
         {filteredData.map((filteredItem) => {
-          console.log(filteredItem, 194);
           let resourceEventsList = (
             <DndResourceEvents
               {...props}
