@@ -31,7 +31,7 @@
     "clean": "rimraf ./lib && mkdir lib",
     "start": "react-scripts start",
     "predeploy":"npm run build",
-    "deploy":"gh-pages -d build"
+    "deploy":"gh-pages -d build",
     "build": "react-scripts build",
     "clean:exampledist": "rimraf ./exampledist/static",
     "build:exampledist": "npm run clean:exampledist && cpy src/css/style.css exampledist/static && cross-env NODE_ENV=production webpack --config ./webpack/webpack.config.js",
