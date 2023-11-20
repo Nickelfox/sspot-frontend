@@ -24,13 +24,10 @@ dayjs.updateLocale("en", {
   weekdays: dayArr
 });
 class BodyView extends Component {
+  //eslint-disable-next-line
   constructor(props) {
     super(props);
   }
-  //   componentDidMount() {
-  //     this.props.scroller("current");
-  //   }
-
   static propTypes = {
     schedulerData: PropTypes.object.isRequired
   };
@@ -38,7 +35,6 @@ class BodyView extends Component {
   render() {
     const { schedulerData, currentItem } = this.props;
     const { renderData, headers, config, behaviors } = schedulerData;
-    let cellWidth = schedulerData.getContentCellWidth();
 
     let displayRenderData = renderData.filter((o) => o.render);
     const requiredMap = displayRenderData.filter(
@@ -47,19 +43,20 @@ class BodyView extends Component {
     const daySet = new Set(currentItem?.workDays);
 
     const getColor = (childrenItem) => {
+      /**
+       * @function
+       * gives the background color of the cell
+       */
       return daySet.has(dayjs(childrenItem?.time).day()) ||
         !!childrenItem?.nonWorkingTime
         ? config?.nonWorkingTimeBodyBgColor
         : "#fff";
     };
-    let currentDate = new Date("01-02-2016");
-    const year = dayjs(currentDate).year();
-    let startDate = new Date(currentDate.getFullYear(), 0, 1);
-    const days = Math.floor((currentDate - startDate) / (24 * 60 * 60 * 1000));
-    let month = months[currentDate.getMonth()];
-
-    // const requiredArray = displayRenderData.map((headerItem) => {});
     let tableRows = requiredMap.map((item) => {
+      /**
+       * @ignore
+       * this is the code from the library
+       *  */
       //   let rowCells = headers.map((header, index) => {
       //     let key = item.slotId + "_" + header.time;
       //     let style = index === headers.length - 1 ? {} : { width: 80 };
@@ -84,20 +81,16 @@ class BodyView extends Component {
       //       </td>
       //     );
       //   });
+
       const requiredArray = headers.map((item) => {
         let currentDate = new Date(item?.time);
-        let startDate = new Date(currentDate.getFullYear(), 0, 1);
-        const days = Math.floor(
-          (currentDate - startDate) / (24 * 60 * 60 * 1000)
-        );
         let month = months[currentDate.getMonth()];
         const year = dayjs(currentDate).year();
-        let weekNumber = Math.ceil(days / 7);
-
+        let newWeeknumber = dayjs(currentDate).format("w");
         const requiredObject = {
           time: item?.time,
           nonWorkingTime: item?.nonWorkingTime,
-          weekDay: dayjs(new Date()).year() === year ? weekNumber : year,
+          weekDay: dayjs(new Date()).year() === year ? newWeeknumber : year,
           month: month
         };
         return requiredObject;
@@ -129,12 +122,15 @@ class BodyView extends Component {
             // border: "1px solid green",
             width: "100%",
             display: "flex",
-            height: "6rem"
+            height: "fit-content",
+            borderBottom: 0
             // marginBottom: 10
           }}
         >
           {/* <img src={nonWorking} alt="" /> */}
           {Array.from(headerMap).map((headerItem, parentIndex) => {
+            let currentDate = new Date(new Date());
+            const weekNumber = dayjs(currentDate).format("w");
             return (
               <span key={parentIndex + 6}>
                 <span
@@ -147,33 +143,47 @@ class BodyView extends Component {
                         key={childIndex + 1}
                         className={`body_${childItem[0]} flex`}
                         id={`X_${childItem[0]}`}
+                        style={{
+                          borderLeft:
+                            childItem[0] === weekNumber
+                              ? "1px solid #75B1E5"
+                              : "1px solid #eee",
+                          borderRight:
+                            childItem[0] === weekNumber
+                              ? "1px solid #75B1E5"
+                              : "1px solid #eee",
+                          borderTop: "1px solid #e4e4e4",
+                          borderBottom: "1px solid #e4e4e4",
+                          height: "5rem"
+                        }}
                       >
                         {Array.from(childItem[1]).map(
                           (childrenItem, childrenIndex) => {
-
+                            const currentDate = dayjs(new Date()).format(
+                              "DD-MM"
+                            );
+                            const itemDate = dayjs(childrenItem?.time).format(
+                              "DD-MM"
+                            );
                             return (
-                              <span
+                              <td
                                 key={childrenIndex + 1}
                                 className="flex justify-center items-center"
                                 style={{
-                                  width: 80,
-                                  borderLeft: " 1px solid #eeeeee",
-                                  borderRight: " 1px solid #eeeeee",
-                                  border: "0 1px solid #eeeeee",
-                                  height: "6rem",
-                                  // backgroundColor: getColor(childrenItem),
-                                  // !!childrenItem?.nonWorkingTime
-                                  //   ? config?.nonWorkingTimeBodyBgColor
-                                  //   : "#fff"
+                                  width: 50,
+                                  height: "4.8rem",
+                                  borderLeft: "1px solid #c4c4c4",
+                                  borderBottom: "px solid #c4c4c4",
+                                  backgroundColor:
+                                    itemDate === currentDate
+                                      ? "#75b1e5"
+                                      : "#fff",
+                                  opacity: itemDate === currentDate ? 0.7 : 1,
                                   pointerEvents: !!childrenItem?.nonWorkingTime
                                     ? "none"
                                     : "auto",
-
-                                  // backgroundImage:
-                                  //   !!childrenItem?.nonWorkingTime
-                                  //     ? nonWorking
-                                  //     : ""
-                                  backgroundColor: getColor(childrenItem)
+                                  borderTop: 0
+                                  // backgroundColor: getColor(childrenItem)
                                 }}
                               >
                                 {!!childrenItem?.nonWorkingTime ||
@@ -181,12 +191,10 @@ class BodyView extends Component {
                                   <img
                                     src={nonWorking}
                                     alt=""
-                                    style={{ zIndex: 9 }}
+                                    // style={{ zIndex: 9 }}
                                   />
                                 ) : null}
-
-                                {/* {dayjs(childrenItem?.time).day()} */}
-                              </span>
+                              </td>
                             );
                           }
                         )}
@@ -199,75 +207,7 @@ class BodyView extends Component {
           })}
         </tr>
       );
-      //   return (
-      //     // <tr
-      //     //   key={item.slotId}
-      //     //   style={{
-      //     //     height: item.rowHeight,
-      //     //     minWidth: "100vw",
-      //     //     maxWidth: "100vw"
-      //     //   }}
-      //     //   //   style={{
-      //     //   //     display: "flex",
-      //     //   //     height: headerHeight + 10,
-      //     //   //     //   width: "100%",
-      //     //   //     minWidth: "100vw",
-      //     //   //     maxWidth: "100vw",
-      //     //   //     ...style
-      //     //   //   }}
-      //     // >
-      //     //   {/* {console.log(item)} */}
-      //     //   {/* {rowCells} */}
-      //     // </tr>
-      //     <tr
-      //       className="header3-text text-[#888888] w-full"
-      //       style={{
-      //         display: "flex",
-      //         height: 60
-      //         //   width: "100%",
-      //         //   minWidth: "100vw",
-      //         //   maxWidth: "100vw",
-      //         //   ...style
-      //       }}
-      //     >
-      //       {Array.from(headerMap).map((item, parentIndex) => {
-      //         return (
-      //           <span>
-      //             <span key={parentIndex} className="flex w-full font-md">
-      //               {console.log(Array.from(item[1]), "Idhar Dekh")}
-      //               {Array.from(item[1]).map((childItem, childIndex) => {
-      //                 console.log(childItem, "Line 135");
-      //                 return (
-      //                   <td
-      //                     style={{
-      //                       border: "1px solid #666666",
-      //                       width: 80,
-      //                       height: 60
-      //                     }}
-      //                     key={childIndex}
-      //                     className="flex w-full"
-      //                     // href={`#${childItem[0]}`}
-      //                     id={`${childItem[0]}`}
-      //                   >
-      //                     <span
-      //                       className="flex"
-      //                       style={{
-      //                         border: "1px solid #666666",
-      //                         width: 80,
-      //                         height: 60
-      //                       }}
-      //                     ></span>
-      //                   </td>
-      //                 );
-      //               })}
-      //             </span>
-      //           </span>
-      //         );
-      //       })}
-      //     </tr>
-      //   );
     });
-    // console.log(tableRows, "Roes are here");
 
     return <tbody style={{ height: "fit-content" }}>{tableRows}</tbody>;
   }

@@ -25,9 +25,9 @@ class SelectedArea extends Component {
           top: 0,
           bottom: 0,
           backgroundColor: config.selectedAreaColor,
-          height: "5.5rem",
-          margin: "0.1rem",
-          borderRadius: "0.8rem"
+          height: "4.2rem",
+          // margin: "0.1rem",
+          borderRadius: "0.4rem"
         }}
       ></div>
     );

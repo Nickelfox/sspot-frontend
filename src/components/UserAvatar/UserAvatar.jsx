@@ -20,12 +20,13 @@ const UserAvatar = ({ username, profileImage }) => {
           sx={{
             borderRadius: 0,
             backgroundColor: "#333333",
-            height: "6rem",
-            width: "6rem"
+            height: "4.6rem",
+            width: "5rem",
+            borderBottom:"1px solid #eee"
           }}
         >
           {!profileImage && (
-            <Typography variant="h6">{getNameInitials(username)}</Typography>
+            <Typography variant="p1">{getNameInitials(username)}</Typography>
           )}
         </Avatar>
       </Box>

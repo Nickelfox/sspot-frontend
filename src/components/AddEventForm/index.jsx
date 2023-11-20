@@ -24,7 +24,6 @@ const AddEvent = (props) => {
   const isNotLaptop = useMediaQuery(theme.breakpoints.down("md"));
   const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
 
-  // console.log(FormValidator);
   const createEvent = (values) => {
     // const requiredObject = {
     //   name: `${values?.firstName + values?.lastName}`,

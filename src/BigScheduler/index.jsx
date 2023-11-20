@@ -443,7 +443,9 @@ class Scheduler extends Component {
           onSchedulerContentMouseOut={this.onSchedulerContentMouseOut}
           onSchedulerContentScroll={this.onSchedulerContentScroll}
           schedulerContentBgTableRef={this.schedulerContentBgTableRef}
+          openEditItemPopUp={this.openEditItemPopUp}
           width={width}
+          closePopup={this.closePopup}
         />
       </>
       // <table
@@ -562,11 +564,15 @@ class Scheduler extends Component {
     //   (this.currentArea === 2 || this.currentArea === -1) &&
     //   this.schedulerContent.scrollLeft != this.schedulerHead.scrollLeft
     // )
-      // this.schedulerContent.scrollLeft = this.schedulerHead.scrollLeft;
+    // this.schedulerContent.scrollLeft = this.schedulerHead.scrollLeft;
   };
   expandAllItems = () => {
     const { expandAllItems, schedulerData } = this.props;
     expandAllItems(schedulerData);
+  };
+  openEditItemPopUp = (itemToEdit) => {
+    const { showResourceEditPopup, schedulerData } = this.props;
+    showResourceEditPopup(schedulerData, itemToEdit);
   };
   schedulerResourceRef = (element) => {
     this.schedulerResource = element;
@@ -610,11 +616,11 @@ class Scheduler extends Component {
     if (!!this.schedulerResource) {
       if (this.currentArea === 0 || this.currentArea === -1) {
         if (this.schedulerHead.scrollLeft !== this.schedulerContent.scrollLeft)
-          // this.schedulerHead.scrollLeft = this.schedulerContent.scrollLeft;
-        if (
-          this.schedulerResource.scrollTop !== this.schedulerContent.scrollTop
-        )
-          this.schedulerResource.scrollTop = this.schedulerContent.scrollTop;
+          if (
+            this.schedulerResource.scrollTop !== this.schedulerContent.scrollTop
+          )
+            // this.schedulerHead.scrollLeft = this.schedulerContent.scrollLeft;
+            this.schedulerResource.scrollTop = this.schedulerContent.scrollTop;
       }
     }
 
@@ -714,6 +720,10 @@ class Scheduler extends Component {
     const { onSelectDate, schedulerData } = this.props;
 
     onSelectDate(schedulerData, date);
+  };
+  closePopup = () => {
+    const { closePopUp, schedulerData } = this.props;
+    closePopUp(schedulerData);
   };
 }
 

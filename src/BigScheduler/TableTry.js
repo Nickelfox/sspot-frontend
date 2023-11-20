@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import BodyView from "./BodyView";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -7,13 +7,34 @@ import UserAvatar from "../components/UserAvatar/UserAvatar";
 import { Box, Typography } from "@mui/material";
 import dayjs from "dayjs";
 import { DATETIME_FORMAT } from ".";
-import CustomAutoComplete from "./schedulerComponents/AutoComplete";
+import { Popover } from "antd";
+const editItemObject = [
+  {
+    label: "Edit",
+    value: "edit"
+  },
+  { label: "Calendar Feed", value: "cal" },
+  {
+    label: "Archive",
+    value: "arc"
+  },
+  {
+    label: "Delete",
+    value: "del"
+  }
+];
 const TableTry = (props) => {
-  const { schedulerData, toggleExpandFunc, dnd } = props;
+  const {
+    schedulerData,
+    toggleExpandFunc,
+    dnd,
+    openEditItemPopUp,
+    closePopup
+  } = props;
+  //eslint-disable-next-line no-unused-vars
   const { renderData, cellUnit, config, headers } = schedulerData;
-
+  const borderBottom = "1px solid #c4c4c4";
   let contentScrollbarHeight = 17,
-    contentScrollbarWidth = 17,
     resourceScrollbarHeight = 17,
     contentHeight = config.schedulerContentHeight;
   let contentPaddingBottom =
@@ -23,9 +44,27 @@ const TableTry = (props) => {
     overflowY: "hidden",
     margin: 0,
     position: "relative",
-    height: contentHeight,
-    paddingBottom: contentPaddingBottom
+    height: 50
+    // paddingBottom: contentPaddingBottom
   };
+
+  let editItems = editItemObject.map((item) => {
+    return (
+      <Box
+        key={item?.value}
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"start"}
+        flexDirection={"column"}
+        padding={"1rem"}
+        className={`cursor-pointer availabilitySelector`}
+      >
+        <Typography variant="p3" color={"#333"}>
+          {item?.label}
+        </Typography>
+      </Box>
+    );
+  });
   let schedulerWidth = schedulerData.getContentTableWidth() - 1;
   let resourceTableWidth = schedulerData.getResourceTableWidth();
   const width = schedulerData.getSchedulerWidth();
@@ -74,7 +113,7 @@ const TableTry = (props) => {
         !item?.parentId && (
           <div
             style={{
-              marginTop: "0.1rem",
+              // marginTop: "0.1rem",
               marginBottom: expandItem?.size > 0 ? "1rem" : 0,
               maxWidth: "100vw",
               overflow: "hidden"
@@ -82,14 +121,14 @@ const TableTry = (props) => {
           >
             <div
               style={{
-                minHeight: "6rem",
+                minHeight: "4.5rem",
                 display: "flex",
                 width: "fit-content",
-                height: "6rem"
+                height: "4.7rem"
               }}
             >
               <div
-                style={{ minWidth: "24rem" }}
+                style={{ minWidth: "23.9rem", borderBottom: borderBottom }}
                 className="bg-[#fff] stickyCell flex justify-center items-center w-full"
               >
                 <UserAvatar username={item?.slotName} />
@@ -110,7 +149,7 @@ const TableTry = (props) => {
                     marginTop: "-0.25rem"
                   }}
                 >
-                  <td>
+                  <td style={{ border: 0 }}>
                     <div
                       className="scheduler-view"
                       style={{
@@ -168,10 +207,6 @@ const TableTry = (props) => {
         )
       );
     });
-  };
-  const getEnd = (date) => {
-    const newDay = dayjs(date).endOf("day");
-    return newDay.format(DATETIME_FORMAT);
   };
   const getInnerTable = (
     displayRenderData,
@@ -231,17 +266,17 @@ const TableTry = (props) => {
             <div
               style={{
                 // maxWidth: "24rem",
-                minWidth: "24rem",
-                height: "6rem",
+                minWidth: "23.9rem",
+                height: "4.7rem",
                 display: "flex",
                 width: "fit-content"
               }}
             >
               <div
-                style={{ minWidth: "24rem" }}
+                style={{ minWidth: "23.9rem", borderBottom: borderBottom }}
                 className="bg-[#fff] stickyCell flex justify-end items-center px-4"
               >
-                <Typography variant="p2" color="black" paddingRight={"1rem"}>
+                <Typography variant="c1" color="#666" paddingRight={"1rem"}>
                   {" "}
                   {filteredItem?.slotName}
                 </Typography>
@@ -306,7 +341,7 @@ const TableTry = (props) => {
 
         <div
           style={{
-            height: "4rem",
+            height: "4.5rem",
             minWidth: "24rem",
             width: "fit-content",
             backgroundColor: "#fff",
@@ -314,21 +349,50 @@ const TableTry = (props) => {
           }}
         >
           <div
-            style={{ minWidth: "24rem" }}
+            style={{ minWidth: "23.9rem", borderBottom }}
             className="bg-[#fff] stickyCell flex justify-end items-center px-4"
           >
             <Box className="flex justify-space w-full">
-              <Box className="w-full">
+              <Box
+                className="w-full cursor-pointer"
+                onClick={openEditItemPopUp.bind(null, item)}
+              >
                 {" "}
                 <Typography
                   variant="p2"
                   sx={{ color: "#888888", textDecoration: "underline" }}
                 >
                   Actions
+                  {item?.editPopup && (
+                    <Popover
+                      content={editItems}
+                      placement="bottom"
+                      arrow={false}
+                      trigger="click"
+                      open={item?.editPopup}
+                      overlayStyle={{ padding: 0 }}
+                      overlayInnerStyle={{ padding: 0, borderRadius: "8px" }}
+                      onOpenChange={() => {
+                        closePopup();
+                      }}
+                    />
+                  )}
                 </Typography>
               </Box>
               <Box className="w-full">
                 {/* <CustomAutoComplete options={[]} /> */}
+                <input
+                  type="text"
+                  list="cars"
+                  className="projectselctor"
+                  placeholder="Projects"
+                />
+                <datalist id="cars" style={{ listStyleType: "solid" }}>
+                  <option>Volvo</option>
+                  <option>Saab</option>
+                  <option>Mercedes</option>
+                  <option>Audi</option>
+                </datalist>
               </Box>
             </Box>
           </div>
@@ -368,7 +432,7 @@ const TableTry = (props) => {
                           {...props}
                           // scroller={this.bodyScroller}
                           scroller={() => {}}
-                          currentItem={{}}
+                          currentItem={dropDownItem}
                         />
                       </table>
                     </div>

@@ -199,7 +199,6 @@ const AddResourceEvent = (props) => {
   const isNotLaptop = useMediaQuery(theme.breakpoints.down("md"));
   const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
 
-  // console.log(FormValidator);
   const createResource = (values) => {
     const requiredObject = {
       name: `${values?.firstName} ${values?.lastName}`,
@@ -220,7 +219,6 @@ const AddResourceEvent = (props) => {
       };
     }
     if (workDays.includes(value)) {
-      // console.log(workDays);
       return { ...styles.daySelector, ...styles.selectedDay };
     } else {
       return { ...styles.daySelector, ...styles.unSelectedDay };
