@@ -117,11 +117,11 @@ let events = [
   },
   {
     id: 5,
-    start: "2023-11-19 15:30:00",
-    end: "2023-11-20 23:30:00",
+    start: "2023-11-21 15:30:00",
+    end: "2023-11-30 23:30:00",
     resourceId: "r2",
     title: "R2",
-    rrule: "FREQ=WEEKLY;DTSTART=20171219T013000Z;BYDAY=TU,FR", //this is going to be used for availability
+    // rrule: "FREQ=WEEKLY;DTSTART=20171219T013000Z;BYDAY=TU,FR", //this is going to be used for availability
     bgColor: "#DCC36B"
   }
 ];
@@ -376,13 +376,14 @@ const Calender = (props) => {
   const updateEventStart = (schedulerData, event, newStart) => {
     getRenderSd(schedulerData);
     schedulerData.updateEventStart(event, newStart);
-    triggerRerender(render + 1);
+    // triggerRerender(render + 1);
   };
 
   const updateEventEnd = (schedulerData, event, newEnd) => {
     getRenderSd(schedulerData);
+    console.log(event);
     schedulerData.updateEventEnd(event, newEnd);
-    triggerRerender(render + 1);
+    // triggerRerender(render + 1);
   };
   const moveEvent = (schedulerData, event, slotId, slotName, start, end) => {
     if (slotId === event?.resourceId) {

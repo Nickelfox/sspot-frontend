@@ -48,7 +48,7 @@ const TableTry = (props) => {
     // paddingBottom: contentPaddingBottom
   };
 
-  let editItems = editItemObject.map((item) => {
+  let editItems = editItemObject.map((item,index) => {
     return (
       <Box
         key={item?.value}
@@ -57,7 +57,9 @@ const TableTry = (props) => {
         alignItems={"start"}
         flexDirection={"column"}
         padding={"1rem"}
+        borderBottom={index===1&&"1px solid #ccc"}
         className={`cursor-pointer availabilitySelector`}
+        width={"10rem"}
       >
         <Typography variant="p3" color={"#333"}>
           {item?.label}
@@ -362,7 +364,7 @@ const TableTry = (props) => {
                   variant="p2"
                   sx={{ color: "#888888", textDecoration: "underline" }}
                 >
-                  Actions
+                  Actions <KeyboardArrowDownIcon/>
                   {item?.editPopup && (
                     <Popover
                       content={editItems}
@@ -388,10 +390,10 @@ const TableTry = (props) => {
                   placeholder="Projects"
                 />
                 <datalist id="cars" style={{ listStyleType: "solid" }}>
-                  <option>Volvo</option>
-                  <option>Saab</option>
-                  <option>Mercedes</option>
-                  <option>Audi</option>
+                  <option>Project-1</option>
+                  <option>Project-2</option>
+                  <option>Project-3</option>
+                  <option>Project-4</option>
                 </datalist>
               </Box>
             </Box>

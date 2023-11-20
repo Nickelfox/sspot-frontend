@@ -8,6 +8,7 @@ import { DATE_FORMAT } from ".";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import ViewSelector from "./schedulerComponents/ViewSelector";
 import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
+import CheckIcon from "@mui/icons-material/Check";
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const availabiltyObject = [
@@ -32,7 +33,7 @@ class SchedulerHeader extends Component {
       selectedView: "",
       selecteddParentView: "",
       selectedWeek: dayjs().week(),
-      viewTye: "Weekly Availability",
+      viewTye: availabiltyObject[0],
       isViewTypeOpen: false
     };
   }
@@ -52,7 +53,9 @@ class SchedulerHeader extends Component {
       ? this.setState({ selecteddParentView: value })
       : this.setState({ selectedView: value });
   };
-
+  handleType = (item) => {
+    this.setState({ viewTye: item });
+  };
   render() {
     const {
       leftCustomHeader,
@@ -104,8 +107,14 @@ class SchedulerHeader extends Component {
           flexDirection={"column"}
           padding={"1rem"}
           className={`cursor-pointer availabilitySelector`}
+          onClick={() => {
+            this.handleType(item);
+          }}
         >
           <Typography variant="p3" color={"#333"}>
+            {this.state?.viewTye?.value === item?.value && (
+              <CheckIcon color="success" />
+            )}{" "}
             {item?.label}
           </Typography>
           <Typography variant="label" color={"#ccc"}>
@@ -170,7 +179,7 @@ class SchedulerHeader extends Component {
                 this.changeViewType(!isViewTypeOpen);
               }}
             >
-              <span className={`text-xl font-semibold`}>{viewTye}</span>
+              <span className={`text-xl font-semibold`}>{viewTye?.label}</span>
             </button>
             {isViewTypeOpen && (
               <Popover

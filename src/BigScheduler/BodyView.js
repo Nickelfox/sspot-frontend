@@ -124,7 +124,6 @@ class BodyView extends Component {
             display: "flex",
             height: "fit-content",
             borderBottom: 0
-            // marginBottom: 10
           }}
         >
           {/* <img src={nonWorking} alt="" /> */}
@@ -152,8 +151,12 @@ class BodyView extends Component {
                             childItem[0] === weekNumber
                               ? "1px solid #75B1E5"
                               : "1px solid #eee",
-                          borderTop: "1px solid #e4e4e4",
-                          borderBottom: "1px solid #e4e4e4",
+                          borderTop: 0,
+                          borderBottom: 0,
+                          marginTop: 0,
+                          marginBottom: 0,
+                          // borderTop: "1px solid #e4e4e4",
+                          // borderBottom: "1px solid #e4e4e4",
                           height: "5rem"
                         }}
                       >
@@ -173,7 +176,7 @@ class BodyView extends Component {
                                   width: 50,
                                   height: "4.8rem",
                                   borderLeft: "1px solid #c4c4c4",
-                                  borderBottom: "px solid #c4c4c4",
+                                  // borderBottom: "px solid #c4c4c4",
                                   backgroundColor:
                                     itemDate === currentDate
                                       ? "#75b1e5"
@@ -182,7 +185,10 @@ class BodyView extends Component {
                                   pointerEvents: !!childrenItem?.nonWorkingTime
                                     ? "none"
                                     : "auto",
-                                  borderTop: 0
+                                  borderTop: 0,
+                                  borderBottom: 0,
+                                  marginTop: 0,
+                                  marginBottom: 0
                                   // backgroundColor: getColor(childrenItem)
                                 }}
                               >
