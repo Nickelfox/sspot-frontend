@@ -60,11 +60,9 @@ class HeaderView extends Component {
           let pFormattedList = config.nonAgendaDayCellHeaderFormat
             .split("|")
             .map((item) => datetime.format(item));
-          //   console.log(pFormattedList, "nonAgendaDayCellHeaderFormat");
           let element;
 
           if (typeof nonAgendaCellHeaderTemplateResolver === "function") {
-            // console.log("AAAAAAA");
             element = nonAgendaCellHeaderTemplateResolver(
               schedulerData,
               item,
@@ -72,7 +70,6 @@ class HeaderView extends Component {
               style
             );
           } else {
-            // console.log(pFormattedList, "nonAgenda");
             const pList = pFormattedList.map((item, index) => (
               <div key={index}>{item}</div>
             ));
@@ -185,18 +182,14 @@ class HeaderView extends Component {
 
       const requiredArray = headers.map((item) => {
         let currentDate = new Date(item?.time);
-        let startDate = new Date(currentDate.getFullYear(), 0, 1);
-        const days = Math.floor(
-          (currentDate - startDate) / (24 * 60 * 60 * 1000)
-        );
         let month = months[currentDate.getMonth()];
-        const weekNumber = Math.ceil(days / 7);
         const year = dayjs(currentDate).year();
+        let newWeeknumber = dayjs(currentDate).format("w");
 
         const requiredObject = {
           time: item?.time,
           nonWorkingTime: item?.nonWorkingTime,
-          weekDay: dayjs(new Date()).year() === year ? weekNumber : year,
+          weekDay: dayjs(new Date()).year() === year ? newWeeknumber : year,
           month: month
         };
         return requiredObject;
@@ -222,20 +215,13 @@ class HeaderView extends Component {
       requiredArray.forEach((item) => {
         headerMap.set(item?.month, getWeekDayMap(requiredArray, item?.month));
       });
-      //   console.log(headerHeight, "Height Idhar hei");
       headerList = (
         <th style={{ width: cellWidth, marginRight: 10, display: "flex" }}>
-          {/* {console.log(schedulerData.getContentCellWidth(), 217)} */}
-
           <tr
             className="header3-text text-[#888888]"
             style={{
               display: "flex",
               height: headerHeight + 10
-              //   width: "100%",
-              //   minWidth: "100vw",
-              //   maxWidth: "100vw",
-              //   ...style
             }}
           >
             <div
@@ -247,47 +233,76 @@ class HeaderView extends Component {
               className="stickyCell"
             >
               <OutlinedInputField
-                sx={{ height: "95%", width: "100%", backgroundColor: "#fff" }}
+                sx={{ height: "95%", width: "98%", backgroundColor: "#fff" }}
                 placeholder="Search..."
               />
             </div>
             {Array.from(headerMap).map((item, parentIndex) => {
+              let currentDate = new Date(new Date());
+              const weekNumber = dayjs(currentDate).format("w");
               return (
-                <span>
+                <span style={{ height: "8rem" }}>
                   <span key={parentIndex} className="flex font-md">
                     {Array.from(item[1]).map((childItem, childIndex) => {
                       return (
                         <td
                           style={{
-                            borderTop: 0,
-                            borderLeft: 0,
-                            borderRight: 0,
-                            marginLeft: "-2px"
+                            borderLeft:
+                              childItem[0] === weekNumber
+                                ? "1px solid #75B1E5"
+                                : "1px solid #eee",
+                            borderRight:
+                              childItem[0] === weekNumber
+                                ? "1px solid #75B1E5"
+                                : "1px solid #eee",
+                            borderTop: "1px solid #e4e4e4",
+                            borderBottom: "1px solid #e4e4e4",
+                            marginLeft: "-2px",
+                            height: "7.2rem"
                             // width: 80
                           }}
                           key={childIndex}
                           // href={`#${childItem[0]}`}
                           id={`${childItem[0]}`}
                         >
-                          <span className="flex ">
+                          <span className="flex" style={{ height: "4rem" }}>
                             <span className="h-8 bg-[#eeeeee] min-w-[2rem] w-fit px-1">
                               {childItem[0]}
                             </span>
                             <span className="w-full flex justify-center items-center">
                               {item[0]}
                             </span>
-                            {/* {`${childItem[0]} ${item[0]}`} */}
                           </span>
                           <span className="flex">
                             {Array.from(childItem[1]).map(
                               (childrenItem, childrenIndex) => {
+                                const currentDate = dayjs(new Date()).format(
+                                  "DD-MM"
+                                );
+                                const itemDate = dayjs(
+                                  childrenItem?.time
+                                ).format("DD-MM");
                                 return (
                                   <span
                                     key={childrenIndex + 2}
                                     className="flex justify-center items-center"
                                     style={{
-                                      width: 80,
-                                      border: " 1px solid #eeeeee",
+                                      width: 50,
+                                      borderLeft:
+                                        itemDate === currentDate
+                                          ? "1px solid #75b1e5"
+                                          : "1px solid #eee",
+                                      borderRight:
+                                        itemDate === currentDate
+                                          ? "1px solid #75b1e5"
+                                          : "1px solid #eee",
+                                      backgroundColor:
+                                        itemDate === currentDate
+                                          ? "#75b1e5"
+                                          : "#fff",
+                                      opacity:
+                                        itemDate === currentDate ? 0.7 : 1,
+                                      // border: " 1px solid #eeeeee",
                                       borderTop: 0,
                                       borderBottom: 0
                                     }}
@@ -326,7 +341,6 @@ class HeaderView extends Component {
             width: resourceTableWidth + scrollBarWidth - 2
           }}
         >
-          {/* {console.log(headerList, "INRENDER")} */}
           {headerList}
         </tr>
       </thead>

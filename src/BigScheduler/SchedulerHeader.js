@@ -5,11 +5,24 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { RightOutlined, LeftOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { DATE_FORMAT } from ".";
-import { Box, Button, Grid } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import ViewSelector from "./schedulerComponents/ViewSelector";
 import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
+import CheckIcon from "@mui/icons-material/Check";
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
+const availabiltyObject = [
+  {
+    label: "Weekly Availabilty",
+    value: "week",
+    subLabel: " View The hours per week a person has booked"
+  },
+  {
+    label: "Daily Availability",
+    value: "day",
+    subLabel: " View the hours per day a person has open "
+  }
+];
 class SchedulerHeader extends Component {
   constructor(props) {
     super(props);
@@ -19,7 +32,9 @@ class SchedulerHeader extends Component {
       visible: false,
       selectedView: "",
       selecteddParentView: "",
-      selectedWeek: dayjs().week()
+      selectedWeek: dayjs().week(),
+      viewTye: availabiltyObject[0],
+      isViewTypeOpen: false
     };
   }
 
@@ -38,10 +53,9 @@ class SchedulerHeader extends Component {
       ? this.setState({ selecteddParentView: value })
       : this.setState({ selectedView: value });
   };
-  componentDidMount() {
-    // console.log(this.state.selectedWeek, "40");
-    // this.props.onThisWeekClick("current", this.state.selectedWeek);
-  }
+  handleType = (item) => {
+    this.setState({ viewTye: item });
+  };
   render() {
     const {
       leftCustomHeader,
@@ -56,7 +70,7 @@ class SchedulerHeader extends Component {
       selectedParentView,
       expandAllItems
     } = this.props;
-    // console.log(this.props, 42);
+    const { viewTye, isViewTypeOpen } = this.state;
     const { viewType, showAgenda, isEventPerspective, config } = schedulerData;
     let dateLabel = schedulerData.getDateLabel();
     let selectDate = schedulerData.getSelectedDate();
@@ -82,6 +96,49 @@ class SchedulerHeader extends Component {
           }}
         />
       </div>
+    );
+    let availabilityItems = availabiltyObject.map((item) => {
+      return (
+        <Box
+          key={item?.value}
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"start"}
+          flexDirection={"column"}
+          padding={"1rem"}
+          className={`cursor-pointer availabilitySelector`}
+          onClick={() => {
+            this.handleType(item);
+          }}
+        >
+          <Typography variant="p3" color={"#333"}>
+            {this.state?.viewTye?.value === item?.value && (
+              <CheckIcon color="success" />
+            )}{" "}
+            {item?.label}
+          </Typography>
+          <Typography variant="label" color={"#ccc"}>
+            {item?.subLabel}
+          </Typography>
+        </Box>
+      );
+    });
+    let availabiltyPopUp = (
+      <Box>
+        <Box
+          height={"fit-content"}
+          color="#333333"
+          backgroundColor={"#f4f4f4"}
+          borderBottom={"1px solid #ccc"}
+          borderRadius={"8px 8px 0 0"}
+          padding={"1rem"}
+        >
+          <Typography variant={"p3"} color={"#666666"}>
+            Choose a view for the heat map:
+          </Typography>
+        </Box>
+        {availabilityItems}
+      </Box>
     );
 
     return (
@@ -109,6 +166,36 @@ class SchedulerHeader extends Component {
               <KeyboardDoubleArrowDownIcon />{" "}
             </button>
           </Box>
+          <Box paddingLeft={"1rem"}>
+            <button
+              style={{
+                height: "3rem",
+                marginRight: "0.5rem"
+              }}
+              type="button"
+              className="btn flex items-center justify-center font-bold py-2 px-4 rounded border-2"
+              // className="flex items-center justify-center"
+              onClick={() => {
+                this.changeViewType(!isViewTypeOpen);
+              }}
+            >
+              <span className={`text-xl font-semibold`}>{viewTye?.label}</span>
+            </button>
+            {isViewTypeOpen && (
+              <Popover
+                content={availabiltyPopUp}
+                placement="bottomLeft"
+                trigger="click"
+                arrow={false}
+                open={isViewTypeOpen}
+                overlayStyle={{ padding: 0 }}
+                overlayInnerStyle={{ padding: 0, borderRadius: "8px" }}
+                onOpenChange={() => {
+                  this.changeViewType(!isViewTypeOpen);
+                }}
+              />
+            )}
+          </Box>
         </Grid>
         <Grid
           item
@@ -135,6 +222,7 @@ class SchedulerHeader extends Component {
                   content={popover}
                   placement="bottomLeft"
                   trigger="click"
+                  arrow={false}
                   open={this.state.visible}
                   onOpenChange={this.handleVisibleChange}
                 ></Popover>
@@ -171,11 +259,6 @@ class SchedulerHeader extends Component {
               style={{ height: "3rem", width: "3rem" }}
               onClick={() => {
                 goNext();
-                // console.log(this.state.selectedWeek);
-                // const plus = this.state.selectedWeek + 1;
-                // console.log(plus);
-                // onThisWeekClick("next", plus);
-                // this.setState({ selectedWeek: plus });
               }}
             >
               <RightOutlined type="right" className="icon-nav" />
@@ -294,10 +377,10 @@ class SchedulerHeader extends Component {
 
   handleVisibleChange = (visible) => {
     const { schedulerData } = this.props;
-    // const { config } = schedulerData;
     this.setState({ visible: visible });
-    // console.log(schedulerData);
-    // schedulerData.calendarPopoverEnabled(false);
+  };
+  changeViewType = (value) => {
+    this.setState({ isViewTypeOpen: value });
   };
 }
 

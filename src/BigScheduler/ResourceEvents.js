@@ -89,16 +89,17 @@ class ResourceEvents extends Component {
     if (resourceEvents.groupOnly) return;
     let clientX = 0;
     if (this.supportTouch) {
-      if (ev.changedTouches.length == 0) return;
+      if (ev.changedTouches.length === 0) return;
       const touch = ev.changedTouches[0];
       clientX = touch.pageX;
     } else {
       if (ev.buttons !== undefined && ev.buttons !== 1) return;
       clientX = ev.clientX;
     }
-
-    const { schedulerData } = this.props;
-    let cellWidth = schedulerData.getContentCellWidth();
+    //es-lint-disable-next-line no-unused-vars
+    // const { schedulerData } = this.props;
+    // let cellWidth = schedulerData.getContentCellWidth();
+    let cellWidth = 50;
     let pos = getPos(this.eventContainer);
     let startX = clientX - pos.x;
     let leftIndex = Math.floor(startX / cellWidth);
@@ -156,7 +157,7 @@ class ResourceEvents extends Component {
 
     let clientX = 0;
     if (this.supportTouch) {
-      if (ev.changedTouches.length == 0) return;
+      if (ev.changedTouches.length === 0) return;
       const touch = ev.changedTouches[0];
       clientX = touch.pageX;
     } else {
@@ -165,7 +166,8 @@ class ResourceEvents extends Component {
     const { startX } = this.state;
     const { schedulerData } = this.props;
     const { headers } = schedulerData;
-    let cellWidth = schedulerData.getContentCellWidth();
+    // let cellWidth = schedulerData.getContentCellWidth();
+    let cellWidth = 50;
     let pos = getPos(this.eventContainer);
     let currentX = clientX - pos.x;
     let leftIndex = Math.floor(Math.min(startX, currentX) / cellWidth);
@@ -265,7 +267,7 @@ class ResourceEvents extends Component {
 
     if (hasConflict) {
       const { conflictOccurred } = this.props;
-      if (conflictOccurred != undefined) {
+      if (conflictOccurred !== undefined) {
         conflictOccurred(
           schedulerData,
           "New",
@@ -289,7 +291,7 @@ class ResourceEvents extends Component {
         );
       }
     } else {
-      if (newEvent != undefined)
+      if (newEvent !== undefined)
         newEvent(schedulerData, slotId, slotName, startTime, endTime);
     }
   };
@@ -345,7 +347,7 @@ class ResourceEvents extends Component {
 
     let eventList = [];
     resourceEvents.headerItems.forEach((headerItem, index) => {
-      if (headerItem.count > 0 || headerItem.summary != undefined) {
+      if (headerItem.count > 0 || headerItem.summary !== undefined) {
         let isTop =
           config.summaryPos === SummaryPos.TopRight ||
           config.summaryPos === SummaryPos.Top ||
@@ -375,10 +377,10 @@ class ResourceEvents extends Component {
             let eventEnd = localeDayjs(evt.eventItem.end);
             let isStart = eventStart >= durationStart;
             let isEnd = eventEnd <= durationEnd;
-            let left = index * cellWidth + (index > 0 ? 2 : 3);
+            let left = index * 50 + (index > 0 ? 2 : 3);
             let width =
-              evt.span * cellWidth - (index > 0 ? 5 : 6) > 0
-                ? evt.span * cellWidth - (index > 0 ? 5 : 6)
+              evt.span * 50 - (index > 0 ? 5 : 6) > 0
+                ? evt.span * 50 - (index > 0 ? 5 : 6)
                 : 0;
             let top = marginTop + idx * config.eventItemLineHeight;
             let eventItem = (
@@ -420,7 +422,7 @@ class ResourceEvents extends Component {
           eventList.push(addMoreItem);
         }
 
-        if (headerItem.summary != undefined) {
+        if (headerItem.summary !== undefined) {
           let top = isTop
             ? 1
             : resourceEvents.rowHeight - config.eventItemLineHeight + 1;
@@ -446,7 +448,7 @@ class ResourceEvents extends Component {
       <div
         ref={this.eventContainerRef}
         className="event-container"
-        style={{ height: "6rem" }}
+        style={{ height: "4.5rem" }}
       >
         {selectedArea}
         {eventList}
