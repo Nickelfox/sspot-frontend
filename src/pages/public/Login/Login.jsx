@@ -73,7 +73,6 @@ const Login = () => {
             <Form>
               <Box sx={{ mb: 2 }}>
                 <InputField
-                  as={TextField}
                   fullWidth
                   id="email"
                   name="email"
@@ -87,7 +86,6 @@ const Login = () => {
               </Box>
               <Box sx={{ mb: 2 }}>
                 <InputField
-                  as={TextField}
                   fullWidth
                   id="password"
                   name="password"
