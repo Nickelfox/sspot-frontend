@@ -1,25 +1,11 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import OutlinedInputField from "../OutlinedInput";
-// import MenuItemStyled from "./MenuItemStyled";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-// import "./DropDown.scss";
-import { InputLabel, Typography } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import useStyles from "./dropDownStyles";
-// import ExpandMoreIcon from "../../../assets/images/icons/expandMoreIcon.svg";
-// import useStyles from "./dropDownStyles";
-// import ErrorText from "../InputField/ErrorText";
 
-// export const NewIcon = (props) => {
-// //   const styles = useStyles();
-//   return (
-//     <div {...props} style={styles?.dropDownIconBox}>
-//       <img src={ExpandMoreIcon} style={styles.dropDownIcon} />
-//     </div>
-//   );
-// };
 const DropDown = (props) => {
   const {
     items,
@@ -38,7 +24,6 @@ const DropDown = (props) => {
   const styles = useStyles();
   return (
     <Box>
-      {/* {showExternal && <Typography>{label}</Typography>} */}
       <FormControl
         fullWidth
         style={style}
@@ -47,11 +32,6 @@ const DropDown = (props) => {
         // error={showError}
         // helperText={helperText}
       >
-        {/* {!showExternal && (
-          <InputLabel id="demo-simple-select-label" sx={styles.label}>
-            {label}
-          </InputLabel>
-        )} */}
         <Select
           //   error={showError}
           onBlur={onBlur}
@@ -72,13 +52,12 @@ const DropDown = (props) => {
           MenuProps={{ classes: { paper: `menuPaper` } }}
         >
           {items?.map((item, index) => (
-            <MenuItem value={item.value} key={index.toString()}>
+            <MenuItem value={item.value} key={item?.value}>
               {item?.label}
             </MenuItem>
           ))}
           {items?.length === 0 && <MenuItem>No options available</MenuItem>}
         </Select>
-        {/* {helperText && showError && <ErrorText text={helperText} />} */}
       </FormControl>
     </Box>
   );
