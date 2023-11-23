@@ -38,7 +38,9 @@ class BodyView extends Component {
 
     let displayRenderData = renderData.filter((o) => o.render);
     const requiredMap = displayRenderData.filter(
-      (item) => item?.slotId === currentItem?.slotId
+      (item) =>
+        item?.slotId === currentItem?.slotId ||
+        item?.slotId === currentItem?.parentId
     );
     const daySet = new Set(currentItem?.workDays);
 

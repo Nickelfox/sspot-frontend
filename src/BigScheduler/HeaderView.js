@@ -3,6 +3,7 @@ import { PropTypes } from "prop-types";
 import { CellUnit, DATETIME_FORMAT, DATE_FORMAT } from "./index";
 import dayjs from "dayjs";
 import OutlinedInputField from "../components/OutlinedInput";
+import { getHeaders } from "../helpers/conversionFunctions/headerMap";
 
 class HeaderView extends Component {
   constructor(props) {
@@ -211,10 +212,23 @@ class HeaderView extends Component {
         });
         return weekDayMap;
       };
+      // const newHeaderMap = new Map();
+      // requiredArray.forEach((item) => {
+      //   if (headerMap.has(item?.weekDay)) {
+      //     headerMap.set(item?.weekDay, item);
+      //   } else {
+      //     headerMap.set(
+      //       item?.weekDay,
+      //       getMonthMap(requiredArray, item?.weekDay)
+      //     );
+      //   }
+      // });
       const headerMap = new Map();
       requiredArray.forEach((item) => {
         headerMap.set(item?.month, getWeekDayMap(requiredArray, item?.month));
       });
+      const newHeaderMap = getHeaders(requiredArray);
+
       headerList = (
         <th style={{ width: cellWidth, marginRight: 10, display: "flex" }}>
           <tr
@@ -237,7 +251,103 @@ class HeaderView extends Component {
                 placeholder="Search..."
               />
             </div>
-            {Array.from(headerMap).map((item, parentIndex) => {
+            {Array.from(newHeaderMap).map((item, parentIndex) => {
+              let currentDate = new Date(new Date());
+              const weekNumber = dayjs(currentDate).format("w");
+              return (
+                <span key={parentIndex}>
+                  <span className="flex font-medium">
+                    {/* <span className="h-8 bg-[#eeeeee] min-w-[2rem] w-fit px-1">
+                      {item[0]}
+                    </span> */}
+                    {Array.from(item[1]).map((childItem, childIndex) => {
+                      return (
+                        <span
+                          style={{
+                            borderLeft:
+                              Array.from(item[1].keys())?.length === 2
+                                ? 0
+                                : item[0] === weekNumber
+                                ? "1px solid #75B1E5"
+                                : "1px solid #eee",
+                            borderRight:
+                              item[0] === weekNumber
+                                ? "1px solid #75B1E5"
+                                : "0",
+                            borderTop: "1px solid #e4e4e4",
+                            borderBottom: "1px solid #e4e4e4",
+                            // marginLeft: "-2px",
+                            height: "7.2rem"
+                            // width: 80
+                          }}
+                          key={childIndex}
+                          // href={`#${childItem[0]}`}
+                          id={`${childItem[0]}`}
+                        >
+                          <span className="flex" style={{ height: "4rem" }}>
+                            {childIndex === 0 && (
+                              <span className="h-8 bg-[#eeeeee] min-w-[2rem] w-fit px-1">
+                                {item[0]}
+                              </span>
+                            )}
+                            {childIndex === 0 && (
+                              <span className="w-full flex justify-center items-center">
+                                {Array.from(item[1].keys())?.length === 2
+                                  ? `${Array.from(item[1].keys())[0]}-${
+                                      Array.from(item[1].keys())[1]
+                                    }`
+                                  : Array.from(item[1].keys())[0]}
+                              </span>
+                            )}
+                          </span>
+                          <span className="flex">
+                            {Array.from(childItem[1]).map(
+                              (childrenItem, childrenIndex) => {
+                                const currentDate = dayjs(new Date()).format(
+                                  "DD-MM"
+                                );
+                                const itemDate = dayjs(
+                                  childrenItem?.time
+                                ).format("DD-MM");
+                                return (
+                                  <span
+                                    key={childrenIndex + 2}
+                                    className="flex justify-center items-center"
+                                    style={{
+                                      width: 50,
+                                      borderLeft:
+                                        itemDate === currentDate
+                                          ? "1px solid #75b1e5"
+                                          : "1px solid #eee",
+                                      borderRight:
+                                        itemDate === currentDate
+                                          ? "1px solid #75b1e5"
+                                          : "1px solid #eee",
+                                      backgroundColor:
+                                        itemDate === currentDate
+                                          ? "#75b1e5"
+                                          : "#fff",
+                                      opacity:
+                                        itemDate === currentDate ? 0.7 : 1,
+                                      // border: " 1px solid #eeeeee",
+                                      borderTop: 0,
+                                      borderBottom: 0
+                                    }}
+                                  >
+                                    {dayjs(childrenItem?.time).format("DD")}
+                                  </span>
+                                );
+                              }
+                            )}
+                          </span>
+                        </span>
+                      );
+                    })}
+                  </span>
+                </span>
+              );
+            })}
+            {/* {Array.from(headerMap).map((item, parentIndex) => {
               let currentDate = new Date(new Date());
               const weekNumber = dayjs(currentDate).format("w");
               return (
@@ -319,7 +429,7 @@ class HeaderView extends Component {
                   </span>
                 </span>
               );
-            })}
+            })} */}
             <span style={{ width: "1.6rem" }}></span>
           </tr>
         </th>

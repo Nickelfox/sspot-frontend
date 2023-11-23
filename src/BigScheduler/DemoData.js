@@ -40,17 +40,17 @@ const DemoData = {
   events: [
       {
           id: 1,
-          start: '2017-12-18 09:30:00',
-          end: '2017-12-19 23:30:00',
+          start: '2023-12-18 09:30:00',
+          end: '2023-12-19 23:30:00',
           resourceId: 'r1',
           title: 'I am finished',
-          bgColor: '#D9D9D9',
+        //   bgColor: '#D9D9D9',
           showPopover: false
       },
       {
           id: 2,
-          start: '2017-12-18 12:30:00',
-          end: '2017-12-26 23:30:00',
+          start: '2023-12-18 12:30:00',
+          end: '2023-12-26 23:30:00',
           resourceId: 'r2',
           title: 'I am not resizable',
           resizable: false

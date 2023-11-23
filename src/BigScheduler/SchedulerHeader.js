@@ -1,6 +1,15 @@
 import React, { Component } from "react";
 import { PropTypes } from "prop-types";
-import { Col, Row, Spin, Radio, Space, Popover, Calendar } from "antd";
+import {
+  Col,
+  Row,
+  Spin,
+  Radio,
+  Space,
+  Popover,
+  Calendar,
+  DatePicker
+} from "antd";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { RightOutlined, LeftOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
@@ -86,10 +95,14 @@ class SchedulerHeader extends Component {
     }`;
     let popover = (
       <div className="popover-calendar">
-        <Calendar
+        <DatePicker
           locale={calendarLocale}
           defaultValue={dayjs(selectDate)}
           fullscreen={false}
+          picker="week"
+          className="btn"
+          style={{ width: "3rem", fontSize: "1.2rem" }}
+          // style={{ backgroundColor: "#ccc", }}
           onSelect={(date) => {
             this.handleVisibleChange(false);
             this.handleEvents(onSelectDate, false, date.format(DATE_FORMAT));
@@ -143,7 +156,6 @@ class SchedulerHeader extends Component {
 
     return (
       <Grid
-        conatainer
         display={"flex"}
         height={"4.1rem"}
         alignItems={"center"}
@@ -216,8 +228,9 @@ class SchedulerHeader extends Component {
               // className="flex items-center justify-center"
               onClick={this.handleVisibleChange}
             >
-              <CalendarMonthIcon />
-              {config.calendarPopoverEnabled ? (
+              {/* <CalendarMonthIcon /> */}
+              {popover}
+              {/* {config.calendarPopoverEnabled ? (
                 <Popover
                   content={popover}
                   placement="bottomLeft"
@@ -228,7 +241,7 @@ class SchedulerHeader extends Component {
                 ></Popover>
               ) : (
                 <span className={"header2-text-label"}></span>
-              )}
+              )} */}
             </button>
             <button
               className={`btn flex justify-center items-center`}

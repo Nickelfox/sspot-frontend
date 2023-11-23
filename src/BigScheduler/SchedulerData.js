@@ -711,13 +711,8 @@ export default class SchedulerData {
 
   _createHeaders() {
     const now = new Date(this.startDate);
-    let current = dayjs(now).format("w");
-    let currentDate = new Date(new Date());
-    let startDate = new Date(currentDate.getFullYear(), 0, 1);
-    const days = Math.floor((currentDate - startDate) / (24 * 60 * 60 * 1000));
-    let weekNumber = Math.ceil(days / 7);
     let headers = [],
-      start = this.localeDayjs(new Date(this.startDate)).add(1, "D"),
+      start = this.localeDayjs(new Date(this.startDate)).startOf("week"),
       header = start;
     /**Check
      * Here it is going to bet end of year
@@ -895,7 +890,8 @@ export default class SchedulerData {
         expanded: slot?.expanded !== undefined ? slot?.expanded : false,
         render: true,
         workDays: slot?.workDays,
-        editPopup: slot?.editPopup
+        editPopup: slot?.editPopup,
+        projectsAssigned: slot?.projectsAssigned
       };
       let id = slot.id;
       let value = undefined;

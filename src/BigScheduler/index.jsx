@@ -446,6 +446,7 @@ class Scheduler extends Component {
           openEditItemPopUp={this.openEditItemPopUp}
           width={width}
           closePopup={this.closePopup}
+          projects={this.props.projects}
         />
       </>
       // <table

@@ -29,6 +29,7 @@ const DropDown = (props) => {
     style,
     showExternal,
     fieldName = "",
+    handleSize,
     // showError = "",
     // helperText = "",
     onBlur = () => {},
@@ -54,7 +55,11 @@ const DropDown = (props) => {
         <Select
           //   error={showError}
           onBlur={onBlur}
-          sx={styles.select}
+          sx={
+            !handleSize
+              ? [styles.normalHeight, styles.select]
+              : [styles.smallHeight, styles?.select]
+          }
           labelId="demo-simple-select-label"
           name={fieldName}
           id="demo-simple-select"

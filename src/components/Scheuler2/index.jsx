@@ -16,44 +16,42 @@ import Scheduler, {
 import { render } from "@testing-library/react";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import Popup from "../PopUp";
 import AddResource from "../AddResource";
 import PrimaryButton from "../PrimaryButton";
 import AddEvent from "../AddEventForm";
+import { convertArrayToMap } from "../../helpers/conversionFunctions/resourceMap";
+import { convertEventsToMap } from "../../helpers/conversionFunctions/eventsMap";
 
 let resources = [
-  {
-    id: "r1",
-    name: "Staff_Val",
-    weeklyAvailability: 40,
-    parentId: "r2",
-    expanded: false,
-    workDays: []
-  },
   {
     id: "r2",
     name: "Staff_Tom",
     weeklyAvailability: 40,
     expanded: false,
     workDays: [],
-    editPopup: false
+    editPopup: false,
+    projects: [
+      {
+        id: "r1",
+        name: "Staff_Val",
+        parentId: "r2",
+        expanded: false,
+        workDays: [],
+        hoursAssigned: 4
+      },
+      {
+        id: "r7",
+        name: "Manager_C",
+        expanded: false,
+        workDays: [],
+        editPopup: false,
+        parentId: "r2",
+        hoursAssigned: 6
+      }
+    ]
   },
-  // {
-  //   id: "r5",
-  //   name: "Staff_Ben",
-  //   weeklyAvailability: 40
-  // },
-  // {
-  //   id: "r6",
-  //   name: "Staff_Lee",
-  //   weeklyAvailability: 40
-  // },
-  // {
-  //   id: "r3",
-  //   name: "Manager_A",
-  //   weeklyAvailability: 40
-  // },
   {
     id: "r4",
     name: "Manager_B",
@@ -62,21 +60,15 @@ let resources = [
     workDays: [],
     editPopup: false
   },
-  {
-    id: "r7",
-    name: "Manager_C",
-    weeklyAvailability: 40,
-    expanded: false,
-    workDays: [],
-    editPopup: false
-  },
+
   {
     id: "r8",
     name: "Manager_D",
     weeklyAvailability: 40,
     expanded: false,
     workDays: [],
-    editPopup: false
+    editPopup: false,
+    projectsAssigned: []
   },
   {
     id: "r9",
@@ -84,14 +76,15 @@ let resources = [
     weeklyAvailability: 40,
     expanded: false,
     workDays: [],
-    editPopup: false
+    editPopup: false,
+    projectsAssigned: []
   }
 ];
 let events = [
   {
     id: 1,
-    start: "2023-11-18 09:30:00",
-    end: "2023-11-19 23:30:00",
+    start: "2023-11-24 09:30:00",
+    end: "2023-11-29 23:30:00",
     resourceId: "r1",
     title: "A1",
     bgColor: "#488FAB",
@@ -99,26 +92,27 @@ let events = [
   },
   {
     id: 3,
-    start: "2023-11-19 12:30:00",
-    end: "2023-11-20 23:30:00",
-    resourceId: "r3",
+    start: "2023-11-24 12:30:00",
+    end: "2023-11-29 23:30:00",
+    resourceId: "r7",
     title: "Fixed",
-    movable: true
+    movable: true,
+    bgColor: "#d7d5a2"
   },
   {
     id: 4,
     start: "2023-11-24 14:30:00",
-    end: "2023-11-26 23:30:00",
-    resourceId: "r1",
+    end: "2023-11-24 23:30:00",
+    resourceId: "r4",
     title: "Try",
     startResizable: true,
-    bgColor: "#9C48AB"
-    // rrule: "FREQ=WEEKLY;DTSTART=20171219T013000Z;BYDAY=TU,FR", //this is going to be used for availability
+    bgColor: "#9C48AB",
+    rrule: "FREQ=WEEKLY;DTSTART=20171219T013000Z;BYDAY=TU,TH" //this is going to be used for availability
   },
   {
     id: 5,
-    start: "2023-11-21 15:30:00",
-    end: "2023-11-30 23:30:00",
+    start: "2023-11-24 00:00:00",
+    end: "2023-11-30 23:59:00",
     resourceId: "r2",
     title: "R2",
     // rrule: "FREQ=WEEKLY;DTSTART=20171219T013000Z;BYDAY=TU,FR", //this is going to be used for availability
@@ -137,15 +131,19 @@ const Calender = (props) => {
   const [openPopUp, setOpenPopup] = useState(false);
   const [view, setView] = useState("");
   const [id, setId] = useState("");
+  const [resoureMap, setResourceMap] = useState(new Map());
+  const [eventsMap, setEventsMap] = useState(new Map());
+  const [selectedObject, setSelectedObject] = useState(null);
   useEffect(() => {
     getSchedulerData();
   }, []);
   useEffect(() => {
     triggerRerender(render + 1);
   }, [triger]);
-  // useEffect(() => {
-  //   document.addEventListener("click",getRenderSd(props?.))
-  // });
+
+  useEffect(() => {
+    setEventsMap(convertEventsToMap(events));
+  }, []);
   const eventItemTemplateResolver = (
     schedulerData,
     event,
@@ -156,15 +154,45 @@ const Calender = (props) => {
     mustBeHeight,
     agendaMaxEventWidth
   ) => {
-    // const isWeekend = getWeekends(event?.start, event?.end);
-    let borderWidth = isStart ? "4" : "0";
-    const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-    // let borderColor = "rgba(0,139,236,1)",
-    //   backgroundColor = "#80C5F6";
     let titleText = schedulerData.behaviors.getEventTextFunc(
       schedulerData,
       event
     );
+    const resourceObjectForEvent = resoureMap.get(event?.resourceId);
+    const eventsObject = eventsMap.get(event?.resourceId);
+    const resourceChildArray = resources?.map((item) => item?.projects);
+    const resourceFlatArray = resourceChildArray.flat();
+    const filteredArray = resourceFlatArray.filter(
+      (item) => item !== undefined
+    );
+    const resourceChildObject = filteredArray.filter(
+      (item) => item?.parentId === event?.resourceId
+    );
+    const requiredData = resourceChildObject.map((child) => {
+      const parentObj = eventsMap.get(child?.id);
+      const date1 = dayjs(parentObj?.end);
+      const date2 = dayjs(parentObj?.start);
+      return {
+        diff: child?.hoursAssigned * date1.diff(date2, "d")
+      };
+    });
+
+    const weeklyAvailability =
+      requiredData?.length > 0 &&
+      requiredData.map((childResource) => childResource?.diff);
+    // create a variable for the sum and initialize it
+    let sum = 0;
+    // iterate over each item in the array
+    for (let i = 0; i < weeklyAvailability.length; i++) {
+      sum += weeklyAvailability[i];
+    }
+    let bColor;
+    if (sum > resourceObjectForEvent?.weeklyAvailability) {
+      bColor = "rgba(255, 0, 0, 0.5)";
+    } else {
+      bColor = "rgba(131, 192, 120, 0.5)";
+    }
+    const sumPercent = (sum / resourceObjectForEvent?.weeklyAvailability) * 100;
     // if (!!event.type) {
     //   borderColor =
     //     event.type == 1
@@ -175,22 +203,46 @@ const Calender = (props) => {
     //   backgroundColor =
     //     event.type == 1 ? "#80C5F6" : event.type == 3 ? "#FA9E95" : "#D9D9D9";
     // }
+    const hex = event?.bgColor;
+    let opacity = "0.7";
+    // Convert each hex character pair into an integer
+    let red = parseInt(hex?.substring(1, 3), 16);
+    let green = parseInt(hex?.substring(3, 5), 16);
+    let blue = parseInt(hex?.substring(5, 7), 16);
+    let rgba = ` rgba(${red}, ${green}, ${blue}, ${opacity})`;
     let divStyle = {
       //   borderLeft: borderWidth + "px solid " + borderColor,
-      backgroundColor: event?.bgColor,
+      // backgroundColor: event?.bgColor,
+      background:
+        resourceObjectForEvent?.parentId === undefined ? bColor : rgba,
       minHeight: "4rem",
-      height: "4rem"
+      height: "4rem",
+      borderRadius: 4
     };
     if (!!agendaMaxEventWidth)
       divStyle = {
         ...divStyle,
         maxWidth: agendaMaxEventWidth
       };
-
     return (
       <div key={event.id} className={mustAddCssClass} style={divStyle}>
-        <span style={{ marginLeft: "4px", lineHeight: `${mustBeHeight}px` }}>
-          {titleText}
+        <span
+          style={{
+            lineHeight: `${mustBeHeight}px`
+          }}
+        >
+          <Typography
+            variant="p4"
+            color="#fff"
+            fontWeight={600}
+            paddingLeft={"1rem"}
+          >
+            {resourceObjectForEvent?.parentId
+              ? `${resourceObjectForEvent?.hoursAssigned} h/day`
+              : isNaN(sumPercent)
+              ? "0%"
+              : `${sumPercent.toFixed(0)} %`}
+          </Typography>
         </span>
       </div>
     );
@@ -217,12 +269,19 @@ const Calender = (props) => {
             viewName: "Resource View",
             viewType: ViewType.Month,
             showAgenda: false,
-            isEventPerspective: true
+            isEventPerspective: true,
+            checkConflict: true
           }
         ]
       }
     );
-    sd.setResources(resources);
+    const filteredArray = resources.map((item) => item?.projects);
+    const projectsArray = filteredArray.filter((item) => item !== undefined);
+    const newArray = [...resources, ...projectsArray];
+    const requiredArray = newArray.flat();
+    sd.setResources(requiredArray);
+    setResourceMap(convertArrayToMap(requiredArray));
+
     sd.setEvents(events);
     setSchedulerData(sd);
   };
@@ -320,6 +379,10 @@ const Calender = (props) => {
     type,
     item
   ) => {
+    const childObject = resoureMap.get(slotId);
+    const requiredObject = resoureMap.get(childObject?.parentId);
+    console.log(requiredObject, "Required");
+    setSelectedObject(requiredObject);
     setId(slotName);
     if (slotName) {
       if (
@@ -345,7 +408,7 @@ const Calender = (props) => {
         triggerRerender(rerender + 1);
       }
     } else {
-      alert("Add New Event in Progress");
+      alert("Event in progress");
     }
   };
   const newEventfromResource = (schedulerData, slotId, start, end) => {
@@ -381,7 +444,6 @@ const Calender = (props) => {
 
   const updateEventEnd = (schedulerData, event, newEnd) => {
     getRenderSd(schedulerData);
-    console.log(event);
     schedulerData.updateEventEnd(event, newEnd);
     // triggerRerender(render + 1);
   };
@@ -508,12 +570,12 @@ const Calender = (props) => {
         >
           Add Person
         </PrimaryButton>
-        {/* <PrimaryButton
+        <PrimaryButton
           style={{ width: "fit-content", padding: "2rem", fontSize: "2rem" }}
           onClick={handleAddEventPopUp.bind(null, "addEvent")}
         >
           Create Event
-        </PrimaryButton> */}
+        </PrimaryButton>
       </Box>
 
       <Popup
