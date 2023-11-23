@@ -1,22 +1,15 @@
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 import Scheduler, {
-  EventItem,
-  Resource,
   SchedulerData,
-  SchedulerDataBehaviors,
-  SchedulerDataConfig,
-  View,
   DemoData,
   ViewType,
   DATE_FORMAT
 } from "../../BigScheduler";
-// import "react-big-scheduler-stch/lib/css/style.css";
-// import withDndContext from "../Scheduler/withDndContext";
 import { render } from "@testing-library/react";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Popup from "../PopUp";
 import AddResource from "../AddResource";
 import PrimaryButton from "../PrimaryButton";
@@ -154,12 +147,7 @@ const Calender = (props) => {
     mustBeHeight,
     agendaMaxEventWidth
   ) => {
-    let titleText = schedulerData.behaviors.getEventTextFunc(
-      schedulerData,
-      event
-    );
     const resourceObjectForEvent = resoureMap.get(event?.resourceId);
-    const eventsObject = eventsMap.get(event?.resourceId);
     const resourceChildArray = resources?.map((item) => item?.projects);
     const resourceFlatArray = resourceChildArray.flat();
     const filteredArray = resourceFlatArray.filter(
@@ -170,21 +158,23 @@ const Calender = (props) => {
     );
     const requiredData = resourceChildObject.map((child) => {
       const parentObj = eventsMap.get(child?.id);
-      const date1 = dayjs(parentObj?.end);
-      const date2 = dayjs(parentObj?.start);
+      const date1 = new dayjs(new Date(parentObj?.end));
+      const date2 = new dayjs(new Date(parentObj?.start));
       return {
         diff: child?.hoursAssigned * date1.diff(date2, "d")
       };
     });
 
-    const weeklyAvailability =
-      requiredData?.length > 0 &&
-      requiredData.map((childResource) => childResource?.diff);
+    const weeklyAvailability = requiredData.map(
+      (childResource) => childResource?.diff
+    );
     // create a variable for the sum and initialize it
     let sum = 0;
     // iterate over each item in the array
-    for (let i = 0; i < weeklyAvailability.length; i++) {
-      sum += weeklyAvailability[i];
+    if (weeklyAvailability.length > 0) {
+      for (let itx of weeklyAvailability) {
+        sum += itx;
+      }
     }
     let bColor;
     if (sum > resourceObjectForEvent?.weeklyAvailability) {
@@ -193,6 +183,7 @@ const Calender = (props) => {
       bColor = "rgba(131, 192, 120, 0.5)";
     }
     const sumPercent = (sum / resourceObjectForEvent?.weeklyAvailability) * 100;
+
     // if (!!event.type) {
     //   borderColor =
     //     event.type == 1
@@ -219,11 +210,12 @@ const Calender = (props) => {
       height: "4rem",
       borderRadius: 4
     };
-    if (!!agendaMaxEventWidth)
+    if (agendaMaxEventWidth)
       divStyle = {
         ...divStyle,
         maxWidth: agendaMaxEventWidth
       };
+    const notANumber = isNaN(sumPercent) ? "0%" : `${sumPercent.toFixed(0)} %`;
     return (
       <div key={event.id} className={mustAddCssClass} style={divStyle}>
         <span
@@ -239,9 +231,7 @@ const Calender = (props) => {
           >
             {resourceObjectForEvent?.parentId
               ? `${resourceObjectForEvent?.hoursAssigned} h/day`
-              : isNaN(sumPercent)
-              ? "0%"
-              : `${sumPercent.toFixed(0)} %`}
+              : notANumber}
           </Typography>
         </span>
       </div>
@@ -305,7 +295,6 @@ const Calender = (props) => {
     schedulerData.setEvents(DemoData.events);
     triggerRerender(rerender + 1);
     setRetrigger((prev) => !prev);
-
     schedulerContent.scrollLeft = maxScrollLeft - 10;
   };
   const onViewChange = (schedulerData, view) => {
@@ -439,13 +428,11 @@ const Calender = (props) => {
   const updateEventStart = (schedulerData, event, newStart) => {
     getRenderSd(schedulerData);
     schedulerData.updateEventStart(event, newStart);
-    // triggerRerender(render + 1);
   };
 
   const updateEventEnd = (schedulerData, event, newEnd) => {
     getRenderSd(schedulerData);
     schedulerData.updateEventEnd(event, newEnd);
-    // triggerRerender(render + 1);
   };
   const moveEvent = (schedulerData, event, slotId, slotName, start, end) => {
     if (slotId === event?.resourceId) {
@@ -454,14 +441,6 @@ const Calender = (props) => {
       triggerRerender(render + 1);
       setRetrigger((prev) => !prev);
     } else return;
-  };
-  const getTimeMaps = (eventsArr, id) => {
-    const timeMap = new Map();
-    const requiredArray = eventsArr.filter((event) => event?.resourceId === id);
-    requiredArray.forEach((item) => {
-      if (!timeMap.has(item?.start)) timeMap.set(item?.start, item);
-    });
-    return timeMap;
   };
   const handleAddEventPopUp = (key) => {
     setPopupChild(key);
@@ -474,8 +453,13 @@ const Calender = (props) => {
   };
   const addResorceInScheduler = (values) => {
     const startDate = new Date();
-    const convertedStartDate = dayjs(startDate).format("YYYY-MM-DD hh:mm:ss");
-    const endDate = dayjs().day(5).endOf("day").format("YYYY-MM-DD hh:mm:ss");
+    const convertedStartDate = new dayjs(startDate).format(
+      "YYYY-MM-DD hh:mm:ss"
+    );
+    const endDate = new dayjs()
+      .day(5)
+      .endOf("day")
+      .format("YYYY-MM-DD hh:mm:ss");
     schedulerData.addResource(values);
     triggerRerender(rerender + 1);
     handlePopUpClose();
@@ -547,8 +531,6 @@ const Calender = (props) => {
             newEvent={newEvent}
             moveEvent={moveEvent}
             eventItemTemplateResolver={eventItemTemplateResolver}
-            // onScrollRight={onScrollRight}
-            // onScrollLeft={onScrollLeft}
             updateEventStart={updateEventStart}
             updateEventEnd={updateEventEnd}
             expandAllItems={expandAllItems}
