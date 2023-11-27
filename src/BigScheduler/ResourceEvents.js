@@ -101,6 +101,7 @@ class ResourceEvents extends Component {
     // let cellWidth = schedulerData.getContentCellWidth();
     let cellWidth = 50;
     let pos = getPos(this.eventContainer);
+    console.log(pos)
     let startX = clientX - pos.x;
     let leftIndex = Math.floor(startX / cellWidth);
     let left = leftIndex * cellWidth;
@@ -334,7 +335,8 @@ class ResourceEvents extends Component {
       this.props;
     const { cellUnit, startDate, endDate, config, localeDayjs } = schedulerData;
     const { isSelecting, left, width } = this.state;
-    let cellWidth = schedulerData.getContentCellWidth();
+    // let cellWidth = schedulerData.getContentCellWidth();
+    let cellWidth = 50;
     let cellMaxEvents = schedulerData.getCellMaxEvents();
     let rowWidth = schedulerData.getContentTableWidth();
     let DnDEventItem = dndSource.getDragSource();
@@ -358,7 +360,7 @@ class ResourceEvents extends Component {
             : 1;
         let renderEventsMaxIndex =
           headerItem.addMore === 0 ? cellMaxEvents : headerItem.addMoreIndex;
-
+console.log(headerItem,"HeaderItem")
         headerItem.events.forEach((evt, idx) => {
           if (idx < renderEventsMaxIndex && evt !== undefined && evt.render) {
             let durationStart = localeDayjs(new Date(startDate));
@@ -378,6 +380,7 @@ class ResourceEvents extends Component {
             let isStart = eventStart >= durationStart;
             let isEnd = eventEnd <= durationEnd;
             let left = index * 50 + (index > 0 ? 2 : 3);
+            console.log(evt,"383")
             let width =
               evt.span * 50 - (index > 0 ? 5 : 6) > 0
                 ? evt.span * 50 - (index > 0 ? 5 : 6)

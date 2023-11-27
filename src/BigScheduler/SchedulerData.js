@@ -205,7 +205,7 @@ export default class SchedulerData {
           } else if (viewType === ViewType.Month) {
             this.startDate = this.localeDayjs(new Date(date)).startOf("month");
             this.endDate = this.localeDayjs(new Date(this.startDate)).endOf(
-              "month"
+              "year"
             );
           } else if (viewType === ViewType.Quarter) {
             this.startDate = this.localeDayjs(new Date(date)).startOf(
@@ -248,7 +248,7 @@ export default class SchedulerData {
           } else if (viewType === ViewType.Month) {
             this.startDate = this.localeDayjs(new Date(date)).startOf("month");
             this.endDate = this.localeDayjs(new Date(this.startDate)).endOf(
-              "month"
+              "year"
             );
           } else if (viewType === ViewType.Quarter) {
             this.startDate = this.localeDayjs(new Date(date)).startOf(
@@ -678,7 +678,7 @@ export default class SchedulerData {
         date != undefined
           ? this.localeDayjs(date)
           : this.localeDayjs(this.startDate).add(num, "months");
-      this.endDate = this.localeDayjs(this.startDate).endOf("month");
+      this.endDate = this.localeDayjs(this.startDate).endOf("year");
     } else if (this.viewType === ViewType.Quarter) {
       this.startDate =
         date != undefined
@@ -711,13 +711,8 @@ export default class SchedulerData {
 
   _createHeaders() {
     const now = new Date(this.startDate);
-    let current = dayjs(now).format("w");
-    let currentDate = new Date(new Date());
-    let startDate = new Date(currentDate.getFullYear(), 0, 1);
-    const days = Math.floor((currentDate - startDate) / (24 * 60 * 60 * 1000));
-    let weekNumber = Math.ceil(days / 7);
     let headers = [],
-      start = this.localeDayjs(new Date(this.startDate)).add(1, "D"),
+      start = this.localeDayjs(new Date(this.startDate)).startOf("week"),
       header = start;
     /**Check
      * Here it is going to bet end of year
@@ -895,7 +890,8 @@ export default class SchedulerData {
         expanded: slot?.expanded !== undefined ? slot?.expanded : false,
         render: true,
         workDays: slot?.workDays,
-        editPopup: slot?.editPopup
+        editPopup: slot?.editPopup,
+        projectsAssigned: slot?.projectsAssigned
       };
       let id = slot.id;
       let value = undefined;
@@ -958,6 +954,7 @@ export default class SchedulerData {
   }
 
   _getSpan(startTime, endTime, headers) {
+    console.log(this, "GETSPAn");
     if (this.showAgenda) return 1;
 
     function startOfWeek(date) {
@@ -1002,8 +999,9 @@ export default class SchedulerData {
       span = 0,
       windowStart = new Date(this.startDate),
       windowEnd = new Date(this.endDate);
+
     windowStart.setHours(0, 0, 0, 0);
-    windowEnd.setHours(23, 59, 59);
+
     if (this.viewType === ViewType.Day) {
       if (headers.length > 0) {
         const day = new Date(headers[0].time);
@@ -1052,7 +1050,6 @@ export default class SchedulerData {
         eventEnd.setHours(23, 59, 59);
         eventStart.setHours(0, 0, 0, 0);
       }
-
       const timeIn = this.cellUnit === CellUnit.Day ? "days" : "minutes";
       const dividedBy =
         this.cellUnit === CellUnit.Day ? 1 : this.config.minuteStep;
@@ -1073,8 +1070,11 @@ export default class SchedulerData {
         span = Math.ceil(timeBetween(eventStart, eventEnd, timeIn) / dividedBy);
       }
     }
-
-    return span;
+    if (eventStart < windowStart) {
+      return span + 1;
+    } else {
+      return span;
+    }
   }
 
   _validateResource(resources) {
@@ -1172,6 +1172,7 @@ export default class SchedulerData {
       let resourceEventsList = initRenderData.filter(
         (x) => x.slotId === this._getEventSlotId(item)
       );
+      console.log(item, "11777");
       if (resourceEventsList.length > 0) {
         let resourceEvents = resourceEventsList[0];
         let span = this._getSpan(item.start, item.end, this.headers);

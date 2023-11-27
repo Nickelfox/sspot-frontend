@@ -88,6 +88,7 @@ table.scheduler-table {
     border-spacing: 0;
     text-align: center;
     height: fit-content;
+    position: relative;
 }
 
 table.scheduler-table {
@@ -143,6 +144,7 @@ table.scheduler-table tr:last-child td {
     cursor: pointer;
 }
 
+
 .day-event {
     position: relative;
     display: inline-block;
@@ -181,16 +183,17 @@ table.scheduler-table tr:last-child td {
 
 .event-item {
     margin: 1px 0;
-    width: 100%;
+    /* width: 100%; */
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     color: #fff;
-    padding-right: 20px !important;
+    /* padding-right: 20px !important; */
     /* margin-bottom: 4rem; */
     height: 5rem;
-    opacity: 0.5;
-    border-radius: 0.5rem;
+    /* opacity: 0.5; */
+    display: flex;
+    align-items: center;
 }
 
 .overflow-text {
@@ -302,6 +305,10 @@ table.scheduler-table tr:last-child td {
     /* padding: 10px 20px 10px 20px; */
     border: solid #666666 1px;
     text-decoration: none;
+}
+
+.btn input {
+    visibility: hidden;
 }
 
 .scheduler-header {

@@ -37,9 +37,7 @@ const useStyles = () => {
     },
     select: {
       paddingTop: "1rem !important",
-      borderRadius: "0.1remrem !important",
-      height: "5rem",
-      width: "13rem"
+      borderRadius: "0.1rem!important"
     },
     label: {
       paddingTop: "0.5rem !important",
@@ -51,6 +49,14 @@ const useStyles = () => {
         fontSize: "1rem !important",
         marginTop: "-0.8rem"
       }
+    },
+    normalHeight: {
+      height: "5rem",
+      width: "13rem"
+    },
+    smallHeight: {
+      height: "3rem",
+      width: "100%"
     }
   };
 };

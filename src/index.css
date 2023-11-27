@@ -71,7 +71,7 @@ code {
   cursor: "pointer"
 }
 
-avatar {
+.avatar {
   background-color: #000 !important;
   font-size: 1.6rem;
   cursor: pointer;
@@ -80,13 +80,17 @@ avatar {
   border-radius: 0;
 }
 
-.MuiOutlinedInput-root .MuiAutocomplete-endAdornment {
+.MuiAutocomplete-endAdornment {
   right: 0 !important;
+  top: -2px !important;
+  border-radius: 4px;
+  /* bottom: 2 !important; */
 }
 
+/* .MuiAutocomplete-endAdornment  */
 .MuiAutocomplete-root,
 .MuiOutlinedInput-root,
 .MuiInputBase-sizeSmall {
-  height: 3rem;
+  height: 5rem;
   padding: 0 !important;
 }

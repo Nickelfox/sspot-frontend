@@ -48,7 +48,7 @@ const TableTry = (props) => {
     // paddingBottom: contentPaddingBottom
   };
 
-  let editItems = editItemObject.map((item,index) => {
+  let editItems = editItemObject.map((item, index) => {
     return (
       <Box
         key={item?.value}
@@ -57,7 +57,7 @@ const TableTry = (props) => {
         alignItems={"start"}
         flexDirection={"column"}
         padding={"1rem"}
-        borderBottom={index===1&&"1px solid #ccc"}
+        borderBottom={index === 1 && "1px solid #ccc"}
         className={`cursor-pointer availabilitySelector`}
         width={"10rem"}
       >
@@ -266,6 +266,7 @@ const TableTry = (props) => {
           );
           return (
             <div
+              key={filteredItem?.slotId}
               style={{
                 // maxWidth: "24rem",
                 minWidth: "23.9rem",
@@ -308,7 +309,9 @@ const TableTry = (props) => {
                         // style={schedulerContentStyle}
                         // ref={props.schedulerContentRef}
                         onMouseOver={props.onSchedulerContentMouseOver}
+                        onFocus={props.onSchedulerContentMouseOver}
                         onMouseOut={props.onSchedulerContentMouseOut}
+                        onBlur={props.onSchedulerContentMouseOut}
                         // onScroll={props.onSchedulerContentScroll}
                       >
                         <div style={{ width: schedulerWidth }}>
@@ -364,7 +367,7 @@ const TableTry = (props) => {
                   variant="p2"
                   sx={{ color: "#888888", textDecoration: "underline" }}
                 >
-                  Actions <KeyboardArrowDownIcon/>
+                  Actions <KeyboardArrowDownIcon />
                   {item?.editPopup && (
                     <Popover
                       content={editItems}
@@ -415,7 +418,9 @@ const TableTry = (props) => {
                   // style={schedulerContentStyle}
                   // ref={props.schedulerContentRef}
                   onMouseOver={props.onSchedulerContentMouseOver}
+                  onFocus={props.onSchedulerContentMouseOver}
                   onMouseOut={props.onSchedulerContentMouseOut}
+                  onBlur={props.onSchedulerContentMouseOut}
                   // onScroll={props.onSchedulerContentScroll}
                 >
                   <div style={{ width: schedulerWidth }}>

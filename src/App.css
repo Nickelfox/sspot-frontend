@@ -32,7 +32,33 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+.ant-picker .ant-picker-input input {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.popover-calendar .ant-picker .ant-picker-input input {
+  display: none;
+}
+
+.popover-calendar .ant-picker .ant-picker-input .ant-picker-clear {
+  display: none;
+}
+
+.popover-calendar .ant-picker .ant-picker-input .ant-picker-suffix {
+  margin-left: -0.7rem;
+  margin-right: auto;
+  font-size: 2rem;
+  font-weight: 500;
+  color: #666666
+}
+
+.ant-picker-content thead {
+  display: none;
 }

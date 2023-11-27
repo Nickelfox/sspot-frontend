@@ -191,7 +191,7 @@ const workDays = [
   { value: 5, label: "FRI" },
   { value: 6, label: "SAT" }
 ];
-const AddResourceEvent = (props) => {
+const AddResource = (props) => {
   const { handleClose, addResorceInScheduler, resourceLength } = props;
   const styles = useStyles();
   const theme = useTheme();
@@ -224,6 +224,9 @@ const AddResourceEvent = (props) => {
       return { ...styles.daySelector, ...styles.unSelectedDay };
     }
   };
+  const checkLaptop = isNotLaptop ? "40vw" : "25vw";
+  const checkTablet = isTablet ? "50vw" : checkLaptop;
+  const maxWidth = isMobile ? "100vw" : checkTablet;
   return (
     <Box sx={styles.formDisplay}>
       <Formik
@@ -242,231 +245,226 @@ const AddResourceEvent = (props) => {
           errors,
           setFieldValue
         }) => (
-          <>
-            <form
-              style={{
-                padding: "0.2rem",
-                maxWidth: isMobile
-                  ? "100vw"
-                  : isTablet
-                  ? "50vw"
-                  : isNotLaptop
-                  ? "40vw"
-                  : "25vw"
-              }}
-            >
-              <Grid container justifyContent="center" m={0}>
-                <Grid item xs={12} m={0} height={"fit-content"}>
-                  <InputField
-                    size="medium"
-                    name="firstName"
-                    hiddenLabel
-                    placeholder="First Name*"
-                    InputProps={{ disableUnderline: true }}
-                    value={values.firstName}
-                    variant="filled"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={touched.firstName && Boolean(errors.firstName)}
-                    helperText={touched.firstName ? errors.firstName : ""}
-                    type="text"
-                    fullWidth
-                    margin="normal"
-                    sx={{ height: "7.2rem", marginBottom: "6px" }}
-                  />
-                  <InputField
-                    size="medium"
-                    name="lastName"
-                    hiddenLabel
-                    placeholder="Last Name*"
-                    InputProps={{ disableUnderline: true }}
-                    value={values.lastName}
-                    variant="filled"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    helperText={touched.lastName ? errors.lastName : ""}
-                    error={touched.lastName && Boolean(errors.lastName)}
-                    type="text"
-                    fullWidth
-                    margin="normal"
-                    sx={{ height: "7.2rem", margin: 0 }}
-                  />
-                </Grid>
-                <Grid item xs={12} className="flex items-center justify-around">
-                  <Grid
-                    item
-                    xs={2}
-                    className="flex items-center justify-center"
-                  >
-                    <span className="text-slate-500 text-xl">Roles</span>{" "}
-                    <BasicTooltip
-                      title={
-                        <div style={{ color: "#000", fontSize: "1.2rem" }}>
-                          {" "}
-                          Add roles to take advantage of filtering and search on
-                          your schedule
-                        </div>
-                      }
-                    >
-                      <QuestionMarkIcon />
-                    </BasicTooltip>
-                  </Grid>
-                  <Grid item xs={10} m={0} height={"fit-content"}>
-                    <InputField
-                      size="small"
-                      name="roles"
-                      hiddenLabel
-                      placeholder="eg.: Designer, Senior,etc."
-                      InputProps={{ disableUnderline: true }}
-                      value={values.roles}
-                      variant="filled"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      error={touched.roles && Boolean(errors.roles)}
-                      type="text"
-                      fullWidth
-                      margin="normal"
-                      sx={{ height: "4rem" }}
-                      placeholdertext="true"
-                    />
-                  </Grid>
-                </Grid>
-                <Grid item xs={12} className="flex items-center justify-around">
-                  <Grid item xs={2}>
-                    <span className="text-slate-500 text-xl">Email</span>
-                  </Grid>
-                  <Grid item xs={10} m={0} height={"fit-content"}>
-                    <InputField
-                      size="small"
-                      name="email"
-                      hiddenLabel
-                      placeholder="Optional"
-                      InputProps={{ disableUnderline: true }}
-                      value={values.email}
-                      variant="filled"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      error={touched.email && Boolean(errors.email)}
-                      type="text"
-                      fullWidth
-                      margin="normal"
-                      sx={{ height: "4rem" }}
-                      placeholdertext="true"
-                    />
-                  </Grid>
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  className="flex items-center justify-around pb-4"
-                >
-                  <Grid item xs={2}>
-                    <span className="pr-2 text-slate-500 text-xl">
-                      Capacity{" "}
-                    </span>
-                  </Grid>
-                  <Grid item xs={10} className="flex items-center" m={0}>
-                    <DropDown
-                      value={
-                        values?.weeklyAvailability
-                          ? values?.weeklyAvailability
-                          : 35
-                      }
-                      name={"weeklyAvailability"}
-                      label="weeklyAvailability"
-                      items={items}
-                      handleChange={(e) => {
-                        setFieldValue(`weeklyAvailability`, e.target?.value);
-                      }}
-                    />
-                    <span className="pl-2 text-slate-500 text-xl">
-                      hours per day{" "}
-                    </span>
-                  </Grid>
-                  {touched.weeklyAvailability &&
-                    errors.weeklyAvailability &&
-                    "Kindly Select Weekly Availability"}
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  className="flex items-center justify-around mt-2"
-                >
-                  <Grid item xs={2}>
-                    <span className="text-slate-500 text-xl">Work Days </span>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={10}
-                    m={0}
-                    display={"flex"}
-                    flexDirection={"column"}
-                  >
-                    <Grid item xs={12} className="flex">
-                      <div className="flex">
-                        {workDays.map((workDay, index) => {
-                          return (
-                            <div
-                              key={index}
-                              className="flex items-center justify-center "
-                              // style={styles.daySelector}
-                              style={getStylesforSelector(
-                                values?.workDays,
-                                workDay.value,
-                                index
-                              )}
-                              onClick={() => {
-                                const daySet = new Set(values?.workDays);
-                                if (daySet?.has(workDay.value)) {
-                                  daySet.delete(workDay.value);
-                                } else {
-                                  daySet.add(workDay.value);
-                                }
-                                setFieldValue(`workDays`, Array.from(daySet));
-                              }}
-                            >
-                              <p style={styles.daySelectorText}>
-                                {workDay?.label}
-                              </p>
-                            </div>
-                          );
-                        })}
+          <form
+            style={{
+              padding: "0.2rem",
+              maxWidth: maxWidth
+            }}
+          >
+            <Grid container justifyContent="center" m={0}>
+              <Grid item xs={12} m={0} height={"fit-content"}>
+                <InputField
+                  size="medium"
+                  name="firstName"
+                  hiddenLabel
+                  placeholder="First Name*"
+                  InputProps={{ disableUnderline: true }}
+                  value={values.firstName}
+                  variant="filled"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={touched.firstName && Boolean(errors.firstName)}
+                  helperText={touched.firstName ? errors.firstName : ""}
+                  type="text"
+                  fullWidth
+                  margin="normal"
+                  sx={{ height: "7.2rem", marginBottom: "6px" }}
+                />
+                <InputField
+                  size="medium"
+                  name="lastName"
+                  hiddenLabel
+                  placeholder="Last Name*"
+                  InputProps={{ disableUnderline: true }}
+                  value={values.lastName}
+                  variant="filled"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  helperText={touched.lastName ? errors.lastName : ""}
+                  error={touched.lastName && Boolean(errors.lastName)}
+                  type="text"
+                  fullWidth
+                  margin="normal"
+                  sx={{ height: "7.2rem", margin: 0 }}
+                />
+              </Grid>
+              <Grid item xs={12} className="flex items-center justify-around">
+                <Grid item xs={2} className="flex items-center justify-center">
+                  <span className="text-slate-500 text-xl">Roles</span>{" "}
+                  <BasicTooltip
+                    title={
+                      <div style={{ color: "#000", fontSize: "1.2rem" }}>
+                        {" "}
+                        Add roles to take advantage of filtering and search on
+                        your schedule
                       </div>
-                    </Grid>
-                    <div style={{ marginTop: "2px", color: "#FF000D" }}>
-                      {touched.workDays &&
-                        errors?.workDays &&
-                        values?.workDays?.length === 0 &&
-                        "Kindly Select Work Days"}
+                    }
+                  >
+                    <QuestionMarkIcon />
+                  </BasicTooltip>
+                </Grid>
+                <Grid item xs={10} m={0} height={"fit-content"}>
+                  <InputField
+                    size="small"
+                    name="roles"
+                    hiddenLabel
+                    placeholder="eg.: Designer, Senior,etc."
+                    InputProps={{ disableUnderline: true }}
+                    value={values.roles}
+                    variant="filled"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={touched.roles && Boolean(errors.roles)}
+                    type="text"
+                    fullWidth
+                    margin="normal"
+                    sx={{ height: "4rem" }}
+                    placeholdertext="true"
+                  />
+                </Grid>
+              </Grid>
+              <Grid item xs={12} className="flex items-center justify-around">
+                <Grid item xs={2}>
+                  <span className="text-slate-500 text-xl">Email</span>
+                </Grid>
+                <Grid item xs={10} m={0} height={"fit-content"}>
+                  <InputField
+                    size="small"
+                    name="email"
+                    hiddenLabel
+                    placeholder="Optional"
+                    InputProps={{ disableUnderline: true }}
+                    value={values.email}
+                    variant="filled"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={touched.email && Boolean(errors.email)}
+                    type="text"
+                    fullWidth
+                    margin="normal"
+                    sx={{ height: "4rem" }}
+                    placeholdertext="true"
+                  />
+                </Grid>
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                className="flex items-center justify-around pb-4"
+              >
+                <Grid item xs={2}>
+                  <span className="pr-2 text-slate-500 text-xl">Capacity </span>
+                </Grid>
+                <Grid item xs={10} className="flex items-center" m={0}>
+                  <DropDown
+                    value={
+                      values?.weeklyAvailability
+                        ? values?.weeklyAvailability
+                        : 35
+                    }
+                    name={"weeklyAvailability"}
+                    label="weeklyAvailability"
+                    items={items}
+                    handleChange={(e) => {
+                      setFieldValue(`weeklyAvailability`, e.target?.value);
+                    }}
+                  />
+                  <span className="pl-2 text-slate-500 text-xl">
+                    hours per day{" "}
+                  </span>
+                </Grid>
+                {touched.weeklyAvailability &&
+                  errors.weeklyAvailability &&
+                  "Kindly Select Weekly Availability"}
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                className="flex items-center justify-around mt-2"
+              >
+                <Grid item xs={2}>
+                  <span className="text-slate-500 text-xl">Work Days </span>
+                </Grid>
+                <Grid
+                  item
+                  xs={10}
+                  m={0}
+                  display={"flex"}
+                  flexDirection={"column"}
+                >
+                  <Grid item xs={12} className="flex">
+                    <div className="flex">
+                      {workDays.map((workDay, index) => {
+                        return (
+                          <div
+                            key={`${workDay?.value}`}
+                            className="flex items-center justify-center "
+                            // style={styles.daySelector}
+                            style={getStylesforSelector(
+                              values?.workDays,
+                              workDay.value,
+                              index
+                            )}
+                            onKeyDown={() => {
+                              const daySet = new Set(values?.workDays);
+                              if (daySet?.has(workDay.value)) {
+                                daySet.delete(workDay.value);
+                              } else {
+                                daySet.add(workDay.value);
+                              }
+                              setFieldValue(`workDays`, Array.from(daySet));
+                            }}
+                            onClick={() => {
+                              const daySet = new Set(values?.workDays);
+                              if (daySet?.has(workDay.value)) {
+                                daySet.delete(workDay.value);
+                              } else {
+                                daySet.add(workDay.value);
+                              }
+                              setFieldValue(`workDays`, Array.from(daySet));
+                            }}
+                          >
+                            <p style={styles.daySelectorText}>
+                              {workDay?.label}
+                            </p>
+                          </div>
+                        );
+                      })}
                     </div>
                   </Grid>
-                </Grid>
-              </Grid>
-              <Grid container paddingBottom={3}></Grid>
-              <Grid container>
-                <Grid item xs={6} className="flex items-end">
-                  <div>
-                    <PrimaryButton
-                      height={"3rem"}
-                      onClick={handleSubmit}
-                      style={{ marginRight: "2rem" }}
-                    >
-                      Save Person
-                    </PrimaryButton>
-                  </div>
-                  <div>
-                    <SecondaryButton height={"3rem"} onClick={handleClose}>
-                      Cancel
-                    </SecondaryButton>
+                  <div style={{ marginTop: "2px", color: "#FF000D" }}>
+                    {touched.workDays &&
+                      errors?.workDays &&
+                      values?.workDays?.length === 0 &&
+                      "Kindly Select Work Days"}
                   </div>
                 </Grid>
               </Grid>
-            </form>
-          </>
+            </Grid>
+            <Grid container paddingBottom={3}></Grid>
+            <Grid container>
+              <Grid item xs={6} className="flex items-end">
+                <div>
+                  <PrimaryButton
+                    height={"3rem"}
+                    onClick={handleSubmit}
+                    style={{ marginRight: "2rem" }}
+                  >
+                    Save Person
+                  </PrimaryButton>
+                </div>
+                <div>
+                  <SecondaryButton height={"3rem"} onClick={handleClose}>
+                    Cancel
+                  </SecondaryButton>
+                </div>
+              </Grid>
+            </Grid>
+          </form>
         )}
       </Formik>
     </Box>
   );
 };
 
-export default AddResourceEvent;
+export default AddResource;

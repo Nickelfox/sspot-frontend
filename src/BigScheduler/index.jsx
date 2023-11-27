@@ -448,18 +448,6 @@ class Scheduler extends Component {
           closePopup={this.closePopup}
         />
       </>
-      // <table
-      //   id="RBS-Scheduler-root"
-      //   className="scheduler"
-      //   style={{ width: `${width}px` }}
-      // >
-      //   <thead>
-      //     <tr>
-      //       <td colSpan="2">{schedulerHeader}</td>
-      //     </tr>
-      //   </thead>
-      //   <tbody>{tbodyContent}</tbody>
-      // </table>
     );
   }
 
@@ -524,36 +512,9 @@ class Scheduler extends Component {
   onSchedulerHeadMouseOut = () => {
     this.currentArea = -1;
   };
-  scroller = (toWhere, id) => {
-    let element;
-    let el = document.querySelectorAll(`.body_${id}`);
-    if (toWhere === "prev") {
-      element = document.getElementById(id);
-    } else if (toWhere === "next") {
-      element = document.getElementById(id); // weekDay = newWeekDay;
-    } else if (toWhere === "current") {
-      element = document.getElementById(id);
-    }
-    if (el?.length > 0) {
-      for (let i = 0; i < el.length; i++) {
-        const elementx = el[i];
-        elementx.scrollIntoView(true);
-      }
-    }
 
-    element.scrollIntoView(true);
-  };
   scrollToElement = (element) => {
     element.scrollIntoView({ behavior: "smooth" });
-  };
-
-  scrollToElements = (id) => {
-    const elements = document.querySelectorAll(`.body_${id}`); // Replace with your class name
-    elements.forEach((element) => {
-      setTimeout(() => {
-        this.scrollToElement(element);
-      }, 0);
-    });
   };
 
   onSchedulerHeadScroll = (proxy, event) => {
@@ -562,7 +523,7 @@ class Scheduler extends Component {
      */
     // if (
     //   (this.currentArea === 2 || this.currentArea === -1) &&
-    //   this.schedulerContent.scrollLeft != this.schedulerHead.scrollLeft
+    //   this.schedulerContent.scrollLeft != this.schedulerHead.scrollLeft 
     // )
     // this.schedulerContent.scrollLeft = this.schedulerHead.scrollLeft;
   };

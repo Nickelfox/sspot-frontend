@@ -10,7 +10,6 @@ import timezone from "dayjs/plugin/timezone";
 import { useTheme } from "@mui/material";
 const DateSelect = (props) => {
   dayjs.extend(utc);
-  // dayjs.extend(advancedFormat);
 
   dayjs.extend(timezone);
   dayjs.tz.setDefault("America/New_York");
@@ -91,29 +90,3 @@ const DateSelect = (props) => {
   );
 };
 export default DateSelect;
-
-// import * as React from "react";
-// import dayjs from "dayjs";
-// import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-// import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-// import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-
-// export default function DatePickerValue(props) {
-//   const {
-//     label,
-//     value,
-//     onChange,
-//     style,
-//     minDate = null,
-//     maxDate = null,
-//     futureDisable = false
-//   } = props;
-//   return (
-//     <LocalizationProvider dateAdapter={AdapterDayjs}>
-//       <DemoContainer components={["DatePicker"]}>
-//         <DatePicker label={label} value={value} onChange={onChange} />
-//       </DemoContainer>
-//     </LocalizationProvider>
-//   );
-// }
