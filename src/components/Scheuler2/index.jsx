@@ -9,13 +9,15 @@ import Scheduler, {
 import { render } from "@testing-library/react";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 import Popup from "../PopUp";
 import AddResource from "../AddResource";
 import PrimaryButton from "../PrimaryButton";
 import AddEvent from "../AddEventForm";
 import { convertArrayToMap } from "../../helpers/conversionFunctions/resourceMap";
 import { convertEventsToMap } from "../../helpers/conversionFunctions/eventsMap";
+import { getDummyDataArray } from "../../helpers/conversionFunctions/conversion";
+import { Popover } from "antd";
 
 let resources = [
   {
@@ -117,6 +119,7 @@ const parentViewArray = [
   { name: "Team", value: 1 }
 ];
 const Calender = (props) => {
+  const theme = useTheme();
   const [rerender, triggerRerender] = useState(1);
   const [schedulerData, setSchedulerData] = useState(null);
   const [triger, setRetrigger] = useState(false);
@@ -127,13 +130,17 @@ const Calender = (props) => {
   const [resoureMap, setResourceMap] = useState(new Map());
   const [eventsMap, setEventsMap] = useState(new Map());
   const [selectedObject, setSelectedObject] = useState(null);
+  const [popupStyles, setPopUpStyles] = useState({});
+  const [isAddeventPopover, setIsAddeventPopover] = useState(false);
+  const [resourceEvent, setResourceEvent] = useState(null);
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTablet = useMediaQuery(theme.breakpoints.down("md"));
   useEffect(() => {
     getSchedulerData();
   }, []);
   useEffect(() => {
     triggerRerender(render + 1);
   }, [triger]);
-
   useEffect(() => {
     setEventsMap(convertEventsToMap(events));
   }, []);
@@ -208,7 +215,10 @@ const Calender = (props) => {
         resourceObjectForEvent?.parentId === undefined ? bColor : rgba,
       minHeight: "4rem",
       height: "4rem",
-      borderRadius: 4
+      borderRadius: 4,
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center"
     };
     if (agendaMaxEventWidth)
       divStyle = {
@@ -226,8 +236,9 @@ const Calender = (props) => {
           <Typography
             variant="p4"
             color="#fff"
-            fontWeight={600}
-            paddingLeft={"1rem"}
+            fontSize={"1rem"}
+            // fontWeight={600}
+            // paddingLeft={"0.1rem"}
           >
             {resourceObjectForEvent?.parentId
               ? `${resourceObjectForEvent?.hoursAssigned} h/day`
@@ -265,10 +276,16 @@ const Calender = (props) => {
         ]
       }
     );
-    const filteredArray = resources.map((item) => item?.projects);
-    const projectsArray = filteredArray.filter((item) => item !== undefined);
-    const newArray = [...resources, ...projectsArray];
+    const dataArray = getDummyDataArray();
+    const projectsArray = dataArray.map((item) => item?.projects);
+    const filteredArray = projectsArray.filter((item) => item !== undefined);
+    const newArray = [...dataArray, ...filteredArray];
     const requiredArray = newArray.flat();
+
+    // const filteredArray = resources.map((item) => item?.projects);
+    // const projectsArray = filteredArray.filter((item) => item !== undefined);
+    // const newArray = [...resources, ...projectsArray];
+    // const requiredArray = newArray.flat();
     sd.setResources(requiredArray);
     setResourceMap(convertArrayToMap(requiredArray));
 
@@ -358,6 +375,7 @@ const Calender = (props) => {
     schedulerData.setResources(newResources);
     triggerRerender(rerender + 1);
   };
+  const newStyles = {};
 
   const newEvent = (
     schedulerData,
@@ -368,37 +386,82 @@ const Calender = (props) => {
     type,
     item
   ) => {
+    handlePopUpClose();
+    const requiredDataObject = {};
     const childObject = resoureMap.get(slotId);
     const requiredObject = resoureMap.get(childObject?.parentId);
-    console.log(requiredObject, "Required");
+    requiredDataObject.parent = requiredObject;
+    requiredDataObject.child = childObject;
+    const el = (sel, par) => (par || document).querySelector(sel);
+    const elArea = el("#area");
+    let bodyRect = document.body.getBoundingClientRect(),
+      elemRect = elArea.getBoundingClientRect();
+    let newFreshId = 0;
+    schedulerData.events.forEach((item) => {
+      if (item.id >= newFreshId) newFreshId = item.id + 1;
+    });
+    const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+    let newEvent = {
+      id: newFreshId,
+      title: "New Event",
+      start: start,
+      end: end,
+      resourceId: slotId,
+      bgColor: `#${randomColor}`
+    };
+    requiredDataObject.event = newEvent;
+    setResourceEvent(requiredDataObject);
+    if (!isMobile && !isTablet) {
+      const newStyles = {
+        position: "absolute",
+        left: elemRect.left > 1180 ? 1180 : elemRect.left,
+        right: elemRect.right,
+        top: elemRect.top > 300 ? 300 : elemRect.top
+      };
+      setPopupChild("addEvent");
+      setIsAddeventPopover(true);
+      setPopUpStyles(newStyles);
+    } else {
+      setPopupChild("addEvent");
+      setOpenPopup(true);
+    }
     setSelectedObject(requiredObject);
     setId(slotName);
-    if (slotName) {
-      if (
-        window.confirm(
-          `Do you want to create a new event? {slotId: ${slotId}, slotName: ${slotName}, start: ${start}, end: ${end}, type: ${type}, item: ${item}}`
-        )
-      ) {
-        let newFreshId = 0;
-        schedulerData.events.forEach((item) => {
-          if (item.id >= newFreshId) newFreshId = item.id + 1;
-        });
-        const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-        let newEvent = {
-          id: newFreshId,
-          title: "New Event",
-          start: start,
-          end: end,
-          resourceId: slotId,
-          bgColor: `#${randomColor}`
-        };
-        getRenderSd(schedulerData);
-        schedulerData.addEvent(newEvent);
-        triggerRerender(rerender + 1);
-      }
-    } else {
-      alert("Event in progress");
-    }
+    // if (slotName) {
+    //   if (
+    //     window.confirm(
+    //       `Do you want to create a new event? {slotId: ${slotId}, slotName: ${slotName}, start: ${start}, end: ${end}, type: ${type}, item: ${item}}`
+    //     )
+    //   ) {
+    // let newFreshId = 0;
+    // schedulerData.events.forEach((item) => {
+    //   if (item.id >= newFreshId) newFreshId = item.id + 1;
+    // });
+    // const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+    // let newEvent = {
+    //   id: newFreshId,
+    //   title: "New Event",
+    //   start: start,
+    //   end: end,
+    //   resourceId: slotId,
+    //   bgColor: `#${randomColor}`
+    // };
+    // setResourceEvent(newEvent);
+    //     getRenderSd(schedulerData);
+    //     schedulerData.addEvent(newEvent);
+    //     triggerRerender(rerender + 1);
+    //   }
+    // } else {
+    //   alert("Event in progress");
+    // }
+  };
+  const createNewEvent = (requiredData) => {
+    console.log(requiredData, "RequiredData");
+    setResourceEvent(requiredData);
+    getRenderSd(schedulerData);
+    schedulerData.addEvent(requiredData);
+    handlePopUpClose();
+    triggerRerender(rerender + 1);
   };
   const newEventfromResource = (schedulerData, slotId, start, end) => {
     let newFreshId = 0;
@@ -450,6 +513,7 @@ const Calender = (props) => {
   const handlePopUpClose = () => {
     setOpenPopup(false);
     setPopupChild("");
+    setIsAddeventPopover(false);
   };
   const addResorceInScheduler = (values) => {
     const startDate = new Date();
@@ -491,7 +555,15 @@ const Calender = (props) => {
     schedulerData.setResources(replaceArr);
   };
   const popUpChildren = {
-    addEvent: <AddEvent handleClose={handlePopUpClose} resources={resources} />,
+    addEvent: (
+      <AddEvent
+        handleClose={handlePopUpClose}
+        resources={resources}
+        resourceData={selectedObject}
+        eventData={resourceEvent}
+        createNewEvent={createNewEvent}
+      />
+    ),
     addResource: (
       <AddResource
         handleClose={handlePopUpClose}
@@ -506,7 +578,8 @@ const Calender = (props) => {
         maxHeight: "100vh",
         maxWidth: "100vw",
         overflowX: "hidden",
-        overflowY: "auto"
+        overflowY: "auto",
+        position: "relative"
       }}
     >
       <Box
@@ -572,6 +645,27 @@ const Calender = (props) => {
       >
         {popUpChildren[popupChild]}
       </Popup>
+      {isAddeventPopover && (
+        <Popover
+          content={popUpChildren[popupChild]}
+          trigger="click"
+          open={isAddeventPopover}
+          arrow={false}
+          overlayStyle={{
+            maxHeight: "10rem",
+            minWidth: "35rem",
+            width: "fit-content",
+            ...popupStyles
+          }}
+          overlayInnerStyle={{ padding: 0, borderRadius: "8px" }}
+          onOpenChange={() => {
+            setIsAddeventPopover(false);
+          }}
+          // onOpenChange={() => {
+          //   this.changeViewType(!isViewTypeOpen);
+          // }}
+        />
+      )}
     </div>
   );
 };

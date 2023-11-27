@@ -334,7 +334,8 @@ class ResourceEvents extends Component {
       this.props;
     const { cellUnit, startDate, endDate, config, localeDayjs } = schedulerData;
     const { isSelecting, left, width } = this.state;
-    let cellWidth = schedulerData.getContentCellWidth();
+    // let cellWidth = schedulerData.getContentCellWidth();
+    let cellWidth = 50;
     let cellMaxEvents = schedulerData.getCellMaxEvents();
     let rowWidth = schedulerData.getContentTableWidth();
     let DnDEventItem = dndSource.getDragSource();

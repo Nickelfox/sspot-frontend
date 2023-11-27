@@ -71,7 +71,7 @@ code {
   cursor: "pointer"
 }
 
-avatar {
+.avatar {
   background-color: #000 !important;
   font-size: 1.6rem;
   cursor: pointer;

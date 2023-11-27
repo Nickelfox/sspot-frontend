@@ -10,43 +10,47 @@ import { AuthContext } from "../auth/AuthContext";
 const Router = () => {
   const dispatch = useDispatch();
   const { isLoggedIn, isUser } = useIsLoggedIn();
-  console.log(isLoggedIn, "Router");
   return (
-    <>
-      <AuthContext.Provider value={isLoggedIn}>
-        {/* <Suspense fallback={AppLoader} /> */}
-        <BrowserRouter>
-          {/* {isLoggedIn && <IdleTimeout />} */}
-          <Routes>
-            <Route path="/" element={<Navigate to="/login" replace />} />
+    <AuthContext.Provider value={isLoggedIn}>
+      {/* <Suspense fallback={AppLoader} /> */}
+      <BrowserRouter>
+        {/* {isLoggedIn && <IdleTimeout />} */}
+        <Routes>
+          <Route
+            path="/"
+            element={<Navigate to="/bigScheduler/login" replace />}
+          />
 
-            {/* All the public routes */}
-            {PublicRoutes.map((route) => (
+          {/* All the public routes */}
+          {PublicRoutes.map((route) => (
+            <Route
+              path={route.path}
+              key={`Route-${route.path}`}
+              element={<PublicWrapper {...route} />}
+            />
+          ))}
+
+          {/* All the private routes */}
+
+          {PrivateRoutes.map((route) => {
+            return (
               <Route
                 path={route.path}
                 key={`Route-${route.path}`}
-                element={<PublicWrapper {...route} />}
+                element={<AuthWrapper {...route} userDetail={isUser} />}
               />
-            ))}
+            );
+          })}
 
-            {/* All the private routes */}
-
-            {PrivateRoutes.map((route) => {
-              return (
-                <Route
-                  path={route.path}
-                  key={`Route-${route.path}`}
-                  element={<AuthWrapper {...route} userDetail={isUser} />}
-                />
-              );
-            })}
-
-            {/* 404 page route */}
-            {/* <Route exact path="*" element={<Error404 />} /> */}
-          </Routes>
-        </BrowserRouter>
-      </AuthContext.Provider>
-    </>
+          {/* 404 page route */}
+          <Route
+            exact
+            path="*"
+            element={<Navigate to="/bigscheduler/login" replace />}
+          />
+        </Routes>
+      </BrowserRouter>
+    </AuthContext.Provider>
   );
 };
 export default Router;

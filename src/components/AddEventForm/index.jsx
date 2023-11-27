@@ -1,7 +1,7 @@
 import { Box, Grid, Typography, useMediaQuery, useTheme } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useStyles } from "../AddResource/resourseFormStyles";
-import { Formik } from "formik";
+import { Formik, getIn } from "formik";
 import { Input, DatePicker } from "antd";
 import PrimaryButton from "../PrimaryButton";
 import SecondaryButton from "../SecondaryButton";
@@ -10,31 +10,113 @@ import DropDown from "../DropDown";
 import dayjs from "dayjs";
 
 const { TextArea } = Input;
+const inputSyles = {
+  multiLine: { width: "100%" },
+  input: { width: "6rem", height: "3rem", fontSize: "1.2rem" },
+  border: {
+    borderRadius: "0.4rem"
+  }
+};
+const initValues = {
+  hours: "",
+  startDate: dayjs(new Date()),
+  endDate: dayjs(new Date()),
+  notes: "",
+  person: "",
+  workDays: []
+};
 const AddEvent = (props) => {
-  const { handleClose, addResorceInScheduler, resources } = props;
+  const {
+    handleClose,
+    addResorceInScheduler,
+    resources,
+    resourceData,
+    eventData,
+    createNewEvent
+  } = props;
+  const [counter, setCounter] = useState(1);
+
+  useEffect(() => {
+    getInitialValues();
+  }, [counter]);
   const styles = useStyles();
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down("sm"));
   const isNotLaptop = useMediaQuery(theme.breakpoints.down("md"));
   const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
-  const inputSyles = {
-    multiLine: { width: "100%" },
-    input: { width: "6rem", height: "3rem", fontSize: "1.2rem" },
-    border: {
-      borderRadius: "0.4rem"
-    }
+  const [hours, setHours] = useState("");
+  const [date, setDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [requiredInitValues, setRequiredInitValues] = useState(initValues);
+  useEffect(() => {
+    console.log(eventData?.event?.start, "DATEFROMOBJECT");
+    setDate(eventData?.event?.start);
+    setEndDate(eventData?.event?.end);
+  }, [eventData?.event?.start]);
+  const getInitialValues = () => {
+    const initValues = {
+      hours: "",
+      startDate: dayjs(new Date(eventData?.event?.start)),
+      endDate: dayjs(new Date(eventData?.event?.end)),
+      notes: "",
+      person: "",
+      workDays: []
+    };
+    setRequiredInitValues(initValues);
   };
+  useEffect(() => {
+    getInitialValues();
+  }, [eventData?.event?.start]);
+
+  useEffect(() => {
+    getHoursPercent();
+  }, [hours]);
+
   const checkLaptop = isNotLaptop ? "40vw" : "25vw";
   const checkTablet = isTablet ? "50vw" : checkLaptop;
   const maxWidth = isMobile ? "100vw" : checkTablet;
   const createEvent = (values) => {
-    console.log("fired", values);
+    const requiredEventObject = {
+      id: eventData?.event?.id,
+      title: "New Event",
+      start: dayjs(date).format("YYYY-MM-DD HH:MM:ss"),
+      end: dayjs(endDate).format("YYYY-MM-DD HH:MM:ss"),
+      resourceId: eventData?.event?.resourceId,
+      bgColor: "#88152b"
+    };
+    createNewEvent(requiredEventObject);
+  };
+  const getHoursPercent = (values) => {
+    return (values / eventData?.child?.hoursAssigned) * 100;
+  };
+  const hoursField = (values, handleChange) => {
+    return (
+      <Input
+        name="hours"
+        type="telephone"
+        placeholder="0"
+        style={{ ...inputSyles?.input, ...inputSyles?.border }}
+        value={values?.hours}
+        onChange={(e) => {
+          handleChange(e);
+          setHours(e.target.value);
+        }}
+      />
+    );
   };
   return (
     <Box sx={styles.formDisplay}>
+      {console.log(date, "InModal")}
+      <Typography
+        variant="h6"
+        color="#363636"
+        gutterBottom={1}
+      >{`${eventData?.parent?.name} Assignmet`}</Typography>
       <Formik
         validateOnMount
-        initialValues={FormValidator.initialValues}
+        initialValues={
+          !eventData ? FormValidator.initialValues : requiredInitValues
+        }
         validationSchema={FormValidator.validationSchema}
         onSubmit={createEvent}
       >
@@ -54,6 +136,7 @@ const AddEvent = (props) => {
               maxWidth: maxWidth
             }}
           >
+            {console.log(values, "here")}
             <Grid container alignItems={"center"} paddingBottom={"2rem"}>
               <Grid item xs={3}>
                 <Typography variant="c1" color="#929292">
@@ -61,17 +144,13 @@ const AddEvent = (props) => {
                 </Typography>
               </Grid>
               <Grid item xs={4}>
-                <Input
-                  name="hours"
-                  placeholder="0.00"
-                  style={{ ...inputSyles?.input, ...inputSyles?.border }}
-                  value={values?.hours}
-                  onChange={handleChange}
-                />
+                {hoursField(values, handleChange)}
               </Grid>
               <Grid item xs={5}>
                 <Typography variant="c1" color="#929292">
-                  17% of 6 h/d
+                  {getHoursPercent(values?.hours)}% of{" "}
+                  {eventData?.child?.hoursAssigned}
+                  h/d
                 </Typography>
               </Grid>
             </Grid>
@@ -82,17 +161,11 @@ const AddEvent = (props) => {
                 </Typography>
               </Grid>
               <Grid item xs={4}>
-                <Input
-                  name="totalHours"
-                  placeholder="0"
-                  value={values?.totalHours}
-                  style={{ ...inputSyles?.input, ...inputSyles?.border }}
-                  onChange={handleChange}
-                />
+                {hoursField(values, handleChange)}
               </Grid>
               <Grid item xs={5}>
                 <Typography variant="c1" color="#929292">
-                  17% of 6 h/d
+                  across 1 day
                 </Typography>
               </Grid>
             </Grid>
@@ -104,10 +177,9 @@ const AddEvent = (props) => {
               </Grid>
               <Grid item xs={4} display={"flex"}>
                 <DatePicker
-                  defaultValue={dayjs(values?.startDate, "YYYY-MM-DD")}
                   format={"YYYY-MM-DD"}
                   size="small"
-                  value={values?.startDate}
+                  value={dayjs(date, "YYYY-MM-DD")}
                   name="startDate"
                   allowClear={false}
                   style={{
@@ -118,6 +190,7 @@ const AddEvent = (props) => {
                   onChange={(e) => {
                     const formattedDate = dayjs(e).format("YYYY-MM-DD");
                     setFieldValue(`startDate`, formattedDate);
+                    setDate(formattedDate);
                   }}
                   className="h-14 w-full"
                   popupStyle={{ zIndex: 9999 }}
@@ -135,10 +208,9 @@ const AddEvent = (props) => {
               </Grid>
               <Grid item xs={4}>
                 <DatePicker
-                  defaultValue={dayjs(values?.endDate, "YYYY-MM-DD")}
                   format={"YYYY-MM-DD"}
                   size="small"
-                  value={values?.endDate}
+                  value={dayjs(endDate, "YYYY-MM-DD")}
                   name="endDate"
                   allowClear={false}
                   style={{
@@ -149,6 +221,7 @@ const AddEvent = (props) => {
                   onChange={(e) => {
                     const formattedDate = dayjs(e).format("YYYY-MM-DD");
                     setFieldValue(`endDate`, formattedDate);
+                    setEndDate(formattedDate);
                   }}
                   className="h-14 w-full"
                   popupStyle={{ zIndex: 9999 }}

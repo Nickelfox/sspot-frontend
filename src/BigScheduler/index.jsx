@@ -523,7 +523,7 @@ class Scheduler extends Component {
      */
     // if (
     //   (this.currentArea === 2 || this.currentArea === -1) &&
-    //   this.schedulerContent.scrollLeft != this.schedulerHead.scrollLeft
+    //   this.schedulerContent.scrollLeft != this.schedulerHead.scrollLeft 
     // )
     // this.schedulerContent.scrollLeft = this.schedulerHead.scrollLeft;
   };

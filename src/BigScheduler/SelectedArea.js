@@ -15,7 +15,6 @@ class SelectedArea extends Component {
   render() {
     const { left, width, schedulerData } = this.props;
     const { config } = schedulerData;
-    
     return (
       <div
         className="selected-area"
@@ -29,7 +28,9 @@ class SelectedArea extends Component {
           // margin: "0.1rem",
           borderRadius: "0.4rem"
         }}
-      ></div>
+        id="area"
+      >
+      </div>
     );
   }
 }

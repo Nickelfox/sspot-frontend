@@ -1,11 +1,21 @@
-import React from "react";
-import { Container, Typography, TextField, Button, Box } from "@mui/material";
-import { Formik, Form, ErrorMessage } from "formik";
+import React, { useState } from "react";
+import {
+  Container,
+  Typography,
+  Box,
+  InputAdornment,
+  IconButton,
+  Grid
+} from "@mui/material";
+import { Formik, Form } from "formik";
 import { styled } from "@mui/system";
-import InputField from "../../../components/Input";
-import PrimaryButton from "../../../components/PrimaryButton";
+import InputField from "components/Input";
+import PrimaryButton from "components/PrimaryButton";
 import { useDispatch, useSelector } from "react-redux";
-import { coreAppActions } from "../../../redux/store";
+import { coreAppActions } from "redux/store";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import ErrorText from "components/ErrorText";
+
 // Centered container using styled components
 const CenteredContainer = styled(Container)(({ theme }) => ({
   display: "flex",
@@ -24,8 +34,12 @@ const initialValues = {
 const Login = () => {
   const dispatch = useDispatch();
   const loginDetail = useSelector((state) => state?.app?.isLogged);
-  console.log(loginDetail);
+  const [showPassword, setShowPassword] = useState(false);
 
+  console.log(loginDetail);
+  const togglePasswordVisiblity = () => {
+    setShowPassword((prev) => !prev);
+  };
   const onSubmit = (values, { setSubmitting }) => {
     // You can perform login logic here, like making an API call
     console.log("Submitting:", values);
@@ -69,45 +83,88 @@ const Login = () => {
           onSubmit={onSubmit}
           validate={validate}
         >
-          {({ isSubmitting, handleChange, values }) => (
-            <Form>
-              <Box sx={{ mb: 2 }}>
-                <InputField
-                  fullWidth
-                  id="email"
-                  name="email"
-                  label="Email"
-                  variant="outlined"
-                  error={!!ErrorMessage}
-                  onChange={handleChange}
-                  value={values?.email}
-                />
-                <ErrorMessage name="email" component="div" />
-              </Box>
-              <Box sx={{ mb: 2 }}>
-                <InputField
-                  fullWidth
-                  id="password"
-                  name="password"
-                  label="Password"
-                  type="password"
-                  variant="outlined"
-                  error={!!ErrorMessage}
-                  onChange={handleChange}
-                  value={values?.password}
-                />
-                <ErrorMessage name="password" component="div" />
-              </Box>
-              <PrimaryButton
-                type="submit"
-                variant="contained"
-                color="primary"
-                fullWidth
-                width="100%"
-                disabled={isSubmitting}
-              >
-                Login
-              </PrimaryButton>
+          {({
+            isSubmitting,
+            handleChange,
+            values,
+            handleBlur,
+            touched,
+            errors
+          }) => (
+            <Form style={{ backgroundColor: "#fff" }}>
+              <Grid conatiner>
+                {" "}
+                <Grid item xs={12} sx={{ backgroundColor: "#fff" }}>
+                  <InputField
+                    size="medium"
+                    sx={{ marginTop: "0rem" }}
+                    name="email"
+                    label="Email Id"
+                    InputProps={{
+                      disableUnderline: true
+                    }}
+                    value={values.email}
+                    variant="filled"
+                    onChange={handleChange}
+                    helperText={
+                      errors.email && <ErrorText text={errors.email} />
+                    }
+                    onBlur={handleBlur}
+                    error={touched.email && Boolean(errors.email)}
+                    type="email"
+                    fullWidth
+                    margin="normal"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <InputField
+                    size="medium"
+                    name="password"
+                    value={values.password}
+                    label="Password"
+                    variant="filled"
+                    onBlur={handleBlur}
+                    error={touched.password && Boolean(errors.password)}
+                    onChange={handleChange}
+                    type={showPassword ? "text" : "password"}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            className="visibilityIcon"
+                            aria-label="toggle password visibility"
+                            onClick={togglePasswordVisiblity}
+                          >
+                            {showPassword ? (
+                              <Visibility fontSize="large" color="primary" />
+                            ) : (
+                              <VisibilityOff fontSize="large" color="primary" />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                      disableUnderline: true
+                    }}
+                    fullWidth
+                    margin="normal"
+                    helperText={
+                      errors.password && <ErrorText text={errors.password} />
+                    }
+                  />
+                </Grid>
+              </Grid>
+              <Grid item xs={12}>
+                <PrimaryButton
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  width="100%"
+                  disabled={isSubmitting}
+                  size="large"
+                >
+                  Login
+                </PrimaryButton>
+              </Grid>
             </Form>
           )}
         </Formik>

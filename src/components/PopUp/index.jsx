@@ -1,7 +1,6 @@
 import { Box, Modal } from "@mui/material";
 import React from "react";
-import "./popUpModal.scss"
-
+import "./popUpModal.scss";
 
 const Popup = ({ open, handleClose = () => {}, children, styles = {} }) => {
   return (
@@ -12,9 +11,9 @@ const Popup = ({ open, handleClose = () => {}, children, styles = {} }) => {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box className={`popUp`} style={styles}>
+      <div id="popup" className={`popUp`} style={styles} >
         {children}
-      </Box>
+      </div>
     </Modal>
   );
 };
