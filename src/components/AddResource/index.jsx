@@ -191,7 +191,7 @@ const workDays = [
   { value: 5, label: "FRI" },
   { value: 6, label: "SAT" }
 ];
-const AddResourceEvent = (props) => {
+const AddResource = (props) => {
   const { handleClose, addResorceInScheduler, resourceLength } = props;
   const styles = useStyles();
   const theme = useTheme();
@@ -467,4 +467,4 @@ const AddResourceEvent = (props) => {
   );
 };
 
-export default AddResourceEvent;
+export default AddResource;

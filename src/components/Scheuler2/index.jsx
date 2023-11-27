@@ -5,19 +5,20 @@ import Scheduler, {
   DemoData,
   ViewType,
   DATE_FORMAT
-} from "../../BigScheduler";
+} from "BigScheduler";
 import { render } from "@testing-library/react";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
-import Popup from "../PopUp";
-import AddResource from "../AddResource";
-import PrimaryButton from "../PrimaryButton";
-import AddEvent from "../AddEventForm";
-import { convertArrayToMap } from "../../helpers/conversionFunctions/resourceMap";
-import { convertEventsToMap } from "../../helpers/conversionFunctions/eventsMap";
-import { getDummyDataArray } from "../../helpers/conversionFunctions/conversion";
+import Popup from "components/PopUp";
+import AddResource from "components/AddResource";
+import PrimaryButton from "components/PrimaryButton";
+import AddEvent from "components/AddEventForm";
+import { convertArrayToMap } from "helpers/conversionFunctions/resourceMap";
+import { convertEventsToMap } from "helpers/conversionFunctions/eventsMap";
+import { getDummyDataArray } from "helpers/conversionFunctions/conversion";
 import { Popover } from "antd";
+import AssignProject from "components/AssignProject";
 
 let resources = [
   {
@@ -143,6 +144,9 @@ const Calender = (props) => {
   }, [triger]);
   useEffect(() => {
     setEventsMap(convertEventsToMap(events));
+  }, []);
+  useEffect(() => {
+    (openPopUp || isAddeventPopover) && handlePopUpClose();
   }, []);
   const eventItemTemplateResolver = (...props) => {
     const [
@@ -393,44 +397,68 @@ const Calender = (props) => {
   ) => {
     handlePopUpClose();
     const requiredDataObject = {};
+    console.log(slotId);
     const childObject = resoureMap.get(slotId);
-    const requiredObject = resoureMap.get(childObject?.parentId);
-    requiredDataObject.parent = requiredObject;
-    requiredDataObject.child = childObject;
-    const el = (sel, par) => (par || document).querySelector(sel);
-    const elArea = el("#area");
-    let bodyRect = document.body.getBoundingClientRect(),
-      elemRect = elArea.getBoundingClientRect();
-    let newFreshId = 0;
-    schedulerData.events.forEach((item) => {
-      if (item.id >= newFreshId) newFreshId = item.id + 1;
-    });
-    const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-    let newEvent = {
-      id: newFreshId,
-      title: "New Event",
-      start: start,
-      end: end,
-      resourceId: slotId,
-      bgColor: `#${randomColor}`
-    };
-    requiredDataObject.event = newEvent;
-    setResourceEvent(requiredDataObject);
-    if (!isMobile && !isTablet) {
-      const newStyles = {
-        position: "absolute",
-        left: elemRect.left > 1180 ? 1180 : elemRect.left,
-        right: elemRect.right,
-        top: elemRect.top > 300 ? 300 : elemRect.top
+    if (slotName) {
+      const requiredObject = resoureMap.get(childObject?.parentId);
+      requiredDataObject.parent = requiredObject;
+      requiredDataObject.child = childObject;
+      const el = (sel, par) => (par || document).querySelector(sel);
+      const elArea = el("#area");
+      let bodyRect = document.body.getBoundingClientRect(),
+        elemRect = elArea.getBoundingClientRect();
+      let newFreshId = 0;
+      schedulerData.events.forEach((item) => {
+        if (item.id >= newFreshId) newFreshId = item.id + 1;
+      });
+      const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+      let newEvent = {
+        id: newFreshId,
+        title: "New Event",
+        start: start,
+        end: end,
+        resourceId: slotId,
+        bgColor: `#${randomColor}`
       };
-      setPopupChild("addEvent");
-      setIsAddeventPopover(true);
-      setPopUpStyles(newStyles);
+      requiredDataObject.event = newEvent;
+      setResourceEvent(requiredDataObject);
+      if (!isMobile && !isTablet) {
+        const newStyles = {
+          position: "absolute",
+          left: elemRect.left > 1180 ? 1180 : elemRect.left,
+          right: elemRect.right,
+          top: elemRect.top > 300 ? 300 : elemRect.top
+        };
+        setPopupChild("addEvent");
+        setIsAddeventPopover(true);
+        setPopUpStyles(newStyles);
+      } else {
+        setPopupChild("addEvent");
+        setOpenPopup(true);
+      }
+      setSelectedObject(requiredObject);
     } else {
-      setPopupChild("addEvent");
-      setOpenPopup(true);
+      // console.log(childObject,"inesle")
+      setSelectedObject(childObject);
+      const el = (sel, par) => (par || document).querySelector(sel);
+      const elArea = el("#area");
+      let bodyRect = document.body.getBoundingClientRect(),
+        elemRect = elArea.getBoundingClientRect();
+      if (!isMobile && !isTablet) {
+        const newStyles = {
+          position: "absolute",
+          left: elemRect.left > 1180 ? 1180 : elemRect.left,
+          right: elemRect.right,
+          top: elemRect.top > 300 ? 300 : elemRect.top
+        };
+        setPopupChild("assignResource");
+        setIsAddeventPopover(true);
+        setPopUpStyles(newStyles);
+      } else {
+        setPopupChild("assignResource");
+        setOpenPopup(true);
+      }
     }
-    setSelectedObject(requiredObject);
     setId(slotName);
     // if (slotName) {
     //   if (
@@ -575,7 +603,8 @@ const Calender = (props) => {
         addResorceInScheduler={addResorceInScheduler}
         resourceLength={schedulerData?.resources?.length}
       />
-    )
+    ),
+    assignResource: <AssignProject requiredObject={selectedObject} />
   };
   return (
     <div
@@ -631,15 +660,16 @@ const Calender = (props) => {
           Add Person
         </PrimaryButton>
       </Box>
-
       <Popup
         open={openPopUp}
         handleClose={handlePopUpClose}
         styles={{
-          width: "70vw",
+          width: "fit-content",
           maxHeight: "90vh",
           marginLeft: "auto",
-          marginRight: "auto"
+          marginRight: "auto",
+          display: "flex",
+          alignItems: "center"
         }}
       >
         {popUpChildren[popupChild]}
@@ -657,11 +687,8 @@ const Calender = (props) => {
             ...popupStyles
           }}
           overlayInnerStyle={{ padding: 0, borderRadius: "8px" }}
-          onOpenChange={() => {
-            setIsAddeventPopover(false);
-          }}
           // onOpenChange={() => {
-          //   this.changeViewType(!isViewTypeOpen);
+          //   setIsAddeventPopover(false);
           // }}
         />
       )}

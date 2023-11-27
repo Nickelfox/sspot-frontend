@@ -35,14 +35,11 @@ const Login = () => {
   const dispatch = useDispatch();
   const loginDetail = useSelector((state) => state?.app?.isLogged);
   const [showPassword, setShowPassword] = useState(false);
-
-  console.log(loginDetail);
   const togglePasswordVisiblity = () => {
     setShowPassword((prev) => !prev);
   };
   const onSubmit = (values, { setSubmitting }) => {
     // You can perform login logic here, like making an API call
-    console.log("Submitting:", values);
     setSubmitting(false);
     const payload = {
       user: { name: values?.email },

@@ -1,7 +1,7 @@
 import React from "react";
-import { useIsLoggedIn } from "../hooks/useAuth";
+import { useIsLoggedIn } from "hooks/useAuth";
 import { Navigate } from "react-router-dom";
-import PrivateLayout from "../Layouts/PrivateLayout";
+import PrivateLayout from "Layouts/PrivateLayout";
 
 
 /**

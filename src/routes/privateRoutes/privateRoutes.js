@@ -1,8 +1,8 @@
-import Dashboard from "../../pages/private/Dashboard";
+import Dashboard from "pages/private/Dashboard";
 
 export const PrivateRoutes=[
     {
-        path: "/dashboard",
+        path: "/bigScheduler/dashboard",
         component: Dashboard,
         exact: true
       },
