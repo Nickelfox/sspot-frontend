@@ -268,16 +268,16 @@ const AddEvent = (props) => {
             </Grid>
             <Grid container>
               <Grid item xs={6} className="flex items-end">
-                <div>
+                <Box marginRight={"1rem"}>
                   <PrimaryButton
                     height={"3rem"}
                     // onClick={createEvent.bind(null, values)}
                     onClick={handleSubmit}
-                    style={{ marginRight: "2rem" }}
+                    style={{ marginRight: "2rem", width: "max-content" }}
                   >
                     Save Assignment
                   </PrimaryButton>
-                </div>
+                </Box>
                 <div>
                   <SecondaryButton height={"3rem"} onClick={handleClose}>
                     Cancel

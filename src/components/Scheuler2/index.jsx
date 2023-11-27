@@ -79,8 +79,8 @@ let events = [
   {
     id: 1,
     start: "2023-11-24 09:30:00",
-    end: "2023-11-29 23:30:00",
-    resourceId: "r1",
+    end: "2023-12-15 23:30:00",
+    resourceId: "ec4dd3b4-a9b6-4a28-824b-f3b73a9e4c46",
     title: "A1",
     bgColor: "#488FAB",
     type: "parent"
@@ -144,16 +144,19 @@ const Calender = (props) => {
   useEffect(() => {
     setEventsMap(convertEventsToMap(events));
   }, []);
-  const eventItemTemplateResolver = (
-    schedulerData,
-    event,
-    bgColor,
-    isStart,
-    isEnd,
-    mustAddCssClass,
-    mustBeHeight,
-    agendaMaxEventWidth
-  ) => {
+  const eventItemTemplateResolver = (...props) => {
+    const [
+      schedulerData,
+      event,
+      bgColor,
+      isStart,
+      isEnd,
+      mustAddCssClass,
+      mustBeHeight,
+      agendaMaxEventWidth,
+      width
+    ] = props;
+    console.log(props[7], "PROPS");
     const resourceObjectForEvent = resoureMap.get(event?.resourceId);
     const resourceChildArray = resources?.map((item) => item?.projects);
     const resourceFlatArray = resourceChildArray.flat();
@@ -218,8 +221,10 @@ const Calender = (props) => {
       borderRadius: 4,
       display: "flex",
       justifyContent: "center",
-      alignItems: "center"
+      alignItems: "center",
+      width: props[7]
     };
+    console.log(width);
     if (agendaMaxEventWidth)
       divStyle = {
         ...divStyle,
@@ -624,12 +629,6 @@ const Calender = (props) => {
           onClick={handleAddEventPopUp.bind(null, "addResource")}
         >
           Add Person
-        </PrimaryButton>
-        <PrimaryButton
-          style={{ width: "fit-content", padding: "2rem", fontSize: "2rem" }}
-          onClick={handleAddEventPopUp.bind(null, "addEvent")}
-        >
-          Create Event
         </PrimaryButton>
       </Box>
 
