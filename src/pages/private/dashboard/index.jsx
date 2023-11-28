@@ -1,7 +1,8 @@
-import React from "react"
-import Calender from "components/Scheuler2"
-function Dashboard() {
-  return <Calender />
-}
+import React from "react";
+import Calender from "components/Scheuler2";
 
-export default Dashboard
+const Dashboard = () => {
+  return <Calender />;
+};
+
+export default Dashboard;

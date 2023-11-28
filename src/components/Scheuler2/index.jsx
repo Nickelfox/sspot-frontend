@@ -472,7 +472,7 @@ const Calender = (props) => {
     getRenderSd(schedulerData)
     schedulerData.addEvent(requiredData)
     handlePopUpClose()
-    triggerRerender(rerender + 1)
+    // triggerRerender(rerender + 1)
   }
   const newEventfromResource = (schedulerData, slotId, start, end) => {
     let newFreshId = 0
