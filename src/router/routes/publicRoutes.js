@@ -2,7 +2,7 @@
 import React from "react"
 
 const ForgotPassword = React.lazy(() => import("pages/public/forgot-password"))
-const Login = React.lazy(() => import("pages/public/login"))
+const Login = React.lazy(() => import("pages/public/Login"))
 const SignUp = React.lazy(() => import("pages/public/signup"))
 const ResetPassword = React.lazy(() => import("pages/public/reset-password"))
 
