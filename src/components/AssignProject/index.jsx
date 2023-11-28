@@ -1,13 +1,7 @@
-import {
-  Autocomplete,
-  Box,
-  InputAdornment,
-  TextField,
-  Typography
-} from "@mui/material";
-import React from "react";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import SearchIcon from "@mui/icons-material/Search";
+import { Autocomplete, Box, InputAdornment, TextField, Typography } from "@mui/material"
+import React from "react"
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
+import SearchIcon from "@mui/icons-material/Search"
 const PopupIcon = () => {
   return (
     <Box
@@ -22,18 +16,18 @@ const PopupIcon = () => {
       }}
       display={"flex"}
       justifyContent={"center"}
-      alignItems={"center"}
-    >
+      alignItems={"center"}>
       <ExpandMoreIcon />
     </Box>
-  );
-};
+  )
+}
 const top100Films = [
   { label: "Project1", year: 1994 },
   { label: "Project2", year: 1972 },
-];
+  { label: "Project3", year: 1976 }
+]
 const AssignProject = (props) => {
-  const { requiredObject } = props;
+  const { requiredObject } = props
   return (
     <Box
       sx={{
@@ -44,13 +38,11 @@ const AssignProject = (props) => {
         borderRadius: "1rem",
         paddingLeft: "3rem",
         paddingTop: "2rem"
-      }}
-    >
+      }}>
       <Typography
         variant="h6"
         color="#363636"
-        gutterBottom={1}
-      >{`${requiredObject?.name} Assignmet`}</Typography>{" "}
+        gutterBottom={1}>{`${requiredObject?.name} Assignmet`}</Typography>{" "}
       <Box paddingTop={"2rem"}>
         <Autocomplete
           // disablePortal
@@ -67,10 +59,7 @@ const AssignProject = (props) => {
                 ...params.InputProps,
                 startAdornment: (
                   <>
-                    <InputAdornment
-                      position="start"
-                      sx={{ paddingLeft: "1rem", fontSize: "2rem" }}
-                    >
+                    <InputAdornment position="start" sx={{ paddingLeft: "1rem", fontSize: "2rem" }}>
                       <SearchIcon fontSize="2rem" />
                     </InputAdornment>
                   </>
@@ -82,10 +71,10 @@ const AssignProject = (props) => {
         />
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default AssignProject;
+export default AssignProject
 {
   /* <Autocomplete
         id="tags-standard"
