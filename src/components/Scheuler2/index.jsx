@@ -467,7 +467,7 @@ const Calender = (props) => {
     // }
   }
   const createNewEvent = (requiredData) => {
-    console.log(requiredData, "RequiredData")
+    //TODO: Write a function to get dates from events and check if startand end date exists in it
     setResourceEvent(requiredData)
     getRenderSd(schedulerData)
     schedulerData.addEvent(requiredData)
@@ -613,7 +613,7 @@ const Calender = (props) => {
           />
         )}{" "}
       </DndProvider>
-      <Box className="flex flex-col py-12">
+      <Box className="flex flex-col py-12 px-4">
         <PrimaryButton
           style={{
             width: "fit-content",

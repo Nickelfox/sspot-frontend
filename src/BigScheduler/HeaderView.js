@@ -32,12 +32,13 @@ class HeaderView extends Component {
           className="flex justify-center items-center"
           style={{
             width: 50,
-            borderLeft: itemDate === currentDate ? "1px solid #75b1e5" : "1px solid #eee",
-            borderRight: itemDate === currentDate ? "1px solid #75b1e5" : "1px solid #eee",
+            borderTop: itemDate === currentDate ? "3px solid #336BAB" : 0,
+            borderLeft: "1px solid #eee",
             backgroundColor: itemDate === currentDate ? "#75b1e5" : "#fff",
             opacity: itemDate === currentDate ? 0.7 : 1,
-            borderTop: 0,
-            borderBottom: 0
+            // borderTop: 0,
+            borderBottom: 0,
+            marginLeft: "-0.01rem"
           }}>
           {dayjs(childrenItem?.time).format("DD")}
         </div>
@@ -85,7 +86,7 @@ class HeaderView extends Component {
             const weekNumber = dayjs(currentDate).format("w")
             const itemArray1 = Array.from(item[1])
             const keysArray1 = Array.from(item[1].keys())
-            const borderLeftStyle = item[0] === weekNumber ? "1px solid #75B1E5" : "1px solid #eee"
+            const borderLeftStyle = item[0] === weekNumber ? "2px solid #366BAB" : "1px solid #eee"
             return (
               <span key={item?.time}>
                 <span className="flex font-medium">
@@ -93,12 +94,10 @@ class HeaderView extends Component {
                     return (
                       <span
                         style={{
-                          borderLeft: keysArray1?.length === 2 ? 0 : borderLeftStyle,
-                          borderRight: item[0] === weekNumber ? "1px solid #75B1E5" : "0",
-                          borderTop: "1px solid #e4e4e4",
+                          borderRight: keysArray1?.length === 2 ? 0 : "1px solid #e4e4e4",
                           borderBottom: "1px solid #e4e4e4",
-                          // marginLeft: "-2px",
-                          height: "7.2rem"
+                          height: "7.2rem",
+                          borderTop: borderLeftStyle
                           // width: 80
                         }}
                         key={`${childItem[0]}${item?.time}`}

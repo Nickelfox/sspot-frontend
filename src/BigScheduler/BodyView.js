@@ -44,8 +44,9 @@ class BodyView extends Component {
             borderBottom: 0
           }}>
           {headerMapArray.map((headerItem, parentIndex) => {
-            let currentDate = new Date(new Date())
-            const weekNumber = dayjs(currentDate).format("w")
+            /* let currentDate = new Date(new Date()) */
+            /* const weekNumber = dayjs(currentDate).format("w") */
+
             const headerItemArray1 = Array.from(headerItem[1])
             return (
               <span key={currentItem?.slotId}>
@@ -59,12 +60,7 @@ class BodyView extends Component {
                         className={`body_${childItem[0]} flex`}
                         id={`X_${childItem[0]}`}
                         style={{
-                          borderLeft:
-                            childItem[0] === weekNumber ? "1px solid #75B1E5" : "1px solid #eee",
-                          borderRight:
-                            childItem[0] === weekNumber ? "1px solid #75B1E5" : "1px solid #eee",
-                          borderTop: 0,
-                          borderBottom: 0,
+                          border: 0,
                           marginTop: 0,
                           marginBottom: 0,
                           height: "5rem"
@@ -97,7 +93,7 @@ const getRows = (array, daySet) => {
         className="flex justify-center items-center"
         style={{
           width: 50,
-          height: "4.8rem",
+          // height: "5rem",
           borderLeft: "1px solid #c4c4c4",
           backgroundColor: itemDate === currentDate ? "#75b1e5" : "#fff",
           opacity: itemDate === currentDate ? 0.7 : 1,

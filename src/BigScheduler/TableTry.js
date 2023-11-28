@@ -39,7 +39,7 @@ const TableTry = (props) => {
     overflowY: "hidden",
     margin: 0,
     position: "relative",
-    height: 50
+    height: 48
     // paddingBottom: contentPaddingBottom
   }
 
@@ -108,7 +108,7 @@ const TableTry = (props) => {
         !item?.parentId && (
           <div
             style={{
-              // marginTop: "0.1rem",
+              marginTop: "-0.25rem",
               // marginBottom: expandItem?.size > 0 ? "1rem" : 0,
               maxWidth: "100vw",
               overflow: "hidden"
@@ -118,7 +118,7 @@ const TableTry = (props) => {
                 minHeight: "4.5rem",
                 display: "flex",
                 width: "fit-content",
-                height: "4.7rem"
+                height: 48
               }}>
               <div
                 style={{ minWidth: "23.9rem", borderBottom: borderBottom }}
@@ -133,9 +133,11 @@ const TableTry = (props) => {
               </div>
               {
                 <tr
-                  style={{
-                    marginTop: "-0.25rem"
-                  }}>
+                  style={
+                    {
+                      // marginTop: "-0.25rem"
+                    }
+                  }>
                   <td style={{ border: 0 }}>
                     <div
                       className="scheduler-view"
