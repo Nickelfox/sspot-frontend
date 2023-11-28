@@ -152,7 +152,7 @@ export const defaultTheme = {
   },
   shadows: Array(25).fill("none"),
   overrides: {}
-};
+}
 
 /**
  * ****** List Of z-indices Used in the app ******

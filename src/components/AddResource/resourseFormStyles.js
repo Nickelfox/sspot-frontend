@@ -1,6 +1,8 @@
-import { useTheme } from "@mui/material";
+/*eslint-disable no-unused-vars */
+/*eslint no-constant-condition: ["error", { "checkLoops": false }]*/
+import { useTheme } from "@mui/material"
 export const useStyles = (width) => {
-  const theme = useTheme();
+  const theme = useTheme()
   return {
     formDisplay: {
       borderRadius: "0.8rem",
@@ -26,5 +28,5 @@ export const useStyles = (width) => {
     unSelectedDay: {
       backgroundColor: theme.palette.secondary.main
     }
-  };
-};
+  }
+}

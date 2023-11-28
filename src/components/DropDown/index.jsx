@@ -1,10 +1,12 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import OutlinedInputField from "../OutlinedInput";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import useStyles from "./dropDownStyles";
+/*eslint-disable no-unused-vars */
+/*eslint no-constant-condition: ["error", { "checkLoops": false }]*/
+import * as React from "react"
+import Box from "@mui/material/Box"
+import OutlinedInputField from "../OutlinedInput"
+import FormControl from "@mui/material/FormControl"
+import Select from "@mui/material/Select"
+import MenuItem from "@mui/material/MenuItem"
+import useStyles from "./dropDownStyles"
 
 const DropDown = (props) => {
   const {
@@ -20,8 +22,8 @@ const DropDown = (props) => {
     // helperText = "",
     onBlur = () => {},
     disabled
-  } = props;
-  const styles = useStyles();
+  } = props
+  const styles = useStyles()
   return (
     <Box>
       <FormControl
@@ -49,8 +51,7 @@ const DropDown = (props) => {
           value={value}
           onChange={handleChange}
           //   IconComponent={NewIcon}
-          MenuProps={{ classes: { paper: `menuPaper` } }}
-        >
+          MenuProps={{ classes: { paper: `menuPaper` } }}>
           {items?.map((item, index) => (
             <MenuItem value={item.value} key={item?.value}>
               {item?.label}
@@ -60,7 +61,7 @@ const DropDown = (props) => {
         </Select>
       </FormControl>
     </Box>
-  );
-};
+  )
+}
 
-export default DropDown;
+export default DropDown

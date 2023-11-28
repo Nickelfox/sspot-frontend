@@ -1,8 +1,10 @@
-import { TextField } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import { useTheme } from "@mui/system";
+/*eslint-disable no-unused-vars */
+/*eslint no-constant-condition: ["error", { "checkLoops": false }]*/
+import { TextField } from "@mui/material"
+import { styled } from "@mui/material/styles"
+import { useTheme } from "@mui/system"
 const InputField = styled(TextField)(({ placeholdertext }) => {
-  const theme = useTheme();
+  const theme = useTheme()
   //eslint-disable-next-line
   // return {
   //   "& .MuiFilledInput-root": {
@@ -104,7 +106,7 @@ const InputField = styled(TextField)(({ placeholdertext }) => {
     },
     fontSize: "1.6rem !important",
     fontWeight: "600 !important"
-  };
-});
+  }
+})
 
-export default InputField;
+export default InputField

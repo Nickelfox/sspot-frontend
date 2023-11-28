@@ -1,21 +1,23 @@
-import { Box, Grid, useMediaQuery, useTheme } from "@mui/material";
-import React, { useEffect } from "react";
-import { useStyles } from "./resourseFormStyles";
-import { Formik } from "formik";
-import InputField from "../Input";
-import PrimaryButton from "../PrimaryButton";
-import SecondaryButton from "../SecondaryButton";
-import { FormValidator } from "../../helpers/validations/addResourceValidations";
-import DropDown from "../DropDown";
-import BasicTooltip from "../ToolTip";
-import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
+/*eslint-disable no-unused-vars */
+/*eslint no-constant-condition: ["error", { "checkLoops": false }]*/
+import { Box, Grid, useMediaQuery, useTheme } from "@mui/material"
+import React from "react"
+import { useStyles } from "./resourseFormStyles"
+import { Formik } from "formik"
+import InputField from "../Input"
+import PrimaryButton from "../PrimaryButton"
+import SecondaryButton from "../SecondaryButton"
+import { FormValidator } from "../../helpers/validations/addResourceValidations"
+import DropDown from "../DropDown"
+import BasicTooltip from "../ToolTip"
+import QuestionMarkIcon from "@mui/icons-material/QuestionMark"
 
 const initialValues = {
   firstName: "",
   lastName: "",
   weeklyAvailability: "",
   workDays: []
-};
+}
 const items = [
   {
     value: 1,
@@ -181,7 +183,7 @@ const items = [
     value: 40,
     label: "40"
   }
-];
+]
 const workDays = [
   { value: 0, label: "SUN" },
   { value: 1, label: "MON" },
@@ -190,14 +192,14 @@ const workDays = [
   { value: 4, label: "THU" },
   { value: 5, label: "FRI" },
   { value: 6, label: "SAT" }
-];
+]
 const AddResource = (props) => {
-  const { handleClose, addResorceInScheduler, resourceLength } = props;
-  const styles = useStyles();
-  const theme = useTheme();
-  const isTablet = useMediaQuery(theme.breakpoints.down("sm"));
-  const isNotLaptop = useMediaQuery(theme.breakpoints.down("md"));
-  const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
+  const { handleClose, addResorceInScheduler, resourceLength } = props
+  const styles = useStyles()
+  const theme = useTheme()
+  const isTablet = useMediaQuery(theme.breakpoints.down("sm"))
+  const isNotLaptop = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useMediaQuery(theme.breakpoints.down("xs"))
 
   const createResource = (values) => {
     const requiredObject = {
@@ -207,34 +209,33 @@ const AddResource = (props) => {
       groupOnly: false,
       // parentId: resourceLength + 1,
       workDays: values?.workDays
-    };
-    addResorceInScheduler(requiredObject);
-  };
+    }
+    addResorceInScheduler(requiredObject)
+  }
   const getStylesforSelector = (workDays, value, index) => {
     if (value === "SA" || value === "SU") {
       return {
         ...styles.daySelector,
         ...styles.selectedDay,
         pointerEvents: "none"
-      };
+      }
     }
     if (workDays.includes(value)) {
-      return { ...styles.daySelector, ...styles.selectedDay };
+      return { ...styles.daySelector, ...styles.selectedDay }
     } else {
-      return { ...styles.daySelector, ...styles.unSelectedDay };
+      return { ...styles.daySelector, ...styles.unSelectedDay }
     }
-  };
-  const checkLaptop = isNotLaptop ? "40vw" : "25vw";
-  const checkTablet = isTablet ? "50vw" : checkLaptop;
-  const maxWidth = isMobile ? "100vw" : checkTablet;
+  }
+  const checkLaptop = isNotLaptop ? "40vw" : "25vw"
+  const checkTablet = isTablet ? "50vw" : checkLaptop
+  const maxWidth = isMobile ? "100vw" : checkTablet
   return (
     <Box sx={styles.formDisplay}>
       <Formik
         validateOnMount
         initialValues={FormValidator.initialValues}
         validationSchema={FormValidator.validationSchema}
-        onSubmit={createResource}
-      >
+        onSubmit={createResource}>
         {({
           isValid,
           handleSubmit,
@@ -249,8 +250,7 @@ const AddResource = (props) => {
             style={{
               padding: "0.2rem",
               maxWidth: maxWidth
-            }}
-          >
+            }}>
             <Grid container justifyContent="center" m={0}>
               <Grid item xs={12} m={0} height={"fit-content"}>
                 <InputField
@@ -295,11 +295,9 @@ const AddResource = (props) => {
                     title={
                       <div style={{ color: "#000", fontSize: "1.2rem" }}>
                         {" "}
-                        Add roles to take advantage of filtering and search on
-                        your schedule
+                        Add roles to take advantage of filtering and search on your schedule
                       </div>
-                    }
-                  >
+                    }>
                     <QuestionMarkIcon />
                   </BasicTooltip>
                 </Grid>
@@ -347,51 +345,31 @@ const AddResource = (props) => {
                   />
                 </Grid>
               </Grid>
-              <Grid
-                item
-                xs={12}
-                className="flex items-center justify-around pb-4"
-              >
+              <Grid item xs={12} className="flex items-center justify-around pb-4">
                 <Grid item xs={2}>
                   <span className="pr-2 text-slate-500 text-xl">Capacity </span>
                 </Grid>
                 <Grid item xs={10} className="flex items-center" m={0}>
                   <DropDown
-                    value={
-                      values?.weeklyAvailability
-                        ? values?.weeklyAvailability
-                        : 35
-                    }
+                    value={values?.weeklyAvailability ? values?.weeklyAvailability : 35}
                     name={"weeklyAvailability"}
                     label="weeklyAvailability"
                     items={items}
                     handleChange={(e) => {
-                      setFieldValue(`weeklyAvailability`, e.target?.value);
+                      setFieldValue(`weeklyAvailability`, e.target?.value)
                     }}
                   />
-                  <span className="pl-2 text-slate-500 text-xl">
-                    hours per day{" "}
-                  </span>
+                  <span className="pl-2 text-slate-500 text-xl">hours per day </span>
                 </Grid>
                 {touched.weeklyAvailability &&
                   errors.weeklyAvailability &&
                   "Kindly Select Weekly Availability"}
               </Grid>
-              <Grid
-                item
-                xs={12}
-                className="flex items-center justify-around mt-2"
-              >
+              <Grid item xs={12} className="flex items-center justify-around mt-2">
                 <Grid item xs={2}>
                   <span className="text-slate-500 text-xl">Work Days </span>
                 </Grid>
-                <Grid
-                  item
-                  xs={10}
-                  m={0}
-                  display={"flex"}
-                  flexDirection={"column"}
-                >
+                <Grid item xs={10} m={0} display={"flex"} flexDirection={"column"}>
                   <Grid item xs={12} className="flex">
                     <div className="flex">
                       {workDays.map((workDay, index) => {
@@ -400,35 +378,28 @@ const AddResource = (props) => {
                             key={`${workDay?.value}`}
                             className="flex items-center justify-center "
                             // style={styles.daySelector}
-                            style={getStylesforSelector(
-                              values?.workDays,
-                              workDay.value,
-                              index
-                            )}
+                            style={getStylesforSelector(values?.workDays, workDay.value, index)}
                             onKeyDown={() => {
-                              const daySet = new Set(values?.workDays);
+                              const daySet = new Set(values?.workDays)
                               if (daySet?.has(workDay.value)) {
-                                daySet.delete(workDay.value);
+                                daySet.delete(workDay.value)
                               } else {
-                                daySet.add(workDay.value);
+                                daySet.add(workDay.value)
                               }
-                              setFieldValue(`workDays`, Array.from(daySet));
+                              setFieldValue(`workDays`, Array.from(daySet))
                             }}
                             onClick={() => {
-                              const daySet = new Set(values?.workDays);
+                              const daySet = new Set(values?.workDays)
                               if (daySet?.has(workDay.value)) {
-                                daySet.delete(workDay.value);
+                                daySet.delete(workDay.value)
                               } else {
-                                daySet.add(workDay.value);
+                                daySet.add(workDay.value)
                               }
-                              setFieldValue(`workDays`, Array.from(daySet));
-                            }}
-                          >
-                            <p style={styles.daySelectorText}>
-                              {workDay?.label}
-                            </p>
+                              setFieldValue(`workDays`, Array.from(daySet))
+                            }}>
+                            <p style={styles.daySelectorText}>{workDay?.label}</p>
                           </div>
-                        );
+                        )
                       })}
                     </div>
                   </Grid>
@@ -448,8 +419,7 @@ const AddResource = (props) => {
                   <PrimaryButton
                     height={"3rem"}
                     onClick={handleSubmit}
-                    style={{ marginRight: "2rem" }}
-                  >
+                    style={{ marginRight: "2rem" }}>
                     Save Person
                   </PrimaryButton>
                 </div>
@@ -464,7 +434,7 @@ const AddResource = (props) => {
         )}
       </Formik>
     </Box>
-  );
-};
+  )
+}
 
-export default AddResource;
+export default AddResource

@@ -1,0 +1,16 @@
+{
+  "success": true,
+  "code": 200,
+  "data": {
+    "id": "85f1e003-98d1-4c94-b98d-da53d811b320",
+    "profile_pic_url": null,
+    "first_name": "Ravi",
+    "last_name": "K",
+    "email": "ravi.maurya@nickelfox.com",
+    "country_code": "",
+    "phone": "+919876543210",
+    "dob": null,
+    "gender": null,
+    "profile_pic": null
+  }
+}

@@ -1,24 +1,21 @@
-import dayjs from "dayjs";
-import React, { useEffect, useState } from "react";
-import Scheduler, {
-  SchedulerData,
-  DemoData,
-  ViewType,
-  DATE_FORMAT
-} from "BigScheduler";
-import { render } from "@testing-library/react";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { DndProvider } from "react-dnd";
-import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
-import Popup from "components/PopUp";
-import AddResource from "components/AddResource";
-import PrimaryButton from "components/PrimaryButton";
-import AddEvent from "components/AddEventForm";
-import { convertArrayToMap } from "helpers/conversionFunctions/resourceMap";
-import { convertEventsToMap } from "helpers/conversionFunctions/eventsMap";
-import { getDummyDataArray } from "helpers/conversionFunctions/conversion";
-import { Popover } from "antd";
-import AssignProject from "components/AssignProject";
+/*eslint-disable no-unused-vars */
+/*eslint no-constant-condition: ["error", { "checkLoops": false }]*/
+import dayjs from "dayjs"
+import React, { useEffect, useState } from "react"
+import Scheduler, { SchedulerData, DemoData, ViewType, DATE_FORMAT } from "BigScheduler"
+import { render } from "@testing-library/react"
+import { HTML5Backend } from "react-dnd-html5-backend"
+import { DndProvider } from "react-dnd"
+import { Box, Typography, useMediaQuery, useTheme } from "@mui/material"
+import Popup from "components/PopUp"
+import AddResource from "components/AddResource"
+import PrimaryButton from "components/PrimaryButton"
+import AddEvent from "components/AddEventForm"
+import { convertArrayToMap } from "helpers/conversionFunctions/resourceMap"
+import { convertEventsToMap } from "helpers/conversionFunctions/eventsMap"
+import { getDummyDataArray } from "helpers/conversionFunctions/conversion"
+import { Popover } from "antd"
+import AssignProject from "components/AssignProject"
 
 let resources = [
   {
@@ -75,7 +72,7 @@ let resources = [
     editPopup: false,
     projectsAssigned: []
   }
-];
+]
 let events = [
   {
     id: 1,
@@ -114,40 +111,44 @@ let events = [
     // rrule: "FREQ=WEEKLY;DTSTART=20171219T013000Z;BYDAY=TU,FR", //this is going to be used for availability
     bgColor: "#DCC36B"
   }
-];
+]
 const parentViewArray = [
   { name: "Projects", value: 0 },
   { name: "Team", value: 1 }
-];
+]
 const Calender = (props) => {
-  const theme = useTheme();
-  const [rerender, triggerRerender] = useState(1);
-  const [schedulerData, setSchedulerData] = useState(null);
-  const [triger, setRetrigger] = useState(false);
-  const [popupChild, setPopupChild] = useState("");
-  const [openPopUp, setOpenPopup] = useState(false);
-  const [view, setView] = useState("");
-  const [id, setId] = useState("");
-  const [resoureMap, setResourceMap] = useState(new Map());
-  const [eventsMap, setEventsMap] = useState(new Map());
-  const [selectedObject, setSelectedObject] = useState(null);
-  const [popupStyles, setPopUpStyles] = useState({});
-  const [isAddeventPopover, setIsAddeventPopover] = useState(false);
-  const [resourceEvent, setResourceEvent] = useState(null);
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const isTablet = useMediaQuery(theme.breakpoints.down("md"));
+  const theme = useTheme()
+  const [rerender, triggerRerender] = useState(1)
+  const [schedulerData, setSchedulerData] = useState(null)
+  const [triger, setRetrigger] = useState(false)
+  const [popupChild, setPopupChild] = useState("")
+  const [openPopUp, setOpenPopup] = useState(false)
+  const [view, setView] = useState("")
+  const [id, setId] = useState("")
+  const [resoureMap, setResourceMap] = useState(new Map())
+  const [eventsMap, setEventsMap] = useState(new Map())
+  const [selectedObject, setSelectedObject] = useState(null)
+  const [popupStyles, setPopUpStyles] = useState({})
+  const [isAddeventPopover, setIsAddeventPopover] = useState(false)
+  const [resourceEvent, setResourceEvent] = useState(null)
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const isTablet = useMediaQuery(theme.breakpoints.down("md"))
   useEffect(() => {
-    getSchedulerData();
-  }, []);
+    getSchedulerData()
+  }, [])
   useEffect(() => {
-    triggerRerender(render + 1);
-  }, [triger]);
+    triggerRerender(render + 1)
+  }, [triger])
   useEffect(() => {
-    setEventsMap(convertEventsToMap(events));
-  }, []);
+    setEventsMap(convertEventsToMap(events))
+  }, [])
+  // useEffect(() => {
+  //   ;(openPopUp || isAddeventPopover) && handlePopUpClose()
+  // }, [])
   useEffect(() => {
-    (openPopUp || isAddeventPopover) && handlePopUpClose();
-  }, []);
+    // eslint-disable-next-line no-extra-semi
+    ;(openPopUp || isAddeventPopover) && handlePopUpClose()
+  }, [])
   const eventItemTemplateResolver = (...props) => {
     const [
       schedulerData,
@@ -159,44 +160,37 @@ const Calender = (props) => {
       mustBeHeight,
       agendaMaxEventWidth,
       width
-    ] = props;
-    console.log(props[7], "PROPS");
-    const resourceObjectForEvent = resoureMap.get(event?.resourceId);
-    const resourceChildArray = resources?.map((item) => item?.projects);
-    const resourceFlatArray = resourceChildArray.flat();
-    const filteredArray = resourceFlatArray.filter(
-      (item) => item !== undefined
-    );
-    const resourceChildObject = filteredArray.filter(
-      (item) => item?.parentId === event?.resourceId
-    );
+    ] = props
+    const resourceObjectForEvent = resoureMap.get(event?.resourceId)
+    const resourceChildArray = resources?.map((item) => item?.projects)
+    const resourceFlatArray = resourceChildArray.flat()
+    const filteredArray = resourceFlatArray.filter((item) => item !== undefined)
+    const resourceChildObject = filteredArray.filter((item) => item?.parentId === event?.resourceId)
     const requiredData = resourceChildObject.map((child) => {
-      const parentObj = eventsMap.get(child?.id);
-      const date1 = new dayjs(new Date(parentObj?.end));
-      const date2 = new dayjs(new Date(parentObj?.start));
+      const parentObj = eventsMap.get(child?.id)
+      const date1 = new dayjs(new Date(parentObj?.end))
+      const date2 = new dayjs(new Date(parentObj?.start))
       return {
         diff: child?.hoursAssigned * date1.diff(date2, "d")
-      };
-    });
+      }
+    })
 
-    const weeklyAvailability = requiredData.map(
-      (childResource) => childResource?.diff
-    );
+    const weeklyAvailability = requiredData.map((childResource) => childResource?.diff)
     // create a variable for the sum and initialize it
-    let sum = 0;
+    let sum = 0
     // iterate over each item in the array
     if (weeklyAvailability.length > 0) {
       for (let itx of weeklyAvailability) {
-        sum += itx;
+        sum += itx
       }
     }
-    let bColor;
+    let bColor
     if (sum > resourceObjectForEvent?.weeklyAvailability) {
-      bColor = "rgba(255, 0, 0, 0.5)";
+      bColor = "rgba(255, 0, 0, 0.5)"
     } else {
-      bColor = "rgba(131, 192, 120, 0.5)";
+      bColor = "rgba(131, 192, 120, 0.5)"
     }
-    const sumPercent = (sum / resourceObjectForEvent?.weeklyAvailability) * 100;
+    const sumPercent = (sum / resourceObjectForEvent?.weeklyAvailability) * 100
 
     // if (!!event.type) {
     //   borderColor =
@@ -208,18 +202,17 @@ const Calender = (props) => {
     //   backgroundColor =
     //     event.type == 1 ? "#80C5F6" : event.type == 3 ? "#FA9E95" : "#D9D9D9";
     // }
-    const hex = event?.bgColor;
-    let opacity = "0.7";
+    const hex = event?.bgColor
+    let opacity = "0.7"
     // Convert each hex character pair into an integer
-    let red = parseInt(hex?.substring(1, 3), 16);
-    let green = parseInt(hex?.substring(3, 5), 16);
-    let blue = parseInt(hex?.substring(5, 7), 16);
-    let rgba = ` rgba(${red}, ${green}, ${blue}, ${opacity})`;
+    let red = parseInt(hex?.substring(1, 3), 16)
+    let green = parseInt(hex?.substring(3, 5), 16)
+    let blue = parseInt(hex?.substring(5, 7), 16)
+    let rgba = ` rgba(${red}, ${green}, ${blue}, ${opacity})`
     let divStyle = {
       //   borderLeft: borderWidth + "px solid " + borderColor,
       // backgroundColor: event?.bgColor,
-      background:
-        resourceObjectForEvent?.parentId === undefined ? bColor : rgba,
+      background: resourceObjectForEvent?.parentId === undefined ? bColor : rgba,
       minHeight: "4rem",
       height: "4rem",
       borderRadius: 4,
@@ -227,21 +220,19 @@ const Calender = (props) => {
       justifyContent: "center",
       alignItems: "center",
       width: props[7]
-    };
-    console.log(width);
+    }
     if (agendaMaxEventWidth)
       divStyle = {
         ...divStyle,
         maxWidth: agendaMaxEventWidth
-      };
-    const notANumber = isNaN(sumPercent) ? "0%" : `${sumPercent.toFixed(0)} %`;
+      }
+    const notANumber = isNaN(sumPercent) ? "0%" : `${sumPercent.toFixed(0)} %`
     return (
       <div key={event.id} className={mustAddCssClass} style={divStyle}>
         <span
           style={{
             lineHeight: `${mustBeHeight}px`
-          }}
-        >
+          }}>
           <Typography
             variant="p4"
             color="#fff"
@@ -255,8 +246,8 @@ const Calender = (props) => {
           </Typography>
         </span>
       </div>
-    );
-  };
+    )
+  }
 
   const getSchedulerData = () => {
     const sd = new SchedulerData(
@@ -284,59 +275,55 @@ const Calender = (props) => {
           }
         ]
       }
-    );
-    const dataArray = getDummyDataArray();
-    const projectsArray = dataArray.map((item) => item?.projects);
-    const filteredArray = projectsArray.filter((item) => item !== undefined);
-    const newArray = [...dataArray, ...filteredArray];
-    const requiredArray = newArray.flat();
+    )
+    const dataArray = getDummyDataArray()
+    const projectsArray = dataArray.map((item) => item?.projects)
+    const filteredArray = projectsArray.filter((item) => item !== undefined)
+    const newArray = [...dataArray, ...filteredArray]
+    const requiredArray = newArray.flat()
 
     // const filteredArray = resources.map((item) => item?.projects);
     // const projectsArray = filteredArray.filter((item) => item !== undefined);
     // const newArray = [...resources, ...projectsArray];
     // const requiredArray = newArray.flat();
-    sd.setResources(requiredArray);
-    setResourceMap(convertArrayToMap(requiredArray));
+    sd.setResources(requiredArray)
+    setResourceMap(convertArrayToMap(requiredArray))
 
-    sd.setEvents(events);
-    setSchedulerData(sd);
-  };
+    sd.setEvents(events)
+    setSchedulerData(sd)
+  }
   const prevClick = (schedulerData) => {
-    schedulerData.prev();
-    schedulerData.setEvents(DemoData.events);
-    triggerRerender(rerender + 1);
-  };
+    schedulerData.prev()
+    schedulerData.setEvents(DemoData.events)
+    triggerRerender(rerender + 1)
+  }
   const closePopUp = (schedulerData) => {
-    getRenderSd(schedulerData);
-    triggerRerender(rerender + 1);
-  };
+    getRenderSd(schedulerData)
+    triggerRerender(rerender + 1)
+  }
   const nextClick = (schedulerData) => {
-    schedulerData.next();
-    schedulerData.setEvents(DemoData.events);
-    triggerRerender(rerender + 1);
-  };
+    schedulerData.next()
+    schedulerData.setEvents(DemoData.events)
+    triggerRerender(rerender + 1)
+  }
 
   const onScrollRight = (schedulerData, schedulerContent, maxScrollLeft) => {
-    schedulerData.next();
-    schedulerData.setEvents(DemoData.events);
-    triggerRerender(rerender + 1);
-    setRetrigger((prev) => !prev);
-    schedulerContent.scrollLeft = maxScrollLeft - 10;
-  };
+    schedulerData.next()
+    schedulerData.setEvents(DemoData.events)
+    triggerRerender(rerender + 1)
+    setRetrigger((prev) => !prev)
+    schedulerContent.scrollLeft = maxScrollLeft - 10
+  }
   const onViewChange = (schedulerData, view) => {
-    schedulerData.setViewType(
-      view.viewType,
-      view.showAgenda,
-      view.isEventPerspective
-    );
-    schedulerData.setEvents(events);
-    triggerRerender(rerender + 1);
-  };
+    schedulerData.setViewType(view.viewType, view.showAgenda, view.isEventPerspective)
+    schedulerData.setEvents(events)
+    triggerRerender(rerender + 1)
+  }
   const onParentViewChange = () => {
-    schedulerData.setParentViewType("Team");
-  };
+    schedulerData.setParentViewType("Team")
+  }
   const showResourceEditPopup = (schedulerData, itemToEdit) => {
-    const { renderData } = schedulerData;
+    const { renderData } = schedulerData
     const requiredArray = renderData.map((item) => {
       return {
         id: item?.slotId,
@@ -345,73 +332,64 @@ const Calender = (props) => {
         expanded: item?.expanded,
         parentId: item?.parentId,
         workDays: item?.workDays,
-        editPopup:
-          item?.slotId === itemToEdit?.slotId ? !item?.editPopup : false
-      };
-    });
-    // getRenderSd(schedulerData)
-    schedulerData.setResources(requiredArray);
-    triggerRerender(rerender + 1);
-  };
+        editPopup: item?.slotId === itemToEdit?.slotId ? !item?.editPopup : false
+      }
+    })
+    getRenderSd(schedulerData)
+    schedulerData.setResources(requiredArray)
+    triggerRerender(rerender + 1)
+  }
   const onSelectDate = (schedulerData, date) => {
-    getRenderSd(schedulerData);
-    schedulerData.setDate(date);
-    schedulerData.setEvents([]);
-    triggerRerender(rerender + 1);
-  };
+    getRenderSd(schedulerData)
+    schedulerData.setDate(date)
+    schedulerData.setEvents([])
+    triggerRerender(rerender + 1)
+  }
   const onThisWeekCick = (schedulerData) => {
-    const date = new Date();
-    getRenderSd(schedulerData);
-    schedulerData.setDate(date);
-    schedulerData.setEvents(events);
-    triggerRerender(rerender + 1);
-  };
+    const date = new Date()
+    getRenderSd(schedulerData)
+    schedulerData.setDate(date)
+    schedulerData.setEvents(events)
+    triggerRerender(rerender + 1)
+  }
 
-  const eventClicked = (schedulerData, event) => {};
+  const eventClicked = (schedulerData, event) => {}
 
   const toggleExpandFunc = (schedulerData, slotId) => {
-    schedulerData.toggleExpandStatus(slotId);
-    triggerRerender(rerender + 1);
-  };
+    schedulerData.toggleExpandStatus(slotId)
+    triggerRerender(rerender + 1)
+  }
   const expandAllItems = (schedulerData) => {
-    const { resources } = schedulerData;
+    const { resources } = schedulerData
     const newResources = resources.map((resource) => {
       return {
         ...resource,
         expanded: !resource?.expanded
-      };
-    });
-    schedulerData.setResources(newResources);
-    triggerRerender(rerender + 1);
-  };
-  const newStyles = {};
+      }
+    })
+    schedulerData.setResources(newResources)
+    triggerRerender(rerender + 1)
+  }
+  const newStyles = {}
 
-  const newEvent = (
-    schedulerData,
-    slotId,
-    slotName,
-    start,
-    end,
-    type,
-    item
-  ) => {
-    handlePopUpClose();
-    const requiredDataObject = {};
-    console.log(slotId);
-    const childObject = resoureMap.get(slotId);
+  const newEvent = (schedulerData, slotId, slotName, start, end, type, item) => {
+    handlePopUpClose()
+    const requiredDataObject = {}
+    console.log(slotId)
+    const childObject = resoureMap.get(slotId)
     if (slotName) {
-      const requiredObject = resoureMap.get(childObject?.parentId);
-      requiredDataObject.parent = requiredObject;
-      requiredDataObject.child = childObject;
-      const el = (sel, par) => (par || document).querySelector(sel);
-      const elArea = el("#area");
+      const requiredObject = resoureMap.get(childObject?.parentId)
+      requiredDataObject.parent = requiredObject
+      requiredDataObject.child = childObject
+      const el = (sel, par) => (par || document).querySelector(sel)
+      const elArea = el("#area")
       let bodyRect = document.body.getBoundingClientRect(),
-        elemRect = elArea.getBoundingClientRect();
-      let newFreshId = 0;
+        elemRect = elArea.getBoundingClientRect()
+      let newFreshId = 0
       schedulerData.events.forEach((item) => {
-        if (item.id >= newFreshId) newFreshId = item.id + 1;
-      });
-      const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+        if (item.id >= newFreshId) newFreshId = item.id + 1
+      })
+      const randomColor = Math.floor(Math.random() * 16777215).toString(16)
       let newEvent = {
         id: newFreshId,
         title: "New Event",
@@ -419,47 +397,47 @@ const Calender = (props) => {
         end: end,
         resourceId: slotId,
         bgColor: `#${randomColor}`
-      };
-      requiredDataObject.event = newEvent;
-      setResourceEvent(requiredDataObject);
+      }
+      requiredDataObject.event = newEvent
+      setResourceEvent(requiredDataObject)
       if (!isMobile && !isTablet) {
         const newStyles = {
           position: "absolute",
           left: elemRect.left > 1180 ? 1180 : elemRect.left,
           right: elemRect.right,
           top: elemRect.top > 300 ? 300 : elemRect.top
-        };
-        setPopupChild("addEvent");
-        setIsAddeventPopover(true);
-        setPopUpStyles(newStyles);
+        }
+        setPopupChild("addEvent")
+        setIsAddeventPopover(true)
+        setPopUpStyles(newStyles)
       } else {
-        setPopupChild("addEvent");
-        setOpenPopup(true);
+        setPopupChild("addEvent")
+        setOpenPopup(true)
       }
-      setSelectedObject(requiredObject);
+      setSelectedObject(requiredObject)
     } else {
       // console.log(childObject,"inesle")
-      setSelectedObject(childObject);
-      const el = (sel, par) => (par || document).querySelector(sel);
-      const elArea = el("#area");
+      setSelectedObject(childObject)
+      const el = (sel, par) => (par || document).querySelector(sel)
+      const elArea = el("#area")
       let bodyRect = document.body.getBoundingClientRect(),
-        elemRect = elArea.getBoundingClientRect();
+        elemRect = elArea.getBoundingClientRect()
       if (!isMobile && !isTablet) {
         const newStyles = {
           position: "absolute",
           left: elemRect.left > 1180 ? 1180 : elemRect.left,
           right: elemRect.right,
           top: elemRect.top > 300 ? 300 : elemRect.top
-        };
-        setPopupChild("assignResource");
-        setIsAddeventPopover(true);
-        setPopUpStyles(newStyles);
+        }
+        setPopupChild("assignResource")
+        setIsAddeventPopover(true)
+        setPopUpStyles(newStyles)
       } else {
-        setPopupChild("assignResource");
-        setOpenPopup(true);
+        setPopupChild("assignResource")
+        setOpenPopup(true)
       }
     }
-    setId(slotName);
+    setId(slotName)
     // if (slotName) {
     //   if (
     //     window.confirm(
@@ -487,21 +465,21 @@ const Calender = (props) => {
     // } else {
     //   alert("Event in progress");
     // }
-  };
+  }
   const createNewEvent = (requiredData) => {
-    console.log(requiredData, "RequiredData");
-    setResourceEvent(requiredData);
-    getRenderSd(schedulerData);
-    schedulerData.addEvent(requiredData);
-    handlePopUpClose();
-    triggerRerender(rerender + 1);
-  };
+    console.log(requiredData, "RequiredData")
+    setResourceEvent(requiredData)
+    getRenderSd(schedulerData)
+    schedulerData.addEvent(requiredData)
+    handlePopUpClose()
+    triggerRerender(rerender + 1)
+  }
   const newEventfromResource = (schedulerData, slotId, start, end) => {
-    let newFreshId = 0;
+    let newFreshId = 0
     schedulerData.events.forEach((item) => {
-      if (item.id >= newFreshId) newFreshId = item.id + 1;
-    });
-    const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+      if (item.id >= newFreshId) newFreshId = item.id + 1
+    })
+    const randomColor = Math.floor(Math.random() * 16777215).toString(16)
     let newEvent = {
       id: newFreshId,
       title: "New Event",
@@ -509,71 +487,61 @@ const Calender = (props) => {
       end: end,
       resourceId: slotId,
       bgColor: `#${randomColor}`
-    };
-    schedulerData.addEvent(newEvent);
-    triggerRerender(rerender + 1);
-  };
+    }
+    schedulerData.addEvent(newEvent)
+    triggerRerender(rerender + 1)
+  }
   const onScrollLeft = (schedulerData, schedulerContent, maxScrollLeft) => {
-    schedulerData.prev();
-    schedulerData.setEvents(schedulerData.events);
-    triggerRerender(render + 1);
-    setRetrigger((prev) => !prev);
+    schedulerData.prev()
+    schedulerData.setEvents(schedulerData.events)
+    triggerRerender(render + 1)
+    setRetrigger((prev) => !prev)
 
-    schedulerContent.scrollLeft = 10;
-  };
+    schedulerContent.scrollLeft = 10
+  }
   const updateEventStart = (schedulerData, event, newStart) => {
-    getRenderSd(schedulerData);
-    schedulerData.updateEventStart(event, newStart);
-  };
+    getRenderSd(schedulerData)
+    schedulerData.updateEventStart(event, newStart)
+  }
 
   const updateEventEnd = (schedulerData, event, newEnd) => {
-    getRenderSd(schedulerData);
-    schedulerData.updateEventEnd(event, newEnd);
-  };
+    // getRenderSd(schedulerData)
+    schedulerData.updateEventEnd(event, newEnd)
+  }
   const moveEvent = (schedulerData, event, slotId, slotName, start, end) => {
     if (slotId === event?.resourceId) {
-      getRenderSd(schedulerData);
-      schedulerData.moveEvent(event, slotId, slotName, start, end);
-      triggerRerender(render + 1);
-      setRetrigger((prev) => !prev);
-    } else return;
-  };
+      getRenderSd(schedulerData)
+      schedulerData.moveEvent(event, slotId, slotName, start, end)
+      triggerRerender(render + 1)
+      setRetrigger((prev) => !prev)
+    } else return
+  }
   const handleAddEventPopUp = (key) => {
-    setPopupChild(key);
-    setOpenPopup(true);
-  };
+    setPopupChild(key)
+    setOpenPopup(true)
+  }
 
   const handlePopUpClose = () => {
-    setOpenPopup(false);
-    setPopupChild("");
-    setIsAddeventPopover(false);
-  };
+    setOpenPopup(false)
+    setPopupChild("")
+    setIsAddeventPopover(false)
+  }
   const addResorceInScheduler = (values) => {
-    const startDate = new Date();
-    const convertedStartDate = new dayjs(startDate).format(
-      "YYYY-MM-DD hh:mm:ss"
-    );
-    const endDate = new dayjs()
-      .day(5)
-      .endOf("day")
-      .format("YYYY-MM-DD hh:mm:ss");
-    schedulerData.addResource(values);
-    triggerRerender(rerender + 1);
-    handlePopUpClose();
-    newEventfromResource(
-      schedulerData,
-      values?.id,
-      convertedStartDate,
-      endDate
-    );
-  };
+    const startDate = new Date()
+    const convertedStartDate = new dayjs(startDate).format("YYYY-MM-DD hh:mm:ss")
+    const endDate = new dayjs().day(5).endOf("day").format("YYYY-MM-DD hh:mm:ss")
+    schedulerData.addResource(values)
+    triggerRerender(rerender + 1)
+    handlePopUpClose()
+    newEventfromResource(schedulerData, values?.id, convertedStartDate, endDate)
+  }
   const getRenderSd = (schedulerData) => {
     /**@MehranSiddiqui
      * @function
      * This Function is responsible for not rerendering scheduler Data and collapsing all Divs
      */
-    const { renderData } = schedulerData;
-    let displayRenderData = renderData.filter((o) => o.render);
+    const { renderData } = schedulerData
+    let displayRenderData = renderData.filter((o) => o.render)
     const replaceArr = displayRenderData.map((i) => {
       return {
         id: i.slotId,
@@ -583,10 +551,10 @@ const Calender = (props) => {
         parentId: i.parentId,
         workDays: i.workDays,
         editPopup: false
-      };
-    });
-    schedulerData.setResources(replaceArr);
-  };
+      }
+    })
+    schedulerData.setResources(replaceArr)
+  }
   const popUpChildren = {
     addEvent: (
       <AddEvent
@@ -605,7 +573,7 @@ const Calender = (props) => {
       />
     ),
     assignResource: <AssignProject requiredObject={selectedObject} />
-  };
+  }
   return (
     <div
       style={{
@@ -614,15 +582,13 @@ const Calender = (props) => {
         overflowX: "hidden",
         overflowY: "auto",
         position: "relative"
-      }}
-    >
+      }}>
       <Box
         style={{
           minHeight: "7rem",
           minWidth: "100vw",
           backgroundColor: "#666666"
-        }}
-      ></Box>
+        }}></Box>
       <DndProvider backend={HTML5Backend}>
         {schedulerData && (
           <Scheduler
@@ -655,8 +621,7 @@ const Calender = (props) => {
             fontSize: "2rem",
             marginBottom: "1rem"
           }}
-          onClick={handleAddEventPopUp.bind(null, "addResource")}
-        >
+          onClick={handleAddEventPopUp.bind(null, "addResource")}>
           Add Person
         </PrimaryButton>
       </Box>
@@ -670,8 +635,7 @@ const Calender = (props) => {
           marginRight: "auto",
           display: "flex",
           alignItems: "center"
-        }}
-      >
+        }}>
         {popUpChildren[popupChild]}
       </Popup>
       {isAddeventPopover && (
@@ -693,7 +657,7 @@ const Calender = (props) => {
         />
       )}
     </div>
-  );
-};
+  )
+}
 
-export default Calender;
+export default Calender

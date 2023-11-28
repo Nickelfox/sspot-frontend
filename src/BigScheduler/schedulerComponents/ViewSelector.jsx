@@ -1,12 +1,11 @@
-import React, { useState } from "react";
-import { Radio } from "antd";
+import React from "react"
+import { Radio } from "antd"
 
-const RadioButton = Radio.Button;
-const RadioGroup = Radio.Group;
+const RadioButton = Radio.Button
+const RadioGroup = Radio.Group
 const ViewSelector = (props) => {
-  const { schedulerData } = props;
-  const { config } = schedulerData;
-  const [selectedView, setSelectedView] = useState("");
+  const { schedulerData } = props
+  const { config } = schedulerData
   let parentViewList = config.parentView.map((item, index) => {
     return (
       <RadioButton
@@ -15,20 +14,18 @@ const ViewSelector = (props) => {
           height: "3rem",
           borderRadius: "0.4rem",
           width: "11rem",
-          backgroundColor:
-            config?.selectedParent === item?.value ? "#d0d0d0" : "#f6f6f6",
+          backgroundColor: config?.selectedParent === item?.value ? "#d0d0d0" : "#f6f6f6",
           color: "#666666"
         }}
         key={`${item?.value}${index}`}
         value={`${item.value}`}
         className={`${
           config?.selectedParent === item?.value ? "btn-selected" : "btn"
-        } text-xl font-semibold flex justify-center items-center`}
-      >
+        } text-xl font-semibold flex justify-center items-center`}>
         <span className={`text-xl font-semibold`}>{item.name}</span>
       </RadioButton>
-    );
-  });
+    )
+  })
   return (
     <RadioGroup
       //   buttonStyle="solid"
@@ -45,7 +42,7 @@ const ViewSelector = (props) => {
     >
       {parentViewList}
     </RadioGroup>
-  );
-};
+  )
+}
 
-export default ViewSelector;
+export default ViewSelector

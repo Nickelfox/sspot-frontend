@@ -1,11 +1,13 @@
-import React, { Component } from "react";
-import { PropTypes } from "prop-types";
-import { MinusSquareOutlined, PlusSquareOutlined } from "@ant-design/icons";
-import { Avatar } from "@mui/material";
+/*eslint no-extra-boolean-cast: "error"*/
+/*eslint-disable no-unused-vars */
+import React, { Component } from "react"
+import { PropTypes } from "prop-types"
+import { MinusSquareOutlined, PlusSquareOutlined } from "@ant-design/icons"
+import { Avatar } from "@mui/material"
 
 class ResourceView extends Component {
   constructor(props) {
-    super(props);
+    super(props)
   }
 
   static propTypes = {
@@ -14,9 +16,10 @@ class ResourceView extends Component {
     slotClickedFunc: PropTypes.func,
     slotItemTemplateResolver: PropTypes.func,
     toggleExpandFunc: PropTypes.func
-  };
+  }
   getArrow = (item) => {
-    const { schedulerData, toggleExpandFunc } = this.props;
+    const { schedulerData, toggleExpandFunc } = this.props
+    const expandFun = !!toggleExpandFunc
     return item.hasChildren ? (
       item.expanded ? (
         <MinusSquareOutlined
@@ -24,8 +27,7 @@ class ResourceView extends Component {
           style={{}}
           className=""
           onClick={() => {
-            if (!!toggleExpandFunc)
-              toggleExpandFunc(schedulerData, item.slotId);
+            if (expandFun) toggleExpandFunc(schedulerData, item.slotId)
           }}
         />
       ) : (
@@ -34,13 +36,12 @@ class ResourceView extends Component {
           style={{}}
           className=""
           onClick={() => {
-            if (!!toggleExpandFunc)
-              toggleExpandFunc(schedulerData, item.slotId);
+            if (expandFun) toggleExpandFunc(schedulerData, item.slotId)
           }}
         />
       )
-    ) : null;
-  };
+    ) : null
+  }
 
   render() {
     const {
@@ -49,13 +50,13 @@ class ResourceView extends Component {
       slotClickedFunc,
       slotItemTemplateResolver,
       toggleExpandFunc
-    } = this.props;
-    const { renderData } = schedulerData;
+    } = this.props
+    const { renderData } = schedulerData
 
     // let width = schedulerData.getResourceTableWidth();
-    let width = "25rem";
-    let paddingBottom = contentScrollbarHeight;
-    let displayRenderData = renderData.filter((o) => o.render);
+    let width = "25rem"
+    let paddingBottom = contentScrollbarHeight
+    let displayRenderData = renderData.filter((o) => o.render)
     let resourceList = displayRenderData.map((resourceItem) => {
       return (
         <>
@@ -67,10 +68,9 @@ class ResourceView extends Component {
                   border: "1px solid #eee",
                   fontSize: "1.7rem",
                   minHeight: "6rem",
-                  height: "fit-content",
-                //   marginBottom: 10
-                }}
-              >
+                  height: "fit-content"
+                  //   marginBottom: 10
+                }}>
                 {!resourceItem?.parentId && this.getAvatar(resourceItem)}
                 <div>
                   <div>
@@ -84,8 +84,8 @@ class ResourceView extends Component {
             </div>
           }
         </>
-      );
-    });
+      )
+    })
     // let resourceList = displayRenderData.map((item) => {
     //   let indents = [];
     //   for (let i = 0; i < item.indent; i++) {
@@ -204,25 +204,22 @@ class ResourceView extends Component {
           <tbody>{resourceList}</tbody>
         </table>
       </div>
-    );
+    )
   }
   getNameInitials = (name) => {
-    const nameArr = name.split("_");
-    const initials = nameArr.map((word) => word.charAt(0)).join("");
-    return initials;
-  };
+    const nameArr = name.split("_")
+    const initials = nameArr.map((word) => word.charAt(0)).join("")
+    return initials
+  }
   getAvatar = (item) => {
     if (item?.parentId === undefined) {
       return (
-        <Avatar
-          alt="User"
-          style={{ backgroundColor: "#000", fontSize: "2.5rem" }}
-        >
+        <Avatar alt="User" style={{ backgroundColor: "#000", fontSize: "2.5rem" }}>
           {this.getNameInitials(item?.slotName)}
         </Avatar>
-      );
+      )
     }
-  };
+  }
 }
 
-export default ResourceView;
+export default ResourceView

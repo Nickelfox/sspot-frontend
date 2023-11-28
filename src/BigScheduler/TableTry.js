@@ -1,13 +1,15 @@
-import React, { useMemo, useState } from "react";
-import BodyView from "./BodyView";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { ViewTypes } from "./helpers";
-import UserAvatar from "../components/UserAvatar/UserAvatar";
-import { Box, Typography } from "@mui/material";
-import dayjs from "dayjs";
-import { DATETIME_FORMAT } from ".";
-import { Popover } from "antd";
+/*eslint-disable no-unused-vars */
+/*eslint no-constant-condition: ["error", { "checkLoops": false }]*/
+import React from "react"
+import BodyView from "./BodyView"
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp"
+import { ViewTypes } from "./helpers"
+import UserAvatar from "../components/UserAvatar/UserAvatar"
+import { Box, Typography } from "@mui/material"
+import dayjs from "dayjs"
+import { DATETIME_FORMAT } from "."
+import { Popover } from "antd"
 const editItemObject = [
   {
     label: "Edit",
@@ -22,23 +24,16 @@ const editItemObject = [
     label: "Delete",
     value: "del"
   }
-];
+]
 const TableTry = (props) => {
-  const {
-    schedulerData,
-    toggleExpandFunc,
-    dnd,
-    openEditItemPopUp,
-    closePopup
-  } = props;
+  const { schedulerData, toggleExpandFunc, dnd, openEditItemPopUp, closePopup } = props
   //eslint-disable-next-line no-unused-vars
-  const { renderData, cellUnit, config, headers } = schedulerData;
-  const borderBottom = "1px solid #c4c4c4";
+  const { renderData, cellUnit, config, headers } = schedulerData
+  const borderBottom = "1px solid #c4c4c4"
   let contentScrollbarHeight = 17,
     resourceScrollbarHeight = 17,
-    contentHeight = config.schedulerContentHeight;
-  let contentPaddingBottom =
-    contentScrollbarHeight === 0 ? resourceScrollbarHeight : 0;
+    contentHeight = config.schedulerContentHeight
+  let contentPaddingBottom = contentScrollbarHeight === 0 ? resourceScrollbarHeight : 0
   let schedulerContentStyle = {
     overflowX: config?.viewType === ViewTypes.Week ? "hidden" : "hidden",
     overflowY: "hidden",
@@ -46,7 +41,7 @@ const TableTry = (props) => {
     position: "relative",
     height: 50
     // paddingBottom: contentPaddingBottom
-  };
+  }
 
   let editItems = editItemObject.map((item, index) => {
     return (
@@ -59,22 +54,20 @@ const TableTry = (props) => {
         padding={"1rem"}
         borderBottom={index === 1 && "1px solid #ccc"}
         className={`cursor-pointer availabilitySelector`}
-        width={"10rem"}
-      >
+        width={"10rem"}>
         <Typography variant="p3" color={"#333"}>
           {item?.label}
         </Typography>
       </Box>
-    );
-  });
-  let schedulerWidth = schedulerData.getContentTableWidth() - 1;
-  let resourceTableWidth = schedulerData.getResourceTableWidth();
-  const width = schedulerData.getSchedulerWidth();
+    )
+  })
+  let schedulerWidth = schedulerData.getContentTableWidth() - 1
+  let resourceTableWidth = schedulerData.getResourceTableWidth()
+  const width = schedulerData.getSchedulerWidth()
 
-  let schedulerContainerWidth =
-    width - (config.resourceViewEnabled ? resourceTableWidth : 0);
+  let schedulerContainerWidth = width - (config.resourceViewEnabled ? resourceTableWidth : 0)
 
-  let expandItem = new Set();
+  let expandItem = new Set()
   const getExpandButton = (item) => {
     return item.hasChildren && item.expanded ? (
       <KeyboardArrowUpIcon
@@ -82,8 +75,8 @@ const TableTry = (props) => {
         style={{}}
         className=""
         onClick={() => {
-          if (!!toggleExpandFunc) toggleExpandFunc(schedulerData, item.slotId);
-          expandItem.add(item?.slotName);
+          if (toggleExpandFunc) toggleExpandFunc(schedulerData, item.slotId)
+          expandItem.add(item?.slotName)
         }}
       />
     ) : (
@@ -92,16 +85,16 @@ const TableTry = (props) => {
         style={{}}
         className=""
         onClick={() => {
-          if (!!toggleExpandFunc) toggleExpandFunc(schedulerData, item.slotId);
-          expandItem.delete(item?.slotName);
+          if (toggleExpandFunc) toggleExpandFunc(schedulerData, item.slotId)
+          expandItem.delete(item?.slotName)
         }}
       />
-    );
-  };
-  const displayRenderData = renderData.filter((o) => o.render);
+    )
+  }
+  const displayRenderData = renderData.filter((o) => o.render)
   const getDivs = () => {
-    let eventDndSource = dnd.getDndSource();
-    let DndResourceEvents = dnd.getDropTarget(config.dragAndDropEnabled);
+    let eventDndSource = dnd.getDndSource()
+    let DndResourceEvents = dnd.getDropTarget(config.dragAndDropEnabled)
     return displayRenderData.map((item, index) => {
       let resourceEventsList = (
         <DndResourceEvents
@@ -110,35 +103,28 @@ const TableTry = (props) => {
           resourceEvents={item}
           dndSource={eventDndSource}
         />
-      );
+      )
       return (
         !item?.parentId && (
           <div
             style={{
               // marginTop: "0.1rem",
-              marginBottom: expandItem?.size > 0 ? "1rem" : 0,
+              // marginBottom: expandItem?.size > 0 ? "1rem" : 0,
               maxWidth: "100vw",
               overflow: "hidden"
-            }}
-          >
+            }}>
             <div
               style={{
                 minHeight: "4.5rem",
                 display: "flex",
                 width: "fit-content",
                 height: "4.7rem"
-              }}
-            >
+              }}>
               <div
                 style={{ minWidth: "23.9rem", borderBottom: borderBottom }}
-                className="bg-[#fff] stickyCell flex justify-center items-center w-full"
-              >
+                className="bg-[#fff] stickyCell flex justify-center items-center w-full">
                 <UserAvatar username={item?.slotName} />
-                <Box
-                  width={"100%"}
-                  display={"flex"}
-                  justifyContent={"space-around"}
-                >
+                <Box width={"100%"} display={"flex"} justifyContent={"space-around"}>
                   <Typography variant="p1" color="black">
                     {item?.slotName?.split(" ")[0]}
                   </Typography>
@@ -149,16 +135,14 @@ const TableTry = (props) => {
                 <tr
                   style={{
                     marginTop: "-0.25rem"
-                  }}
-                >
+                  }}>
                   <td style={{ border: 0 }}>
                     <div
                       className="scheduler-view"
                       style={{
                         width: schedulerContainerWidth,
                         verticalAlign: "top"
-                      }}
-                    >
+                      }}>
                       <div
                         style={{
                           position: "relative",
@@ -207,19 +191,11 @@ const TableTry = (props) => {
               )}
           </div>
         )
-      );
-    });
-  };
-  const getInnerTable = (
-    displayRenderData,
-    slotid,
-    eventDndSource,
-    DndResourceEvents,
-    item
-  ) => {
-    const filteredData = displayRenderData.filter(
-      (item) => item?.parentId === slotid
-    );
+      )
+    })
+  }
+  const getInnerTable = (displayRenderData, slotid, eventDndSource, DndResourceEvents, item) => {
+    const filteredData = displayRenderData.filter((item) => item?.parentId === slotid)
     const requiredHeaders = headers.map((header) => {
       return {
         ...header,
@@ -230,8 +206,8 @@ const TableTry = (props) => {
         nonWorkingTime: false,
         start: header.time,
         events: []
-      };
-    });
+      }
+    })
     const dropDownItem = {
       expanded: false,
       hasChildren: false,
@@ -244,7 +220,7 @@ const TableTry = (props) => {
       rowMaxCount: 1,
       slotId: item?.slotId,
       slotName: null
-    };
+    }
     let dropDownEventList = (
       <DndResourceEvents
         {...props}
@@ -252,7 +228,7 @@ const TableTry = (props) => {
         resourceEvents={dropDownItem}
         dndSource={eventDndSource}
       />
-    );
+    )
     return (
       <>
         {filteredData.map((filteredItem) => {
@@ -263,7 +239,7 @@ const TableTry = (props) => {
               resourceEvents={filteredItem}
               dndSource={eventDndSource}
             />
-          );
+          )
           return (
             <div
               key={filteredItem?.slotId}
@@ -273,12 +249,10 @@ const TableTry = (props) => {
                 height: "4.7rem",
                 display: "flex",
                 width: "fit-content"
-              }}
-            >
+              }}>
               <div
                 style={{ minWidth: "23.9rem", borderBottom: borderBottom }}
-                className="bg-[#fff] stickyCell flex justify-end items-center px-4"
-              >
+                className="bg-[#fff] stickyCell flex justify-end items-center px-4">
                 <Typography variant="c1" color="#666" paddingRight={"1rem"}>
                   {" "}
                   {filteredItem?.slotName}
@@ -299,8 +273,7 @@ const TableTry = (props) => {
                       style={{
                         width: schedulerContainerWidth,
                         verticalAlign: "top"
-                      }}
-                    >
+                      }}>
                       <div
                         style={{
                           position: "relative",
@@ -324,8 +297,7 @@ const TableTry = (props) => {
                             <table
                               className="scheduler-bg-table"
                               style={{ width: schedulerWidth }}
-                              ref={props.schedulerContentBgTableRef}
-                            >
+                              ref={props.schedulerContentBgTableRef}>
                               <BodyView
                                 {...props}
                                 // scroller={this.bodyScroller}
@@ -341,7 +313,7 @@ const TableTry = (props) => {
                 </tr>
               }
             </div>
-          );
+          )
         })}
 
         <div
@@ -351,22 +323,14 @@ const TableTry = (props) => {
             width: "fit-content",
             backgroundColor: "#fff",
             display: "flex"
-          }}
-        >
+          }}>
           <div
             style={{ minWidth: "23.9rem", borderBottom }}
-            className="bg-[#fff] stickyCell flex justify-end items-center px-4"
-          >
+            className="bg-[#fff] stickyCell flex justify-end items-center px-4">
             <Box className="flex justify-space w-full">
-              <Box
-                className="w-full cursor-pointer"
-                onClick={openEditItemPopUp.bind(null, item)}
-              >
+              <Box className="w-full cursor-pointer" onClick={openEditItemPopUp.bind(null, item)}>
                 {" "}
-                <Typography
-                  variant="p2"
-                  sx={{ color: "#888888", textDecoration: "underline" }}
-                >
+                <Typography variant="p2" sx={{ color: "#888888", textDecoration: "underline" }}>
                   Actions <KeyboardArrowDownIcon />
                   {item?.editPopup && (
                     <Popover
@@ -378,7 +342,7 @@ const TableTry = (props) => {
                       overlayStyle={{ padding: 0 }}
                       overlayInnerStyle={{ padding: 0, borderRadius: "8px" }}
                       onOpenChange={() => {
-                        closePopup();
+                        closePopup()
                       }}
                     />
                   )}
@@ -386,12 +350,7 @@ const TableTry = (props) => {
               </Box>
               <Box className="w-full">
                 {/* <CustomAutoComplete options={[]} /> */}
-                <input
-                  type="text"
-                  list="cars"
-                  className="projectselctor"
-                  placeholder="Projects"
-                />
+                <input type="text" list="cars" className="projectselctor" placeholder="Projects" />
                 <datalist id="cars" style={{ listStyleType: "solid" }}>
                   <option>Project-1</option>
                   <option>Project-2</option>
@@ -408,8 +367,7 @@ const TableTry = (props) => {
                 style={{
                   width: schedulerContainerWidth,
                   verticalAlign: "top"
-                }}
-              >
+                }}>
                 <div
                   style={{
                     position: "relative",
@@ -433,8 +391,7 @@ const TableTry = (props) => {
                       <table
                         className="scheduler-bg-table"
                         style={{ width: schedulerWidth }}
-                        ref={props.schedulerContentBgTableRef}
-                      >
+                        ref={props.schedulerContentBgTableRef}>
                         <BodyView
                           {...props}
                           // scroller={this.bodyScroller}
@@ -450,9 +407,9 @@ const TableTry = (props) => {
           </tr>{" "}
         </div>
       </>
-    );
-  };
-  return <div style={{ maxWidth: "100vw", overflow: "auto" }}>{getDivs()}</div>;
-};
+    )
+  }
+  return <div style={{ maxWidth: "100vw", overflow: "auto" }}>{getDivs()}</div>
+}
 
-export default TableTry;
+export default TableTry
