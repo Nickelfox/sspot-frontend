@@ -1,0 +1,50 @@
+// @import "../../styles/variables.scss";
+.popUp {
+  border-radius: 0.8rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  // background-color: $background-color;
+  // box-shadow: 1.5rem;
+  // width: 40vw;
+  padding: 0 0 2rem 0;
+  height: fit-content;
+  overflow-x: auto;
+  // border-radius:8px;
+
+  .header {
+    height: 8rem;
+    width: 100%;
+    overflow: hidden;
+    // background-color: $header-color;
+    text-align: left;
+    display: flex;
+
+    // @media screen and (max-width: $tab-screen) {
+    //   height: 14rem;
+    // }
+  }
+  .titleContainer {
+    margin-left: 3rem;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // @media screen and (max-width: $mobile-screen) {
+    //   text-align: center;
+    // }
+  }
+  .child {
+    width: 100%;
+  }
+  .display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .img {
+    margin-top: -1rem;
+    margin-left: -0.5rem;
+  }
+}

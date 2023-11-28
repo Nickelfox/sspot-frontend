@@ -1,0 +1,28 @@
+.MuiDialog-root {
+  z-index: 5000 !important;
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.3) !important;
+  font-size: 1.2rem !important;
+}
+.MuiPickersFadeTransitionGroup-root {
+  font-size: 2rem !important;
+  font-weight: 600;
+}
+.MuiDayCalendar-weekDayLabel {
+  font-size: 1.5rem !important;
+}
+.MuiPickersDay-root {
+  font-size: 1.5rem !important;
+}
+.MuiPickersPopper-root {
+  z-index: 2300 !important;
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.3) !important;
+}
+.dateWrapper .MuiOutlinedInput-input {
+  font-size: 1.5rem !important;
+}
+// .dateWrapper .MuiFormLabel-root {
+//   font-size: 1.3rem !important;
+//   font-weight: 600;
+//   margin-top: 0.4rem;
+//   margin-left: -0.5rem;
+// }

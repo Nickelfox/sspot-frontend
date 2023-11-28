@@ -1,3 +1,4 @@
+/*eslint-disable no-unused-vars */
 import * as React from "react"
 import { styled } from "@mui/material/styles"
 import {
@@ -21,7 +22,7 @@ const drawerWidth = 270
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
   ({ theme, open }) => ({
     flexGrow: 1,
-    padding: theme.spacing(3),
+    // padding: theme.spacing(3),
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
@@ -54,7 +55,7 @@ export default function PrivateLayout(props) {
 
   return (
     <Box sx={{ display: "flex" }}>
-      <Drawer sx={styles.drawer} variant="persistent" anchor="left" open={true}>
+      {/* <Drawer sx={styles.drawer} variant="persistent" anchor="left" open={true}>
         <List>
           <DrawerHeader>
             <Typography sx={styles.drawerHeader} variant="h4">
@@ -89,7 +90,7 @@ export default function PrivateLayout(props) {
             </ListItemText>
           </ListItemButton>
         </List>
-      </Drawer>
+      </Drawer> */}
       <Main open={open}>
         <Outlet />
       </Main>

@@ -3,11 +3,10 @@ import { Formik, Form } from "formik"
 import React from "react"
 import { useUpdatePasswordController } from "./updatePassword.controller"
 import { useStyles } from "../commonStyles"
-import FormField from "components/Loader/FormField"
+import FormField from "components/FormField"
 import "react-phone-number-input/style.css"
 import { LoadingButton } from "@mui/lab"
 import { UpdatePasswordValidator } from "helpers/validators/updatePassword"
-
 const UpdatePassword = () => {
   const styles = useStyles()
 

@@ -1,13 +1,7 @@
 import React from "react"
-import { Divider } from "@mui/material"
-
+import Calender from "components/Scheuler2"
 function Dashboard() {
-  return (
-    <div>
-      <h2>Dashboard</h2>
-      <Divider />
-    </div>
-  )
+  return <Calender />
 }
 
 export default Dashboard
