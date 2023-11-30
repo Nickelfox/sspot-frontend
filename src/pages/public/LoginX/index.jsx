@@ -7,7 +7,7 @@ import LockOpenIcon from "@mui/icons-material/LockOpen"
 import { LoginValidator } from "helpers/validators/login"
 import { useLoginController } from "./login.controller"
 import FormField from "components/FormField"
-import { GoogleLogin, FacebookLogin } from "library/SocialLogin"
+// import { GoogleLogin, FacebookLogin } from "library/SocialLogin"
 
 const Login = () => {
   const styles = useStyles()
@@ -89,7 +89,7 @@ const Login = () => {
           )}
         </Formik>
       </Grid>
-      <Grid container>
+      {/* <Grid container>
         <Grid container alignItems="center" justifyContent="center">
           <Typography sx={styles.topLabel} variant="subtitle" textAlign="center" color="main">
             OR
@@ -101,7 +101,7 @@ const Login = () => {
         <Grid item md={6}>
           <FacebookLogin />
         </Grid>
-      </Grid>
+      </Grid> */}
     </Box>
   )
 }

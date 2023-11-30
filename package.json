@@ -7,7 +7,7 @@
     "start:qa": "env-cmd -f .env.qa react-scripts start",
     "start:stage": "env-cmd -f .env.staging react-scripts start",
     "build": "react-scripts build",
-    "build:dev": "GENERATE_SOURCEMAP=false env-cmd -f .env.dev react-scripts build",
+    "build:dev": "env-cmd -f .env.dev react-scripts build",
     "build:stage": "GENERATE_SOURCEMAP=false env-cmd -f .env.staging react-scripts build",
     "build:qa": "GENERATE_SOURCEMAP=false env-cmd -f .env.qa react-scripts build",
     "build:prod": "GENERATE_SOURCEMAP=false env-cmd -f .env.prod react-scripts build",
