@@ -10,38 +10,20 @@ export const defaultTheme = {
     error: {
       main: "#FF0040"
     },
+    border: {
+      main: "#c4c4c4"
+    },
     background: {
       default: "#FFFFFF",
-      main: "#E5E5E5",
-      gray: "#444444",
-      green: "#94DD60",
-      green2: "#E7FAF0",
-      green3: "#C1ECD4",
-      green4: "#C9E9B2",
-      green5: "#8DDCC9",
-      pink1: "#FFF7EA",
-      pink2: "#FFE5E7",
-      pink3: "#F5E3C2",
-      gold: "#efcb8a",
-      platinum: "#b29fcb",
-      silver: "#8692a4",
-      yellow: "#fffcde",
-      yellow2: "#FDC55F",
-      yellow3: "#FEEBCA"
+      secondary: "#f4f4f4",
+      gray: "#666666"
     },
     text: {
-      main: "#181A1E",
+      main: "#eeeeee",
       white: "#FFF",
       gray: "#8692A4",
-      gray2: "#666666",
-      gray3: "#B3BBC7",
-      red1: "#FF4049",
-      red2: "#FF8086",
-      red3: "#FF000D",
-      red4: "#FF1925",
-      green: "#5CA91D",
-      green2: "#5ca91D",
-      gold2: "#FFB020"
+      dark: `#64748b`,
+      heading: "#444444"
     },
     switch: {
       green: "#33cf4d",
@@ -81,7 +63,7 @@ export const defaultTheme = {
     h6: {
       fontSize: "2.4rem",
       lineHeight: "3.2rem",
-      fontWeight: 600
+      fontWeight: 500
     },
     h7: {
       fontSize: "2rem",
@@ -89,9 +71,9 @@ export const defaultTheme = {
       fontWeight: 600
     },
     s1: {
-      fontSize: "1.8rem",
+      fontSize: "1.6rem",
       lineHeight: "2.4rem",
-      fontWeight: 600
+      fontWeight: 400
     },
     p1: {
       fontSize: "1.6rem",

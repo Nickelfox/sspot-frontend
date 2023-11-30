@@ -1,6 +1,6 @@
 // @import "../../styles/variables.scss";
 .popUp {
-  border-radius: 0.8rem;
+  border-radius: 0.4rem;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -8,7 +8,7 @@
   // background-color: $background-color;
   // box-shadow: 1.5rem;
   // width: 40vw;
-  padding: 0 0 2rem 0;
+  // padding: 0 0 2rem 0;
   height: fit-content;
   overflow-x: auto;
   // border-radius:8px;
@@ -25,6 +25,7 @@
     //   height: 14rem;
     // }
   }
+
   .titleContainer {
     margin-left: 3rem;
     width: 80%;
@@ -35,14 +36,17 @@
     //   text-align: center;
     // }
   }
+
   .child {
     width: 100%;
   }
+
   .display {
     display: flex;
     justify-content: center;
     align-items: center;
   }
+
   .img {
     margin-top: -1rem;
     margin-left: -0.5rem;

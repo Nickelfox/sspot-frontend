@@ -16,6 +16,7 @@ import { convertEventsToMap } from "helpers/conversionFunctions/eventsMap"
 import { getDummyDataArray } from "helpers/conversionFunctions/conversion"
 import { Popover } from "antd"
 import AssignProject from "components/AssignProject"
+import CalendarFeed from "components/CalendarFeedForm"
 
 let resources = [
   {
@@ -336,6 +337,7 @@ const Calender = (props) => {
         editPopup: item?.slotId === itemToEdit?.slotId ? !item?.editPopup : false
       }
     })
+    setSelectedObject(itemToEdit)
     getRenderSd(schedulerData)
     schedulerData.setResources(requiredArray)
     triggerRerender(rerender + 1)
@@ -525,6 +527,7 @@ const Calender = (props) => {
     setOpenPopup(false)
     setPopupChild("")
     setIsAddeventPopover(false)
+    setPopUpStyles(null)
   }
   const addResorceInScheduler = (values) => {
     const startDate = new Date()
@@ -572,7 +575,15 @@ const Calender = (props) => {
         resourceLength={schedulerData?.resources?.length}
       />
     ),
-    assignResource: <AssignProject requiredObject={selectedObject} />
+    assignResource: <AssignProject requiredObject={selectedObject} />,
+    calenderFeed: <CalendarFeed requiredObject={selectedObject} handleClose={handlePopUpClose} />
+  }
+  const handlePopUp = (key) => {
+    switch (key) {
+      case "cal":
+        setPopupChild("calenderFeed")
+        setOpenPopup(true)
+    }
   }
   return (
     <div
@@ -583,12 +594,6 @@ const Calender = (props) => {
         overflowY: "auto",
         position: "relative"
       }}>
-      <Box
-        style={{
-          minHeight: "4rem",
-          minWidth: "100vw",
-          backgroundColor: "#666666"
-        }}></Box>
       <DndProvider backend={HTML5Backend}>
         {schedulerData && (
           <Scheduler
@@ -609,6 +614,7 @@ const Calender = (props) => {
             expandAllItems={expandAllItems}
             showResourceEditPopup={showResourceEditPopup}
             closePopUp={closePopUp}
+            handlePopUp={handlePopUp}
             // {...props}
           />
         )}{" "}
@@ -622,7 +628,7 @@ const Calender = (props) => {
             marginBottom: "1rem"
           }}
           onClick={handleAddEventPopUp.bind(null, "addResource")}>
-          Add Person
+          + Add Person
         </PrimaryButton>
       </Box>
       <Popup

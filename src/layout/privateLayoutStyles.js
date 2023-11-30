@@ -51,7 +51,9 @@ export const useStyles = () => {
       lineHeight: "16px"
     },
     icon: {
-      color: theme.palette.text.main
+      color: theme.palette.text.main,
+      height: "3rem",
+      width: "3rem"
     },
     iconActive: {
       color: theme.palette.text.white
@@ -64,6 +66,11 @@ export const useStyles = () => {
       fontWeight: "400",
       left: 0,
       right: 0
+    },
+    appbar: {
+      background: theme.palette.background.default,
+      color: theme.palette.primary.main,
+      boxShadow: "0px -1px 16px 0px #564AA93D"
     }
   }
 }
