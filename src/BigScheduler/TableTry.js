@@ -34,7 +34,7 @@ const editItemObject = [
   }
 ]
 const TableTry = (props) => {
-  const { schedulerData, toggleExpandFunc, dnd, openEditItemPopUp, closePopup } = props
+  const { schedulerData, toggleExpandFunc, dnd, openEditItemPopUp, closePopup, handlePopUp } = props
   //eslint-disable-next-line no-unused-vars
   const { renderData, cellUnit, config, headers } = schedulerData
   const borderBottom = "1px solid #c4c4c4"
@@ -51,24 +51,27 @@ const TableTry = (props) => {
     // paddingBottom: contentPaddingBottom
   }
 
-  let editItems = editItemObject.map((item, index) => {
-    return (
-      <Box
-        key={item?.value}
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"start"}
-        flexDirection={"column"}
-        padding={"1rem"}
-        borderBottom={index === 1 && "1px solid #ccc"}
-        className={`cursor-pointer availabilitySelector`}
-        width={"10rem"}>
-        <Typography variant="p3" color={"#333"}>
-          {item?.label}
-        </Typography>
-      </Box>
-    )
-  })
+  let editItems = (items) => {
+    return editItemObject.map((item, index) => {
+      return (
+        <Box
+          key={item?.value}
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"start"}
+          flexDirection={"column"}
+          padding={"1rem"}
+          borderBottom={index === 1 && "1px solid #ccc"}
+          className={`cursor-pointer availabilitySelector`}
+          width={"10rem"}
+          onClick={handlePopUp.bind(null, item?.value)}>
+          <Typography variant="p3" color={"#333"}>
+            {item?.label}
+          </Typography>
+        </Box>
+      )
+    })
+  }
   let schedulerWidth = schedulerData.getContentTableWidth() - 1
   let resourceTableWidth = schedulerData.getResourceTableWidth()
   const width = schedulerData.getSchedulerWidth()
@@ -354,7 +357,7 @@ const TableTry = (props) => {
                   Actions <KeyboardArrowDownIcon />
                   {item?.editPopup && (
                     <Popover
-                      content={editItems}
+                      content={editItems.bind(null, item)}
                       placement="bottom"
                       arrow={false}
                       trigger="click"

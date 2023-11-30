@@ -10,23 +10,20 @@ export const defaultTheme = {
     error: {
       main: "#FF0040"
     },
+    border: {
+      main: "#c4c4c4"
+    },
     background: {
       default: "#FFFFFF",
+      secondary: "#f4f4f4",
       gray: "#666666"
     },
     text: {
       main: "#eeeeee",
       white: "#FFF",
       gray: "#8692A4",
-      gray2: "#666666",
-      gray3: "#B3BBC7",
-      red1: "#FF4049",
-      red2: "#FF8086",
-      red3: "#FF000D",
-      red4: "#FF1925",
-      green: "#5CA91D",
-      green2: "#5ca91D",
-      gold2: "#FFB020"
+      dark: `#64748b`,
+      heading: "#444444"
     },
     switch: {
       green: "#33cf4d",
@@ -66,7 +63,7 @@ export const defaultTheme = {
     h6: {
       fontSize: "2.4rem",
       lineHeight: "3.2rem",
-      fontWeight: 600
+      fontWeight: 500
     },
     h7: {
       fontSize: "2rem",
@@ -74,9 +71,9 @@ export const defaultTheme = {
       fontWeight: 600
     },
     s1: {
-      fontSize: "1.8rem",
+      fontSize: "1.6rem",
       lineHeight: "2.4rem",
-      fontWeight: 600
+      fontWeight: 400
     },
     p1: {
       fontSize: "1.6rem",

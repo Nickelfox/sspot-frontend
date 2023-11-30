@@ -8,19 +8,20 @@ const SecondaryButton = styled(Button)(
       fontWeight: fontWeight,
       height: height,
       width: width,
-      color: `#aaaaaa`,
+      color: `#64748b`,
       textTransform: "none",
       padding: "0.6rem 1.2rem",
-      backgroundColor: `#e4e4e4`,
+      backgroundImage: "linear-gradient(#fff,#eee)",
       border: `0.1rem solid #c4cbda`,
       "&:hover": {
-        backgroundColor: `#fff`,
+        backgroundImage: "linear-gradient(#fff,#eee)",
         boxShadow: "none"
       },
       "&:active": {
         boxShadow: "none",
-        backgroundColor: `#fff`
-      }
+        backgroundImage: "linear-gradient(#eee,#fff)"
+      },
+      borderRadius: "0.4rem"
     }
   }
 )
