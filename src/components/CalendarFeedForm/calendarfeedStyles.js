@@ -20,7 +20,8 @@ export const useStyles = () => {
       height: "fit-content",
       width: "100%",
       backgroundColor: theme.palette.background.secondary,
-      borderTop: `1px solid ${theme?.palette.border.main}`
+      borderTop: `1px solid ${theme?.palette.border.main}`,
+      borderBottom: `1px solid ${theme?.palette.border.main}`
     },
     emailInternalContainer: {
       // width: "80%",
