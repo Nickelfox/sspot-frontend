@@ -12,25 +12,10 @@ export const defaultTheme = {
     },
     background: {
       default: "#FFFFFF",
-      main: "#E5E5E5",
-      gray: "#444444",
-      green: "#94DD60",
-      green2: "#E7FAF0",
-      green3: "#C1ECD4",
-      green4: "#C9E9B2",
-      green5: "#8DDCC9",
-      pink1: "#FFF7EA",
-      pink2: "#FFE5E7",
-      pink3: "#F5E3C2",
-      gold: "#efcb8a",
-      platinum: "#b29fcb",
-      silver: "#8692a4",
-      yellow: "#fffcde",
-      yellow2: "#FDC55F",
-      yellow3: "#FEEBCA"
+      gray: "#666666"
     },
     text: {
-      main: "#181A1E",
+      main: "#eeeeee",
       white: "#FFF",
       gray: "#8692A4",
       gray2: "#666666",

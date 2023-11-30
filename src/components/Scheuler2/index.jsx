@@ -583,12 +583,6 @@ const Calender = (props) => {
         overflowY: "auto",
         position: "relative"
       }}>
-      <Box
-        style={{
-          minHeight: "4rem",
-          minWidth: "100vw",
-          backgroundColor: "#666666"
-        }}></Box>
       <DndProvider backend={HTML5Backend}>
         {schedulerData && (
           <Scheduler

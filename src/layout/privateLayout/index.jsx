@@ -1,6 +1,6 @@
 /*eslint-disable no-unused-vars */
-import * as React from "react"
-import { styled } from "@mui/material/styles"
+import React, { useRef } from "react"
+import { styled, useTheme } from "@mui/material/styles"
 import {
   Box,
   Drawer,
@@ -9,13 +9,16 @@ import {
   ListItemIcon,
   Divider,
   ListItemText,
-  ListItemButton
+  ListItemButton,
+  Toolbar,
+  IconButton
 } from "@mui/material"
 import { DashboardMenus } from "router/routes/dashboardRoutes"
 import { Outlet } from "react-router-dom"
 import LogoutIcon from "@mui/icons-material/Logout"
 import { usePrivateLayoutController } from "./privateLayout.controller"
 import { useStyles } from "layout/privateLayoutStyles"
+import { AppBar } from "./Appbar"
 
 const drawerWidth = 270
 
@@ -41,8 +44,8 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
-  padding: theme.spacing(0, 1),
-  height: "100px",
+  height: "4rem",
+  backgroundColor: "#666666",
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
   justifyContent: "center"
@@ -50,48 +53,39 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 export default function PrivateLayout(props) {
   const styles = useStyles()
-
+  const appRef = useRef()
+  const theme = useTheme()
   const { navigate, handleLogout, activeMenu } = usePrivateLayoutController(props)
 
   return (
     <Box sx={{ display: "flex" }}>
-      {/* <Drawer sx={styles.drawer} variant="persistent" anchor="left" open={true}>
-        <List>
-          <DrawerHeader>
-            <Typography sx={styles.drawerHeader} variant="h4">
-              {process.env.REACT_APP_APP_NAME}
-            </Typography>
-          </DrawerHeader>
-          <Divider sx={styles.divider} />
-          {DashboardMenus.map((item) => {
-            return (
-              <ListItemButton
-                sx={activeMenu(item) ? styles.activeListItem : styles.listItem}
-                key={item.alias}
-                onClick={() => navigate(item.route)}>
-                <ListItemIcon sx={activeMenu(item) ? styles.iconActive : styles.icon}>
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText>
-                  <Typography sx={styles.listItemText}>{item.title}</Typography>
-                </ListItemText>
-              </ListItemButton>
-            )
-          })}
-        </List>
-        <List sx={styles.logout}>
-          <Divider sx={styles.divider} />
-          <ListItemButton onClick={handleLogout}>
-            <ListItemIcon sx={styles.icon}>
-              <LogoutIcon color="secondary" />
-            </ListItemIcon>
-            <ListItemText>
-              <Typography sx={styles.listItemText}>Logout</Typography>
-            </ListItemText>
-          </ListItemButton>
-        </List>
-      </Drawer> */}
       <Main open={open}>
+        <DrawerHeader position="fixed" open={open} sx={styles.appbar} ref={appRef}>
+          <Toolbar
+            sx={{
+              minWidth: 0,
+              width: "100%",
+              height: "4rem",
+              borderColor: "transparent",
+              backgroundColor: theme.palette.background.gray,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between"
+            }}>
+            <Box>
+              <Typography sx={styles.drawerHeader} variant="h5" color={theme.palette.text.main}>
+                {process.env.REACT_APP_APP_NAME}
+              </Typography>
+            </Box>
+            <Box>
+              <ListItemButton onClick={handleLogout}>
+                <ListItemIcon sx={styles.icon}>
+                  <LogoutIcon color="secondary" fontSize="large" />
+                </ListItemIcon>
+              </ListItemButton>
+            </Box>
+          </Toolbar>
+        </DrawerHeader>{" "}
         <Outlet />
       </Main>
     </Box>
