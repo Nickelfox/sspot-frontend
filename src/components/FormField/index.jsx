@@ -12,13 +12,14 @@ const FormField = ({
   type,
   showPassword,
   togglePasswordVisiblity,
-  hideLabel
+  hideLabel,
+  resize
 }) => {
   const styles = useStyles()
   return (
     <Grid container>
       {!hideLabel && (
-        <InputLabel sx={styles.label} htmlFor="email">
+        <InputLabel sx={!resize ? styles.label : styles?.smallLabel} htmlFor="email">
           {label}
           {required && "*"}
         </InputLabel>

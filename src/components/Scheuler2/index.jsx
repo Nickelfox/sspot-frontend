@@ -17,7 +17,7 @@ import { getDummyDataArray } from "helpers/conversionFunctions/conversion"
 import { Popover } from "antd"
 import AssignProject from "components/AssignProject"
 import CalendarFeed from "components/CalendarFeedForm"
-
+import DeleteResource from "components/DeleteModal"
 let resources = [
   {
     id: "r2",
@@ -576,13 +576,21 @@ const Calender = (props) => {
       />
     ),
     assignResource: <AssignProject requiredObject={selectedObject} />,
-    calenderFeed: <CalendarFeed requiredObject={selectedObject} handleClose={handlePopUpClose} />
+    calenderFeed: <CalendarFeed requiredObject={selectedObject} handleClose={handlePopUpClose} />,
+    deleteResource: (
+      <DeleteResource requiredObject={selectedObject} handleClose={handlePopUpClose} />
+    )
   }
   const handlePopUp = (key) => {
     switch (key) {
       case "cal":
         setPopupChild("calenderFeed")
         setOpenPopup(true)
+        return
+      case "del":
+        setPopupChild("deleteResource")
+        setOpenPopup(true)
+        return
     }
   }
   return (

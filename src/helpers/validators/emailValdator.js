@@ -8,3 +8,11 @@ export const EmailValidator = {
     email: Yup.string().email("Enter a valid email").required("Email is required")
   })
 }
+export const TextValidator = {
+  initialValues: {
+    confirm: ""
+  },
+  validationSchema: Yup.object().shape({
+    confirm: Yup.string().matches("YOLO", "Text Must Match").required("Text is required")
+  })
+}

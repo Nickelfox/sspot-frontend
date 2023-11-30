@@ -1,64 +1,62 @@
-import { Box, Typography, useTheme } from "@mui/material"
-import TitleContainer from "components/TitleContainer"
+import { Box, Stack, Typography, useTheme } from "@mui/material"
 import React from "react"
-import { useStyles } from "./calendarfeedStyles"
+import TitleContainer from "components/TitleContainer"
+import { useStyles } from "components/CalendarFeedForm/calendarfeedStyles"
+import SecondaryButton from "components/SecondaryButton"
 import { Formik } from "formik"
 import FormField from "components/FormField"
-import { EmailValidator } from "helpers/validators/emailValdator"
-import PrimaryButton from "components/PrimaryButton"
-import SecondaryButton from "components/SecondaryButton"
-const CalendarFeed = (props) => {
+import { TextValidator } from "helpers/validators/emailValdator"
+import DeleteButton from "components/DeleteButton"
+const DeleteResource = (props) => {
   const { requiredObject, handleClose } = props
   const styles = useStyles()
   const theme = useTheme()
+
   return (
-    <Box sx={styles?.container}>
+    <Stack sx={styles?.container}>
       <Box sx={styles.boxWrapper}>
-        <TitleContainer user={requiredObject?.slotName} subTitle={"Calendar Feed"} />
-        <Box sx={styles.subTitleContainer}>
+        <TitleContainer user={"Delete"} subTitle={requiredObject?.slotName} />
+        <Box>
           <Typography variant="s1" color={theme.palette.text.dark}>
-            Squad Spot offers each member of your team a calendar feed of their schedule, so they
-            can see all of their assignments and relevant milestones right in their work calendar.
-            Learn more.
+            <b>This action will permanently delete this person.</b> There is no undo. If you just
+            want to hide this person, we recommend archiving them instead.
           </Typography>
         </Box>
         <Box sx={styles.subTitleContainer}>
           <Typography variant="s1" paddingTop={"2rem"} color={theme.palette.text.dark}>
-            You can send {requiredObject?.slotName} an email telling them how to subscribe to their
-            calendar feed.
+            This action<b> will also permanently delete </b>this person&apos;s assignments.
           </Typography>
         </Box>
       </Box>
       <Box sx={styles.emailInputContainer}>
         <Formik
           validateOnMount
-          initialValues={EmailValidator.initialValues}
-          validationSchema={EmailValidator.validationSchema}
+          initialValues={TextValidator.initialValues}
+          validationSchema={TextValidator.validationSchema}
           onSubmit={() => {
-            console.log("Submit")
+            console.log("Delete")
           }}>
           {(formik) => (
             <Box>
               <Box sx={styles.emailInternalContainer}>
                 <Box sx={styles.emailFieldContainer}>
                   <FormField
-                    label={"Email ID"}
-                    placeholder="Enter Your Email"
+                    label={"Type YOLO to confirm"}
                     formik={formik}
-                    name={"email"}
+                    name={"confirm"}
                     required
-                    type={"email"}
-                    hideLabel
+                    type={"text"}
+                    resize
                   />
                 </Box>
               </Box>
               <Box sx={styles?.buttonContainer}>
-                <PrimaryButton
+                <DeleteButton
                   sx={[styles?.button, styles?.marginRight]}
                   type="submit"
                   onClick={formik.handleSubmit}>
-                  Send Feed Instructions
-                </PrimaryButton>
+                  Delete
+                </DeleteButton>
                 <SecondaryButton sx={styles?.button} onClick={handleClose}>
                   Back
                 </SecondaryButton>
@@ -67,8 +65,8 @@ const CalendarFeed = (props) => {
           )}
         </Formik>
       </Box>
-    </Box>
+    </Stack>
   )
 }
 
-export default CalendarFeed
+export default DeleteResource

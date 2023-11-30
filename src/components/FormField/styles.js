@@ -6,10 +6,20 @@ export const useStyles = () => {
     label: {
       marginTop: "2vh",
       color: "#444444",
-      fontSize: "16px",
+      fontSize: "1.6rem",
       fontStyle: "normal",
       fontWeight: " 600",
-      lineHeight: " 24px",
+      lineHeight: " 2.4rem",
+      letterSpacing: "0.5px",
+      textAlign: "left"
+    },
+    smallLabel: {
+      marginTop: "2vh",
+      color: "#444444",
+      fontSize: "1.4rem",
+      fontStyle: "normal",
+      fontWeight: " 600",
+      lineHeight: " 1.3rem",
       letterSpacing: "0.5px",
       textAlign: "left"
     },
