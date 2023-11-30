@@ -181,7 +181,11 @@ const AddResource = (props) => {
                   />
                 </Grid>
               </Grid>
-              <Grid item xs={12} className="flex items-center justify-around pb-8">
+              <Grid
+                item
+                xs={12}
+                className="flex items-center justify-around"
+                sx={{ paddingBottom: "3rem" }}>
                 <Grid item xs={2}>
                   <span className="pr-2 text-slate-500 text-xl">Capacity </span>
                 </Grid>

@@ -619,7 +619,7 @@ const Calender = (props) => {
           />
         )}{" "}
       </DndProvider>
-      <Box className="flex flex-col py-12 px-4">
+      <Box className="flex flex-col px-4" sx={{ paddingTop: "2rem" }}>
         <PrimaryButton
           style={{
             width: "fit-content",
