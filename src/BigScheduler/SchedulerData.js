@@ -892,7 +892,6 @@ export default class SchedulerData {
   }
 
   _getSpan(startTime, endTime, headers) {
-    console.log(this, "GETSPAn")
     if (this.showAgenda) return 1
 
     function startOfWeek(date) {
@@ -982,7 +981,10 @@ export default class SchedulerData {
       }
     }
     if (eventStart < windowStart) {
-      return span + 1
+      const getStartofCurrentWeek = dayjs(new Date()).startOf("w")
+      const weekStart = new Date(getStartofCurrentWeek)
+      const getTimeFromWeek = Math.ceil(timeBetween(eventStart, weekStart, "days"))
+      return span + getTimeFromWeek
     } else {
       return span
     }

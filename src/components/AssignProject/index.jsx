@@ -42,7 +42,7 @@ const AssignProject = (props) => {
       <Typography
         variant="h6"
         color="#363636"
-        gutterBottom={1}>{`${requiredObject?.name} Assignmet`}</Typography>{" "}
+        gutterBottom={1}>{`Assign ${requiredObject?.name} to`}</Typography>{" "}
       <Box paddingTop={"2rem"}>
         <Autocomplete
           // disablePortal

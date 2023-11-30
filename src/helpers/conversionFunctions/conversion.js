@@ -1,42 +1,42 @@
-import dayjs from "dayjs";
-import { months } from "../Months/months";
+import dayjs from "dayjs"
+import { months } from "../Months/months"
 
 export const getRequiredArray = (headers) => {
   const requiredArray = headers.map((item) => {
-    let currentDate = new Date(item?.time);
-    let month = months[currentDate.getMonth()];
-    const year = dayjs(currentDate).year();
-    let newWeeknumber = dayjs(currentDate).format("w");
+    let currentDate = new Date(item?.time)
+    let month = months[currentDate.getMonth()]
+    const year = dayjs(currentDate).year()
+    let newWeeknumber = dayjs(currentDate).format("w")
     const requiredObject = {
       time: item?.time,
       nonWorkingTime: item?.nonWorkingTime,
       weekDay: dayjs(new Date()).year() === year ? newWeeknumber : year,
       month: month
-    };
-    return requiredObject;
-  });
-  return requiredArray;
-};
+    }
+    return requiredObject
+  })
+  return requiredArray
+}
 export const getWeekDayMap = (headerArray, month) => {
-  const weekDayMap = new Map();
-  const requiredMonth = headerArray.filter((item) => item?.month === month);
+  const weekDayMap = new Map()
+  const requiredMonth = headerArray.filter((item) => item?.month === month)
   requiredMonth.forEach((item) => {
     if (!weekDayMap.has(item?.weekDay)) {
-      weekDayMap.set(item?.weekDay, [item]);
+      weekDayMap.set(item?.weekDay, [item])
     } else {
-      weekDayMap.set(item?.weekDay, [...weekDayMap.get(item?.weekDay), item]);
+      weekDayMap.set(item?.weekDay, [...weekDayMap.get(item?.weekDay), item])
     }
-  });
-  return weekDayMap;
-};
+  })
+  return weekDayMap
+}
 
 export const getHeaderMap = (requiredArray) => {
-  const headerMap = new Map();
+  const headerMap = new Map()
   requiredArray.forEach((item) => {
-    headerMap.set(item?.month, getWeekDayMap(requiredArray, item?.month));
-  });
-  return headerMap;
-};
+    headerMap.set(item?.month, getWeekDayMap(requiredArray, item?.month))
+  })
+  return headerMap
+}
 
 const dummyData = [
   {
@@ -97,37 +97,40 @@ const dummyData = [
       }
     ]
   }
-];
+]
 
 export const getDummyDataArray = () => {
-  let requiredUserInfo = [];
+  let requiredUserInfo = []
   dummyData.forEach((data) => {
     const requiredObject = {
       id: data.id,
       name: data?.user?.full_name,
       weeklyAvailability: data?.capacity,
-      workDays: data?.work_days,
+      // workDays: data?.work_days, //TODO: uncooment this
+      workDays: ["MON", "TUE", "THU", "FRI"],
+
       editPopup: false,
       expanded: false,
       projects: getProjectsArray(data?.project_members, data)
-    };
-    requiredUserInfo.push(requiredObject);
-  });
-  return requiredUserInfo;
-};
-
-const getProjectsArray = (projectArray, data) => {
+    }
+    requiredUserInfo.push(requiredObject)
+  })
+  return requiredUserInfo
+}
+//add Data here
+const getProjectsArray = (projectArray) => {
   const requiredProjectArray = projectArray.map((project) => {
     return {
       projectId: project.id,
       id: project?.project?.id,
       name: project?.project?.project_name,
       hoursAssigned: 4,
-      workDays: data?.work_days,
+      // workDays: data?.work_days,
+      workDays: ["MON", "TUE", "THU", "FRI"],
       expanded: false,
       editPopup: false,
       parentId: project?.member
-    };
-  });
-  return requiredProjectArray;
-};
+    }
+  })
+  return requiredProjectArray
+}

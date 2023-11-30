@@ -21,15 +21,15 @@ class EventItem extends Component {
       contentMousePosX: 0,
       eventItemLeftRect: 0,
       eventItemRightRect: 0
-    };
-    this.startResizer = null;
-    this.endResizer = null;
+    }
+    this.startResizer = null
+    this.endResizer = null
 
-    this.supportTouch = false; // 'ontouchstart' in window;
+    this.supportTouch = false // 'ontouchstart' in window;
 
-    this.eventItemRef = React.createRef();
-    this._isMounted = false;
-    
+    this.eventItemRef = React.createRef()
+    this._isMounted = false
+
     this.startResizer = null
     this.endResizer = null
 
@@ -532,7 +532,7 @@ class EventItem extends Component {
     } else {
       if (updateEventEnd != undefined) updateEventEnd(schedulerData, eventItem, newEnd)
     }
-  };
+  }
 
   cancelEndDrag = (ev) => {
     ev.stopPropagation()
@@ -548,8 +548,8 @@ class EventItem extends Component {
       left: left,
       top: top,
       width: width
-    });
-  };
+    })
+  }
 
   render() {
     const {
@@ -566,7 +566,6 @@ class EventItem extends Component {
     } = this.props
     const { config, localeDayjs } = schedulerData
     const { left, width, top } = this.state
-    console.log(eventItem)
     let roundCls = isStart
       ? isEnd
         ? "round-all"
@@ -625,7 +624,6 @@ class EventItem extends Component {
         </span>
       </div>
     )
-    console.log("inEventItem", width)
     if (eventItemTemplateResolver != undefined)
       eventItemTemplate = eventItemTemplateResolver(
         schedulerData,
@@ -643,7 +641,7 @@ class EventItem extends Component {
         className="timeline-event"
         ref={this.eventItemRef}
         onMouseMove={isPopoverPlacementMousePosition ? this.handleMouseMove : undefined}
-        style={{ left: left, width: width, top: top }}
+        style={{ left: left, width: width }}
         onClick={() => {
           if (eventClick) eventItemClick(schedulerData, eventItem)
         }}>

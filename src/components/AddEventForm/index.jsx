@@ -44,11 +44,15 @@ const AddEvent = (props) => {
   const [date, setDate] = useState(null)
   const [endDate, setEndDate] = useState(null)
   const [requiredInitValues, setRequiredInitValues] = useState(initValues)
+  const [dateDiff, setDateDiff] = useState(0)
   useEffect(() => {
-    console.log(eventData?.event?.start, "DATEFROMOBJECT")
     setDate(eventData?.event?.start)
     setEndDate(eventData?.event?.end)
   }, [eventData?.event?.start])
+  useEffect(() => {
+    dateDifference()
+  }, [date, endDate])
+  useEffect(() => {}, [date, endDate])
   const getInitialValues = () => {
     const initValues = {
       hours: "",
@@ -85,24 +89,12 @@ const AddEvent = (props) => {
   const getHoursPercent = (values) => {
     return (values / eventData?.child?.hoursAssigned) * 100
   }
-  const hoursField = (values, handleChange) => {
-    return (
-      <Input
-        name="hours"
-        type="telephone"
-        placeholder="0"
-        style={{ ...inputSyles?.input, ...inputSyles?.border }}
-        value={values?.hours}
-        onChange={(e) => {
-          handleChange(e)
-          setHours(e.target.value)
-        }}
-      />
-    )
+  const dateDifference = () => {
+    const difference = dayjs(endDate).diff(date, "days")
+    setDateDiff(difference === 0 ? 1 : difference + 1)
   }
   return (
     <Box sx={styles.formDisplay}>
-      {console.log(date, "InModal")}
       <Typography
         variant="h6"
         color="#363636"
@@ -111,7 +103,8 @@ const AddEvent = (props) => {
         validateOnMount
         initialValues={!eventData ? FormValidator.initialValues : requiredInitValues}
         validationSchema={FormValidator.validationSchema}
-        onSubmit={createEvent}>
+        onSubmit={createEvent}
+        enableReinitialize={true}>
         {({
           isValid,
           handleSubmit,
@@ -120,14 +113,14 @@ const AddEvent = (props) => {
           handleBlur,
           touched,
           errors,
-          setFieldValue
+          setFieldValue,
+          setFieldTouched
         }) => (
           <form
             style={{
               padding: "0.2rem",
               maxWidth: maxWidth
             }}>
-            {console.log(values, "here")}
             <Grid container alignItems={"center"} paddingBottom={"2rem"}>
               <Grid item xs={3}>
                 <Typography variant="c1" color="#929292">
@@ -135,7 +128,18 @@ const AddEvent = (props) => {
                 </Typography>
               </Grid>
               <Grid item xs={4}>
-                {hoursField(values, handleChange)}
+                <Input
+                  name="hours"
+                  type="telephone"
+                  placeholder="0"
+                  style={{ ...inputSyles?.input, ...inputSyles?.border }}
+                  value={values?.hours}
+                  onChange={(e) => {
+                    handleChange(e)
+                    setHours(e.target.value)
+                    setFieldValue("totalHours", e?.target?.value * dateDiff)
+                  }}
+                />{" "}
               </Grid>
               <Grid item xs={5}>
                 <Typography variant="c1" color="#929292">
@@ -151,11 +155,20 @@ const AddEvent = (props) => {
                 </Typography>
               </Grid>
               <Grid item xs={4}>
-                {hoursField(values, handleChange)}
+                <Input
+                  name="totalHours"
+                  type="telephone"
+                  placeholder="0"
+                  style={{ ...inputSyles?.input, ...inputSyles?.border }}
+                  value={values?.totalHours}
+                  onChange={(e) => {
+                    handleChange(e)
+                  }}
+                />{" "}
               </Grid>
               <Grid item xs={5}>
                 <Typography variant="c1" color="#929292">
-                  across 1 day
+                  across {dateDiff} day
                 </Typography>
               </Grid>
             </Grid>
@@ -181,6 +194,11 @@ const AddEvent = (props) => {
                     const formattedDate = dayjs(e).format("YYYY-MM-DD")
                     setFieldValue(`startDate`, formattedDate)
                     setDate(formattedDate)
+                    setFieldValue("totalHours", values?.hours * dateDiff)
+                    setTimeout(() => setFieldTouched("totalHours", true))
+                  }}
+                  onBlur={(e) => {
+                    console.log(e)
                   }}
                   className="h-14 w-full"
                   popupStyle={{ zIndex: 9999 }}
@@ -204,9 +222,12 @@ const AddEvent = (props) => {
                     ...inputSyles?.border
                   }}
                   onChange={(e) => {
+                    console.log(e)
                     const formattedDate = dayjs(e).format("YYYY-MM-DD")
                     setFieldValue(`endDate`, formattedDate)
                     setEndDate(formattedDate)
+                    setFieldValue("totalHours", values?.hours * dateDiff)
+                    setTimeout(() => setFieldTouched("totalHours", true))
                   }}
                   className="h-14 w-full"
                   popupStyle={{ zIndex: 9999 }}

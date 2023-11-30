@@ -6,7 +6,15 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp"
 import { ViewTypes } from "./helpers"
 import UserAvatar from "../components/UserAvatar/UserAvatar"
-import { Box, Typography } from "@mui/material"
+import {
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Typography
+} from "@mui/material"
 import dayjs from "dayjs"
 import { DATETIME_FORMAT } from "."
 import { Popover } from "antd"
@@ -39,7 +47,7 @@ const TableTry = (props) => {
     overflowY: "hidden",
     margin: 0,
     position: "relative",
-    height: 50
+    height: 48
     // paddingBottom: contentPaddingBottom
   }
 
@@ -106,42 +114,39 @@ const TableTry = (props) => {
       )
       return (
         !item?.parentId && (
-          <div
-            style={{
-              // marginTop: "0.1rem",
-              // marginBottom: expandItem?.size > 0 ? "1rem" : 0,
-              maxWidth: "100vw",
-              overflow: "hidden"
-            }}>
-            <div
+          <TableContainer sx={{ overflow: "hidden" }}>
+            <Table
               style={{
-                minHeight: "4.5rem",
-                display: "flex",
-                width: "fit-content",
-                height: "4.7rem"
+                overflow: "hidden",
+                marginBottom: 0
               }}>
-              <div
-                style={{ minWidth: "23.9rem", borderBottom: borderBottom }}
-                className="bg-[#fff] stickyCell flex justify-center items-center w-full">
-                <UserAvatar username={item?.slotName} />
-                <Box width={"100%"} display={"flex"} justifyContent={"space-around"}>
-                  <Typography variant="p1" color="black">
-                    {item?.slotName?.split(" ")[0]}
-                  </Typography>
-                  <Box>{getExpandButton(item)}</Box>
-                </Box>
-              </div>
-              {
-                <tr
-                  style={{
-                    marginTop: "-0.25rem"
-                  }}>
-                  <td style={{ border: 0 }}>
+              <TableBody sx={{ overflow: "hidden" }}>
+                <TableRow sx={{ minWidth: "100%" }}>
+                  <TableCell
+                    sx={{
+                      minWidth: "23.9rem",
+                      borderBottom: borderBottom,
+                      padding: 0,
+                      display: "flex",
+                      height: 43,
+                      width: 24
+                    }}
+                    className="bg-[#fff] stickyCell flex justify-center items-center w-full p-0">
+                    <UserAvatar username={item?.slotName} />
+                    <Box width={"100%"} display={"flex"} justifyContent={"space-around"}>
+                      <Typography variant="p1" color="black">
+                        {item?.slotName?.split(" ")[0]}
+                      </Typography>
+                      <Box>{getExpandButton(item)}</Box>
+                    </Box>
+                  </TableCell>
+                  <TableCell sx={{ padding: 0 }}>
                     <div
                       className="scheduler-view"
                       style={{
                         width: schedulerContainerWidth,
-                        verticalAlign: "top"
+                        height: 43
+                        // verticalAlign: "top"
                       }}>
                       <div
                         style={{
@@ -154,16 +159,16 @@ const TableTry = (props) => {
                         // onMouseOut={props.onSchedulerContentMouseOut}
                         // onScroll={props.onSchedulerContentScroll}
                       >
-                        <div style={{ width: schedulerWidth }}>
+                        <div style={{ width: schedulerWidth, position: "relative" }}>
                           <div className="scheduler-content">
                             <table className="scheduler-content-table">
                               <tbody>{resourceEventsList}</tbody>
                             </table>
                           </div>
                           <div className="scheduler-bg">
-                            <table
+                            <Box
                               className="scheduler-bg-table"
-                              style={{ width: schedulerWidth }}
+                              style={{ width: schedulerWidth, position: "relative" }}
                               // ref={props.schedulerContentBgTableRef}
                             >
                               <BodyView
@@ -172,15 +177,15 @@ const TableTry = (props) => {
                                 scroller={() => {}}
                                 currentItem={item}
                               />
-                            </table>
+                            </Box>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </td>
-                </tr>
-              }
-            </div>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
             {item?.expanded &&
               getInnerTable(
                 displayRenderData,
@@ -189,7 +194,7 @@ const TableTry = (props) => {
                 DndResourceEvents,
                 item
               )}
-          </div>
+          </TableContainer>
         )
       )
     })
@@ -203,7 +208,7 @@ const TableTry = (props) => {
         addMoreIndex: 0,
         count: 0,
         end: dayjs(header?.time).endOf("day").format(DATETIME_FORMAT),
-        nonWorkingTime: false,
+        nonWorkingTime: true,
         start: header.time,
         events: []
       }
@@ -215,6 +220,7 @@ const TableTry = (props) => {
       headerItems: requiredHeaders,
       indent: 0,
       parentId: item?.slotId,
+      workDays: item?.workDays,
       render: true,
       rowheight: 68,
       rowMaxCount: 1,
@@ -241,20 +247,27 @@ const TableTry = (props) => {
             />
           )
           return (
-            <div
+            <TableRow
               key={filteredItem?.slotId}
               style={{
                 // maxWidth: "24rem",
                 minWidth: "23.9rem",
-                height: "4.7rem",
+                height: 43,
                 display: "flex",
                 width: "fit-content"
               }}>
-              <div
-                style={{ minWidth: "23.9rem", borderBottom: borderBottom }}
+              <TableCell
+                sx={{
+                  minWidth: "23.9rem",
+                  width: 24,
+                  borderBottom: borderBottom,
+                  padding: 0,
+                  display: "flex",
+                  height: 43,
+                  paddingRight: "0.3rem"
+                }}
                 className="bg-[#fff] stickyCell flex justify-end items-center px-4">
                 <Typography variant="c1" color="#666" paddingRight={"1rem"}>
-                  {" "}
                   {filteredItem?.slotName}
                 </Typography>
                 <div
@@ -264,68 +277,75 @@ const TableTry = (props) => {
                     borderRadius: "8px"
                   }}
                 />
-              </div>
-              {
-                <tr>
-                  <td>
+              </TableCell>
+
+              <TableCell sx={{ padding: 0 }}>
+                <div
+                  className="scheduler-view"
+                  style={{
+                    width: schedulerContainerWidth,
+                    height: 43
+                  }}>
+                  <div
+                    style={{
+                      // position: "relative",
+                      ...schedulerContentStyle
+                    }}
+                    // style={schedulerContentStyle}
+                    // ref={props.schedulerContentRef}
+                    onMouseOver={props.onSchedulerContentMouseOver}
+                    onFocus={props.onSchedulerContentMouseOver}
+                    onMouseOut={props.onSchedulerContentMouseOut}
+                    onBlur={props.onSchedulerContentMouseOut}
+                    // onScroll={props.onSchedulerContentScroll}
+                  >
                     <div
-                      className="scheduler-view"
                       style={{
-                        width: schedulerContainerWidth,
-                        verticalAlign: "top"
+                        width: schedulerWidth,
+                        position: "relative"
                       }}>
-                      <div
-                        style={{
-                          position: "relative",
-                          ...schedulerContentStyle
-                        }}
-                        // style={schedulerContentStyle}
-                        // ref={props.schedulerContentRef}
-                        onMouseOver={props.onSchedulerContentMouseOver}
-                        onFocus={props.onSchedulerContentMouseOver}
-                        onMouseOut={props.onSchedulerContentMouseOut}
-                        onBlur={props.onSchedulerContentMouseOut}
-                        // onScroll={props.onSchedulerContentScroll}
-                      >
-                        <div style={{ width: schedulerWidth }}>
-                          <div className="scheduler-content">
-                            <table className="scheduler-content-table">
-                              <tbody>{resourceEventsList}</tbody>
-                            </table>
-                          </div>
-                          <div className="scheduler-bg">
-                            <table
-                              className="scheduler-bg-table"
-                              style={{ width: schedulerWidth }}
-                              ref={props.schedulerContentBgTableRef}>
-                              <BodyView
-                                {...props}
-                                // scroller={this.bodyScroller}
-                                scroller={() => {}}
-                                currentItem={filteredItem}
-                              />
-                            </table>
-                          </div>
-                        </div>
+                      <div className="scheduler-content">
+                        <table className="scheduler-content-table">
+                          <tbody>{resourceEventsList}</tbody>
+                        </table>
+                      </div>
+                      <div className="scheduler-bg">
+                        <table
+                          className="scheduler-bg-table"
+                          style={{ width: schedulerWidth, position: "relative" }}
+                          ref={props.schedulerContentBgTableRef}>
+                          <BodyView
+                            {...props}
+                            // scroller={this.bodyScroller}
+                            scroller={() => {}}
+                            currentItem={filteredItem}
+                          />
+                        </table>
                       </div>
                     </div>
-                  </td>
-                </tr>
-              }
-            </div>
+                  </div>
+                </div>
+              </TableCell>
+            </TableRow>
           )
         })}
 
-        <div
+        <TableRow
           style={{
-            height: "4.5rem",
+            height: "4.3rem",
             minWidth: "24rem",
             width: "fit-content",
             backgroundColor: "#fff",
             display: "flex"
           }}>
-          <div
-            style={{ minWidth: "23.9rem", borderBottom }}
+          <TableCell
+            sx={{
+              minWidth: "23.9rem",
+              borderBottom: borderBottom,
+              padding: 0,
+              display: "flex",
+              height: "4.3rem"
+            }}
             className="bg-[#fff] stickyCell flex justify-end items-center px-4">
             <Box className="flex justify-space w-full">
               <Box className="w-full cursor-pointer" onClick={openEditItemPopUp.bind(null, item)}>
@@ -348,7 +368,7 @@ const TableTry = (props) => {
                   )}
                 </Typography>
               </Box>
-              <Box className="w-full">
+              <Box className="w-full pr-1">
                 {/* <CustomAutoComplete options={[]} /> */}
                 <input type="text" list="cars" className="projectselctor" placeholder="Projects" />
                 <datalist id="cars" style={{ listStyleType: "solid" }}>
@@ -359,53 +379,51 @@ const TableTry = (props) => {
                 </datalist>
               </Box>
             </Box>
-          </div>
-          <tr>
-            <td>
+          </TableCell>
+          <TableCell sx={{ padding: 0 }}>
+            <div
+              className="scheduler-view"
+              style={{
+                width: schedulerContainerWidth,
+                verticalAlign: "top"
+              }}>
               <div
-                className="scheduler-view"
                 style={{
-                  width: schedulerContainerWidth,
-                  verticalAlign: "top"
-                }}>
-                <div
-                  style={{
-                    position: "relative",
-                    ...schedulerContentStyle
-                  }}
-                  // style={schedulerContentStyle}
-                  // ref={props.schedulerContentRef}
-                  onMouseOver={props.onSchedulerContentMouseOver}
-                  onFocus={props.onSchedulerContentMouseOver}
-                  onMouseOut={props.onSchedulerContentMouseOut}
-                  onBlur={props.onSchedulerContentMouseOut}
-                  // onScroll={props.onSchedulerContentScroll}
-                >
-                  <div style={{ width: schedulerWidth }}>
-                    <div className="scheduler-content">
-                      <table className="scheduler-content-table">
-                        <tbody>{dropDownEventList}</tbody>
-                      </table>
-                    </div>
-                    <div className="scheduler-bg">
-                      <table
-                        className="scheduler-bg-table"
-                        style={{ width: schedulerWidth }}
-                        ref={props.schedulerContentBgTableRef}>
-                        <BodyView
-                          {...props}
-                          // scroller={this.bodyScroller}
-                          scroller={() => {}}
-                          currentItem={dropDownItem}
-                        />
-                      </table>
-                    </div>
+                  // position: "relative",
+                  ...schedulerContentStyle
+                }}
+                // style={schedulerContentStyle}
+                // ref={props.schedulerContentRef}
+                onMouseOver={props.onSchedulerContentMouseOver}
+                onFocus={props.onSchedulerContentMouseOver}
+                onMouseOut={props.onSchedulerContentMouseOut}
+                onBlur={props.onSchedulerContentMouseOut}
+                // onScroll={props.onSchedulerContentScroll}
+              >
+                <div style={{ width: schedulerWidth, position: "relative" }}>
+                  <div className="scheduler-content">
+                    <table className="scheduler-content-table">
+                      <tbody>{dropDownEventList}</tbody>
+                    </table>
+                  </div>
+                  <div className="scheduler-bg">
+                    <table
+                      className="scheduler-bg-table"
+                      style={{ width: schedulerWidth, position: "relative" }}
+                      ref={props.schedulerContentBgTableRef}>
+                      <BodyView
+                        {...props}
+                        // scroller={this.bodyScroller}
+                        scroller={() => {}}
+                        currentItem={dropDownItem}
+                      />
+                    </table>
                   </div>
                 </div>
               </div>
-            </td>
-          </tr>{" "}
-        </div>
+            </div>
+          </TableCell>{" "}
+        </TableRow>
       </>
     )
   }
