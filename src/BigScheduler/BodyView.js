@@ -6,7 +6,7 @@ import { getHeaderMap, getRequiredArray } from "../helpers/conversionFunctions/c
 
 let updateLocale = require("dayjs/plugin/updateLocale")
 dayjs.extend(updateLocale)
-const dayArr = ["SUN", "MON", "TUE", "THU", "FRI", "SAT"]
+const dayArr = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]
 dayjs.updateLocale("en", {
   weekdays: dayArr
 })
@@ -35,12 +35,13 @@ class BodyView extends Component {
       const headerMap = getHeaderMap(requiredArray)
       const headerMapArray = Array.from(headerMap)
       return (
-        <tr
+        <table
           key={item?.slotId}
           style={{
             width: "100%",
             display: "flex",
-            height: "fit-content",
+            // height: "fit-content",
+            height: 43,
             borderBottom: 0
           }}>
           {headerMapArray.map((headerItem, parentIndex) => {
@@ -49,13 +50,14 @@ class BodyView extends Component {
 
             const headerItemArray1 = Array.from(headerItem[1])
             return (
-              <span key={currentItem?.slotId}>
-                <span
+              <tr key={currentItem?.slotId}>
+                <td
                   key={`${currentItem?.slotName}${parentIndex + 1}`}
-                  className="flex w-full font-md">
+                  className="flex w-full font-md border-spacing-0"
+                  style={{ border: 0, margin: 0, padding: 0 }}>
                   {headerItemArray1.map((childItem, childIndex) => {
                     return (
-                      <span
+                      <div
                         key={childIndex[0]}
                         className={`body_${childItem[0]} flex`}
                         id={`X_${childItem[0]}`}
@@ -63,21 +65,21 @@ class BodyView extends Component {
                           border: 0,
                           marginTop: 0,
                           marginBottom: 0,
-                          height: "5rem"
+                          height: "4.3rem"
                         }}>
                         {getRows(Array.from(childItem[1]), daySet)}
-                      </span>
+                      </div>
                     )
                   })}
-                </span>
-              </span>
+                </td>
+              </tr>
             )
           })}
-        </tr>
+        </table>
       )
     })
 
-    return <tbody style={{ height: "fit-content" }}>{tableRows}</tbody>
+    return tableRows
   }
 }
 
@@ -87,6 +89,11 @@ const getRows = (array, daySet) => {
   return array.map((childrenItem) => {
     const currentDate = dayjs(new Date()).format("DD-MM")
     const itemDate = dayjs(childrenItem?.time).format("DD-MM")
+    const dayIndex = dayjs(childrenItem?.time).day()
+    const childrenDay = dayArr[dayIndex]
+    const dayCheck = daySet.has(childrenDay) ? null : (
+      <img src={nonWorking} alt="" style={{ zIndex: 999 }} />
+    )
     return (
       <td
         key={childrenItem[0]}
@@ -103,10 +110,23 @@ const getRows = (array, daySet) => {
           marginTop: 0,
           marginBottom: 0
         }}>
-        {!!childrenItem?.nonWorkingTime || daySet.has(dayjs(childrenItem?.time).day()) ? (
-          <img src={nonWorking} alt="" />
-        ) : null}
+        {childrenItem?.nonWorkingTime ? (
+          <img src={nonWorking} alt="" style={{ zIndex: 9 }} />
+        ) : (
+          dayCheck
+        )}
       </td>
     )
   })
 }
+
+// const getNonWorkingTime = (childrenItem, daySet, chidrenDay) => {
+//   if (childrenItem?.nonWorkingTime) {
+//     return <img src={nonWorking} alt="" style={{ zIndex: "1000" }} />
+//   }
+//   if (daySet.has(chidrenDay)) {
+//     return
+//   } else {
+//     return <img src={nonWorking} alt="" style={{ zIndex: 999 }} />
+//   }
+// }

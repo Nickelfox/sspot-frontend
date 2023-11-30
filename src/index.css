@@ -293,7 +293,7 @@ table.scheduler-table tr:last-child td {
 }
 
 .event-item {
-  margin: 1px 0;
+  /* margin: 3px 0; */
   /* width: 100%; */
   overflow: hidden;
   text-overflow: ellipsis;
@@ -371,6 +371,10 @@ table.scheduler-table tr:last-child td {
   position: absolute;
 }
 
+.selected-area:hover {
+  background-color: red;
+}
+
 .slot-cell {
   /* padding-left: 4px;
     padding-right: 4px; */
@@ -445,16 +449,25 @@ table.scheduler-table tr:last-child td {
   display: none;
 }
 
+.addMileStone {
+  display: none;
+}
+
+.addMileStone :hover {
+  display: block;
+  height: 4.3rem;
+  width: 5rem;
+  background-color: #282c34;
+  opacity: 0.5;
+  z-index: 999;
+}
+
 .popover-calendar .ant-picker .ant-picker-input .ant-picker-suffix {
   margin-left: -0.7rem;
   margin-right: auto;
   font-size: 2rem;
   font-weight: 500;
   color: #666666
-}
-
-.ant-picker-content thead {
-  /* display: none; */
 }
 
 .btn:hover {

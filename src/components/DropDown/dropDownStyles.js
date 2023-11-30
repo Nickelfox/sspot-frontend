@@ -1,6 +1,6 @@
-import { useTheme } from "@mui/material";
+import { useTheme } from "@mui/material"
 const useStyles = () => {
-  const theme = useTheme();
+  const theme = useTheme()
   return {
     dropDown: {
       backgroundColor: "#fff",
@@ -51,13 +51,13 @@ const useStyles = () => {
       }
     },
     normalHeight: {
-      height: "5rem",
+      height: "4rem",
       width: "13rem"
     },
     smallHeight: {
       height: "3rem",
       width: "100%"
     }
-  };
-};
-export default useStyles;
+  }
+}
+export default useStyles

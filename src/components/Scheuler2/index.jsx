@@ -23,7 +23,7 @@ let resources = [
     name: "Staff_Tom",
     weeklyAvailability: 40,
     expanded: false,
-    workDays: [],
+    workDays: ["MON", "TUE", "WED", "THU", "FRI"],
     editPopup: false,
     projects: [
       {
@@ -31,14 +31,14 @@ let resources = [
         name: "Staff_Val",
         parentId: "r2",
         expanded: false,
-        workDays: [],
+        workDays: ["MON", "TUE", "WED", "THU", "FRI"],
         hoursAssigned: 4
       },
       {
         id: "r7",
         name: "Manager_C",
         expanded: false,
-        workDays: [],
+        workDays: ["MON", "TUE", "WED", "THU", "FRI"],
         editPopup: false,
         parentId: "r2",
         hoursAssigned: 6
@@ -136,6 +136,7 @@ const Calender = (props) => {
   useEffect(() => {
     getSchedulerData()
   }, [])
+
   useEffect(() => {
     triggerRerender(render + 1)
   }, [triger])
@@ -203,7 +204,7 @@ const Calender = (props) => {
     //     event.type == 1 ? "#80C5F6" : event.type == 3 ? "#FA9E95" : "#D9D9D9";
     // }
     const hex = event?.bgColor
-    let opacity = "0.7"
+    let opacity = 0.7
     // Convert each hex character pair into an integer
     let red = parseInt(hex?.substring(1, 3), 16)
     let green = parseInt(hex?.substring(3, 5), 16)
@@ -375,7 +376,6 @@ const Calender = (props) => {
   const newEvent = (schedulerData, slotId, slotName, start, end, type, item) => {
     handlePopUpClose()
     const requiredDataObject = {}
-    console.log(slotId)
     const childObject = resoureMap.get(slotId)
     if (slotName) {
       const requiredObject = resoureMap.get(childObject?.parentId)
@@ -403,9 +403,9 @@ const Calender = (props) => {
       if (!isMobile && !isTablet) {
         const newStyles = {
           position: "absolute",
-          left: elemRect.left > 1180 ? 1180 : elemRect.left,
+          left: elemRect.x > 1180 ? 1180 : elemRect.left,
           right: elemRect.right,
-          top: elemRect.top > 300 ? 300 : elemRect.top
+          top: elemRect.top > 270 ? 265 : elemRect.top
         }
         setPopupChild("addEvent")
         setIsAddeventPopover(true)
@@ -427,7 +427,7 @@ const Calender = (props) => {
           position: "absolute",
           left: elemRect.left > 1180 ? 1180 : elemRect.left,
           right: elemRect.right,
-          top: elemRect.top > 300 ? 300 : elemRect.top
+          top: elemRect.top > 250 ? 250 : elemRect.top
         }
         setPopupChild("assignResource")
         setIsAddeventPopover(true)
@@ -585,7 +585,7 @@ const Calender = (props) => {
       }}>
       <Box
         style={{
-          minHeight: "7rem",
+          minHeight: "4rem",
           minWidth: "100vw",
           backgroundColor: "#666666"
         }}></Box>

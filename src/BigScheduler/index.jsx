@@ -378,7 +378,8 @@ class Scheduler extends Component {
           style={{
             overflow: "hidden",
             borderBottom: "1px solid #e9e9e9",
-            height: config.tableHeaderHeight
+            // height: config.tableHeaderHeight
+            height: 55
           }}>
           <div
             style={{

@@ -7,7 +7,7 @@ import FormControl from "@mui/material/FormControl"
 import Select from "@mui/material/Select"
 import MenuItem from "@mui/material/MenuItem"
 import useStyles from "./dropDownStyles"
-
+import styles from "./dropDown.module.scss"
 const DropDown = (props) => {
   const {
     items,
@@ -23,7 +23,7 @@ const DropDown = (props) => {
     onBlur = () => {},
     disabled
   } = props
-  const styles = useStyles()
+  const objectStyles = useStyles()
   return (
     <Box>
       <FormControl
@@ -31,6 +31,11 @@ const DropDown = (props) => {
         style={style}
         variant="filled"
         disabled={disabled}
+        sx={
+          !handleSize
+            ? [objectStyles.normalHeight, objectStyles.select]
+            : [objectStyles.smallHeight, objectStyles?.select]
+        }
         // error={showError}
         // helperText={helperText}
       >
@@ -39,19 +44,27 @@ const DropDown = (props) => {
           onBlur={onBlur}
           sx={
             !handleSize
-              ? [styles.normalHeight, styles.select]
-              : [styles.smallHeight, styles?.select]
+              ? [objectStyles.normalHeight, objectStyles.select]
+              : [objectStyles.smallHeight, objectStyles?.select]
           }
           labelId="demo-simple-select-label"
           name={fieldName}
           id="demo-simple-select"
-          input={<OutlinedInputField />}
+          input={
+            <OutlinedInputField
+              sx={
+                !handleSize
+                  ? [objectStyles.normalHeight, objectStyles.select]
+                  : [objectStyles.smallHeight, objectStyles?.select]
+              }
+            />
+          }
           hiddenLabel
           renderValue={value !== null ? undefined : () => "placeholder text"}
           value={value}
           onChange={handleChange}
           //   IconComponent={NewIcon}
-          MenuProps={{ classes: { paper: `menuPaper` } }}>
+          MenuProps={{ classes: { paper: `${styles.menuPaper}` } }}>
           {items?.map((item, index) => (
             <MenuItem value={item.value} key={item?.value}>
               {item?.label}

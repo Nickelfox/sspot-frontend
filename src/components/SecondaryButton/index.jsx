@@ -8,10 +8,10 @@ const SecondaryButton = styled(Button)(
       fontWeight: fontWeight,
       height: height,
       width: width,
-      color: `#c4cbda`,
+      color: `#aaaaaa`,
       textTransform: "none",
       padding: "0.6rem 1.2rem",
-      backgroundColor: `#fff`,
+      backgroundColor: `#e4e4e4`,
       border: `0.1rem solid #c4cbda`,
       "&:hover": {
         backgroundColor: `#fff`,
