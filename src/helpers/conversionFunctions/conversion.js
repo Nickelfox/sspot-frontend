@@ -107,7 +107,7 @@ export const getDummyDataArray = () => {
       name: data?.user?.full_name,
       weeklyAvailability: data?.capacity,
       // workDays: data?.work_days, //TODO: uncooment this
-      workDays: ["MON", "TUE", "THU", "FRI"],
+      // workDays: ["MON", "TUE", "THU", "FRI"],
       email: data?.user?.email,
       editPopup: false,
       expanded: false,
@@ -126,7 +126,7 @@ const getProjectsArray = (projectArray, data) => {
       name: project?.project?.project_name,
       hoursAssigned: 4,
       // workDays: data?.work_days,
-      workDays: ["MON", "TUE", "THU", "FRI"],
+      // workDays: ["MON", "TUE", "THU", "FRI"],
       expanded: false,
       editPopup: false,
       parentId: project?.member,

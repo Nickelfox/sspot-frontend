@@ -19,6 +19,7 @@ import AssignProject from "components/AssignProject"
 import CalendarFeed from "components/CalendarFeedForm"
 import DeleteResource from "components/DeleteModal"
 import ArchiveResource from "components/ArchiveForm"
+import { useStyles } from "./schedulerStyles"
 let resources = [
   {
     id: "r2",
@@ -135,6 +136,7 @@ const Calender = (props) => {
   const [resourceEvent, setResourceEvent] = useState(null)
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const isTablet = useMediaQuery(theme.breakpoints.down("md"))
+  const styles = useStyles()
   useEffect(() => {
     getSchedulerData()
   }, [])
@@ -653,12 +655,7 @@ const Calender = (props) => {
       </DndProvider>
       <Box className="flex flex-col px-4" sx={{ paddingTop: "2rem" }}>
         <PrimaryButton
-          style={{
-            width: "fit-content",
-            padding: "2rem",
-            fontSize: "2rem",
-            marginBottom: "1rem"
-          }}
+          sx={styles?.addPersonButton}
           onClick={handleAddEventPopUp.bind(null, "addResource")}>
           + Add Person
         </PrimaryButton>

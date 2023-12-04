@@ -18,7 +18,7 @@ const ArchiveResource = (props) => {
         <TitleContainer user={"Archive"} subTitle={requiredObject?.slotName} />
         <Box>
           <Typography variant="s1" color={theme.palette.text.dark}>
-            <b>This action will archive this person.</b> This step is undoable . If you want to
+            <b>This action will archive this person.</b> This step is undoable. If you want to
             delete this person, we recommend deleting them instead.
           </Typography>
         </Box>

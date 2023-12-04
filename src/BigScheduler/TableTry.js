@@ -19,10 +19,17 @@ import dayjs from "dayjs"
 import { DATETIME_FORMAT } from "."
 import { Popover } from "antd"
 const editItemObject = [
-  {
-    label: "Edit",
-    value: "edit"
-  },
+  /**
+   * @Actions
+   * Hidden Edit Action
+   * Will be Used in Future.
+   * @HiddenAfter
+   * Update call with Ravindra Soni
+   */
+  // {
+  //   label: "Edit",
+  //   value: "edit"
+  // },
   { label: "Calendar Feed", value: "cal" },
   {
     label: "Archive",
@@ -349,9 +356,11 @@ const TableTry = (props) => {
               display: "flex",
               height: 43
             }}
-            className="bg-[#fff] stickyCell flex justify-end items-center px-4">
+            className="bg-[#fff] stickyCell flex justify-end items-center px-4 pl-2">
             <Box className="flex justify-space w-full">
-              <Box className="w-full cursor-pointer" onClick={openEditItemPopUp.bind(null, item)}>
+              <Box
+                className="w-full cursor-pointer pl-2"
+                onClick={openEditItemPopUp.bind(null, item)}>
                 {" "}
                 <Typography variant="p2" sx={{ color: "#888888", textDecoration: "underline" }}>
                   Actions <KeyboardArrowDownIcon />

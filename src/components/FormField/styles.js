@@ -19,7 +19,7 @@ export const useStyles = () => {
       fontSize: "1.4rem",
       fontStyle: "normal",
       fontWeight: " 600",
-      lineHeight: " 1.3rem",
+      lineHeight: " 1.5rem",
       letterSpacing: "0.5px",
       textAlign: "left"
     },

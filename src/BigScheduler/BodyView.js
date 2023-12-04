@@ -3,13 +3,7 @@ import { PropTypes } from "prop-types"
 import dayjs from "dayjs"
 import nonWorking from "../assets/images/nonWorking.webp"
 import { getHeaderMap, getRequiredArray } from "../helpers/conversionFunctions/conversion"
-
-let updateLocale = require("dayjs/plugin/updateLocale")
-dayjs.extend(updateLocale)
-const dayArr = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]
-dayjs.updateLocale("en", {
-  weekdays: dayArr
-})
+const dayArr = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
 class BodyView extends Component {
   //eslint-disable-next-line
   // constructor(props) {
@@ -90,7 +84,7 @@ const getRows = (array, daySet) => {
     const itemDate = dayjs(childrenItem?.time).format("DD-MM")
     const dayIndex = dayjs(childrenItem?.time).day()
     const childrenDay = dayArr[dayIndex]
-    const dayCheck = daySet.has(childrenDay) ? null : (
+    const dayCheck = !daySet.has(childrenDay) ? null : (
       <img src={nonWorking} alt="" style={{ zIndex: 999 }} />
     )
     return (
