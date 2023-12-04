@@ -197,9 +197,6 @@ const AddEvent = (props) => {
                     setFieldValue("totalHours", values?.hours * dateDiff)
                     setTimeout(() => setFieldTouched("totalHours", true))
                   }}
-                  onBlur={(e) => {
-                    console.log(e)
-                  }}
                   className="h-14 w-full"
                   popupStyle={{ zIndex: 9999 }}
                 />{" "}
@@ -222,7 +219,6 @@ const AddEvent = (props) => {
                     ...inputSyles?.border
                   }}
                   onChange={(e) => {
-                    console.log(e)
                     const formattedDate = dayjs(e).format("YYYY-MM-DD")
                     setFieldValue(`endDate`, formattedDate)
                     setEndDate(formattedDate)

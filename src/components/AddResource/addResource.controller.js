@@ -2,9 +2,8 @@ import { useEffect, useState } from "react"
 import { FormValidator } from "helpers/validations/addResourceValidations"
 
 export const useResourceController = (props) => {
-  const { isEdit, requiredObject } = props
+  const { isEdit } = props
   const [initialValues, setInitialValues] = useState(null)
-  console.log(requiredObject, "FORM")
   useEffect(() => {
     getInitialValues()
   }, [])

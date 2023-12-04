@@ -102,7 +102,6 @@ const dummyData = [
 export const getDummyDataArray = () => {
   let requiredUserInfo = []
   dummyData.forEach((data) => {
-    console.log(data, "Here Is Data")
     const requiredObject = {
       id: data.id,
       name: data?.user?.full_name,

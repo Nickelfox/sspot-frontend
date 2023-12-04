@@ -32,7 +32,6 @@ const AddResource = (props) => {
   const isTablet = useMediaQuery(theme.breakpoints.down("sm"))
   const isNotLaptop = useMediaQuery(theme.breakpoints.down("md"))
   const isMobile = useMediaQuery(theme.breakpoints.down("xs"))
-  console.log(selectedObject, "AddResource")
 
   const createResource = (values) => {
     const requiredObject = {

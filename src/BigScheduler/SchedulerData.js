@@ -889,7 +889,6 @@ export default class SchedulerData {
         slotStack.push(currentNode.children[i])
       }
     }
-    console.log(initRenderData, "Line Number891")
     return initRenderData
   }
 
@@ -1075,14 +1074,12 @@ export default class SchedulerData {
       this.resources,
       this.headers
     )
-    console.log(this.resources, "Here Are REsources1")
     //this.events.sort(this._compare);
     let cellMaxEventsCount = this.getCellMaxEvents()
     const cellMaxEventsCountValue = 30
 
     this.events.forEach((item) => {
       let resourceEventsList = initRenderData.filter((x) => x.slotId === this._getEventSlotId(item))
-      console.log(item, "11777")
       if (resourceEventsList.length > 0) {
         let resourceEvents = resourceEventsList[0]
         let span = this._getSpan(item.start, item.end, this.headers)

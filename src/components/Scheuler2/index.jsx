@@ -325,7 +325,6 @@ const Calender = (props) => {
     schedulerData.setParentViewType("Team")
   }
   const showResourceEditPopup = (schedulerData, itemToEdit) => {
-    console.log(itemToEdit, "ItemTO edit")
     const { renderData } = schedulerData
     const requiredArray = renderData.map((item) => {
       return {

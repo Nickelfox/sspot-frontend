@@ -102,13 +102,11 @@ const TableTry = (props) => {
       />
     )
   }
-  console.log(renderData, "Here IS Render Data")
   const displayRenderData = renderData.filter((o) => o.render)
   const getDivs = () => {
     let eventDndSource = dnd.getDndSource()
     let DndResourceEvents = dnd.getDropTarget(config.dragAndDropEnabled)
     return displayRenderData.map((item, index) => {
-      console.log(item, "Here is Item")
       let resourceEventsList = (
         <DndResourceEvents
           {...props}

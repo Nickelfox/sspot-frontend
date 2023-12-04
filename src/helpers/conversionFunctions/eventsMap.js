@@ -1,15 +1,11 @@
 export const convertEventsToMap = (eventsArray) => {
-  const eventsMap = new Map();
+  const eventsMap = new Map()
   eventsArray.forEach((event) => {
     if (eventsMap.has(event?.resourceId)) {
-      eventsMap.set(event.resourceId, [
-        ...eventsMap.get(event?.resourceId),
-        event
-      ]);
+      eventsMap.set(event.resourceId, [...eventsMap.get(event?.resourceId), event])
     } else {
-      eventsMap.set(event.resourceId, event);
+      eventsMap.set(event.resourceId, event)
     }
-  });
-  console.log(eventsMap,"Map");
-  return eventsMap;
-};
+  })
+  return eventsMap
+}

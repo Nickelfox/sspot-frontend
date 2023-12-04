@@ -29,7 +29,6 @@ class BodyView extends Component {
       (item) => item?.slotId === currentItem?.slotId || item?.slotId === currentItem?.parentId
     )
     const daySet = new Set(currentItem?.workDays)
-    console.log(daySet, currentItem?.slotName, "32")
     let tableRows = requiredMap.map((item) => {
       const requiredArray = getRequiredArray(headers)
       const headerMap = getHeaderMap(requiredArray)
@@ -85,9 +84,8 @@ class BodyView extends Component {
 
 export default BodyView
 
-const getRows = (array, daySet, currentItem) => {
+const getRows = (array, daySet) => {
   return array.map((childrenItem) => {
-    const newDaySet = new Set(dayArr)
     const currentDate = dayjs(new Date()).format("DD-MM")
     const itemDate = dayjs(childrenItem?.time).format("DD-MM")
     const dayIndex = dayjs(childrenItem?.time).day()
@@ -95,8 +93,6 @@ const getRows = (array, daySet, currentItem) => {
     const dayCheck = daySet.has(childrenDay) ? null : (
       <img src={nonWorking} alt="" style={{ zIndex: 999 }} />
     )
-    // const dayCheck = daySet.has(childrenDay)
-    console.log(daySet.has(childrenDay), newDaySet, currentItem?.slotName, "HAHAHHA")
     return (
       <td
         key={childrenItem[0]}
