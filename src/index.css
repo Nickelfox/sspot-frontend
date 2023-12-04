@@ -538,7 +538,8 @@ input::-webkit-calendar-picker-indicator:active {
 }
 
 .availabilitySelector:hover {
-  background-color: #e1e1e1;
+  background-color: #366BAB;
+  color: "#e4e4e4"
 }
 
 .MuiOutlinedInput-notchedOutline {
