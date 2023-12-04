@@ -16,3 +16,11 @@ export const TextValidator = {
     confirm: Yup.string().matches("YOLO", "Text Must Match").required("Text is required")
   })
 }
+export const ArchiveValidator = {
+  initialValues: {
+    confirm: ""
+  },
+  validationSchema: Yup.object().shape({
+    confirm: Yup.string().matches("ARCHIVE", "Text Must Match").required("Text is required")
+  })
+}

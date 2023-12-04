@@ -74,7 +74,7 @@ class SchedulerHeader extends Component {
     } = this.props
     const { viewTye, isViewTypeOpen } = this.state
     const { viewType, showAgenda, isEventPerspective, config } = schedulerData
-    let dateLabel = schedulerData.getDateLabel()
+    // let dateLabel = schedulerData.getDateLabel()
     let selectDate = schedulerData.getSelectedDate()
     let width = "20rem"
     // let width = schedulerData.getResourceTableWidth() - 2;
