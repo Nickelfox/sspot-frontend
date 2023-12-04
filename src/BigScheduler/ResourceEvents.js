@@ -95,7 +95,6 @@ class ResourceEvents extends Component {
     // let cellWidth = schedulerData.getContentCellWidth();
     let cellWidth = 50
     let pos = getPos(this.eventContainer)
-    console.log(pos)
     let startX = clientX - pos.x
     let leftIndex = Math.floor(startX / cellWidth)
     let left = leftIndex * cellWidth

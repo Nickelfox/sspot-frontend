@@ -76,7 +76,6 @@ export default class DnDSource {
 
           events.forEach((e) => {
             if (schedulerData._getEventSlotId(e) === slotId && (!isEvent || e.id !== item.id)) {
-              console.log("Here is Conflict")
               let eStart = localeDayjs(e.start),
                 eEnd = localeDayjs(e.end)
               if (

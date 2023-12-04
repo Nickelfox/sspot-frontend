@@ -108,7 +108,7 @@ export const getDummyDataArray = () => {
       weeklyAvailability: data?.capacity,
       // workDays: data?.work_days, //TODO: uncooment this
       workDays: ["MON", "TUE", "THU", "FRI"],
-
+      email: data?.user?.email,
       editPopup: false,
       expanded: false,
       projects: getProjectsArray(data?.project_members, data)
@@ -118,7 +118,7 @@ export const getDummyDataArray = () => {
   return requiredUserInfo
 }
 //add Data here
-const getProjectsArray = (projectArray) => {
+const getProjectsArray = (projectArray, data) => {
   const requiredProjectArray = projectArray.map((project) => {
     return {
       projectId: project.id,
@@ -129,7 +129,8 @@ const getProjectsArray = (projectArray) => {
       workDays: ["MON", "TUE", "THU", "FRI"],
       expanded: false,
       editPopup: false,
-      parentId: project?.member
+      parentId: project?.member,
+      email: data?.user?.email
     }
   })
   return requiredProjectArray

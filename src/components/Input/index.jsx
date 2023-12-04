@@ -62,8 +62,8 @@ const InputField = styled(TextField)(({ placeholdertext }) => {
     //   }
     "& .MuiFilledInput-root": {
       border: `1px solid ${theme.palette.background.gray}`,
-      borderRadius: "0.4rem",
-      height: "6.2rem",
+      borderRadius: "0.2rem",
+      height: "4rem",
       overflow: "hidden",
       fontSize: `${theme.typography.p1.fontSize} !important`,
       fontWeight: `${theme.typography.p1.fontWeight} !important`,

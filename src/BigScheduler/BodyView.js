@@ -29,7 +29,6 @@ class BodyView extends Component {
       (item) => item?.slotId === currentItem?.slotId || item?.slotId === currentItem?.parentId
     )
     const daySet = new Set(currentItem?.workDays)
-
     let tableRows = requiredMap.map((item) => {
       const requiredArray = getRequiredArray(headers)
       const headerMap = getHeaderMap(requiredArray)
@@ -65,9 +64,9 @@ class BodyView extends Component {
                           border: 0,
                           marginTop: 0,
                           marginBottom: 0,
-                          height: "4.3rem"
+                          height: 43
                         }}>
-                        {getRows(Array.from(childItem[1]), daySet)}
+                        {getRows(Array.from(childItem[1]), daySet, currentItem)}
                       </div>
                     )
                   })}
@@ -111,7 +110,7 @@ const getRows = (array, daySet) => {
           marginBottom: 0
         }}>
         {childrenItem?.nonWorkingTime ? (
-          <img src={nonWorking} alt="" style={{ zIndex: 9 }} />
+          <img src={nonWorking} alt="" style={{ zIndex: "1000" }} />
         ) : (
           dayCheck
         )}

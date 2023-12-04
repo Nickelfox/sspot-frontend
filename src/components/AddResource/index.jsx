@@ -12,13 +12,8 @@ import DropDown from "../DropDown"
 import BasicTooltip from "../ToolTip"
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark"
 import { items } from "helpers/dropDownListing/hoursListing"
-
-const initialValues = {
-  firstName: "",
-  lastName: "",
-  weeklyAvailability: "",
-  workDays: []
-}
+import ErrorText from "components/ErrorText"
+import { useResourceController } from "./addResource.controller"
 
 const workDays = [
   { value: "SUN", label: "SUN" },
@@ -30,7 +25,8 @@ const workDays = [
   { value: "SAT", label: "SAT" }
 ]
 const AddResource = (props) => {
-  const { handleClose, addResorceInScheduler, resourceLength } = props
+  const { handleClose, addResorceInScheduler, resourceLength, isEdit, selectedObject } = props
+  const { initialValues } = useResourceController(props)
   const styles = useStyles()
   const theme = useTheme()
   const isTablet = useMediaQuery(theme.breakpoints.down("sm"))
@@ -87,79 +83,79 @@ const AddResource = (props) => {
               padding: "0.2rem",
               maxWidth: maxWidth
             }}>
-            <Grid container justifyContent="center" m={0}>
-              <Grid item xs={12} m={0} height={"fit-content"}>
-                <InputField
-                  size="medium"
-                  name="firstName"
-                  hiddenLabel
-                  placeholder="First Name*"
-                  InputProps={{ disableUnderline: true }}
-                  value={values.firstName}
-                  variant="filled"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={touched.firstName && Boolean(errors.firstName)}
-                  helperText={touched.firstName ? errors.firstName : ""}
-                  type="text"
-                  fullWidth
-                  margin="normal"
-                  sx={{ height: "7.2rem", marginBottom: "6px" }}
-                />
-                <InputField
-                  size="medium"
-                  name="lastName"
-                  hiddenLabel
-                  placeholder="Last Name*"
-                  InputProps={{ disableUnderline: true }}
-                  value={values.lastName}
-                  variant="filled"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  helperText={touched.lastName ? errors.lastName : ""}
-                  error={touched.lastName && Boolean(errors.lastName)}
-                  type="text"
-                  fullWidth
-                  margin="normal"
-                  sx={{ height: "7.2rem", margin: 0 }}
-                />
+            <Grid container justifyContent="center">
+              <Grid item xs={12} height={"fit-content"}>
+                <Box sx={{ maxHeight: "fit-content" }}>
+                  <InputField
+                    size="medium"
+                    name="firstName"
+                    hiddenLabel
+                    placeholder="First Name*"
+                    InputProps={{ disableUnderline: true }}
+                    value={values.firstName}
+                    variant="filled"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={touched.firstName && Boolean(errors.firstName)}
+                    type="text"
+                    fullWidth
+                    margin="normal"
+                  />
+                  {touched.firstName && errors.firstName && <ErrorText text={errors.firstName} />}
+                </Box>
+                <Box sx={{ maxHeight: "fit-content" }}>
+                  <InputField
+                    size="medium"
+                    name="lastName"
+                    hiddenLabel
+                    placeholder="Last Name*"
+                    InputProps={{ disableUnderline: true }}
+                    value={values.lastName}
+                    variant="filled"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={touched.lastName && Boolean(errors.lastName)}
+                    type="text"
+                    fullWidth
+                    margin="normal"
+                    // sx={{ height: "7.2rem", margin: 0 }}
+                  />
+                  {touched.lastName && errors.lastName && <ErrorText text={errors.lastName} />}
+                </Box>
               </Grid>
               <Grid item xs={12} className="flex items-center justify-around">
-                <Grid item xs={2} className="flex items-center justify-center">
-                  <span className="text-slate-500 text-xl">Roles</span>{" "}
+                <Grid item xs={2} className="flex items-center" paddingTop={"2rem"}>
+                  <Typography className="text-slate-500 text-xl" variant="p3">
+                    Roles
+                  </Typography>{" "}
                   <BasicTooltip
                     title={
-                      <div style={{ color: "#000", fontSize: "1.2rem" }}>
-                        {" "}
-                        Add roles to take advantage of filtering and search on your schedule
-                      </div>
+                      <Box style={{ color: "#000", fontSize: "1.2rem" }}>
+                        <Typography variant={"c1"}>
+                          Add roles to take advantage of filtering and search on your schedule
+                        </Typography>
+                      </Box>
                     }>
                     <QuestionMarkIcon />
                   </BasicTooltip>
                 </Grid>
                 <Grid item xs={10} m={0} height={"fit-content"}>
-                  <InputField
-                    size="small"
-                    name="roles"
-                    hiddenLabel
-                    placeholder="eg.: Designer, Senior,etc."
-                    InputProps={{ disableUnderline: true }}
+                  <DropDown
                     value={values.roles}
-                    variant="filled"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={touched.roles && Boolean(errors.roles)}
-                    type="text"
-                    fullWidth
-                    margin="normal"
-                    sx={{ height: "4rem" }}
-                    placeholdertext="true"
+                    name={"roles"}
+                    label="roles"
+                    items={items}
+                    handleChange={(e) => {
+                      setFieldValue(`roles`, e.target?.value)
+                    }}
                   />
                 </Grid>
               </Grid>
               <Grid item xs={12} className="flex items-center justify-around">
                 <Grid item xs={2}>
-                  <span className="text-slate-500 text-xl">Email</span>
+                  <Typography className="text-slate-500 text-xl" variant="p3">
+                    Email
+                  </Typography>
                 </Grid>
                 <Grid item xs={10} m={0} height={"fit-content"}>
                   <InputField
@@ -176,7 +172,6 @@ const AddResource = (props) => {
                     type="text"
                     fullWidth
                     margin="normal"
-                    sx={{ height: "4rem" }}
                     placeholdertext="true"
                   />
                 </Grid>
@@ -186,8 +181,10 @@ const AddResource = (props) => {
                 xs={12}
                 className="flex items-center justify-around"
                 sx={{ paddingBottom: "3rem" }}>
-                <Grid item xs={2}>
-                  <span className="pr-2 text-slate-500 text-xl">Capacity </span>
+                <Grid item xs={2} paddingTop={"2rem"}>
+                  <Typography className="pr-2 text-slate-500 text-xl" variant="p3">
+                    Capacity
+                  </Typography>
                 </Grid>
                 <Grid item xs={10} className="flex items-center" m={0}>
                   <DropDown
@@ -199,7 +196,11 @@ const AddResource = (props) => {
                       setFieldValue(`weeklyAvailability`, e.target?.value)
                     }}
                   />
-                  <span className="pl-2 text-slate-500 text-xl">hours per day </span>
+                  <Box paddingTop={"2rem"}>
+                    <Typography className="pl-2 text-slate-500 text-xl" variant="p3">
+                      hours per day{" "}
+                    </Typography>
+                  </Box>
                 </Grid>
                 {touched.weeklyAvailability &&
                   errors.weeklyAvailability &&

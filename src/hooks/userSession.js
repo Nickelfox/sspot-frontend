@@ -3,7 +3,6 @@ import { useCookies } from "react-cookie"
 
 export function useUserSession() {
   const [cookies, setCookie, removeCookie] = useCookies([CookieKeys.Auth])
-
   const setSession = (data) => {
     setCookie(CookieKeys.Auth, data.access_token, CookieOptions)
     setCookie(CookieKeys.REFRESH_TOKEN, data.refresh_token, CookieOptions)

@@ -8,7 +8,6 @@ export const usePrivateLayoutController = (props) => {
   const navigateTo = useNavigate()
   const currentRoute = window.location.pathname
   const model = useLogoutModel()
-
   React.useEffect(() => {
     window.scrollTo(0, 0)
     if (props.isLoggedIn) {

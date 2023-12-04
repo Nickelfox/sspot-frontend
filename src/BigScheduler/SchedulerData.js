@@ -817,6 +817,7 @@ export default class SchedulerData {
         groupOnly: slot?.parentId ? false : true,
         hasSummary: false,
         rowMaxCount: 0,
+        email: slot?.email ? slot?.email : "",
         // rowHeight: 44,
         rowHeight:
           this.config.nonAgendaSlotMinHeight !== 0
@@ -829,7 +830,8 @@ export default class SchedulerData {
         render: true,
         workDays: slot?.workDays,
         editPopup: slot?.editPopup,
-        projectsAssigned: slot?.projectsAssigned
+        projectsAssigned: slot?.projectsAssigned,
+        availability: slot?.weeklyAvailability
       }
       let id = slot.id
       let value = undefined
@@ -887,7 +889,6 @@ export default class SchedulerData {
         slotStack.push(currentNode.children[i])
       }
     }
-
     return initRenderData
   }
 
@@ -934,6 +935,9 @@ export default class SchedulerData {
       windowStart = new Date(this.startDate),
       windowEnd = new Date(this.endDate)
 
+    if (eventStart < windowStart) {
+      eventStart = new Date(windowStart)
+    }
     windowStart.setHours(0, 0, 0, 0)
 
     if (this.viewType === ViewType.Day) {
@@ -980,14 +984,7 @@ export default class SchedulerData {
         span = Math.ceil(timeBetween(eventStart, eventEnd, timeIn) / dividedBy)
       }
     }
-    if (eventStart < windowStart) {
-      const getStartofCurrentWeek = dayjs(new Date()).startOf("w")
-      const weekStart = new Date(getStartofCurrentWeek)
-      const getTimeFromWeek = Math.ceil(timeBetween(eventStart, weekStart, "days"))
-      return span + getTimeFromWeek
-    } else {
-      return span
-    }
+    return span
   }
 
   _validateResource(resources) {
@@ -1083,7 +1080,6 @@ export default class SchedulerData {
 
     this.events.forEach((item) => {
       let resourceEventsList = initRenderData.filter((x) => x.slotId === this._getEventSlotId(item))
-      console.log(item, "11777")
       if (resourceEventsList.length > 0) {
         let resourceEvents = resourceEventsList[0]
         let span = this._getSpan(item.start, item.end, this.headers)

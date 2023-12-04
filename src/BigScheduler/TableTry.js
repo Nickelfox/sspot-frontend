@@ -335,7 +335,7 @@ const TableTry = (props) => {
 
         <TableRow
           style={{
-            height: "4.3rem",
+            height: 43,
             minWidth: "24rem",
             width: "fit-content",
             backgroundColor: "#fff",
@@ -347,7 +347,7 @@ const TableTry = (props) => {
               borderBottom: borderBottom,
               padding: 0,
               display: "flex",
-              height: "4.3rem"
+              height: 43
             }}
             className="bg-[#fff] stickyCell flex justify-end items-center px-4">
             <Box className="flex justify-space w-full">

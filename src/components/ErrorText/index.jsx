@@ -8,8 +8,8 @@ const ErrorText = ({ text }) => {
     <>
       {text ? (
         <Grid container gap={1} alignItems="center" sx={{ marginTop: "0.75rem" }}>
-          <ErrorOutlineOutlinedIcon sx={{ color: "text.red1" }} fontSize="large" />
-          <Typography variant="p2" color="text.red1">
+          <ErrorOutlineOutlinedIcon sx={{ color: "error.main" }} fontSize="medium" />
+          <Typography variant="p3" color="error.main">
             {text}
           </Typography>
         </Grid>
