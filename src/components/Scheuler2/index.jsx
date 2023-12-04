@@ -18,6 +18,7 @@ import { Popover } from "antd"
 import AssignProject from "components/AssignProject"
 import CalendarFeed from "components/CalendarFeedForm"
 import DeleteResource from "components/DeleteModal"
+import ArchiveResource from "components/ArchiveForm"
 let resources = [
   {
     id: "r2",
@@ -591,6 +592,9 @@ const Calender = (props) => {
         isEdit={true}
         requiredObject={selectedObject}
       />
+    ),
+    archiveResource: (
+      <ArchiveResource requiredObject={selectedObject} handleClose={handlePopUpClose} />
     )
   }
   const handlePopUp = (key) => {
@@ -605,6 +609,10 @@ const Calender = (props) => {
         return
       case "edit":
         setPopupChild("editResource")
+        setOpenPopup(true)
+        return
+      case "arc":
+        setPopupChild("archiveResource")
         setOpenPopup(true)
         return
     }
