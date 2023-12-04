@@ -9,7 +9,7 @@ import { HTTP_METHODS, APIRouter, APIWithOfflineRouter, APICustomRouter } from "
 export const API = {
   AUTH: {
     // if you want to return offline json if api fails
-    LOGIN: new APIWithOfflineRouter("/user/login/", HTTP_METHODS.POST, OFFLINE.LOGIN),
+    LOGIN: new APIWithOfflineRouter("/login/", HTTP_METHODS.POST, OFFLINE.LOGIN),
     LOGIN_GOOGLE: new APIWithOfflineRouter(
       "/user/google-login/",
       HTTP_METHODS.POST,

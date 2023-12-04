@@ -97,7 +97,7 @@ export default function networkManager(router, withFile = false) {
 
 // Prepare endpoint url with params
 function urlBuilder(router, params) {
-  let uri = ""
+  let uri = "/api"
   if (typeof router.version === "string") {
     uri = `/${router.version}`
   }
