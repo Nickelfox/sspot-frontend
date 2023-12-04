@@ -325,6 +325,7 @@ const Calender = (props) => {
     schedulerData.setParentViewType("Team")
   }
   const showResourceEditPopup = (schedulerData, itemToEdit) => {
+    console.log(itemToEdit, "ItemTO edit")
     const { renderData } = schedulerData
     const requiredArray = renderData.map((item) => {
       return {
@@ -334,7 +335,8 @@ const Calender = (props) => {
         expanded: item?.expanded,
         parentId: item?.parentId,
         workDays: item?.workDays,
-        editPopup: item?.slotId === itemToEdit?.slotId ? !item?.editPopup : false
+        editPopup: item?.slotId === itemToEdit?.slotId ? !item?.editPopup : false,
+        email: item?.email
       }
     })
     setSelectedObject(itemToEdit)
@@ -553,7 +555,8 @@ const Calender = (props) => {
         expanded: i.expanded,
         parentId: i.parentId,
         workDays: i.workDays,
-        editPopup: false
+        editPopup: false,
+        email: i?.email
       }
     })
     schedulerData.setResources(replaceArr)
@@ -573,12 +576,22 @@ const Calender = (props) => {
         handleClose={handlePopUpClose}
         addResorceInScheduler={addResorceInScheduler}
         resourceLength={schedulerData?.resources?.length}
+        isEdit={false}
       />
     ),
     assignResource: <AssignProject requiredObject={selectedObject} />,
     calenderFeed: <CalendarFeed requiredObject={selectedObject} handleClose={handlePopUpClose} />,
     deleteResource: (
       <DeleteResource requiredObject={selectedObject} handleClose={handlePopUpClose} />
+    ),
+    editResource: (
+      <AddResource
+        handleClose={handlePopUpClose}
+        addResorceInScheduler={addResorceInScheduler}
+        resourceLength={schedulerData?.resources?.length}
+        isEdit={true}
+        requiredObject={selectedObject}
+      />
     )
   }
   const handlePopUp = (key) => {
@@ -589,6 +602,10 @@ const Calender = (props) => {
         return
       case "del":
         setPopupChild("deleteResource")
+        setOpenPopup(true)
+        return
+      case "edit":
+        setPopupChild("editResource")
         setOpenPopup(true)
         return
     }

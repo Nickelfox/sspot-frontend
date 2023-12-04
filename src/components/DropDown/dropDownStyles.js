@@ -2,26 +2,31 @@ import { useTheme } from "@mui/material"
 const useStyles = () => {
   const theme = useTheme()
   return {
+    wrapper: {
+      paddingTop: "2rem"
+    },
     dropDown: {
       backgroundColor: "#fff",
       padding: 0,
-      minWidth: "12rem"
+      minWidth: "8rem",
+      minHeight: 28
     },
 
     dropDownIconBox: {
-      backgroundColor: theme?.palette?.secondary?.main,
-      borderRadius: "0.8rem",
-      height: "4.4rem",
-      width: "4.4rem",
-      top: "auto",
+      // width: "4.4rem",
+      minWidth: 28,
+      top: "0",
+      right: 0,
+      bottom: 0,
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      marginRight: "0.6rem"
+      borderLeft: "1px solid #aaaaaa"
     },
     dropDownIcon: {
-      height: "2.4rem",
-      width: "2.4rem"
+      height: "2rem",
+      width: "2rem",
+      backgroundImage: "linear-gradient(to bottom, #f6f6f6, #eeeeee);"
     },
     typography: {
       fontWeight: theme?.typography?.s1?.fontWeight,

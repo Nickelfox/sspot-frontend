@@ -102,11 +102,13 @@ const TableTry = (props) => {
       />
     )
   }
+  console.log(renderData, "Here IS Render Data")
   const displayRenderData = renderData.filter((o) => o.render)
   const getDivs = () => {
     let eventDndSource = dnd.getDndSource()
     let DndResourceEvents = dnd.getDropTarget(config.dragAndDropEnabled)
     return displayRenderData.map((item, index) => {
+      console.log(item, "Here is Item")
       let resourceEventsList = (
         <DndResourceEvents
           {...props}
@@ -335,7 +337,7 @@ const TableTry = (props) => {
 
         <TableRow
           style={{
-            height: "4.3rem",
+            height: 43,
             minWidth: "24rem",
             width: "fit-content",
             backgroundColor: "#fff",
@@ -347,7 +349,7 @@ const TableTry = (props) => {
               borderBottom: borderBottom,
               padding: 0,
               display: "flex",
-              height: "4.3rem"
+              height: 43
             }}
             className="bg-[#fff] stickyCell flex justify-end items-center px-4">
             <Box className="flex justify-space w-full">

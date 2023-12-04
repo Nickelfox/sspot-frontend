@@ -6,7 +6,6 @@ import { UserState } from "redux/dispatcher/UserState"
 export const useLogoutModel = () => {
   const { isLogged } = useSelector((store) => store.app)
   const userSession = useUserSession()
-
   const profile = async () => {
     if (isLogged) return true
     const instance = NetworkManager(API.USER.PROFILE)

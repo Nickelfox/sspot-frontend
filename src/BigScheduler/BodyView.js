@@ -29,7 +29,7 @@ class BodyView extends Component {
       (item) => item?.slotId === currentItem?.slotId || item?.slotId === currentItem?.parentId
     )
     const daySet = new Set(currentItem?.workDays)
-
+    console.log(daySet, currentItem?.slotName, "32")
     let tableRows = requiredMap.map((item) => {
       const requiredArray = getRequiredArray(headers)
       const headerMap = getHeaderMap(requiredArray)
@@ -65,9 +65,9 @@ class BodyView extends Component {
                           border: 0,
                           marginTop: 0,
                           marginBottom: 0,
-                          height: "4.3rem"
+                          height: 43
                         }}>
-                        {getRows(Array.from(childItem[1]), daySet)}
+                        {getRows(Array.from(childItem[1]), daySet, currentItem)}
                       </div>
                     )
                   })}
@@ -85,8 +85,9 @@ class BodyView extends Component {
 
 export default BodyView
 
-const getRows = (array, daySet) => {
+const getRows = (array, daySet, currentItem) => {
   return array.map((childrenItem) => {
+    const newDaySet = new Set(dayArr)
     const currentDate = dayjs(new Date()).format("DD-MM")
     const itemDate = dayjs(childrenItem?.time).format("DD-MM")
     const dayIndex = dayjs(childrenItem?.time).day()
@@ -94,6 +95,8 @@ const getRows = (array, daySet) => {
     const dayCheck = daySet.has(childrenDay) ? null : (
       <img src={nonWorking} alt="" style={{ zIndex: 999 }} />
     )
+    // const dayCheck = daySet.has(childrenDay)
+    console.log(daySet.has(childrenDay), newDaySet, currentItem?.slotName, "HAHAHHA")
     return (
       <td
         key={childrenItem[0]}
@@ -111,7 +114,7 @@ const getRows = (array, daySet) => {
           marginBottom: 0
         }}>
         {childrenItem?.nonWorkingTime ? (
-          <img src={nonWorking} alt="" style={{ zIndex: 9 }} />
+          <img src={nonWorking} alt="" style={{ zIndex: "1000" }} />
         ) : (
           dayCheck
         )}
