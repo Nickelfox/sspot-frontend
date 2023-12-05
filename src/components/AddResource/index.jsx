@@ -124,7 +124,25 @@ const AddResource = (props) => {
                 </Box>
               </Grid>
               <Grid item xs={12} className="flex items-center justify-around">
-                <Grid item xs={2} className="flex items-center" paddingTop={"2rem"}>
+                <Grid item xs={3} className="flex items-center" paddingTop={"2rem"}>
+                  <Typography className="text-slate-500 text-xl" variant="p3">
+                    Department
+                  </Typography>
+                </Grid>
+                <Grid item xs={9} m={0} height={"fit-content"}>
+                  <DropDown
+                    value={values.roles}
+                    name={"roles"}
+                    label="roles"
+                    items={items}
+                    handleChange={(e) => {
+                      setFieldValue(`roles`, e.target?.value)
+                    }}
+                  />
+                </Grid>
+              </Grid>
+              <Grid item xs={12} className="flex items-center justify-around">
+                <Grid item xs={3} className="flex items-center" paddingTop={"2rem"}>
                   <Typography className="text-slate-500 text-xl" variant="p3">
                     Roles
                   </Typography>{" "}
@@ -139,7 +157,7 @@ const AddResource = (props) => {
                     <QuestionMarkIcon />
                   </BasicTooltip>
                 </Grid>
-                <Grid item xs={10} m={0} height={"fit-content"}>
+                <Grid item xs={9} m={0} height={"fit-content"}>
                   <DropDown
                     value={values.roles}
                     name={"roles"}
@@ -151,42 +169,17 @@ const AddResource = (props) => {
                   />
                 </Grid>
               </Grid>
-              <Grid item xs={12} className="flex items-center justify-around">
-                <Grid item xs={2}>
-                  <Typography className="text-slate-500 text-xl" variant="p3">
-                    Email
-                  </Typography>
-                </Grid>
-                <Grid item xs={10} m={0} height={"fit-content"}>
-                  <InputField
-                    size="small"
-                    name="email"
-                    hiddenLabel
-                    placeholder="Optional"
-                    InputProps={{ disableUnderline: true }}
-                    value={values.email}
-                    variant="filled"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={touched.email && Boolean(errors.email)}
-                    type="text"
-                    fullWidth
-                    margin="normal"
-                    placeholdertext="true"
-                  />
-                </Grid>
-              </Grid>
               <Grid
                 item
                 xs={12}
                 className="flex items-center justify-around"
                 sx={{ paddingBottom: "3rem" }}>
-                <Grid item xs={2} paddingTop={"2rem"}>
+                <Grid item xs={3} paddingTop={"2rem"}>
                   <Typography className="pr-2 text-slate-500 text-xl" variant="p3">
                     Capacity
                   </Typography>
                 </Grid>
-                <Grid item xs={10} className="flex items-center" m={0}>
+                <Grid item xs={9} className="flex items-center" m={0}>
                   <DropDown
                     value={values?.weeklyAvailability ? values?.weeklyAvailability : 35}
                     name={"weeklyAvailability"}
@@ -206,11 +199,11 @@ const AddResource = (props) => {
                   errors.weeklyAvailability &&
                   "Kindly Select Weekly Availability"}
               </Grid>
-              <Grid item xs={12} className="flex items-center justify-around mt-2">
-                <Grid item xs={2}>
+              {/* <Grid item xs={12} className="flex items-center justify-around mt-2">
+                <Grid item xs={3}>
                   <span className="text-slate-500 text-xl">Work Days </span>
                 </Grid>
-                <Grid item xs={10} m={0} display={"flex"} flexDirection={"column"}>
+                <Grid item xs={9} m={0} display={"flex"} flexDirection={"column"}>
                   <Grid item xs={12} className="flex">
                     <div className="flex">
                       {workDays.map((workDay, index) => {
@@ -251,6 +244,50 @@ const AddResource = (props) => {
                       "Kindly Select Work Days"}
                   </div>
                 </Grid>
+              </Grid> */}
+            </Grid>
+            <Grid container>
+              <Grid item xs={3} alignItems={"center"} display={"flex"}>
+                <Typography className="text-slate-500 text-xl" variant="p3">
+                  Work Days{" "}
+                </Typography>
+              </Grid>
+              <Grid item xs={9} display={"flex"}>
+                {workDays.map((workDay, index) => {
+                  return (
+                    <Box
+                      key={`${workDay?.value}`}
+                      className="flex items-center justify-center "
+                      // style={styles.daySelector}
+                      style={getStylesforSelector(values?.workDays, workDay.value, index)}
+                      onKeyDown={() => {
+                        const daySet = new Set(values?.workDays)
+                        if (daySet?.has(workDay.value)) {
+                          daySet.delete(workDay.value)
+                        } else {
+                          daySet.add(workDay.value)
+                        }
+                        setFieldValue(`workDays`, Array.from(daySet))
+                      }}
+                      onClick={() => {
+                        const daySet = new Set(values?.workDays)
+                        if (daySet?.has(workDay.value)) {
+                          daySet.delete(workDay.value)
+                        } else {
+                          daySet.add(workDay.value)
+                        }
+                        setFieldValue(`workDays`, Array.from(daySet))
+                      }}>
+                      <Typography style={styles.daySelectorText}>{workDay?.label}</Typography>
+                    </Box>
+                  )
+                })}
+                <div style={{ marginTop: "2px", color: "#FF000D" }}>
+                  {touched.workDays &&
+                    errors?.workDays &&
+                    values?.workDays?.length === 0 &&
+                    "Kindly Select Work Days"}
+                </div>
               </Grid>
             </Grid>
             <Grid container paddingBottom={3}></Grid>
