@@ -19,7 +19,7 @@ export const useLogoutModel = () => {
   const logout = async () => {
     const instance = NetworkManager(API.USER.LOGOUT)
     const response = await instance.request()
-    if (response.success) {
+    if (!response.success && response?.code === 200) {
       userSession.deleteSession()
       UserState.logout()
     }
