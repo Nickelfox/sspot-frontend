@@ -802,6 +802,11 @@ export default class SchedulerData {
   }
 
   _createInitRenderData(isEventPerspective, eventGroups, resources, headers) {
+    /**
+     * @description
+     * TODO: THIS FUNCTION WILL GET CHANGED 100%
+     * This function will be created newly and requires whole day
+     */
     let slots = isEventPerspective ? eventGroups : resources
     let slotTree = [],
       slotMap = new Map()
@@ -1068,6 +1073,12 @@ export default class SchedulerData {
   }
 
   _createRenderData() {
+    /**
+     * @description
+     * TODO: THIS FUNCTION WILL GET CHANGED 100%
+     * This function will be created newly and requires whole day.
+     */
+
     let initRenderData = this._createInitRenderData(
       this.isEventPerspective,
       this.eventGroups,
