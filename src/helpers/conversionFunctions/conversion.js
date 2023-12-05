@@ -106,12 +106,13 @@ export const getDummyDataArray = () => {
       id: data.id,
       name: data?.user?.full_name,
       weeklyAvailability: data?.capacity,
-      // workDays: data?.work_days, //TODO: uncooment this
+      workDays: data?.work_days,
       // workDays: ["MON", "TUE", "THU", "FRI"],
       email: data?.user?.email,
       editPopup: false,
       expanded: false,
-      projects: getProjectsArray(data?.project_members, data)
+      projects: getProjectsArray(data?.project_members, data),
+      department: "development"
     }
     requiredUserInfo.push(requiredObject)
   })
@@ -125,12 +126,13 @@ const getProjectsArray = (projectArray, data) => {
       id: project?.project?.id,
       name: project?.project?.project_name,
       hoursAssigned: 4,
-      // workDays: data?.work_days,
+      workDays: data?.work_days,
       // workDays: ["MON", "TUE", "THU", "FRI"],
       expanded: false,
       editPopup: false,
       parentId: project?.member,
-      email: data?.user?.email
+      email: data?.user?.email,
+      department: "development"
     }
   })
   return requiredProjectArray

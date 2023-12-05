@@ -84,7 +84,8 @@ const getRows = (array, daySet) => {
     const itemDate = dayjs(childrenItem?.time).format("DD-MM")
     const dayIndex = dayjs(childrenItem?.time).day()
     const childrenDay = dayArr[dayIndex]
-    const dayCheck = !daySet.has(childrenDay) ? null : (
+    console.log(daySet, "DAYSET")
+    const dayCheck = daySet.has(childrenDay) ? null : (
       <img src={nonWorking} alt="" style={{ zIndex: 999 }} />
     )
     return (

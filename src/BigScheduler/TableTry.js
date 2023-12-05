@@ -44,6 +44,7 @@ const TableTry = (props) => {
   const { schedulerData, toggleExpandFunc, dnd, openEditItemPopUp, closePopup, handlePopUp } = props
   //eslint-disable-next-line no-unused-vars
   const { renderData, cellUnit, config, headers } = schedulerData
+  console.log(schedulerData, "renderData")
   const borderBottom = "1px solid #c4c4c4"
   let contentScrollbarHeight = 17,
     resourceScrollbarHeight = 17,
