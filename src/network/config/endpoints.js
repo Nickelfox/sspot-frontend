@@ -9,7 +9,7 @@ import { HTTP_METHODS, APIRouter, APIWithOfflineRouter, APICustomRouter } from "
 export const API = {
   AUTH: {
     // if you want to return offline json if api fails
-    LOGIN: new APIWithOfflineRouter("/user/login/", HTTP_METHODS.POST, OFFLINE.LOGIN),
+    LOGIN: new APIWithOfflineRouter("/login/", HTTP_METHODS.POST, OFFLINE.LOGIN),
     LOGIN_GOOGLE: new APIWithOfflineRouter(
       "/user/google-login/",
       HTTP_METHODS.POST,
@@ -37,7 +37,7 @@ export const API = {
   USER: {
     PROFILE: new APIWithOfflineRouter("/user/profile/", HTTP_METHODS.GET, OFFLINE.PROFILE),
     UPDATE: new APIRouter("/user/profile/", HTTP_METHODS.PATCH, OFFLINE.UPDATE),
-    LOGOUT: new APIWithOfflineRouter("/user/logout/", HTTP_METHODS.DEL, OFFLINE.LOGOUT)
+    LOGOUT: new APIWithOfflineRouter("/logout/", HTTP_METHODS.DEL, OFFLINE.LOGOUT)
   },
   MEDIA: {
     // if you want to upload a file with or without data
