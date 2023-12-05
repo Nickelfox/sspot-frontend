@@ -10,6 +10,7 @@ export function useUserSession() {
 
   const deleteSession = () => {
     const cookieNames = Object.keys(cookies)
+    console.log("fired")
     cookieNames.map((cookie) => {
       removeCookie(cookie, CookieOptions)
     })
