@@ -7,9 +7,7 @@ const TitleContainer = (props) => {
   const theme = useTheme()
   return (
     <Box>
-      <Typography
-        variant="h5"
-        color={theme.palette.text.heading}>{`${user} ${subTitle}`}</Typography>
+      <Typography variant="h5" color={theme.palette.text.gray}>{`${user} ${subTitle}`}</Typography>
     </Box>
   )
 }

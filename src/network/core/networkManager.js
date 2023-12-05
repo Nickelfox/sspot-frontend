@@ -65,7 +65,7 @@ export default function networkManager(router, withFile = false) {
       })
       // If token expired, get it refreshed
       const response = result.data
-      return new APIResponse(response.data, response.success, result.status, response.data?.message)
+      return new APIResponse(response.data, response.error, result.status, response.data?.message)
     } catch (err) {
       // Catch all errors
       apiError(err?.response?.data?.error?.message)
@@ -97,7 +97,7 @@ export default function networkManager(router, withFile = false) {
 
 // Prepare endpoint url with params
 function urlBuilder(router, params) {
-  let uri = ""
+  let uri = "/api"
   if (typeof router.version === "string") {
     uri = `/${router.version}`
   }
