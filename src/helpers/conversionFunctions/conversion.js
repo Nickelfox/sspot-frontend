@@ -43,6 +43,7 @@ const dummyData = [
     id: "578e2d0d-60cf-4e0f-b17e-fb2879024b4a",
     capacity: "00:00:09",
     department: "e8107b89-6a7b-46e8-b0a5-ec6289d8580b",
+    departmentName: "DEVELOPER",
     work_days: ["MON", "TUE", "WED", "THU", "FRI"],
     user: {
       full_name: "a1",
@@ -63,7 +64,8 @@ const dummyData = [
           start_date: "2023-10-15",
           end_date: "2023-12-15",
           project_type: "NON_BILLABLE",
-          notes: "This is a new project for testing."
+          notes: "This is a new project for testing.",
+          departmentName: "DEVELOPER"
         },
         member: "578e2d0d-60cf-4e0f-b17e-fb2879024b4a"
       },
@@ -77,7 +79,8 @@ const dummyData = [
           start_date: "2023-11-06",
           end_date: null,
           project_type: "FIXED",
-          notes: ""
+          notes: "",
+          departmentName: "DEVELOPER"
         },
         member: "578e2d0d-60cf-4e0f-b17e-fb2879024b4a"
       },
@@ -91,11 +94,44 @@ const dummyData = [
           start_date: "2023-11-02",
           end_date: null,
           project_type: "FIXED",
-          notes: ""
+          notes: "",
+          departmentName: "DEVELOPER"
         },
         member: "578e2d0d-60cf-4e0f-b17e-fb2879024b4a"
       }
     ]
+  },
+  {
+    id: "578e2d0d-60cf-4e0f-b17e-fb2879024bjkb",
+    capacity: "00:00:09",
+    department: "e8107b89-6a7b-46e8-b0a5-ec6289d85815",
+    departmentName: "HR",
+    work_days: ["MON", "TUE", "WED", "THU", "FRI"],
+    user: {
+      full_name: "Mehran",
+      email: "a1@tcs.com",
+      role: "468920b7-8995-4a39-9ff9-121019e48877",
+      phone_number: null,
+      designation: null
+    },
+    company: "28971a3f-1b5c-4013-9b8e-8ee15e15c06public",
+    project_members: []
+  },
+  {
+    id: "578e2d0d-60cf-4e0f-b17e-fb2879024bjpo",
+    capacity: "00:00:09",
+    department: "e8107b89-6a7b-46e8-b0a5-ec6289d85858",
+    departmentName: "DEVELOPER",
+    work_days: ["MON", "TUE", "WED", "THU", "FRI"],
+    user: {
+      full_name: "Rishab",
+      email: "a1@tcs.com",
+      role: "468920b7-8995-4a39-9ff9-121019e488sac",
+      phone_number: null,
+      designation: null
+    },
+    company: "28971a3f-1b5c-4013-9b8e-8ee15e15c06pri",
+    project_members: []
   }
 ]
 
@@ -112,7 +148,7 @@ export const getDummyDataArray = () => {
       editPopup: false,
       expanded: false,
       projects: getProjectsArray(data?.project_members, data),
-      department: "development"
+      department: data?.departmentName
     }
     requiredUserInfo.push(requiredObject)
   })
@@ -132,7 +168,7 @@ const getProjectsArray = (projectArray, data) => {
       editPopup: false,
       parentId: project?.member,
       email: data?.user?.email,
-      department: "development"
+      department: data?.departmentName
     }
   })
   return requiredProjectArray
