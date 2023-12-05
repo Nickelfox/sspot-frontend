@@ -801,8 +801,13 @@ export default class SchedulerData {
     this.eventGroups = eventGroups
   }
 
-  _createInitRenderData(resources, headers) {
-    let slots = resources
+  _createInitRenderData(isEventPerspective, eventGroups, resources, headers) {
+    /**
+     * @description
+     * TODO: THIS FUNCTION WILL GET CHANGED 100%
+     * This function will be created newly and requires whole day
+     */
+    let slots = isEventPerspective ? eventGroups : resources
     let slotTree = [],
       slotMap = new Map()
     slots.forEach((slot) => {
@@ -1071,7 +1076,18 @@ export default class SchedulerData {
   }
 
   _createRenderData() {
-    let initRenderData = this._createInitRenderData(this.resources, this.headers)
+    /**
+     * @description
+     * TODO: THIS FUNCTION WILL GET CHANGED 100%
+     * This function will be created newly and requires whole day.
+     */
+
+    let initRenderData = this._createInitRenderData(
+      this.isEventPerspective,
+      this.eventGroups,
+      this.resources,
+      this.headers
+    )
     //this.events.sort(this._compare);
     let cellMaxEventsCount = this.getCellMaxEvents()
     const cellMaxEventsCountValue = 30

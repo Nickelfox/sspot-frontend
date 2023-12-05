@@ -12,12 +12,13 @@ export const useStyles = (width) => {
       backgroundColor: "#fff",
       overflowX: "auto",
       maxWidth: "fit-content",
-      minHeight: "fit-content"
+      minHeight: "fit-content",
+      minWidth: "fit-content"
     },
     daySelector: {
-      width: "auto",
-      height: "auto",
-      padding: "1rem",
+      width: "4rem",
+      height: "4rem",
+      // padding: "1rem",
       border: "1px solid gray",
       cursor: "pointer"
     },
