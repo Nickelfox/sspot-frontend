@@ -34,14 +34,14 @@ const AddResource = (props) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("xs"))
 
   const createResource = (values) => {
-    console.log(values, "Here are Values")
     const requiredObject = {
       name: `${values?.firstName} ${values?.lastName}`,
       id: resourceLength + 1,
       rrule: `FREQ=WEEKLY;DTSTART=20171219T013000Z;BYDAY=${values?.workDays.toString()}`, //this is going to be used for availability
       groupOnly: false,
       // parentId: resourceLength + 1,
-      workDays: values?.workDays
+      workDays: values?.workDays,
+      department: values?.departments
     }
     addResorceInScheduler(requiredObject)
   }

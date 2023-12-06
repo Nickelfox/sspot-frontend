@@ -552,7 +552,6 @@ const Calender = (props) => {
      */
     const { renderData } = schedulerData
     let displayRenderData = renderData.filter((o) => o.render)
-    console.log(displayRenderData, "552")
     const replaceArr = displayRenderData.map((i) => {
       return {
         id: i.slotId,

@@ -112,9 +112,24 @@ export default class SchedulerData {
   addResource(resource) {
     console.log(this.renderData, this.resources, "Render DAta")
     let existedResources = this.resources.filter((x) => x.id === resource.id)
+    let existedValues = this.renderData.map((resource) => {
+      return {
+        id: resource.slotId,
+        name: resource.slotName,
+        weeklyAvailability: 40,
+        expanded: resource.expanded,
+        parentId: resource.parentId,
+        workDays: resource.workDays,
+        editPopup: false,
+        email: resource?.email,
+        department: resource?.department
+      }
+    })
+    let requiredArray = [...existedValues, resource]
     if (existedResources.length === 0) {
       // /*Update function here*/TODO:0
-      this.resources.push(resource)
+      // this.resources.push(resource)
+      this.resources = requiredArray
       this._createRenderData()
     }
   }
