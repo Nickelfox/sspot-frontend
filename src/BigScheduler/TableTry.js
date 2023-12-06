@@ -155,7 +155,7 @@ const TableTry = (props) => {
                       className="scheduler-view"
                       style={{
                         width: schedulerContainerWidth,
-                        height: 43
+                        height: 42
                         // verticalAlign: "top"
                       }}>
                       <div

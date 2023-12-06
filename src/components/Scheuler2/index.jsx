@@ -20,6 +20,8 @@ import CalendarFeed from "components/CalendarFeedForm"
 import DeleteResource from "components/DeleteModal"
 import ArchiveResource from "components/ArchiveForm"
 import { useStyles } from "./schedulerStyles"
+import { useSchedulerModel } from "./scheduler.model"
+import { useSchedulerController } from "./scheduler.controller"
 let resources = [
   {
     id: "r2",
@@ -137,10 +139,13 @@ const Calender = (props) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const isTablet = useMediaQuery(theme.breakpoints.down("md"))
   const styles = useStyles()
+  const { fetchDepartments, departments } = useSchedulerController()
   useEffect(() => {
     getSchedulerData()
   }, [])
-
+  useEffect(() => {
+    fetchDepartments()
+  }, [])
   useEffect(() => {
     triggerRerender(render + 1)
   }, [triger])
@@ -579,6 +584,7 @@ const Calender = (props) => {
         addResorceInScheduler={addResorceInScheduler}
         resourceLength={schedulerData?.resources?.length}
         isEdit={false}
+        departmentsList={departments}
       />
     ),
     assignResource: <AssignProject requiredObject={selectedObject} />,

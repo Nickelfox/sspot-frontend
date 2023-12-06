@@ -8,7 +8,7 @@ export const useLoginModel = () => {
   const loginByEmail = async (values) => {
     const instance = NetworkManager(API.AUTH.LOGIN)
     const response = await instance.request(values)
-    if (!response?.success) {
+    if (response?.success) {
       userSession.setSession(response.data)
       const reduxObject = {
         name: response?.data?.user?.full_name,
