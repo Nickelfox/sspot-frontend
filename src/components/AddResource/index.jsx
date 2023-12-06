@@ -41,7 +41,8 @@ const AddResource = (props) => {
       rrule: `FREQ=WEEKLY;DTSTART=20171219T013000Z;BYDAY=${values?.workDays.toString()}`, //this is going to be used for availability
       groupOnly: false,
       // parentId: resourceLength + 1,
-      workDays: values?.workDays
+      workDays: values?.workDays,
+      department: values?.departments
     }
     addResorceInScheduler(requiredObject)
   }
