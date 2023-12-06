@@ -5,9 +5,9 @@ export const FormValidator = {
     firstName: "",
     lastName: "",
     weeklyAvailability: "35",
-    workDays: [],
+    workDays: ["MON", "TUE", "WED", "THU", "FRI"],
     email: "",
-    roles: "",
+    designation: "",
     departments: ""
   },
   validationSchema: Yup.object().shape({
@@ -24,7 +24,7 @@ export const FormValidator = {
     weeklyAvailability: Yup.string().required("Weekly Availability is required"),
     email: Yup.string().email("Enter a Valid Email"),
     workDays: Yup.array().min(1).required(),
-    roles: Yup.string(),
+    designation: Yup.string().required("Designation is required"),
     departments: Yup.string().required("Department is required")
   })
 }

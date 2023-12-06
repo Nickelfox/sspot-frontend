@@ -34,6 +34,7 @@ const AddResource = (props) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("xs"))
 
   const createResource = (values) => {
+    console.log(values, "Here are Values")
     const requiredObject = {
       name: `${values?.firstName} ${values?.lastName}`,
       id: resourceLength + 1,
@@ -83,7 +84,7 @@ const AddResource = (props) => {
               padding: "0.2rem",
               maxWidth: maxWidth
             }}>
-            <Grid container justifyContent="center">
+            <Grid container justifyContent="center" paddingBottom={"2rem"}>
               <Grid item xs={12} height={"fit-content"}>
                 <Box sx={{ maxHeight: "fit-content" }}>
                   <InputField
@@ -100,9 +101,13 @@ const AddResource = (props) => {
                     type="text"
                     fullWidth
                     margin="normal"
+                    helperText={
+                      touched.firstName && errors.firstName && <ErrorText text={errors.firstName} />
+                    }
                   />
-                  {touched.firstName && errors.firstName && <ErrorText text={errors.firstName} />}
                 </Box>
+              </Grid>
+              <Grid item xs={12}>
                 <Box sx={{ maxHeight: "fit-content" }}>
                   <InputField
                     size="medium"
@@ -118,68 +123,75 @@ const AddResource = (props) => {
                     type="text"
                     fullWidth
                     margin="normal"
-                    // sx={{ height: "7.2rem", margin: 0 }}
+                    helperText={
+                      touched.lastName && errors.lastName && <ErrorText text={errors.lastName} />
+                    }
                   />
-                  {touched.lastName && errors.lastName && <ErrorText text={errors.lastName} />}
                 </Box>
               </Grid>
-              <Grid item xs={12} className="flex items-center justify-around">
-                <Grid item xs={3} className="flex items-center" paddingTop={"2rem"}>
-                  <Typography className="text-slate-500 text-xl" variant="p3">
-                    Department
-                  </Typography>
-                </Grid>
-                <Grid item xs={9} m={0} height={"fit-content"}>
-                  <DropDown
-                    value={values.departments}
-                    name={"departments"}
-                    label="departments"
-                    items={departmentsList}
-                    handleChange={(e) => {
-                      setFieldValue(`departments`, e.target?.value)
-                    }}
-                  />
-                </Grid>
+              {/* <Grid item xs={12} className="flex items-center justify-around"> */}
+              <Grid item xs={3} className="flex items-center">
+                <Typography className="text-slate-500 text-xl" variant="p3">
+                  Department
+                </Typography>
               </Grid>
-              <Grid item xs={12} className="flex items-center justify-around">
-                <Grid item xs={3} className="flex items-center" paddingTop={"2rem"}>
-                  <Typography className="text-slate-500 text-xl" variant="p3">
-                    Designation
-                  </Typography>{" "}
-                  <BasicTooltip
-                    title={
-                      <Box style={{ color: "#000", fontSize: "1.2rem" }}>
-                        <Typography variant={"c1"}>
-                          Add designation to take advantage of filtering and search on your schedule
-                        </Typography>
-                      </Box>
-                    }>
-                    <QuestionMarkIcon />
-                  </BasicTooltip>
-                </Grid>
-                <Grid item xs={9} m={0} height={"fit-content"}>
-                  <DropDown
-                    value={values.roles}
-                    name={"roles"}
-                    label="roles"
-                    items={items}
-                    handleChange={(e) => {
-                      setFieldValue(`roles`, e.target?.value)
-                    }}
-                  />
-                </Grid>
+              <Grid item xs={9} m={0} height={"fit-content"}>
+                <DropDown
+                  value={values.departments}
+                  name={"departments"}
+                  label="departments"
+                  items={departmentsList}
+                  handleChange={(e) => {
+                    setFieldValue(`departments`, e.target?.value)
+                  }}
+                />
               </Grid>
-              <Grid
-                item
-                xs={12}
-                className="flex items-center justify-around"
-                sx={{ paddingBottom: "3rem" }}>
-                <Grid item xs={3} paddingTop={"2rem"}>
-                  <Typography className="pr-2 text-slate-500 text-xl" variant="p3">
-                    Capacity
-                  </Typography>
-                </Grid>
-                <Grid item xs={9} className="flex items-center" m={0}>
+              {/* </Grid> */}
+              <Grid item xs={3} className="flex items-center">
+                <Typography className="text-slate-500 text-xl" variant="p3">
+                  Designation
+                </Typography>{" "}
+                <BasicTooltip
+                  title={
+                    <Box style={{ color: "#000", fontSize: "1.2rem" }}>
+                      <Typography variant={"c1"}>
+                        Add designation to take advantage of filtering and search on your schedule
+                      </Typography>
+                    </Box>
+                  }>
+                  <QuestionMarkIcon />
+                </BasicTooltip>
+              </Grid>
+              <Grid item xs={9} m={0} className="flex items-center">
+                <InputField
+                  size="medium"
+                  name="designation"
+                  hiddenLabel
+                  placeholder="Designation*"
+                  InputProps={{ disableUnderline: true }}
+                  value={values.designation}
+                  variant="filled"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={touched.designation && Boolean(errors.designation)}
+                  type="text"
+                  fullWidth
+                  margin="normal"
+                  helperText={
+                    touched.designation &&
+                    errors.designation && <ErrorText text={errors.designation} />
+                  }
+                />
+              </Grid>
+
+              <Grid item xs={3} className="flex items-center">
+                <Typography className="pr-2 text-slate-500 text-xl" variant="p3">
+                  Capacity
+                </Typography>
+              </Grid>
+              <Grid item xs={9} className="flex items-center" m={0}>
+                <Box>
+                  {" "}
                   <DropDown
                     value={values?.weeklyAvailability ? values?.weeklyAvailability : 35}
                     name={"weeklyAvailability"}
@@ -189,16 +201,16 @@ const AddResource = (props) => {
                       setFieldValue(`weeklyAvailability`, e.target?.value)
                     }}
                   />
-                  <Box paddingTop={"2rem"}>
-                    <Typography className="pl-2 text-slate-500 text-xl" variant="p3">
-                      hours per day{" "}
-                    </Typography>
-                  </Box>
-                </Grid>
-                {touched.weeklyAvailability &&
-                  errors.weeklyAvailability &&
-                  "Kindly Select Weekly Availability"}
+                </Box>
+                <Box>
+                  <Typography className="pl-2 text-slate-500 text-xl" variant="p3">
+                    hours per day{" "}
+                  </Typography>
+                </Box>
               </Grid>
+              {touched.weeklyAvailability &&
+                errors.weeklyAvailability &&
+                "Kindly Select Weekly Availability"}
             </Grid>
             <Grid container>
               <Grid item xs={3} alignItems={"center"} display={"flex"}>
@@ -236,13 +248,13 @@ const AddResource = (props) => {
                     </Box>
                   )
                 })}
-                <div style={{ marginTop: "2px", color: "#FF000D" }}>
-                  {touched.workDays &&
-                    errors?.workDays &&
-                    values?.workDays?.length === 0 &&
-                    "Kindly Select Work Days"}
-                </div>
               </Grid>
+              <div style={{ marginTop: "2px", color: "#FF000D" }}>
+                {touched.workDays &&
+                  errors?.workDays &&
+                  values?.workDays?.length === 0 &&
+                  "Kindly Select Work Days"}
+              </div>
             </Grid>
             <Grid container paddingBottom={3}></Grid>
             <Grid container>

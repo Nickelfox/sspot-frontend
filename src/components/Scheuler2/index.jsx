@@ -291,10 +291,6 @@ const Calender = (props) => {
     const filteredArray = projectsArray.filter((item) => item !== undefined)
     const newArray = [...dataArray, ...filteredArray]
     const requiredArray = newArray.flat()
-    // const filteredArray = resources.map((item) => item?.projects);
-    // const projectsArray = filteredArray.filter((item) => item !== undefined);
-    // const newArray = [...resources, ...projectsArray];
-    // const requiredArray = newArray.flat();
     sd.setResources(requiredArray)
     setResourceMap(convertArrayToMap(requiredArray))
 
@@ -499,8 +495,10 @@ const Calender = (props) => {
       resourceId: slotId,
       bgColor: `#${randomColor}`
     }
+    getRenderSd(schedulerData)
     schedulerData.addEvent(newEvent)
-    triggerRerender(rerender + 1)
+
+    // triggerRerender(rerender + 1)
   }
   const onScrollLeft = (schedulerData, schedulerContent, maxScrollLeft) => {
     schedulerData.prev()
@@ -541,9 +539,9 @@ const Calender = (props) => {
   const addResorceInScheduler = (values) => {
     const startDate = new Date()
     const convertedStartDate = new dayjs(startDate).format("YYYY-MM-DD hh:mm:ss")
-    const endDate = new dayjs().day(5).endOf("day").format("YYYY-MM-DD hh:mm:ss")
+    const endDate = new dayjs().day(7).endOf("day").format("YYYY-MM-DD hh:mm:ss")
     schedulerData.addResource(values)
-    triggerRerender(rerender + 1)
+    // triggerRerender(rerender + 1)
     handlePopUpClose()
     newEventfromResource(schedulerData, values?.id, convertedStartDate, endDate)
   }
