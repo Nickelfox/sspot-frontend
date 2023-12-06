@@ -43,7 +43,6 @@ function App() {
         <PersistGate loading={null} persistor={persistor}>
           <ThemeProvider theme={currentTheme}>
             <AppLoader />
-
             <AppRouter />
             <ToastContainer />
             <SessionObserver />

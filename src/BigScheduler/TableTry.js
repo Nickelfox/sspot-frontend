@@ -8,6 +8,7 @@ import { ViewTypes } from "./helpers"
 import UserAvatar from "../components/UserAvatar/UserAvatar"
 import {
   Box,
+  Grid,
   Table,
   TableBody,
   TableCell,
@@ -44,6 +45,8 @@ const TableTry = (props) => {
   const { schedulerData, toggleExpandFunc, dnd, openEditItemPopUp, closePopup, handlePopUp } = props
   //eslint-disable-next-line no-unused-vars
   const { renderData, cellUnit, config, headers } = schedulerData
+  const displayRenderData = renderData.filter((o) => o.render)
+
   const borderBottom = "1px solid #c4c4c4"
   let contentScrollbarHeight = 17,
     resourceScrollbarHeight = 17,
@@ -109,103 +112,147 @@ const TableTry = (props) => {
       />
     )
   }
-  const displayRenderData = renderData.filter((o) => o.render)
+
   const getDivs = () => {
     let eventDndSource = dnd.getDndSource()
     let DndResourceEvents = dnd.getDropTarget(config.dragAndDropEnabled)
-    return displayRenderData.map((item, index) => {
-      let resourceEventsList = (
-        <DndResourceEvents
-          {...props}
-          key={item.slotId}
-          resourceEvents={item}
-          dndSource={eventDndSource}
-        />
-      )
+    const rMap = new Map()
+    displayRenderData.forEach((render) => {
+      if (!rMap.has(render?.department)) {
+        rMap.set(render?.department, [render])
+      } else {
+        rMap.set(render?.department, [...rMap.get(render?.department), render])
+      }
+    })
+    return [...rMap.entries()].map((department, index) => {
       return (
-        !item?.parentId && (
-          <TableContainer sx={{ overflow: "hidden" }}>
-            <Table
-              style={{
-                overflow: "hidden",
-                marginBottom: 0
-              }}>
-              <TableBody sx={{ overflow: "hidden" }}>
-                <TableRow sx={{ minWidth: "100%" }}>
-                  <TableCell
-                    sx={{
-                      minWidth: "23.9rem",
-                      borderBottom: borderBottom,
-                      padding: 0,
-                      display: "flex",
-                      height: 43,
-                      width: 24
-                    }}
-                    className="bg-[#fff] stickyCell flex justify-center items-center w-full p-0">
-                    <UserAvatar username={item?.slotName} />
-                    <Box width={"100%"} display={"flex"} justifyContent={"space-around"}>
-                      <Typography variant="p1" color="black">
-                        {item?.slotName?.split(" ")[0]}
-                      </Typography>
-                      <Box>{getExpandButton(item)}</Box>
-                    </Box>
-                  </TableCell>
-                  <TableCell sx={{ padding: 0 }}>
-                    <div
-                      className="scheduler-view"
+        <Box key={`${department - index}`}>
+          <Box paddingLeft={1} marginBottom={"0.2rem"} borderBottom={borderBottom}>
+            <Typography className="text-slate-500 text-2xl" variant="p3">
+              {department[0]}
+            </Typography>
+          </Box>
+          {department[1].map((item, index) => {
+            let resourceEventsList = (
+              <DndResourceEvents
+                {...props}
+                key={item.slotId}
+                resourceEvents={item}
+                dndSource={eventDndSource}
+              />
+            )
+            return (
+              <Box key={item} marginTop={index === 0 ? "-0.2rem" : 0}>
+                {!item?.parentId && (
+                  <TableContainer sx={{ overflow: "hidden" }}>
+                    <Table
                       style={{
                         width: schedulerContainerWidth,
                         height: 42
                         // verticalAlign: "top"
                       }}>
-                      <div
-                        style={{
-                          position: "relative",
-                          ...schedulerContentStyle
-                        }}
-                        // style={schedulerContentStyle}
-                        // ref={props.schedulerContentRef}
-                        // onMouseOver={props.onSchedulerContentMouseOver}
-                        // onMouseOut={props.onSchedulerContentMouseOut}
-                        // onScroll={props.onSchedulerContentScroll}
-                      >
-                        <div style={{ width: schedulerWidth, position: "relative" }}>
-                          <div className="scheduler-content">
-                            <table className="scheduler-content-table">
-                              <tbody>{resourceEventsList}</tbody>
-                            </table>
-                          </div>
-                          <div className="scheduler-bg">
-                            <Box
-                              className="scheduler-bg-table"
-                              style={{ width: schedulerWidth, position: "relative" }}
-                              // ref={props.schedulerContentBgTableRef}
-                            >
-                              <BodyView
-                                {...props}
-                                // scroller={this.bodyScroller}
-                                scroller={() => {}}
-                                currentItem={item}
-                              />
-                            </Box>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-            {item?.expanded &&
-              getInnerTable(
-                displayRenderData,
-                item?.slotId,
-                eventDndSource,
-                DndResourceEvents,
-                item
-              )}
-          </TableContainer>
-        )
+                      <TableBody sx={{ overflow: "hidden" }}>
+                        <TableRow sx={{ minWidth: "100%" }}>
+                          <TableCell
+                            sx={{
+                              minWidth: "23.9rem",
+                              borderBottom: borderBottom,
+                              padding: 0,
+                              display: "flex",
+                              height: 43,
+                              width: "fit-content"
+                            }}
+                            className="bg-[#fff]  flex justify-center items-center w-full p-0">
+                            <Grid container>
+                              <Grid
+                                item
+                                xs={3}
+                                display={"flex"}
+                                justifyContent={"center"}
+                                alignItems={"center"}>
+                                <UserAvatar username={item?.slotName} />
+                              </Grid>
+                              <Grid
+                                item
+                                xs={6}
+                                display={"flex"}
+                                justifyContent={"start"}
+                                alignItems={"center"}>
+                                <Typography variant="p1" color="black">
+                                  {item?.slotName?.split(" ")[0]}
+                                </Typography>{" "}
+                              </Grid>
+                              <Grid
+                                item
+                                xs={3}
+                                display={"flex"}
+                                justifyContent={"center"}
+                                alignItems={"center"}>
+                                <Box>{getExpandButton(item)}</Box>
+                              </Grid>
+                            </Grid>
+                          </TableCell>
+                          <TableCell sx={{ padding: 0 }}>
+                            <div
+                              className="scheduler-view"
+                              style={{
+                                // width: schedulerContainerWidth,
+                                height: 43,
+                                marginTop: "-2px"
+                                // verticalAlign: "top"
+                              }}>
+                              <div
+                                style={{
+                                  position: "relative",
+                                  ...schedulerContentStyle
+                                }}
+                                // style={schedulerContentStyle}
+                                // ref={props.schedulerContentRef}
+                                // onMouseOver={props.onSchedulerContentMouseOver}
+                                // onMouseOut={props.onSchedulerContentMouseOut}
+                                // onScroll={props.onSchedulerContentScroll}
+                              >
+                                <div style={{ width: schedulerWidth, position: "relative" }}>
+                                  <div className="scheduler-content">
+                                    <table className="scheduler-content-table">
+                                      <tbody>{resourceEventsList}</tbody>
+                                    </table>
+                                  </div>
+                                  <div className="scheduler-bg">
+                                    <Box
+                                      className="scheduler-bg-table"
+                                      style={{ width: schedulerWidth, position: "relative" }}
+                                      // ref={props.schedulerContentBgTableRef}
+                                    >
+                                      <BodyView
+                                        {...props}
+                                        // scroller={this.bodyScroller}
+                                        scroller={() => {}}
+                                        currentItem={item}
+                                      />
+                                    </Box>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                    {item?.expanded &&
+                      getInnerTable(
+                        displayRenderData,
+                        item?.slotId,
+                        eventDndSource,
+                        DndResourceEvents,
+                        item
+                      )}
+                  </TableContainer>
+                )}
+              </Box>
+            )
+          })}
+        </Box>
       )
     })
   }
@@ -293,7 +340,7 @@ const TableTry = (props) => {
                 <div
                   className="scheduler-view"
                   style={{
-                    width: schedulerContainerWidth,
+                    // width: schedulerContainerWidth,
                     height: 43
                   }}>
                   <div
@@ -396,7 +443,7 @@ const TableTry = (props) => {
             <div
               className="scheduler-view"
               style={{
-                width: schedulerContainerWidth,
+                // width: schedulerContainerWidth,
                 verticalAlign: "top"
               }}>
               <div
@@ -439,7 +486,9 @@ const TableTry = (props) => {
       </>
     )
   }
-  return <div style={{ maxWidth: "100vw", overflow: "auto" }}>{getDivs()}</div>
+  return (
+    <div style={{ maxWidth: "100vw", overflow: "auto", border: "1px solid gray" }}>{getDivs()}</div>
+  )
 }
 
 export default TableTry

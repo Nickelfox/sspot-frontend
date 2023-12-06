@@ -291,7 +291,6 @@ const Calender = (props) => {
     const filteredArray = projectsArray.filter((item) => item !== undefined)
     const newArray = [...dataArray, ...filteredArray]
     const requiredArray = newArray.flat()
-
     // const filteredArray = resources.map((item) => item?.projects);
     // const projectsArray = filteredArray.filter((item) => item !== undefined);
     // const newArray = [...resources, ...projectsArray];
@@ -343,7 +342,8 @@ const Calender = (props) => {
         parentId: item?.parentId,
         workDays: item?.workDays,
         editPopup: item?.slotId === itemToEdit?.slotId ? !item?.editPopup : false,
-        email: item?.email
+        email: item?.email,
+        department: item?.department
       }
     })
     setSelectedObject(itemToEdit)
@@ -554,6 +554,7 @@ const Calender = (props) => {
      */
     const { renderData } = schedulerData
     let displayRenderData = renderData.filter((o) => o.render)
+    console.log(displayRenderData, "552")
     const replaceArr = displayRenderData.map((i) => {
       return {
         id: i.slotId,
@@ -563,7 +564,8 @@ const Calender = (props) => {
         parentId: i.parentId,
         workDays: i.workDays,
         editPopup: false,
-        email: i?.email
+        email: i?.email,
+        department: i?.department
       }
     })
     schedulerData.setResources(replaceArr)
@@ -655,7 +657,7 @@ const Calender = (props) => {
             showResourceEditPopup={showResourceEditPopup}
             closePopUp={closePopUp}
             handlePopUp={handlePopUp}
-            // {...props}
+            {...props}
           />
         )}{" "}
       </DndProvider>

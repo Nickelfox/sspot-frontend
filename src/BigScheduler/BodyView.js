@@ -82,8 +82,6 @@ const getRows = (array, daySet) => {
   return array.map((childrenItem) => {
     const currentDate = dayjs(new Date()).format("DD-MM")
     const itemDate = dayjs(childrenItem?.time).format("DD-MM")
-    // const dayIndex = dayjs(childrenItem?.time).day()
-    // const childrenDay = dayArr[dayIndex]
     const childrenDay = moment(childrenItem?.time).format("dddd").substring(0, 3).toUpperCase()
     const dayCheck = daySet.has(childrenDay) ? null : (
       <img src={nonWorking} alt="" style={{ zIndex: 999 }} />

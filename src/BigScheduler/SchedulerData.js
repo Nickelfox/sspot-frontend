@@ -801,13 +801,29 @@ export default class SchedulerData {
     this.eventGroups = eventGroups
   }
 
-  _createInitRenderData(isEventPerspective, eventGroups, resources, headers) {
+  _ggetResourceinitData(resource, headers) {
+    const resourceMap = new Map()
+    let slots = resource
+    slots.forEach((slot) => {
+      if (!resourceMap.has(slot?.department)) {
+        resourceMap.set(
+          slot?.department,
+          this._createInitRenderData(resource, headers, slot?.department)
+        )
+      }
+    })
+    console.log(resourceMap, "RESOURCEMAP")
+    return resourceMap
+  }
+
+  _createInitRenderData(resources, headers, department) {
     /**
      * @description
      * TODO: THIS FUNCTION WILL GET CHANGED 100%
      * This function will be created newly and requires whole day
      */
-    let slots = isEventPerspective ? eventGroups : resources
+    let slots = resources.filter((resource) => resource.department === department)
+
     let slotTree = [],
       slotMap = new Map()
     slots.forEach((slot) => {
@@ -836,8 +852,10 @@ export default class SchedulerData {
         workDays: slot?.workDays,
         editPopup: slot?.editPopup,
         projectsAssigned: slot?.projectsAssigned,
-        availability: slot?.weeklyAvailability
+        availability: slot?.weeklyAvailability,
+        department: slot?.department
       }
+
       let id = slot.id
       let value = undefined
       if (slotMap.has(id)) {
@@ -850,7 +868,6 @@ export default class SchedulerData {
         }
         slotMap.set(id, value)
       }
-
       let parentId = slot.parentId
       if (!parentId || parentId === id) {
         slotTree.push(value)
@@ -1078,19 +1095,16 @@ export default class SchedulerData {
      * TODO: THIS FUNCTION WILL GET CHANGED 100%
      * This function will be created newly and requires whole day.
      */
-
-    let initRenderData = this._createInitRenderData(
-      this.isEventPerspective,
-      this.eventGroups,
-      this.resources,
-      this.headers
-    )
+    let xData = this._ggetResourceinitData(this.resources, this.headers)
+    // let initRenderData = this._createInitRenderData(this.resources, this.headers)
     //this.events.sort(this._compare);
+    // console.log(...xData.values(), "MAPAPAPAP")
+    const ArrayValue = [...xData.values()]
+    const flatArray = ArrayValue.flat()
     let cellMaxEventsCount = this.getCellMaxEvents()
     const cellMaxEventsCountValue = 30
-
     this.events.forEach((item) => {
-      let resourceEventsList = initRenderData.filter((x) => x.slotId === this._getEventSlotId(item))
+      let resourceEventsList = flatArray.filter((x) => x.slotId === this._getEventSlotId(item))
       if (resourceEventsList.length > 0) {
         let resourceEvents = resourceEventsList[0]
         let span = this._getSpan(item.start, item.end, this.headers)
@@ -1139,7 +1153,7 @@ export default class SchedulerData {
       cellMaxEventsCount <= cellMaxEventsCountValue ||
       this.behaviors.getSummaryFunc !== undefined
     ) {
-      initRenderData.forEach((resourceEvents) => {
+      flatArray.forEach((resourceEvents) => {
         let hasSummary = false
 
         resourceEvents.headerItems.forEach((headerItem) => {
@@ -1202,7 +1216,7 @@ export default class SchedulerData {
       })
     }
 
-    this.renderData = initRenderData
+    this.renderData = flatArray
   }
 
   _startResizing() {
