@@ -8,6 +8,7 @@ import { ViewTypes } from "./helpers"
 import UserAvatar from "../components/UserAvatar/UserAvatar"
 import {
   Box,
+  Grid,
   Table,
   TableBody,
   TableCell,
@@ -126,8 +127,10 @@ const TableTry = (props) => {
     return [...rMap.entries()].map((department, index) => {
       return (
         <Box key={`${department - index}`}>
-          <Box paddingLeft={1}>
-            <Typography variant="p1">{department[0]}</Typography>
+          <Box paddingLeft={1} marginBottom={"0.2rem"} borderBottom={borderBottom}>
+            <Typography className="text-slate-500 text-2xl" variant="p3">
+              {department[0]}
+            </Typography>
           </Box>
           {department[1].map((item, index) => {
             let resourceEventsList = (
@@ -139,7 +142,7 @@ const TableTry = (props) => {
               />
             )
             return (
-              <div key={item}>
+              <Box key={item} marginTop={index === 0 ? "-0.2rem" : 0}>
                 {!item?.parentId && (
                   <TableContainer sx={{ overflow: "hidden" }}>
                     <Table
@@ -160,20 +163,42 @@ const TableTry = (props) => {
                               width: "fit-content"
                             }}
                             className="bg-[#fff]  flex justify-center items-center w-full p-0">
-                            <UserAvatar username={item?.slotName} />
-                            <Box width={"100%"} display={"flex"} justifyContent={"space-around"}>
-                              <Typography variant="p1" color="black">
-                                {item?.slotName?.split(" ")[0]}
-                              </Typography>
-                              <Box>{getExpandButton(item)}</Box>
-                            </Box>
+                            <Grid container>
+                              <Grid
+                                item
+                                xs={3}
+                                display={"flex"}
+                                justifyContent={"center"}
+                                alignItems={"center"}>
+                                <UserAvatar username={item?.slotName} />
+                              </Grid>
+                              <Grid
+                                item
+                                xs={6}
+                                display={"flex"}
+                                justifyContent={"start"}
+                                alignItems={"center"}>
+                                <Typography variant="p1" color="black">
+                                  {item?.slotName?.split(" ")[0]}
+                                </Typography>{" "}
+                              </Grid>
+                              <Grid
+                                item
+                                xs={3}
+                                display={"flex"}
+                                justifyContent={"center"}
+                                alignItems={"center"}>
+                                <Box>{getExpandButton(item)}</Box>
+                              </Grid>
+                            </Grid>
                           </TableCell>
                           <TableCell sx={{ padding: 0 }}>
                             <div
                               className="scheduler-view"
                               style={{
                                 // width: schedulerContainerWidth,
-                                height: 43
+                                height: 43,
+                                marginTop: "-2px"
                                 // verticalAlign: "top"
                               }}>
                               <div
@@ -224,7 +249,7 @@ const TableTry = (props) => {
                       )}
                   </TableContainer>
                 )}
-              </div>
+              </Box>
             )
           })}
         </Box>
@@ -461,7 +486,9 @@ const TableTry = (props) => {
       </>
     )
   }
-  return <div style={{ maxWidth: "100vw", overflow: "auto" }}>{getDivs()}</div>
+  return (
+    <div style={{ maxWidth: "100vw", overflow: "auto", border: "1px solid gray" }}>{getDivs()}</div>
+  )
 }
 
 export default TableTry

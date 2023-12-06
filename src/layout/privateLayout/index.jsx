@@ -58,7 +58,7 @@ export default function PrivateLayout(props) {
   const { navigate, handleLogout, activeMenu } = usePrivateLayoutController(props)
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box>
       <Main open={open}>
         <DrawerHeader position="fixed" open={open} sx={styles.appbar} ref={appRef}>
           <Toolbar
@@ -85,7 +85,7 @@ export default function PrivateLayout(props) {
               </ListItemButton>
             </Box>
           </Toolbar>
-        </DrawerHeader>{" "}
+        </DrawerHeader>
         <Outlet />
       </Main>
     </Box>
