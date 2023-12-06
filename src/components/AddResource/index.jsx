@@ -34,7 +34,6 @@ const AddResource = (props) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("xs"))
 
   const createResource = (values) => {
-    console.log(values, "Here are Values")
     const requiredObject = {
       name: `${values?.firstName} ${values?.lastName}`,
       id: resourceLength + 1,
