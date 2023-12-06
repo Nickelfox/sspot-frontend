@@ -27,10 +27,10 @@ const OutlinedInputField = styled(OutlinedInput)(({ height = "1.5rem" }) => {
       paddingTop: "0rem !important"
     },
     "& .MuiOutlinedInput-input": {
-      paddingTop: "2rem",
-      [theme.breakpoints.down("sm")]: {
-        paddingTop: "3.5rem"
-      },
+      // paddingTop: "2rem",
+      // [theme.breakpoints.down("sm")]: {
+      //   paddingTop: "3.5rem"
+      // },
       paddingLeft: "12px" // Don't convert this to rem as this is match the default alignment used in MUI text field ( InputField Comp)
     },
     "& .MuiOutlinedInput-input:focused": {

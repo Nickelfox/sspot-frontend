@@ -545,3 +545,7 @@ input::-webkit-calendar-picker-indicator:active {
 .MuiOutlinedInput-notchedOutline {
   border-radius: 0.2rem !important;
 }
+
+.MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input .MuiSelect-select {
+  padding: 0 !important;
+}

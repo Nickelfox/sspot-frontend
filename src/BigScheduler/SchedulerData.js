@@ -110,8 +110,10 @@ export default class SchedulerData {
   }
 
   addResource(resource) {
+    console.log(this.renderData, this.resources, "Render DAta")
     let existedResources = this.resources.filter((x) => x.id === resource.id)
     if (existedResources.length === 0) {
+      // /*Update function here*/TODO:0
       this.resources.push(resource)
       this._createRenderData()
     }
@@ -830,7 +832,7 @@ export default class SchedulerData {
       let headerEvents = headers.map((header) => {
         return this._createInitHeaderEvents(header)
       })
-
+      console.log(slot, "SLOT IN RENDER DATA")
       let slotRenderData = {
         slotId: slot.id,
         slotName: slot.name,
