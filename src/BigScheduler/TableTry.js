@@ -123,11 +123,12 @@ const TableTry = (props) => {
         rMap.set(render?.department, [...rMap.get(render?.department), render])
       }
     })
-    console.log(rMap, "PAPAPP")
     return [...rMap.entries()].map((department, index) => {
       return (
-        <div key={`${department - index}`}>
-          <div> {department[0]}</div>
+        <Box key={`${department - index}`}>
+          <Box paddingLeft={1}>
+            <Typography variant="p1">{department[0]}</Typography>
+          </Box>
           {department[1].map((item, index) => {
             let resourceEventsList = (
               <DndResourceEvents
@@ -143,8 +144,9 @@ const TableTry = (props) => {
                   <TableContainer sx={{ overflow: "hidden" }}>
                     <Table
                       style={{
-                        overflow: "hidden",
-                        marginBottom: 0
+                        width: schedulerContainerWidth,
+                        height: 42
+                        // verticalAlign: "top"
                       }}>
                       <TableBody sx={{ overflow: "hidden" }}>
                         <TableRow sx={{ minWidth: "100%" }}>
@@ -225,105 +227,9 @@ const TableTry = (props) => {
               </div>
             )
           })}
-        </div>
+        </Box>
       )
     })
-
-    // return displayRenderData.map((item, index) => {
-    //   let resourceEventsList = (
-    //     <DndResourceEvents
-    //       {...props}
-    //       key={item.slotId}
-    //       resourceEvents={item}
-    //       dndSource={eventDndSource}
-    //     />
-    //   )
-    //   return (
-    //     !item?.parentId && (
-    //       <TableContainer sx={{ overflow: "hidden" }}>
-    //         <Table
-    //           style={{
-    //             overflow: "hidden",
-    //             marginBottom: 0
-    //           }}>
-    //           <TableBody sx={{ overflow: "hidden" }}>
-    //             <TableRow sx={{ minWidth: "100%" }}>
-    //               <TableCell
-    //                 sx={{
-    //                   minWidth: "23.9rem",
-    //                   borderBottom: borderBottom,
-    //                   padding: 0,
-    //                   display: "flex",
-    //                   height: 43,
-    //                   width: 24
-    //                 }}
-    //                 className="bg-[#fff] stickyCell flex justify-center items-center w-full p-0">
-    //                 <UserAvatar username={item?.slotName} />
-    //                 <Box width={"100%"} display={"flex"} justifyContent={"space-around"}>
-    //                   <Typography variant="p1" color="black">
-    //                     {item?.slotName?.split(" ")[0]}
-    //                   </Typography>
-    //                   <Box>{getExpandButton(item)}</Box>
-    //                 </Box>
-    //               </TableCell>
-    //               <TableCell sx={{ padding: 0 }}>
-    //                 <div
-    //                   className="scheduler-view"
-    //                   style={{
-    //                     width: schedulerContainerWidth,
-    //                     height: 43
-    //                     // verticalAlign: "top"
-    //                   }}>
-    //                   <div
-    //                     style={{
-    //                       position: "relative",
-    //                       ...schedulerContentStyle
-    //                     }}
-    //                     // style={schedulerContentStyle}
-    //                     // ref={props.schedulerContentRef}
-    //                     // onMouseOver={props.onSchedulerContentMouseOver}
-    //                     // onMouseOut={props.onSchedulerContentMouseOut}
-    //                     // onScroll={props.onSchedulerContentScroll}
-    //                   >
-    //                     <div style={{ width: schedulerWidth, position: "relative" }}>
-    //                       <div className="scheduler-content">
-    //                         <table className="scheduler-content-table">
-    //                           <tbody>{resourceEventsList}</tbody>
-    //                         </table>
-    //                       </div>
-    //                       <div className="scheduler-bg">
-    //                         <Box
-    //                           className="scheduler-bg-table"
-    //                           style={{ width: schedulerWidth, position: "relative" }}
-    //                           // ref={props.schedulerContentBgTableRef}
-    //                         >
-    //                           <BodyView
-    //                             {...props}
-    //                             // scroller={this.bodyScroller}
-    //                             scroller={() => {}}
-    //                             currentItem={item}
-    //                           />
-    //                         </Box>
-    //                       </div>
-    //                     </div>
-    //                   </div>
-    //                 </div>
-    //               </TableCell>
-    //             </TableRow>
-    //           </TableBody>
-    //         </Table>
-    //         {item?.expanded &&
-    //           getInnerTable(
-    //             displayRenderData,
-    //             item?.slotId,
-    //             eventDndSource,
-    //             DndResourceEvents,
-    //             item
-    //           )}
-    //       </TableContainer>
-    //     )
-    //   )
-    // })
   }
   const getInnerTable = (displayRenderData, slotid, eventDndSource, DndResourceEvents, item) => {
     const filteredData = displayRenderData.filter((item) => item?.parentId === slotid)
@@ -512,7 +418,7 @@ const TableTry = (props) => {
             <div
               className="scheduler-view"
               style={{
-                width: schedulerContainerWidth,
+                // width: schedulerContainerWidth,
                 verticalAlign: "top"
               }}>
               <div

@@ -4,7 +4,6 @@ import dayjs from "dayjs"
 import nonWorking from "../assets/images/nonWorking.webp"
 import { getHeaderMap, getRequiredArray } from "../helpers/conversionFunctions/conversion"
 import moment from "moment"
-// const dayArr = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
 class BodyView extends Component {
   //eslint-disable-next-line
   // constructor(props) {
@@ -83,8 +82,8 @@ const getRows = (array, daySet) => {
   return array.map((childrenItem) => {
     const currentDate = dayjs(new Date()).format("DD-MM")
     const itemDate = dayjs(childrenItem?.time).format("DD-MM")
-    const dayIndex = moment(childrenItem?.time).format("dddd").substring(0, 3).toUpperCase()
-    const dayCheck = daySet.has(dayIndex) ? null : (
+    const childrenDay = moment(childrenItem?.time).format("dddd").substring(0, 3).toUpperCase()
+    const dayCheck = daySet.has(childrenDay) ? null : (
       <img src={nonWorking} alt="" style={{ zIndex: 999 }} />
     )
     return (
@@ -112,14 +111,3 @@ const getRows = (array, daySet) => {
     )
   })
 }
-
-// const getNonWorkingTime = (childrenItem, daySet, chidrenDay) => {
-//   if (childrenItem?.nonWorkingTime) {
-//     return <img src={nonWorking} alt="" style={{ zIndex: "1000" }} />
-//   }
-//   if (daySet.has(chidrenDay)) {
-//     return
-//   } else {
-//     return <img src={nonWorking} alt="" style={{ zIndex: 999 }} />
-//   }
-// }

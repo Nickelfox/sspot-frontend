@@ -404,19 +404,21 @@ class Scheduler extends Component {
             </div>
           </div>
         </div>
-        <TableTry
-          {...this.props}
-          dnd={this.state.dndContext}
-          schedulerContentRef={this.schedulerContentRef}
-          onSchedulerContentMouseOver={this.onSchedulerContentMouseOver}
-          onSchedulerContentMouseOut={this.onSchedulerContentMouseOut}
-          onSchedulerContentScroll={this.onSchedulerContentScroll}
-          schedulerContentBgTableRef={this.schedulerContentBgTableRef}
-          openEditItemPopUp={this.openEditItemPopUp}
-          width={width}
-          closePopup={this.closePopup}
-          handlePopUp={this.props.handlePopUp}
-        />
+        <div ref={this.schedulerResourceRef}>
+          <TableTry
+            {...this.props}
+            dnd={this.state.dndContext}
+            schedulerContentRef={this.schedulerContentRef}
+            onSchedulerContentMouseOver={this.onSchedulerContentMouseOver}
+            onSchedulerContentMouseOut={this.onSchedulerContentMouseOut}
+            onSchedulerContentScroll={this.onSchedulerContentScroll}
+            schedulerContentBgTableRef={this.schedulerContentBgTableRef}
+            openEditItemPopUp={this.openEditItemPopUp}
+            width={width}
+            closePopup={this.closePopup}
+            handlePopUp={this.props.handlePopUp}
+          />
+        </div>
       </>
     )
   }
@@ -507,7 +509,8 @@ class Scheduler extends Component {
     this.schedulerResource = element
   }
 
-  onSchedulerResourceMouseOver = () => {
+  onSchedulerResourceMouseOver = (element) => {
+    console.log(element)
     this.currentArea = 1
   }
 
@@ -530,6 +533,7 @@ class Scheduler extends Component {
   }
 
   schedulerContentBgTableRef = (element) => {
+    console.log(element, "REF")
     this.schedulerContentBgTable = element
   }
 

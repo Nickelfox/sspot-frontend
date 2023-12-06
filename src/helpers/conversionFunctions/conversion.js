@@ -142,7 +142,7 @@ export const getDummyDataArray = () => {
       id: data.id,
       name: data?.user?.full_name,
       weeklyAvailability: data?.capacity,
-      workDays: data?.work_days,
+      workDays: data?.work_days, //TODO: uncooment this
       // workDays: ["MON", "TUE", "THU", "FRI"],
       email: data?.user?.email,
       editPopup: false,
