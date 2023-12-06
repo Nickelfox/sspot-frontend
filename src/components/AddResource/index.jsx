@@ -16,16 +16,16 @@ import ErrorText from "components/ErrorText"
 import { useResourceController } from "./addResource.controller"
 
 const workDays = [
-  { value: "SUN", label: "SUN" },
   { value: "MON", label: "MON" },
   { value: "TUE", label: "TUE" },
   { value: "WED", label: "WED" },
   { value: "THU", label: "THU" },
   { value: "FRI", label: "FRI" },
-  { value: "SAT", label: "SAT" }
+  { value: "SAT", label: "SAT" },
+  { value: "SUN", label: "SUN" }
 ]
 const AddResource = (props) => {
-  const { handleClose, addResorceInScheduler, resourceLength, isEdit, selectedObject } = props
+  const { handleClose, addResorceInScheduler, resourceLength, departmentsList } = props
   const { initialValues } = useResourceController(props)
   const styles = useStyles()
   const theme = useTheme()
@@ -131,12 +131,12 @@ const AddResource = (props) => {
                 </Grid>
                 <Grid item xs={9} m={0} height={"fit-content"}>
                   <DropDown
-                    value={values.roles}
-                    name={"roles"}
-                    label="roles"
-                    items={items}
+                    value={values.departments}
+                    name={"departments"}
+                    label="departments"
+                    items={departmentsList}
                     handleChange={(e) => {
-                      setFieldValue(`roles`, e.target?.value)
+                      setFieldValue(`departments`, e.target?.value)
                     }}
                   />
                 </Grid>
@@ -144,13 +144,13 @@ const AddResource = (props) => {
               <Grid item xs={12} className="flex items-center justify-around">
                 <Grid item xs={3} className="flex items-center" paddingTop={"2rem"}>
                   <Typography className="text-slate-500 text-xl" variant="p3">
-                    Roles
+                    Designation
                   </Typography>{" "}
                   <BasicTooltip
                     title={
                       <Box style={{ color: "#000", fontSize: "1.2rem" }}>
                         <Typography variant={"c1"}>
-                          Add roles to take advantage of filtering and search on your schedule
+                          Add designation to take advantage of filtering and search on your schedule
                         </Typography>
                       </Box>
                     }>
@@ -199,52 +199,6 @@ const AddResource = (props) => {
                   errors.weeklyAvailability &&
                   "Kindly Select Weekly Availability"}
               </Grid>
-              {/* <Grid item xs={12} className="flex items-center justify-around mt-2">
-                <Grid item xs={3}>
-                  <span className="text-slate-500 text-xl">Work Days </span>
-                </Grid>
-                <Grid item xs={9} m={0} display={"flex"} flexDirection={"column"}>
-                  <Grid item xs={12} className="flex">
-                    <div className="flex">
-                      {workDays.map((workDay, index) => {
-                        return (
-                          <div
-                            key={`${workDay?.value}`}
-                            className="flex items-center justify-center "
-                            // style={styles.daySelector}
-                            style={getStylesforSelector(values?.workDays, workDay.value, index)}
-                            onKeyDown={() => {
-                              const daySet = new Set(values?.workDays)
-                              if (daySet?.has(workDay.value)) {
-                                daySet.delete(workDay.value)
-                              } else {
-                                daySet.add(workDay.value)
-                              }
-                              setFieldValue(`workDays`, Array.from(daySet))
-                            }}
-                            onClick={() => {
-                              const daySet = new Set(values?.workDays)
-                              if (daySet?.has(workDay.value)) {
-                                daySet.delete(workDay.value)
-                              } else {
-                                daySet.add(workDay.value)
-                              }
-                              setFieldValue(`workDays`, Array.from(daySet))
-                            }}>
-                            <Typography style={styles.daySelectorText}>{workDay?.label}</Typography>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </Grid>
-                  <div style={{ marginTop: "2px", color: "#FF000D" }}>
-                    {touched.workDays &&
-                      errors?.workDays &&
-                      values?.workDays?.length === 0 &&
-                      "Kindly Select Work Days"}
-                  </div>
-                </Grid>
-              </Grid> */}
             </Grid>
             <Grid container>
               <Grid item xs={3} alignItems={"center"} display={"flex"}>

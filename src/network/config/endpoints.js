@@ -46,5 +46,8 @@ export const API = {
   THIRD_PARTY: {
     // If the base url is different from default
     CHECK: new APICustomRouter("https://example.com", "/test", HTTP_METHODS.GET)
+  },
+  SCHEDULER: {
+    DEPARTMENTS: new APIRouter("/departments/", HTTP_METHODS.GET)
   }
 }
