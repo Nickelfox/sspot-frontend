@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "start:dev": "set PORT=4070 && env-cmd -f .env.dev react-scripts start",
-    "start:qa": "set PORT=4070 && env-cmd -f .env.qa react-scripts start",
-    "start:stage": "set PORT=4070 && env-cmd -f .env.staging react-scripts start",
+    "start:qa": "set PORT=4071 && env-cmd -f .env.qa react-scripts start",
+    "start:stage": "set PORT=4072 && env-cmd -f .env.staging react-scripts start",
     "build": "react-scripts build",
     "build:dev": "GENERATE_SOURCEMAP=false env-cmd -f .env.dev react-scripts build",
     "build:stage": "GENERATE_SOURCEMAP=false env-cmd -f .env.staging react-scripts build",
