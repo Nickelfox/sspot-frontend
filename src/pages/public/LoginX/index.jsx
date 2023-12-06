@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Typography, Grid, Divider, Box } from "@mui/material"
 import { Formik } from "formik"
 import { useStyles } from "../commonStyles"
@@ -7,11 +7,14 @@ import LockOpenIcon from "@mui/icons-material/LockOpen"
 import { LoginValidator } from "helpers/validators/login"
 import { useLoginController } from "./login.controller"
 import FormField from "components/FormField"
+import { Loader } from "redux/dispatcher/Loader"
 // import { GoogleLogin, FacebookLogin } from "library/SocialLogin"
 
 const Login = () => {
   const styles = useStyles()
-
+  useEffect(() => {
+    Loader.hide()
+  }, [])
   const {
     showLoader,
     showPassword,
