@@ -130,15 +130,25 @@ const AddResource = (props) => {
                   </Typography>
                 </Grid>
                 <Grid item xs={9} m={0} height={"fit-content"}>
-                  <DropDown
-                    value={values.departments}
-                    name={"departments"}
-                    label="departments"
-                    items={departmentsList}
-                    handleChange={(e) => {
-                      setFieldValue(`departments`, e.target?.value)
-                    }}
+                  <InputField
+                    size="medium"
+                    name="designation"
+                    hiddenLabel
+                    placeholder="Designation*"
+                    InputProps={{ disableUnderline: true }}
+                    value={values.designation}
+                    variant="filled"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={touched.designation && Boolean(errors.designation)}
+                    type="text"
+                    fullWidth
+                    margin="normal"
+                    // sx={{ height: "7.2rem", margin: 0 }}
                   />
+                  {touched.designation && errors.designation && (
+                    <ErrorText text={errors.designation} />
+                  )}
                 </Grid>
               </Grid>
               <Grid item xs={12} className="flex items-center justify-around">
