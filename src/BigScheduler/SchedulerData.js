@@ -11,6 +11,7 @@ import behaviors from "./behaviors"
 import { CellUnit, DATE_FORMAT, DATETIME_FORMAT } from "./index"
 import { ViewTypes as ViewType } from "./helpers"
 import { months } from "../helpers/Months/months"
+import { getReplaceArr } from "helpers/conversionFunctions/resourceMap"
 
 export default class SchedulerData {
   constructor(
@@ -1105,21 +1106,23 @@ export default class SchedulerData {
 
     return event1.id < event2.id ? -1 : 1
   }
-  // getItem = (array, item) => {
-  //   const requiredArray = array.filter((arrayItem) => {
-  //     return (
-  //       arrayItem?.slotId === item?.resourceId && arrayItem?.parentId === item?.resourceParentID
-  //     )
-  //   })
-  //   return requiredArray
-  // }
+  getItem = (array, item) => {
+    const requiredArray = array.filter((arrayItem) => {
+      return (
+        arrayItem?.slotId === item?.resourceId && arrayItem?.parentId === item?.resourceParentID
+      )
+    })
+    return requiredArray
+  }
   _createRenderData() {
     /**
      * @description
      * TODO: THIS FUNCTION WILL GET CHANGED 100%
      * This function will be created newly and requires whole day.
      */
-    let xData = this._ggetResourceinitData(this.resources, this.headers)
+    const replaceArr =
+      this?.renderData?.length > 0 ? getReplaceArr(this.renderData) : this?.resources
+    let xData = this._ggetResourceinitData(replaceArr, this.headers)
     // let initRenderData = this._createInitRenderData(this.resources, this.headers)
     //this.events.sort(this._compare);
     // console.log(...xData.values(), "MAPAPAPAP")
@@ -1128,8 +1131,8 @@ export default class SchedulerData {
     let cellMaxEventsCount = this.getCellMaxEvents()
     const cellMaxEventsCountValue = 30
     this.events.forEach((item) => {
-      // let newResourceEventsList = this.getItem(flatArray, item)
-      let resourceEventsList = flatArray.filter((x) => x?.parentId === item?.resourceParentID)
+      let resourceEventsList = this.getItem(flatArray, item)
+      // let resourceEventsList = flatArray.filter((x) => x?.parentId === item?.resourceParentID)
       if (resourceEventsList.length > 0) {
         let resourceEvents = resourceEventsList[0]
         let span = this._getSpan(item.start, item.end, this.headers)

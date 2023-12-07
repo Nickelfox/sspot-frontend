@@ -32,12 +32,13 @@ export const getCheckDate = (requiredData, scheduleArray, key) => {
         }
         break
       case "start":
-        if (endDateSet.has(date)) {
+        if (startDateSet.has(requiredData?.start)) {
+          console.log(date, "START")
           areDatesInRangeArray.push(date)
         }
         break
       case "end":
-        if (startDateSet.has(date)) {
+        if (endDateSet.has(date)) {
           areDatesInRangeArray.push(date)
         }
         break

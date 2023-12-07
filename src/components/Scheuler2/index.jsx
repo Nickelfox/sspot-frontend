@@ -1,7 +1,7 @@
 /*eslint-disable no-unused-vars */
 /*eslint no-constant-condition: ["error", { "checkLoops": false }]*/
 import dayjs from "dayjs"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useMemo } from "react"
 import Scheduler, { SchedulerData, DemoData, ViewType, DATE_FORMAT } from "BigScheduler"
 import { render } from "@testing-library/react"
 import { HTML5Backend } from "react-dnd-html5-backend"
@@ -131,7 +131,7 @@ const Calender = (props) => {
   const [triger, setRetrigger] = useState(false)
   const [popupChild, setPopupChild] = useState("")
   const [openPopUp, setOpenPopup] = useState(false)
-  const [view, setView] = useState("")
+  const [view, setView] = useState(1)
   const [id, setId] = useState("")
   const [resoureMap, setResourceMap] = useState(new Map())
   const [eventsMap, setEventsMap] = useState(new Map())
@@ -142,6 +142,9 @@ const Calender = (props) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const isTablet = useMediaQuery(theme.breakpoints.down("md"))
   const styles = useStyles()
+  const cachedData = useMemo(() => schedulerData, [view])
+
+  console.log(cachedData, "CAHCHCAHA")
   const {
     fetchDepartments,
     departments,
@@ -157,6 +160,7 @@ const Calender = (props) => {
     fetchDepartments()
     // getTeamMembers()
   }, [])
+
   useEffect(() => {
     teamFetcher()
     scheduleFetcher()
@@ -404,6 +408,7 @@ const Calender = (props) => {
   const toggleExpandFunc = (schedulerData, slotId) => {
     schedulerData.toggleExpandStatus(slotId)
     triggerRerender(rerender + 1)
+    setView(view + 1)
   }
   const expandAllItems = (schedulerData) => {
     const { resources } = schedulerData
@@ -582,6 +587,7 @@ const Calender = (props) => {
     }
   }
   const moveEvent = (schedulerData, event, slotId, slotName, start, end) => {
+    setView(view + 1)
     const resourceChildMapObject = resoureMap.get(event?.resourceParentID)
     const requiredData = {
       start: start,
@@ -605,11 +611,13 @@ const Calender = (props) => {
     setPopupChild(key)
     setOpenPopup(true)
   }
-
   const getEventSd = (schedulerData) => {
-    console.log(schedulerData)
+    setSchedulerData(schedulerData)
     const { events } = schedulerData
     schedulerData.setEvents(events)
+    setView(view + 1)
+    // setMoved(moved + 1)
+    // triggerRerender(rerender - 1)
   }
   const handlePopUpClose = () => {
     setOpenPopup(false)
@@ -632,6 +640,7 @@ const Calender = (props) => {
      * This Function is responsible for not rerendering scheduler Data and collapsing all Divs
      */
     const { renderData } = schedulerData
+    console.log(renderData, "RENDER")
     let displayRenderData = renderData.filter((o) => o.render)
     const replaceArr = displayRenderData.map((i) => {
       return {

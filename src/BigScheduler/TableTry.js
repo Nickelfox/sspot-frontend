@@ -192,7 +192,7 @@ const TableTry = (props) => {
                                 display={"flex"}
                                 justifyContent={"center"}
                                 alignItems={"center"}>
-                                <Box>{getExpandButton(item)}</Box>
+                                <Box id="arrow">{getExpandButton(item)}</Box>
                               </Grid>
                             </Grid>
                           </TableCell>
