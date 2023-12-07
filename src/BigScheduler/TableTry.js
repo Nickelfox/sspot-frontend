@@ -116,6 +116,7 @@ const TableTry = (props) => {
   const getDivs = () => {
     let eventDndSource = dnd.getDndSource()
     let DndResourceEvents = dnd.getDropTarget(config.dragAndDropEnabled)
+    console.log(DndResourceEvents, "Resource events")
     const rMap = new Map()
     displayRenderData.forEach((render) => {
       if (!rMap.has(render?.department)) {
