@@ -110,7 +110,6 @@ export const isNonWorkingTime = (schedulerData, time) => {
     if (hour < 9 || hour > 18) return true
   } else {
     let dayOfWeek = localeDayjs(new Date(time)).weekday()
-    console.log(dayOfWeek, "hahahhah")
     if (dayOfWeek === 5 || dayOfWeek === 6) return true
   }
 

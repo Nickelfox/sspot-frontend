@@ -9,19 +9,18 @@ export const useLoginModel = () => {
   const loginByEmail = async (values) => {
     const instance = NetworkManager(API.AUTH.LOGIN)
     const response = await instance.request(values)
-    console.log(response)
     if (response?.success && response?.code === 200) {
-      userSession.setSession(response.data)
+      userSession.setSession(response.data.data)
       const reduxObject = {
-        name: response?.data?.user?.full_name,
-        id: response?.data?.user?.id,
-        email: response?.data?.user?.email,
-        phone: response?.data?.user?.phone_number,
-        role: response?.data?.user?.role,
-        designation: response?.data?.user?.designation,
-        company_id: response?.data?.user?.company_id,
-        company_name: response?.data?.user?.company_name,
-        company_logo: response?.data?.user?.company_lo
+        name: response?.data?.data?.user?.full_name,
+        id: response?.data?.data?.user?.id,
+        email: response?.data?.data?.user?.email,
+        phone: response?.data?.data?.user?.phone_number,
+        role: response?.data?.data?.user?.role,
+        designation: response?.data?.data?.user?.designation,
+        company_id: response?.data?.data?.user?.company_id,
+        company_name: response?.data?.data?.user?.company_name,
+        company_logo: response?.data?.data?.user?.company_lo
       }
       UserState.login(reduxObject)
       Toast.success(response?.message)

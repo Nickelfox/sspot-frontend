@@ -135,9 +135,10 @@ const dummyData = [
   }
 ]
 
-export const getDummyDataArray = () => {
+export const getDataArray = (array) => {
+  console.log(array, "HERE IS ARRAy")
   let requiredUserInfo = []
-  dummyData.forEach((data) => {
+  array.forEach((data) => {
     const requiredObject = {
       id: data.id,
       name: data?.user?.full_name,
@@ -147,8 +148,8 @@ export const getDummyDataArray = () => {
       email: data?.user?.email,
       editPopup: false,
       expanded: false,
-      projects: getProjectsArray(data?.project_members, data),
-      department: data?.departmentName
+      projects: getProjectsArray(data?.project_member, data),
+      department: data?.department?.name
     }
     requiredUserInfo.push(requiredObject)
   })
@@ -168,7 +169,8 @@ const getProjectsArray = (projectArray, data) => {
       editPopup: false,
       parentId: project?.member,
       email: data?.user?.email,
-      department: data?.departmentName
+      department: data?.department?.name,
+      color: project?.project?.color_code
     }
   })
   return requiredProjectArray

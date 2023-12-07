@@ -41,7 +41,6 @@ export default function networkManager(router, withFile = false) {
 
   const cookie = new Cookies()
   const authToken = cookie.get(CookieKeys.Auth)
-
   if (authToken && authToken !== "undefined") {
     axios.defaults.headers.common[API_AUTH_HEADER] = `${AUTH_TYPE} ${authToken}`
   }
@@ -65,7 +64,12 @@ export default function networkManager(router, withFile = false) {
       })
       // If token expired, get it refreshed
       const response = result.data
-      return new APIResponse(response.data, !response.error, result.status, response?.message)
+      return new APIResponse(
+        response.data,
+        response.success,
+        response.code,
+        response?.data?.message
+      )
     } catch (err) {
       // Catch all errors
       apiError(err?.response?.data?.message)

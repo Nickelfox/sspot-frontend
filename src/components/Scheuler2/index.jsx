@@ -13,7 +13,7 @@ import PrimaryButton from "components/PrimaryButton"
 import AddEvent from "components/AddEventForm"
 import { convertArrayToMap } from "helpers/conversionFunctions/resourceMap"
 import { convertEventsToMap } from "helpers/conversionFunctions/eventsMap"
-import { getDummyDataArray } from "helpers/conversionFunctions/conversion"
+import { getDataArray } from "helpers/conversionFunctions/conversion"
 import { Popover } from "antd"
 import AssignProject from "components/AssignProject"
 import CalendarFeed from "components/CalendarFeedForm"
@@ -136,17 +136,25 @@ const Calender = (props) => {
   const [popupStyles, setPopUpStyles] = useState({})
   const [isAddeventPopover, setIsAddeventPopover] = useState(false)
   const [resourceEvent, setResourceEvent] = useState(null)
+  const [endDate, setEndDate] = useState("")
+  const [startDate, setStartDate] = useState("")
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const isTablet = useMediaQuery(theme.breakpoints.down("md"))
   const styles = useStyles()
-  const { fetchDepartments, departments, getTeamMembers } = useSchedulerController()
+  const { fetchDepartments, departments, getTeamMembers, teamMembers } = useSchedulerController()
   useEffect(() => {
     getSchedulerData()
-  }, [])
+  }, [teamMembers?.length])
   useEffect(() => {
     fetchDepartments()
-    getTeamMembers()
+    // getTeamMembers()
   }, [])
+  useEffect(() => {
+    teamFetcher()
+  }, [
+    dayjs(schedulerData?.startDate).format("YYYY-MM-DD"),
+    dayjs(schedulerData?.endDate).format("YYYY-MM-DD")
+  ])
   useEffect(() => {
     triggerRerender(render + 1)
   }, [triger])
@@ -160,6 +168,15 @@ const Calender = (props) => {
     // eslint-disable-next-line no-extra-semi
     ;(openPopUp || isAddeventPopover) && handlePopUpClose()
   }, [])
+  const teamFetcher = () => {
+    const startDate = dayjs(schedulerData?.startDate).format("YYYY-MM-DD")
+    const endDate = dayjs(schedulerData?.endDate).format("YYYY-MM-DD")
+    const params = {
+      start_date: startDate,
+      end_date: endDate
+    }
+    getTeamMembers(params)
+  }
   const eventItemTemplateResolver = (...props) => {
     const [
       schedulerData,
@@ -287,17 +304,20 @@ const Calender = (props) => {
         ]
       }
     )
-    const dataArray = getDummyDataArray()
-    const projectsArray = dataArray.map((item) => item?.projects)
-    const filteredArray = projectsArray.filter((item) => item !== undefined)
-    const newArray = [...dataArray, ...filteredArray]
-    const requiredArray = newArray.flat()
-    sd.setResources(requiredArray)
-    setResourceMap(convertArrayToMap(requiredArray))
-
+    console.log(teamMembers, "Here are Team Members")
+    if (teamMembers?.length > 0) {
+      const dataArray = teamMembers
+      const projectsArray = dataArray.map((item) => item?.projects)
+      const filteredArray = projectsArray.filter((item) => item !== undefined)
+      const newArray = [...dataArray, ...filteredArray]
+      const requiredArray = newArray.flat()
+      sd.setResources(requiredArray)
+      setResourceMap(convertArrayToMap(requiredArray))
+    }
     sd.setEvents(events)
     setSchedulerData(sd)
   }
+
   const prevClick = (schedulerData) => {
     schedulerData.prev()
     schedulerData.setEvents(DemoData.events)

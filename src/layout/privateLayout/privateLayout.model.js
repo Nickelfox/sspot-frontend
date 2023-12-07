@@ -1,3 +1,4 @@
+import { Toast } from "helpers/toasts/toastHelper"
 import { useUserSession } from "hooks/userSession"
 import { NetworkManager, API } from "network/core"
 import { useSelector } from "react-redux"
@@ -22,6 +23,7 @@ export const useLogoutModel = () => {
     if (response.success && response?.code === 200) {
       userSession.deleteSession()
       UserState.logout()
+      Toast.success(response?.message)
     }
     return response.success
   }
