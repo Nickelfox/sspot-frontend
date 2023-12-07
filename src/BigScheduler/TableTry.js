@@ -331,7 +331,7 @@ const TableTry = (props) => {
                 <div
                   style={{
                     height: "90%",
-                    border: "4px solid #FB7A24",
+                    border: `4px solid #FB7A24`,
                     borderRadius: "8px"
                   }}
                 />

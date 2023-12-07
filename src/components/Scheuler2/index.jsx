@@ -13,7 +13,7 @@ import PrimaryButton from "components/PrimaryButton"
 import AddEvent from "components/AddEventForm"
 import { convertArrayToMap } from "helpers/conversionFunctions/resourceMap"
 import { convertEventsToMap } from "helpers/conversionFunctions/eventsMap"
-import { getDummyDataArray } from "helpers/conversionFunctions/conversion"
+import { getDataArray } from "helpers/conversionFunctions/conversion"
 import { Popover } from "antd"
 import AssignProject from "components/AssignProject"
 import CalendarFeed from "components/CalendarFeedForm"
@@ -139,10 +139,10 @@ const Calender = (props) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const isTablet = useMediaQuery(theme.breakpoints.down("md"))
   const styles = useStyles()
-  const { fetchDepartments, departments, getTeamMembers } = useSchedulerController()
+  const { fetchDepartments, departments, getTeamMembers, teamMembers } = useSchedulerController()
   useEffect(() => {
     getSchedulerData()
-  }, [])
+  }, [teamMembers?.length])
   useEffect(() => {
     fetchDepartments()
     getTeamMembers()
@@ -287,7 +287,7 @@ const Calender = (props) => {
         ]
       }
     )
-    const dataArray = getDummyDataArray()
+    const dataArray = teamMembers
     const projectsArray = dataArray.map((item) => item?.projects)
     const filteredArray = projectsArray.filter((item) => item !== undefined)
     const newArray = [...dataArray, ...filteredArray]

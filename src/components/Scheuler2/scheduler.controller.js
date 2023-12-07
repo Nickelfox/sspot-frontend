@@ -1,10 +1,11 @@
 import { Loader } from "redux/dispatcher/Loader"
 import { useSchedulerModel } from "./scheduler.model"
 import { useState } from "react"
-import { getDummyDataArray } from "helpers/conversionFunctions/conversion"
+import { getDataArray } from "helpers/conversionFunctions/conversion"
 
 export const useSchedulerController = () => {
   const [departments, setDepartments] = useState([])
+  const [teamMembers, setTeamMemebers] = useState([])
   const model = useSchedulerModel()
   const fetchDepartments = async () => {
     const data = await model.fetchDepartments()
@@ -28,8 +29,8 @@ export const useSchedulerController = () => {
   }
   const getTeamMembers = async () => {
     const data = await model.fetchTeamMembers()
-    const requiredArray = getDummyDataArray(data)
-    console.log(requiredArray, "HERE IS RESPONSE RESTRUCTURED")
+    const requiredArray = getDataArray(data)
+    setTeamMemebers(requiredArray)
   }
-  return { fetchDepartments, departments, getTeamMembers }
+  return { fetchDepartments, departments, getTeamMembers, teamMembers }
 }

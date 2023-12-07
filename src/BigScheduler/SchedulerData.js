@@ -847,7 +847,6 @@ export default class SchedulerData {
       let headerEvents = headers.map((header) => {
         return this._createInitHeaderEvents(header)
       })
-      console.log(slot, "SLOT IN RENDER DATA")
       let slotRenderData = {
         slotId: slot.id,
         slotName: slot.name,
@@ -870,7 +869,8 @@ export default class SchedulerData {
         editPopup: slot?.editPopup,
         projectsAssigned: slot?.projectsAssigned,
         availability: slot?.weeklyAvailability,
-        department: slot?.department
+        department: slot?.department,
+        color: slot?.color ?? null
       }
 
       let id = slot.id
