@@ -139,12 +139,13 @@ const Calender = (props) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const isTablet = useMediaQuery(theme.breakpoints.down("md"))
   const styles = useStyles()
-  const { fetchDepartments, departments } = useSchedulerController()
+  const { fetchDepartments, departments, getTeamMembers } = useSchedulerController()
   useEffect(() => {
     getSchedulerData()
   }, [])
   useEffect(() => {
     fetchDepartments()
+    getTeamMembers()
   }, [])
   useEffect(() => {
     triggerRerender(render + 1)

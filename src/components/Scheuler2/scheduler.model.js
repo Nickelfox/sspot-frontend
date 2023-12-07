@@ -6,6 +6,15 @@ export const useSchedulerModel = () => {
     Loader.show()
     const instance = NetworkManager(API.SCHEDULER.DEPARTMENTS)
     const response = await instance.request()
+    return dataReturner(response)
+  }
+  const fetchTeamMembers = async () => {
+    Loader.show()
+    const instance = NetworkManager(API.SCHEDULER.TEAM_MEMBERS)
+    const response = await instance.request()
+    return dataReturner(response)
+  }
+  const dataReturner = (response) => {
     if (response?.success && response?.code === 200) {
       return response?.data
     } else {
@@ -13,6 +22,7 @@ export const useSchedulerModel = () => {
     }
   }
   return {
-    fetchDepartments
+    fetchDepartments,
+    fetchTeamMembers
   }
 }

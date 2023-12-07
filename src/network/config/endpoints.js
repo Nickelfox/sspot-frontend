@@ -48,6 +48,7 @@ export const API = {
     CHECK: new APICustomRouter("https://example.com", "/test", HTTP_METHODS.GET)
   },
   SCHEDULER: {
-    DEPARTMENTS: new APIRouter("/departments/", HTTP_METHODS.GET)
+    DEPARTMENTS: new APIRouter("/departments/", HTTP_METHODS.GET),
+    TEAM_MEMBERS: new APIRouter("/team-members/", HTTP_METHODS.GET)
   }
 }

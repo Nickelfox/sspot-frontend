@@ -975,7 +975,10 @@ export default class SchedulerData {
       windowEnd = new Date(this.endDate)
 
     if (eventStart < windowStart) {
-      eventStart = new Date(windowStart)
+      let startWeek = dayjs(windowStart).weekday(0)
+      let startOfWeek = new Date(startWeek)
+      console.log(startOfWeek, "WEEK START")
+      eventStart = new Date(startOfWeek)
     }
     windowStart.setHours(0, 0, 0, 0)
 
@@ -1002,7 +1005,7 @@ export default class SchedulerData {
       this.viewType === ViewType.Quarter ||
       this.viewType === ViewType.Year
     ) {
-      const startDate = windowStart < eventStart ? eventStart : windowStart
+      const startDate = eventStart
       const endDate = windowEnd > eventEnd ? eventEnd : windowEnd
       span = Math.ceil(timeBetween(startDate, endDate, "days"))
     } else {
