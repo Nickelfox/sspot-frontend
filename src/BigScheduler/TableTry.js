@@ -116,7 +116,6 @@ const TableTry = (props) => {
   const getDivs = () => {
     let eventDndSource = dnd.getDndSource()
     let DndResourceEvents = dnd.getDropTarget(config.dragAndDropEnabled)
-    console.log(DndResourceEvents, "Resource events")
     const rMap = new Map()
     displayRenderData.forEach((render) => {
       if (!rMap.has(render?.department)) {
@@ -147,7 +146,7 @@ const TableTry = (props) => {
               />
             )
             return (
-              <Box key={item} marginTop={index === 0 ? "-0.2rem" : 0}>
+              <Box key={item?.slotId + index} marginTop={index === 0 ? "-0.2rem" : 0}>
                 {!item?.parentId && (
                   <TableContainer sx={{ overflow: "hidden" }}>
                     <Table
@@ -212,11 +211,10 @@ const TableTry = (props) => {
                                   ...schedulerContentStyle
                                 }}
                                 // style={schedulerContentStyle}
-                                // ref={props.schedulerContentRef}
-                                // onMouseOver={props.onSchedulerContentMouseOver}
-                                // onMouseOut={props.onSchedulerContentMouseOut}
-                                // onScroll={props.onSchedulerContentScroll}
-                              >
+                                ref={props.schedulerContentRef}
+                                onMouseOver={props.onSchedulerContentMouseOver}
+                                onMouseOut={props.onSchedulerContentMouseOut}
+                                onScroll={props.onSchedulerContentScroll}>
                                 <div style={{ width: schedulerWidth, position: "relative" }}>
                                   <div className="scheduler-content">
                                     <table className="scheduler-content-table">
@@ -263,7 +261,6 @@ const TableTry = (props) => {
   }
   const getInnerTable = (displayRenderData, slotid, eventDndSource, DndResourceEvents, item) => {
     const filteredData = displayRenderData.filter((item) => item?.parentId === slotid)
-    console.log(filteredData, "HRE IS FILTERED DATA")
     const requiredHeaders = headers.map((header) => {
       return {
         ...header,
@@ -300,7 +297,7 @@ const TableTry = (props) => {
     )
     return (
       <>
-        {filteredData.map((filteredItem) => {
+        {filteredData.map((filteredItem, index) => {
           let resourceEventsList = (
             <DndResourceEvents
               {...props}
@@ -311,7 +308,7 @@ const TableTry = (props) => {
           )
           return (
             <TableRow
-              key={filteredItem?.slotId}
+              key={filteredItem?.slotId + index}
               style={{
                 // maxWidth: "24rem",
                 minWidth: "23.9rem",
@@ -358,7 +355,7 @@ const TableTry = (props) => {
                       ...schedulerContentStyle
                     }}
                     // style={schedulerContentStyle}
-                    // ref={props.schedulerContentRef}
+                    ref={props.schedulerContentRef}
                     onMouseOver={props.onSchedulerContentMouseOver}
                     onFocus={props.onSchedulerContentMouseOver}
                     onMouseOut={props.onSchedulerContentMouseOut}

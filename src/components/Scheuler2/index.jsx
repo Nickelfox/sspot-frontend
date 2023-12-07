@@ -22,6 +22,9 @@ import ArchiveResource from "components/ArchiveForm"
 import { useStyles } from "./schedulerStyles"
 import { useSchedulerModel } from "./scheduler.model"
 import { useSchedulerController } from "./scheduler.controller"
+import { getCheckDate } from "helpers/conversionFunctions/getDatesinRange"
+import { Toast } from "helpers/toasts/toastHelper"
+import { eventsOverLap } from "helpers/toasterFunction/toasterFunction"
 let resources = [
   {
     id: "r2",
@@ -304,7 +307,7 @@ const Calender = (props) => {
         schedulerMaxHeight: 700,
         tableHeaderHeight: 60,
         availability: ["Day", "Week"],
-        checkConflict: true,
+        // checkConflict: true,
         // tableHeaderHeight: 60,
         // dayCellWidth: 100,
         parentView: parentViewArray,
@@ -313,8 +316,8 @@ const Calender = (props) => {
             viewName: "Resource View",
             viewType: ViewType.Month,
             showAgenda: false,
-            isEventPerspective: true,
-            checkConflict: true
+            isEventPerspective: true
+            // checkConflict: true
           }
         ]
       }
@@ -510,10 +513,15 @@ const Calender = (props) => {
   }
   const createNewEvent = (requiredData) => {
     //TODO: Write a function to get dates from events and check if startand end date exists in it
-    setResourceEvent(requiredData)
-    getRenderSd(schedulerData)
-    schedulerData.addEvent(requiredData)
-    handlePopUpClose()
+    const checkDates = getCheckDate(requiredData, schedulerData?.events, "create")
+    if (checkDates) {
+      setResourceEvent(requiredData)
+      getRenderSd(schedulerData)
+      schedulerData.addEvent(requiredData)
+      handlePopUpClose()
+    } else {
+      eventsOverLap()
+    }
     // triggerRerender(rerender + 1)
   }
   const newEventfromResource = (schedulerData, slotId, start, end) => {
@@ -544,27 +552,65 @@ const Calender = (props) => {
     schedulerContent.scrollLeft = 10
   }
   const updateEventStart = (schedulerData, event, newStart) => {
-    getRenderSd(schedulerData)
-    schedulerData.updateEventStart(event, newStart)
+    const requiredData = {
+      start: newStart,
+      end: event?.end
+    }
+    const checkDates = getCheckDate(requiredData, schedulerData?.events, "start")
+    if (checkDates) {
+      schedulerData.updateEventStart(event, newStart)
+      getRenderSd(schedulerData)
+    } else {
+      eventsOverLap()
+    }
   }
 
   const updateEventEnd = (schedulerData, event, newEnd) => {
-    // getRenderSd(schedulerData)
-    schedulerData.updateEventEnd(event, newEnd)
+    const requiredData = {
+      start: event?.start,
+      end: newEnd
+    }
+    const checkDates = getCheckDate(requiredData, schedulerData?.events, "end")
+    if (checkDates) {
+      schedulerData.updateEventEnd(event, newEnd)
+      getRenderSd(schedulerData)
+    } else {
+      schedulerData.updateEventEnd(event, event?.end)
+      eventsOverLap()
+      getRenderSd(schedulerData)
+      return
+    }
   }
   const moveEvent = (schedulerData, event, slotId, slotName, start, end) => {
-    if (slotId === event?.resourceId) {
-      getRenderSd(schedulerData)
-      schedulerData.moveEvent(event, slotId, slotName, start, end)
-      triggerRerender(render + 1)
-      setRetrigger((prev) => !prev)
-    } else return
+    const resourceChildMapObject = resoureMap.get(event?.resourceParentID)
+    const requiredData = {
+      start: start,
+      end: end
+    }
+    const checkDates = getCheckDate(requiredData, schedulerData?.events, "move")
+    if (checkDates) {
+      if (slotId === event?.resourceId && resourceChildMapObject?.id === event?.resourceParentID) {
+        schedulerData.moveEvent(event, slotId, slotName, start, end)
+        console.log("Event moved")
+        getEventSd(schedulerData)
+
+        // triggerRerender(render + 1)
+        // setRetrigger((prev) => !prev)
+      }
+    } else {
+      eventsOverLap()
+    }
   }
   const handleAddEventPopUp = (key) => {
     setPopupChild(key)
     setOpenPopup(true)
   }
 
+  const getEventSd = (schedulerData) => {
+    console.log(schedulerData)
+    const { events } = schedulerData
+    schedulerData.setEvents(events)
+  }
   const handlePopUpClose = () => {
     setOpenPopup(false)
     setPopupChild("")

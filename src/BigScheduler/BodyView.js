@@ -43,29 +43,30 @@ class BodyView extends Component {
 
             const headerItemArray1 = Array.from(headerItem[1])
             return (
-              <tr key={currentItem?.slotId}>
-                <td
-                  key={`${currentItem?.slotName}${parentIndex + 1}`}
-                  className="flex w-full font-md border-spacing-0"
-                  style={{ border: 0, margin: 0, padding: 0 }}>
-                  {headerItemArray1.map((childItem, childIndex) => {
-                    return (
-                      <div
-                        key={childIndex[0]}
-                        className={`body_${childItem[0]} flex`}
-                        id={`X_${childItem[0]}`}
-                        style={{
-                          border: 0,
-                          marginTop: 0,
-                          marginBottom: 0,
-                          height: 43
-                        }}>
-                        {getRows(Array.from(childItem[1]), daySet, currentItem)}
-                      </div>
-                    )
-                  })}
-                </td>
-              </tr>
+              <tbody key={`${currentItem?.slotName} ${parentIndex + 1}`}>
+                <tr>
+                  <td
+                    className="flex w-full font-md border-spacing-0"
+                    style={{ border: 0, margin: 0, padding: 0 }}>
+                    {headerItemArray1.map((childItem, childIndex) => {
+                      return (
+                        <td
+                          key={`${childIndex + 1}`}
+                          className={`body_${childItem[0]} flex`}
+                          id={`X_${childItem[0]}`}
+                          style={{
+                            border: 0,
+                            marginTop: 0,
+                            marginBottom: 0,
+                            height: 43
+                          }}>
+                          {getRows(Array.from(childItem[1]), daySet, currentItem)}
+                        </td>
+                      )
+                    })}
+                  </td>
+                </tr>
+              </tbody>
             )
           })}
         </table>
@@ -78,8 +79,8 @@ class BodyView extends Component {
 
 export default BodyView
 
-const getRows = (array, daySet) => {
-  return array.map((childrenItem) => {
+const getRows = (array, daySet, currentItem) => {
+  return array.map((childrenItem, index) => {
     const currentDate = dayjs(new Date()).format("DD-MM")
     const itemDate = dayjs(childrenItem?.time).format("DD-MM")
     const childrenDay = moment(childrenItem?.time).format("dddd").substring(0, 3).toUpperCase()
@@ -88,8 +89,9 @@ const getRows = (array, daySet) => {
     )
     return (
       <td
-        key={childrenItem[0]}
+        key={`${itemDate} ${index}`}
         className="flex justify-center items-center"
+        data-resource-id={currentItem.slotId}
         style={{
           width: 50,
           // height: "5rem",

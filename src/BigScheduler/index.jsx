@@ -158,7 +158,7 @@ class Scheduler extends Component {
 
   componentDidUpdate(props, state) {
     this.resolveScrollbarSize()
-
+    console.log("Component Updated")
     const { schedulerData } = this.props
     const { localeDayjs, behaviors } = schedulerData
     if (schedulerData.getScrollToSpecialDayjs() && !!behaviors.getScrollSpecialDayjsFunc) {
