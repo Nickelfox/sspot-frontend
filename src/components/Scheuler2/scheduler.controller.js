@@ -27,10 +27,11 @@ export const useSchedulerController = () => {
       Loader.hide()
     }
   }
-  const getTeamMembers = async () => {
-    const data = await model.fetchTeamMembers()
-    const requiredArray = getDataArray(data)
+  const getTeamMembers = async (params) => {
+    const responseData = await model.fetchTeamMembers(params)
+    const requiredArray = getDataArray(responseData?.data)
     setTeamMemebers(requiredArray)
+    Loader.hide()
   }
   return { fetchDepartments, departments, getTeamMembers, teamMembers }
 }

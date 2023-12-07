@@ -58,7 +58,7 @@ export default function PrivateLayout(props) {
   const { navigate, handleLogout, activeMenu } = usePrivateLayoutController(props)
 
   return (
-    <Box>
+    <Box sx={{ minHeight: "100vh" }}>
       <Main open={open}>
         <DrawerHeader position="fixed" open={open} sx={styles.appbar} ref={appRef}>
           <Toolbar

@@ -49,6 +49,6 @@ export const API = {
   },
   SCHEDULER: {
     DEPARTMENTS: new APIRouter("/departments/", HTTP_METHODS.GET),
-    TEAM_MEMBERS: new APIRouter("/team-members/", HTTP_METHODS.GET)
+    TEAM_MEMBERS: new APIRouter("/timeline/team/", HTTP_METHODS.GET)
   }
 }

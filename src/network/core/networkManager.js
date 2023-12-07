@@ -65,7 +65,12 @@ export default function networkManager(router, withFile = false) {
       })
       // If token expired, get it refreshed
       const response = result.data
-      return new APIResponse(response.data, !response.error, result.status, response?.message)
+      return new APIResponse(
+        response.data,
+        response.success,
+        result.data.status,
+        response?.data?.message
+      )
     } catch (err) {
       // Catch all errors
       apiError(err?.response?.data?.message)

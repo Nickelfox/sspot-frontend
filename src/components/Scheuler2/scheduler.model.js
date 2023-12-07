@@ -9,10 +9,10 @@ export const useSchedulerModel = () => {
     const response = await instance.request()
     return dataReturner(response)
   }
-  const fetchTeamMembers = async () => {
+  const fetchTeamMembers = async (params) => {
     Loader.show()
     const instance = NetworkManager(API.SCHEDULER.TEAM_MEMBERS)
-    const response = await instance.request()
+    const response = await instance.request({}, params)
     return dataReturner(response)
   }
 
