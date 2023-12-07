@@ -178,10 +178,11 @@ export const getEventListing = (eventArray) => {
   let requiredArray = eventArray.map((event) => {
     return {
       id: event?.id,
-      start: dayjs(event?.start).startOf("d").format("YYYY-MM-DDDD HH:mm:ss"),
-      end: dayjs(event?.end).endOf("d").format("YYYY-MM-DDDD HH:mm:ss"),
-      resourceId: event?.project_member,
-      title: event?.assigned_hour,
+      start: dayjs(event?.start).startOf("d").format("YYYY-MM-DD HH:mm:ss"),
+      end: dayjs(event?.end).endOf("d").format("YYYY-MM-DD HH:mm:ss"),
+      resourceId: event?.project_id,
+      resourceParentID: event?.member_id,
+      title: new Date(event?.assigned_hour).getHours(),
       bgColor: "#DCC36B"
     }
   })

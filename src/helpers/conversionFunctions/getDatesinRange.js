@@ -1,4 +1,4 @@
-function getDatesInRange(startDate, endDate) {
+export function getDatesInRange(startDate, endDate) {
   const date = new Date(startDate.getTime())
 
   const dates = []

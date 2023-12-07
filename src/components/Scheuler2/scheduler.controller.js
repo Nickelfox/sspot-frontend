@@ -7,6 +7,7 @@ import { getDataArray, getEventListing } from "helpers/conversionFunctions/conve
 export const useSchedulerController = () => {
   const [departments, setDepartments] = useState([])
   const [teamMembers, setTeamMemebers] = useState([])
+  const [teamSchedules, setTeamSchedules] = useState([])
   const model = useSchedulerModel()
   const fetchDepartments = async () => {
     const data = await model.fetchDepartments()
@@ -41,15 +42,21 @@ export const useSchedulerController = () => {
   }
   const fetchSchedules = async (params) => {
     const responseData = await model.fetchSchedules(params)
-    console.log(responseData, "LINE NUMBER 50")
     let requiredArray
     if (responseData?.length > 0) {
       requiredArray = getEventListing(responseData)
     } else {
       requiredArray = []
     }
-    console.log(requiredArray, "LINE NUMBER 50")
+    setTeamSchedules(requiredArray)
   }
 
-  return { fetchDepartments, departments, getTeamMembers, teamMembers, fetchSchedules }
+  return {
+    fetchDepartments,
+    departments,
+    getTeamMembers,
+    teamMembers,
+    fetchSchedules,
+    teamSchedules
+  }
 }

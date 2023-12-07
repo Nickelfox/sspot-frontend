@@ -136,16 +136,20 @@ const Calender = (props) => {
   const [popupStyles, setPopUpStyles] = useState({})
   const [isAddeventPopover, setIsAddeventPopover] = useState(false)
   const [resourceEvent, setResourceEvent] = useState(null)
-  const [endDate, setEndDate] = useState("")
-  const [startDate, setStartDate] = useState("")
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const isTablet = useMediaQuery(theme.breakpoints.down("md"))
   const styles = useStyles()
-  const { fetchDepartments, departments, getTeamMembers, teamMembers, fetchSchedules } =
-    useSchedulerController()
+  const {
+    fetchDepartments,
+    departments,
+    getTeamMembers,
+    teamMembers,
+    fetchSchedules,
+    teamSchedules
+  } = useSchedulerController()
   useEffect(() => {
     getSchedulerData()
-  }, [teamMembers?.length])
+  }, [teamMembers?.length, teamSchedules?.length])
   useEffect(() => {
     fetchDepartments()
     // getTeamMembers()
@@ -213,7 +217,6 @@ const Calender = (props) => {
         diff: child?.hoursAssigned * date1.diff(date2, "d")
       }
     })
-
     const weeklyAvailability = requiredData.map((childResource) => childResource?.diff)
     // create a variable for the sum and initialize it
     let sum = 0
@@ -251,14 +254,15 @@ const Calender = (props) => {
     let divStyle = {
       //   borderLeft: borderWidth + "px solid " + borderColor,
       // backgroundColor: event?.bgColor,
-      background: resourceObjectForEvent?.parentId === undefined ? bColor : rgba,
-      minHeight: "4rem",
-      height: "4rem",
+      background:
+        resourceObjectForEvent?.parentId === undefined ? bColor : resourceObjectForEvent?.color,
+      minHeight: 40,
+      height: 40,
       borderRadius: 4,
       display: "flex",
       justifyContent: "center",
-      alignItems: "center",
-      width: props[7]
+      alignItems: "center"
+      // width: props[7]
     }
     if (agendaMaxEventWidth)
       divStyle = {
@@ -315,7 +319,6 @@ const Calender = (props) => {
         ]
       }
     )
-    console.log(teamMembers, "Here are Team Members")
     if (teamMembers?.length > 0) {
       const dataArray = teamMembers
       const projectsArray = dataArray.map((item) => item?.projects)
@@ -325,7 +328,7 @@ const Calender = (props) => {
       sd.setResources(requiredArray)
       setResourceMap(convertArrayToMap(requiredArray))
     }
-    sd.setEvents(events)
+    sd.setEvents(teamSchedules)
     setSchedulerData(sd)
   }
 
@@ -435,7 +438,7 @@ const Calender = (props) => {
         start: start,
         end: end,
         resourceId: slotId,
-        bgColor: `#${randomColor}`
+        bgColor: `${requiredObject?.color}`
       }
       requiredDataObject.event = newEvent
       setResourceEvent(requiredDataObject)
@@ -594,7 +597,8 @@ const Calender = (props) => {
         workDays: i.workDays,
         editPopup: false,
         email: i?.email,
-        department: i?.department
+        department: i?.department,
+        color: i?.color
       }
     })
     schedulerData.setResources(replaceArr)

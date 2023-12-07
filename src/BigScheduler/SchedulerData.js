@@ -110,7 +110,6 @@ export default class SchedulerData {
   }
 
   addResource(resource) {
-    console.log(this.renderData, this.resources, "Render DAta")
     let existedResources = this.resources.filter((x) => x.id === resource.id)
     let existedValues = this.renderData.map((resource) => {
       return {
@@ -829,7 +828,6 @@ export default class SchedulerData {
         )
       }
     })
-    console.log(resourceMap, "RESOURCEMAP")
     return resourceMap
   }
 
@@ -977,7 +975,6 @@ export default class SchedulerData {
     if (eventStart < windowStart) {
       let startWeek = dayjs(windowStart).weekday(0)
       let startOfWeek = new Date(startWeek)
-      console.log(startOfWeek, "WEEK START")
       eventStart = new Date(startOfWeek)
     }
     windowStart.setHours(0, 0, 0, 0)
@@ -1108,7 +1105,14 @@ export default class SchedulerData {
 
     return event1.id < event2.id ? -1 : 1
   }
-
+  // getItem = (array, item) => {
+  //   const requiredArray = array.filter((arrayItem) => {
+  //     return (
+  //       arrayItem?.slotId === item?.resourceId && arrayItem?.parentId === item?.resourceParentID
+  //     )
+  //   })
+  //   return requiredArray
+  // }
   _createRenderData() {
     /**
      * @description
@@ -1124,7 +1128,8 @@ export default class SchedulerData {
     let cellMaxEventsCount = this.getCellMaxEvents()
     const cellMaxEventsCountValue = 30
     this.events.forEach((item) => {
-      let resourceEventsList = flatArray.filter((x) => x.slotId === this._getEventSlotId(item))
+      // let newResourceEventsList = this.getItem(flatArray, item)
+      let resourceEventsList = flatArray.filter((x) => x?.parentId === item?.resourceParentID)
       if (resourceEventsList.length > 0) {
         let resourceEvents = resourceEventsList[0]
         let span = this._getSpan(item.start, item.end, this.headers)

@@ -59,8 +59,8 @@ export default function PrivateLayout(props) {
 
   return (
     <Box sx={{ minHeight: "100vh" }}>
-      <Main open={open}>
-        <DrawerHeader position="fixed" open={open} sx={styles.appbar} ref={appRef}>
+      <Main open={"open"}>
+        <DrawerHeader position="fixed" open={"open"} sx={styles.appbar} ref={appRef}>
           <Toolbar
             sx={{
               minWidth: 0,

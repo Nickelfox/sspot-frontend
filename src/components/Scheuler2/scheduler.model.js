@@ -21,7 +21,8 @@ export const useSchedulerModel = () => {
     Loader.show()
     const instance = NetworkManager(API.SCHEDULER.SCHEDULE)
     const response = await instance.request({}, params)
-    console.log(response, "HERE IS SCHEDULED")
+    Loader.hide()
+    return dataReturner(response)
   }
 
   return {

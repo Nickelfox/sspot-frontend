@@ -101,7 +101,6 @@ class HeaderView extends Component {
               <Box key={item?.time}>
                 <Box className="flex font-medium">
                   {itemArray1.map((childItem, childIndex) => {
-                    console.log(itemArray1, "CHILD")
                     return (
                       <Box
                         style={{
