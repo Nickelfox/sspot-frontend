@@ -1,3 +1,4 @@
+import { Toast } from "helpers/toasts/toastHelper"
 import { useUserSession } from "hooks/userSession"
 import { NetworkManager, API } from "network/core"
 import { UserState } from "redux/dispatcher/UserState"
@@ -8,7 +9,8 @@ export const useLoginModel = () => {
   const loginByEmail = async (values) => {
     const instance = NetworkManager(API.AUTH.LOGIN)
     const response = await instance.request(values)
-    if (response?.success) {
+    console.log(response)
+    if (response?.success && response?.code === 200) {
       userSession.setSession(response.data)
       const reduxObject = {
         name: response?.data?.user?.full_name,
@@ -22,6 +24,7 @@ export const useLoginModel = () => {
         company_logo: response?.data?.user?.company_lo
       }
       UserState.login(reduxObject)
+      Toast.success(response?.message)
     }
     return response?.success
   }
