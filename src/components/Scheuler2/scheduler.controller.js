@@ -1,7 +1,7 @@
 import { Loader } from "redux/dispatcher/Loader"
 import { useSchedulerModel } from "./scheduler.model"
 import { useState } from "react"
-import { getDataArray } from "helpers/conversionFunctions/conversion"
+import { getDataArray, getEventListing } from "helpers/conversionFunctions/conversion"
 // import { getDataArray } from "helpers/conversionFunctions/conversion"
 
 export const useSchedulerController = () => {
@@ -30,7 +30,6 @@ export const useSchedulerController = () => {
   }
   const getTeamMembers = async (params) => {
     const responseData = await model.fetchTeamMembers(params)
-    console.log(responseData, "HRE IS RESPONSEDATA")
     let requiredArray
     if (responseData?.length > 0) {
       requiredArray = getDataArray(responseData)
@@ -40,6 +39,17 @@ export const useSchedulerController = () => {
     setTeamMemebers(requiredArray)
     Loader.hide()
   }
-  console.log(teamMembers)
-  return { fetchDepartments, departments, getTeamMembers, teamMembers }
+  const fetchSchedules = async (params) => {
+    const responseData = await model.fetchSchedules(params)
+    console.log(responseData, "LINE NUMBER 50")
+    let requiredArray
+    if (responseData?.length > 0) {
+      requiredArray = getEventListing(responseData)
+    } else {
+      requiredArray = []
+    }
+    console.log(requiredArray, "LINE NUMBER 50")
+  }
+
+  return { fetchDepartments, departments, getTeamMembers, teamMembers, fetchSchedules }
 }

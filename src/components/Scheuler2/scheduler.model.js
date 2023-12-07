@@ -14,12 +14,19 @@ export const useSchedulerModel = () => {
     const instance = NetworkManager(API.SCHEDULER.TEAM_MEMBERS)
     const response = await instance.request({}, params)
     Loader.hide()
-
     return dataReturner(response)
+  }
+
+  const fetchSchedules = async (params) => {
+    Loader.show()
+    const instance = NetworkManager(API.SCHEDULER.SCHEDULE)
+    const response = await instance.request({}, params)
+    console.log(response, "HERE IS SCHEDULED")
   }
 
   return {
     fetchDepartments,
-    fetchTeamMembers
+    fetchTeamMembers,
+    fetchSchedules
   }
 }

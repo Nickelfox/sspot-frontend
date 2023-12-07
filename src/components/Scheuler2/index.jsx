@@ -141,7 +141,8 @@ const Calender = (props) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const isTablet = useMediaQuery(theme.breakpoints.down("md"))
   const styles = useStyles()
-  const { fetchDepartments, departments, getTeamMembers, teamMembers } = useSchedulerController()
+  const { fetchDepartments, departments, getTeamMembers, teamMembers, fetchSchedules } =
+    useSchedulerController()
   useEffect(() => {
     getSchedulerData()
   }, [teamMembers?.length])
@@ -151,6 +152,7 @@ const Calender = (props) => {
   }, [])
   useEffect(() => {
     teamFetcher()
+    scheduleFetcher()
   }, [
     dayjs(schedulerData?.startDate).format("YYYY-MM-DD"),
     dayjs(schedulerData?.endDate).format("YYYY-MM-DD")
@@ -176,6 +178,15 @@ const Calender = (props) => {
       end_date: endDate
     }
     getTeamMembers(params)
+  }
+  const scheduleFetcher = () => {
+    const startDate = dayjs(schedulerData?.startDate).format("YYYY-MM-DD")
+    const endDate = dayjs(schedulerData?.endDate).format("YYYY-MM-DD")
+    const params = {
+      start_date: startDate,
+      end_date: endDate
+    }
+    fetchSchedules(params)
   }
   const eventItemTemplateResolver = (...props) => {
     const [
