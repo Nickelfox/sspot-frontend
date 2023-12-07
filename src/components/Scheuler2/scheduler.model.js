@@ -13,6 +13,8 @@ export const useSchedulerModel = () => {
     Loader.show()
     const instance = NetworkManager(API.SCHEDULER.TEAM_MEMBERS)
     const response = await instance.request({}, params)
+    Loader.hide()
+
     return dataReturner(response)
   }
 

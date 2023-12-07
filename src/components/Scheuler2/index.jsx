@@ -172,8 +172,8 @@ const Calender = (props) => {
     const startDate = dayjs(schedulerData?.startDate).format("YYYY-MM-DD")
     const endDate = dayjs(schedulerData?.endDate).format("YYYY-MM-DD")
     const params = {
-      startDate: startDate,
-      endDate: endDate
+      start_date: startDate,
+      end_date: endDate
     }
     getTeamMembers(params)
   }
@@ -304,24 +304,20 @@ const Calender = (props) => {
         ]
       }
     )
-    const dataArray = teamMembers
-    const projectsArray = dataArray.map((item) => item?.projects)
-    const filteredArray = projectsArray.filter((item) => item !== undefined)
-    const newArray = [...dataArray, ...filteredArray]
-    const requiredArray = newArray.flat()
-    sd.setResources(requiredArray)
-    setResourceMap(convertArrayToMap(requiredArray))
-
+    console.log(teamMembers, "Here are Team Members")
+    if (teamMembers?.length > 0) {
+      const dataArray = teamMembers
+      const projectsArray = dataArray.map((item) => item?.projects)
+      const filteredArray = projectsArray.filter((item) => item !== undefined)
+      const newArray = [...dataArray, ...filteredArray]
+      const requiredArray = newArray.flat()
+      sd.setResources(requiredArray)
+      setResourceMap(convertArrayToMap(requiredArray))
+    }
     sd.setEvents(events)
     setSchedulerData(sd)
-    getDates()
   }
-  const getDates = () => {
-    const endDate = dayjs(schedulerData?.endDate).format("YYYY-MM-DD")
-    const startDate = dayjs(schedulerData?.startDate).format("YYYY-MM-DD")
-    setEndDate(endDate)
-    setStartDate(startDate)
-  }
+
   const prevClick = (schedulerData) => {
     schedulerData.prev()
     schedulerData.setEvents(DemoData.events)
