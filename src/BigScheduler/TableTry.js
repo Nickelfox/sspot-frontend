@@ -128,7 +128,11 @@ const TableTry = (props) => {
     return [...rMap.entries()].map((department, index) => {
       return (
         <Box key={`${department - index}`}>
-          <Box paddingLeft={1} marginBottom={"0.2rem"} borderBottom={borderBottom}>
+          <Box
+            paddingLeft={1}
+            marginBottom={"0.2rem"}
+            borderBottom={borderBottom}
+            borderTop={borderBottom}>
             <Typography className="text-slate-500 text-2xl" variant="p3">
               {department[0]}
             </Typography>
@@ -259,6 +263,7 @@ const TableTry = (props) => {
   }
   const getInnerTable = (displayRenderData, slotid, eventDndSource, DndResourceEvents, item) => {
     const filteredData = displayRenderData.filter((item) => item?.parentId === slotid)
+    console.log(filteredData, "HRE IS FILTERED DATA")
     const requiredHeaders = headers.map((header) => {
       return {
         ...header,
@@ -330,8 +335,11 @@ const TableTry = (props) => {
                 </Typography>
                 <div
                   style={{
-                    height: "90%",
-                    border: `4px solid #FB7A24`,
+                    height: "30px",
+                    border: `4px solid ${filteredItem?.color}`,
+                    borderTop: 0,
+                    borderRight: 0,
+                    borderBottom: 0,
                     borderRadius: "8px"
                   }}
                 />
