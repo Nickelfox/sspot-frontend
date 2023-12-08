@@ -151,7 +151,9 @@ const Calender = (props) => {
     getTeamMembers,
     teamMembers,
     fetchSchedules,
-    teamSchedules
+    teamSchedules,
+    fetchProjects,
+    projects
   } = useSchedulerController()
   useEffect(() => {
     getSchedulerData()
@@ -162,11 +164,14 @@ const Calender = (props) => {
   }, [])
 
   useEffect(() => {
-    teamFetcher()
-    scheduleFetcher()
+    if (projects?.length > 0) {
+      teamFetcher()
+      scheduleFetcher()
+    }
   }, [
     dayjs(schedulerData?.startDate).format("YYYY-MM-DD"),
-    dayjs(schedulerData?.endDate).format("YYYY-MM-DD")
+    dayjs(schedulerData?.endDate).format("YYYY-MM-DD"),
+    projects?.length
   ])
   useEffect(() => {
     triggerRerender(render + 1)
@@ -387,7 +392,8 @@ const Calender = (props) => {
     setSelectedObject(itemToEdit)
     getRenderSd(schedulerData)
     schedulerData.setResources(requiredArray)
-    triggerRerender(rerender + 1)
+    setView(view + 1)
+    // triggerRerender(rerender + 1)
   }
   const onSelectDate = (schedulerData, date) => {
     getRenderSd(schedulerData)
@@ -746,6 +752,8 @@ const Calender = (props) => {
             showResourceEditPopup={showResourceEditPopup}
             closePopUp={closePopUp}
             handlePopUp={handlePopUp}
+            fetchProjects={fetchProjects}
+            projects={projects}
             {...props}
           />
         )}{" "}

@@ -158,7 +158,6 @@ class Scheduler extends Component {
 
   componentDidUpdate(props, state) {
     this.resolveScrollbarSize()
-    console.log("Component Updated")
     const { schedulerData } = this.props
     const { localeDayjs, behaviors } = schedulerData
     if (schedulerData.getScrollToSpecialDayjs() && !!behaviors.getScrollSpecialDayjsFunc) {
@@ -417,6 +416,8 @@ class Scheduler extends Component {
             width={width}
             closePopup={this.closePopup}
             handlePopUp={this.props.handlePopUp}
+            projects={this.props.projects}
+            fetchProjects={this.props.fetchProjects}
           />
         </div>
       </>
@@ -510,7 +511,6 @@ class Scheduler extends Component {
   }
 
   onSchedulerResourceMouseOver = (element) => {
-    console.log(element)
     this.currentArea = 1
   }
 
@@ -533,7 +533,6 @@ class Scheduler extends Component {
   }
 
   schedulerContentBgTableRef = (element) => {
-    console.log(element, "REF")
     this.schedulerContentBgTable = element
   }
 

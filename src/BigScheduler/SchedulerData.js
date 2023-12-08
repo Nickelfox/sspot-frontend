@@ -869,7 +869,8 @@ export default class SchedulerData {
         projectsAssigned: slot?.projectsAssigned,
         availability: slot?.weeklyAvailability,
         department: slot?.department,
-        color: slot?.color ?? null
+        color: slot?.color ?? null,
+        assignedProjects: slot?.assignedProjects
       }
 
       let id = slot.id
@@ -927,6 +928,7 @@ export default class SchedulerData {
         slotStack.push(currentNode.children[i])
       }
     }
+    console.log(initRenderData, "INITIAL")
     return initRenderData
   }
 
@@ -1119,8 +1121,7 @@ export default class SchedulerData {
      * TODO: THIS FUNCTION WILL GET CHANGED 100%
      * This function will be created newly and requires whole day.
      */
-    const replaceArr =
-      this?.renderData?.length > 0 ? getReplaceArr(this.renderData) : this?.resources
+    const replaceArr = this?.resources
     let xData = this._ggetResourceinitData(replaceArr, this.headers)
     // let initRenderData = this._createInitRenderData(this.resources, this.headers)
     //this.events.sort(this._compare);
