@@ -1,7 +1,7 @@
 /*eslint-disable no-unused-vars */
 /*eslint no-constant-condition: ["error", { "checkLoops": false }]*/
 import dayjs from "dayjs"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useMemo } from "react"
 import Scheduler, { SchedulerData, DemoData, ViewType, DATE_FORMAT } from "BigScheduler"
 import { render } from "@testing-library/react"
 import { HTML5Backend } from "react-dnd-html5-backend"
@@ -22,6 +22,9 @@ import ArchiveResource from "components/ArchiveForm"
 import { useStyles } from "./schedulerStyles"
 import { useSchedulerModel } from "./scheduler.model"
 import { useSchedulerController } from "./scheduler.controller"
+import { getCheckDate } from "helpers/conversionFunctions/getDatesinRange"
+import { Toast } from "helpers/toasts/toastHelper"
+import { eventsOverLap } from "helpers/toasterFunction/toasterFunction"
 let resources = [
   {
     id: "r2",
@@ -128,7 +131,7 @@ const Calender = (props) => {
   const [triger, setRetrigger] = useState(false)
   const [popupChild, setPopupChild] = useState("")
   const [openPopUp, setOpenPopup] = useState(false)
-  const [view, setView] = useState("")
+  const [view, setView] = useState(1)
   const [id, setId] = useState("")
   const [resoureMap, setResourceMap] = useState(new Map())
   const [eventsMap, setEventsMap] = useState(new Map())
@@ -136,21 +139,31 @@ const Calender = (props) => {
   const [popupStyles, setPopUpStyles] = useState({})
   const [isAddeventPopover, setIsAddeventPopover] = useState(false)
   const [resourceEvent, setResourceEvent] = useState(null)
-  const [endDate, setEndDate] = useState("")
-  const [startDate, setStartDate] = useState("")
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const isTablet = useMediaQuery(theme.breakpoints.down("md"))
   const styles = useStyles()
-  const { fetchDepartments, departments, getTeamMembers, teamMembers } = useSchedulerController()
+  const cachedData = useMemo(() => schedulerData, [view])
+
+  console.log(cachedData, "CAHCHCAHA")
+  const {
+    fetchDepartments,
+    departments,
+    getTeamMembers,
+    teamMembers,
+    fetchSchedules,
+    teamSchedules
+  } = useSchedulerController()
   useEffect(() => {
     getSchedulerData()
-  }, [teamMembers?.length])
+  }, [teamMembers?.length, teamSchedules?.length])
   useEffect(() => {
     fetchDepartments()
     // getTeamMembers()
   }, [])
+
   useEffect(() => {
     teamFetcher()
+    scheduleFetcher()
   }, [
     dayjs(schedulerData?.startDate).format("YYYY-MM-DD"),
     dayjs(schedulerData?.endDate).format("YYYY-MM-DD")
@@ -177,6 +190,15 @@ const Calender = (props) => {
     }
     getTeamMembers(params)
   }
+  const scheduleFetcher = () => {
+    const startDate = dayjs(schedulerData?.startDate).format("YYYY-MM-DD")
+    const endDate = dayjs(schedulerData?.endDate).format("YYYY-MM-DD")
+    const params = {
+      start_date: startDate,
+      end_date: endDate
+    }
+    fetchSchedules(params)
+  }
   const eventItemTemplateResolver = (...props) => {
     const [
       schedulerData,
@@ -202,7 +224,6 @@ const Calender = (props) => {
         diff: child?.hoursAssigned * date1.diff(date2, "d")
       }
     })
-
     const weeklyAvailability = requiredData.map((childResource) => childResource?.diff)
     // create a variable for the sum and initialize it
     let sum = 0
@@ -240,14 +261,15 @@ const Calender = (props) => {
     let divStyle = {
       //   borderLeft: borderWidth + "px solid " + borderColor,
       // backgroundColor: event?.bgColor,
-      background: resourceObjectForEvent?.parentId === undefined ? bColor : rgba,
-      minHeight: "4rem",
-      height: "4rem",
+      background:
+        resourceObjectForEvent?.parentId === undefined ? bColor : resourceObjectForEvent?.color,
+      minHeight: 40,
+      height: 40,
       borderRadius: 4,
       display: "flex",
       justifyContent: "center",
-      alignItems: "center",
-      width: props[7]
+      alignItems: "center"
+      // width: props[7]
     }
     if (agendaMaxEventWidth)
       divStyle = {
@@ -289,7 +311,7 @@ const Calender = (props) => {
         schedulerMaxHeight: 700,
         tableHeaderHeight: 60,
         availability: ["Day", "Week"],
-        checkConflict: true,
+        // checkConflict: true,
         // tableHeaderHeight: 60,
         // dayCellWidth: 100,
         parentView: parentViewArray,
@@ -298,13 +320,12 @@ const Calender = (props) => {
             viewName: "Resource View",
             viewType: ViewType.Month,
             showAgenda: false,
-            isEventPerspective: true,
-            checkConflict: true
+            isEventPerspective: true
+            // checkConflict: true
           }
         ]
       }
     )
-    console.log(teamMembers, "Here are Team Members")
     if (teamMembers?.length > 0) {
       const dataArray = teamMembers
       const projectsArray = dataArray.map((item) => item?.projects)
@@ -314,7 +335,7 @@ const Calender = (props) => {
       sd.setResources(requiredArray)
       setResourceMap(convertArrayToMap(requiredArray))
     }
-    sd.setEvents(events)
+    sd.setEvents(teamSchedules)
     setSchedulerData(sd)
   }
 
@@ -387,6 +408,7 @@ const Calender = (props) => {
   const toggleExpandFunc = (schedulerData, slotId) => {
     schedulerData.toggleExpandStatus(slotId)
     triggerRerender(rerender + 1)
+    setView(view + 1)
   }
   const expandAllItems = (schedulerData) => {
     const { resources } = schedulerData
@@ -424,7 +446,7 @@ const Calender = (props) => {
         start: start,
         end: end,
         resourceId: slotId,
-        bgColor: `#${randomColor}`
+        bgColor: `${requiredObject?.color}`
       }
       requiredDataObject.event = newEvent
       setResourceEvent(requiredDataObject)
@@ -496,10 +518,16 @@ const Calender = (props) => {
   }
   const createNewEvent = (requiredData) => {
     //TODO: Write a function to get dates from events and check if startand end date exists in it
-    setResourceEvent(requiredData)
-    getRenderSd(schedulerData)
-    schedulerData.addEvent(requiredData)
-    handlePopUpClose()
+    const checkDates = getCheckDate(requiredData, schedulerData?.events, "create")
+    if (checkDates) {
+      setResourceEvent(requiredData)
+      getRenderSd(schedulerData)
+      schedulerData.addEvent(requiredData)
+      handlePopUpClose()
+    } else {
+      eventsOverLap()
+    }
+    setView(view + 1)
     // triggerRerender(rerender + 1)
   }
   const newEventfromResource = (schedulerData, slotId, start, end) => {
@@ -530,27 +558,69 @@ const Calender = (props) => {
     schedulerContent.scrollLeft = 10
   }
   const updateEventStart = (schedulerData, event, newStart) => {
-    getRenderSd(schedulerData)
-    schedulerData.updateEventStart(event, newStart)
+    const requiredData = {
+      start: newStart,
+      end: event?.end
+    }
+    const checkDates = getCheckDate(requiredData, schedulerData?.events, "start")
+    if (checkDates) {
+      schedulerData.updateEventStart(event, newStart)
+      getRenderSd(schedulerData)
+    } else {
+      eventsOverLap()
+    }
+    setView(view + 1)
   }
 
   const updateEventEnd = (schedulerData, event, newEnd) => {
-    // getRenderSd(schedulerData)
-    schedulerData.updateEventEnd(event, newEnd)
+    const requiredData = {
+      ...event,
+      end: newEnd
+    }
+    const checkDates = getCheckDate(requiredData, schedulerData?.events, "end")
+    if (checkDates) {
+      schedulerData.updateEventEnd(event, newEnd)
+      getRenderSd(schedulerData)
+    } else {
+      schedulerData.updateEventEnd(event, event?.end)
+      eventsOverLap()
+      getRenderSd(schedulerData)
+    }
+    setView(view + 1)
   }
   const moveEvent = (schedulerData, event, slotId, slotName, start, end) => {
-    if (slotId === event?.resourceId) {
-      getRenderSd(schedulerData)
-      schedulerData.moveEvent(event, slotId, slotName, start, end)
-      triggerRerender(render + 1)
-      setRetrigger((prev) => !prev)
-    } else return
+    setView(view + 1)
+    const resourceChildMapObject = resoureMap.get(event?.resourceParentID)
+    const requiredData = {
+      ...event,
+      start: start,
+      end: end
+    }
+    if (slotId === event?.resourceId && resourceChildMapObject?.id === event?.resourceParentID) {
+      const checkDates = getCheckDate(requiredData, schedulerData?.events, "move")
+      if (checkDates) {
+        schedulerData.moveEvent(event, slotId, slotName, start, end)
+        getEventSd(schedulerData)
+
+        // triggerRerender(render + 1)
+        // setRetrigger((prev) => !prev)
+      } else {
+        eventsOverLap()
+      }
+    }
   }
   const handleAddEventPopUp = (key) => {
     setPopupChild(key)
     setOpenPopup(true)
   }
-
+  const getEventSd = (schedulerData) => {
+    setSchedulerData(schedulerData)
+    const { events } = schedulerData
+    schedulerData.setEvents(events)
+    setView(view + 1)
+    // setMoved(moved + 1)
+    // triggerRerender(rerender - 1)
+  }
   const handlePopUpClose = () => {
     setOpenPopup(false)
     setPopupChild("")
@@ -583,7 +653,8 @@ const Calender = (props) => {
         workDays: i.workDays,
         editPopup: false,
         email: i?.email,
-        department: i?.department
+        department: i?.department,
+        color: i?.color
       }
     })
     schedulerData.setResources(replaceArr)

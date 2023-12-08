@@ -1,12 +1,13 @@
 import { Loader } from "redux/dispatcher/Loader"
 import { useSchedulerModel } from "./scheduler.model"
 import { useState } from "react"
-import { getDataArray } from "helpers/conversionFunctions/conversion"
+import { getDataArray, getEventListing } from "helpers/conversionFunctions/conversion"
 // import { getDataArray } from "helpers/conversionFunctions/conversion"
 
 export const useSchedulerController = () => {
   const [departments, setDepartments] = useState([])
   const [teamMembers, setTeamMemebers] = useState([])
+  const [teamSchedules, setTeamSchedules] = useState([])
   const model = useSchedulerModel()
   const fetchDepartments = async () => {
     const data = await model.fetchDepartments()
@@ -30,7 +31,6 @@ export const useSchedulerController = () => {
   }
   const getTeamMembers = async (params) => {
     const responseData = await model.fetchTeamMembers(params)
-    console.log(responseData, "HRE IS RESPONSEDATA")
     let requiredArray
     if (responseData?.length > 0) {
       requiredArray = getDataArray(responseData)
@@ -40,6 +40,23 @@ export const useSchedulerController = () => {
     setTeamMemebers(requiredArray)
     Loader.hide()
   }
-  console.log(teamMembers)
-  return { fetchDepartments, departments, getTeamMembers, teamMembers }
+  const fetchSchedules = async (params) => {
+    const responseData = await model.fetchSchedules(params)
+    let requiredArray
+    if (responseData?.length > 0) {
+      requiredArray = getEventListing(responseData)
+    } else {
+      requiredArray = []
+    }
+    setTeamSchedules(requiredArray)
+  }
+
+  return {
+    fetchDepartments,
+    departments,
+    getTeamMembers,
+    teamMembers,
+    fetchSchedules,
+    teamSchedules
+  }
 }

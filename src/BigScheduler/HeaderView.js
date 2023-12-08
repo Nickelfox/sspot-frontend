@@ -76,18 +76,18 @@ class HeaderView extends Component {
           className="header3-text text-[#888888]"
           style={{
             display: "flex",
-            maxHeight: "5rem"
+            minHeight: "5rem"
           }}>
           <div
             style={{
               width: "23.9rem",
               minWidth: "23rem",
-              maxHeight: "fit-content",
+              minHeight: "5rem",
               backgroundColor: "#fff"
             }}
             className="stickyCell">
             <OutlinedInputField
-              sx={{ height: "95%", width: "98%", backgroundColor: "#fff" }}
+              sx={{ height: "inherit", width: "98%", backgroundColor: "#fff" }}
               placeholder="Search..."
             />
           </div>
@@ -126,13 +126,11 @@ class HeaderView extends Component {
                               {item[0]}
                             </Box>
                           )}
-                          {childIndex === 0 && (
-                            <Box className="w-full flex justify-center items-center">
-                              {keysArray1?.length === 2
-                                ? `${keysArray1[0]}-${keysArray1[1]}`
-                                : Array.from(item[1].keys())[0]}
-                            </Box>
-                          )}
+                          <Box className="w-full flex justify-center items-center">
+                            {keysArray1?.length === 2
+                              ? childIndex === 0 && `${keysArray1[0]}-${keysArray1[1]}`
+                              : childItem[0]}
+                          </Box>
                         </Box>
                         <Box className="flex">{this.getRows(Array.from(childItem[1]))}</Box>
                         <Box sx={{ height: "0.3rem", width: "100%", display: "hidden" }} />

@@ -82,6 +82,7 @@ const AddEvent = (props) => {
       start: dayjs(date).format("YYYY-MM-DD HH:MM:ss"),
       end: dayjs(endDate).format("YYYY-MM-DD HH:MM:ss"),
       resourceId: eventData?.event?.resourceId,
+      resourceParentID: eventData?.parent?.id,
       bgColor: "#88152b"
     }
     createNewEvent(requiredEventObject)

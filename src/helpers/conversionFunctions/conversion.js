@@ -136,7 +136,6 @@ const dummyData = [
 ]
 
 export const getDataArray = (array) => {
-  console.log(array, "HERE IS ARRAy")
   let requiredUserInfo = []
   array.forEach((data) => {
     const requiredObject = {
@@ -174,4 +173,18 @@ const getProjectsArray = (projectArray, data) => {
     }
   })
   return requiredProjectArray
+}
+export const getEventListing = (eventArray) => {
+  let requiredArray = eventArray.map((event) => {
+    return {
+      id: event?.id,
+      start: dayjs(event?.start_at).startOf("d").format("YYYY-MM-DD HH:mm:ss"),
+      end: dayjs(event?.end_at).endOf("d").format("YYYY-MM-DD HH:mm:ss"),
+      resourceId: event?.project_id,
+      resourceParentID: event?.member_id,
+      title: new Date(event?.assigned_hour).getHours(),
+      bgColor: "#DCC36B"
+    }
+  })
+  return requiredArray
 }
