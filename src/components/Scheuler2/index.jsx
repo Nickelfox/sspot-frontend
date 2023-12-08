@@ -527,6 +527,7 @@ const Calender = (props) => {
     } else {
       eventsOverLap()
     }
+    setView(view + 1)
     // triggerRerender(rerender + 1)
   }
   const newEventfromResource = (schedulerData, slotId, start, end) => {
@@ -568,11 +569,12 @@ const Calender = (props) => {
     } else {
       eventsOverLap()
     }
+    setView(view + 1)
   }
 
   const updateEventEnd = (schedulerData, event, newEnd) => {
     const requiredData = {
-      start: event?.start,
+      ...event,
       end: newEnd
     }
     const checkDates = getCheckDate(requiredData, schedulerData?.events, "end")
@@ -583,28 +585,28 @@ const Calender = (props) => {
       schedulerData.updateEventEnd(event, event?.end)
       eventsOverLap()
       getRenderSd(schedulerData)
-      return
     }
+    setView(view + 1)
   }
   const moveEvent = (schedulerData, event, slotId, slotName, start, end) => {
     setView(view + 1)
     const resourceChildMapObject = resoureMap.get(event?.resourceParentID)
     const requiredData = {
+      ...event,
       start: start,
       end: end
     }
-    const checkDates = getCheckDate(requiredData, schedulerData?.events, "move")
-    if (checkDates) {
-      if (slotId === event?.resourceId && resourceChildMapObject?.id === event?.resourceParentID) {
+    if (slotId === event?.resourceId && resourceChildMapObject?.id === event?.resourceParentID) {
+      const checkDates = getCheckDate(requiredData, schedulerData?.events, "move")
+      if (checkDates) {
         schedulerData.moveEvent(event, slotId, slotName, start, end)
-        console.log("Event moved")
         getEventSd(schedulerData)
 
         // triggerRerender(render + 1)
         // setRetrigger((prev) => !prev)
+      } else {
+        eventsOverLap()
       }
-    } else {
-      eventsOverLap()
     }
   }
   const handleAddEventPopUp = (key) => {
@@ -640,7 +642,6 @@ const Calender = (props) => {
      * This Function is responsible for not rerendering scheduler Data and collapsing all Divs
      */
     const { renderData } = schedulerData
-    console.log(renderData, "RENDER")
     let displayRenderData = renderData.filter((o) => o.render)
     const replaceArr = displayRenderData.map((i) => {
       return {

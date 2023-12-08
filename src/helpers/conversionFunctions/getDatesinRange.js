@@ -4,7 +4,7 @@ export function getDatesInRange(startDate, endDate) {
   const date = new Date(startDate)
   const endDat = new Date(endDate)
   const dates = []
-
+  console.log(date, endDat, "DATESSSS")
   while (date <= endDat) {
     dates.push(dayjs(new Date(date)).format("DD-MM-YYYY"))
     date.setDate(date.getDate() + 1)
@@ -14,11 +14,15 @@ export function getDatesInRange(startDate, endDate) {
 }
 
 export const getCheckDate = (requiredData, scheduleArray, key) => {
-  const startDateArray = scheduleArray.map((item) =>
+  const filteredRenderData = scheduleArray.filter(
+    (item) =>
+      item?.id !== requiredData.id && item?.resourceParentID === requiredData?.resourceParentID
+  )
+  const startDateArray = filteredRenderData.map((item) =>
     dayjs(new Date(item?.start)).format("DD-MM-YYYY")
   )
-  const endDateArray = scheduleArray.map((item) =>
-    dayjs(new Date(item?.start)).format("DD-MM-YYYY")
+  const endDateArray = filteredRenderData.map((item) =>
+    dayjs(new Date(item?.end)).format("DD-MM-YYYY")
   )
   const dateInRange = getDatesInRange(requiredData?.start, requiredData?.end)
   const startDateSet = new Set(startDateArray)
@@ -32,13 +36,12 @@ export const getCheckDate = (requiredData, scheduleArray, key) => {
         }
         break
       case "start":
-        if (startDateSet.has(requiredData?.start)) {
-          console.log(date, "START")
+        if (endDateSet.has(date)) {
           areDatesInRangeArray.push(date)
         }
         break
       case "end":
-        if (endDateSet.has(date)) {
+        if (startDateSet.has(date)) {
           areDatesInRangeArray.push(date)
         }
         break

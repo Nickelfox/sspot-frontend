@@ -178,8 +178,8 @@ export const getEventListing = (eventArray) => {
   let requiredArray = eventArray.map((event) => {
     return {
       id: event?.id,
-      start: dayjs(event?.start).startOf("d").format("YYYY-MM-DD HH:mm:ss"),
-      end: dayjs(event?.end).endOf("d").format("YYYY-MM-DD HH:mm:ss"),
+      start: dayjs(event?.start_at).startOf("d").format("YYYY-MM-DD HH:mm:ss"),
+      end: dayjs(event?.end_at).endOf("d").format("YYYY-MM-DD HH:mm:ss"),
       resourceId: event?.project_id,
       resourceParentID: event?.member_id,
       title: new Date(event?.assigned_hour).getHours(),

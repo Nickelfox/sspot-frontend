@@ -972,9 +972,8 @@ export default class SchedulerData {
       span = 0,
       windowStart = new Date(this.startDate),
       windowEnd = new Date(this.endDate)
-
-    if (eventStart < windowStart) {
-      let startWeek = dayjs(windowStart).weekday(0)
+    let startWeek = new Date(dayjs(windowStart).weekday(0))
+    if (eventStart < startWeek) {
       let startOfWeek = new Date(startWeek)
       eventStart = new Date(startOfWeek)
     }
