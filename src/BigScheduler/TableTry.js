@@ -458,7 +458,7 @@ const TableTry = (props) => {
                   ...schedulerContentStyle
                 }}
                 // style={schedulerContentStyle}
-                // ref={props.schedulerContentRef}
+                ref={props.schedulerContentRef}
                 onMouseOver={props.onSchedulerContentMouseOver}
                 onFocus={props.onSchedulerContentMouseOver}
                 onMouseOut={props.onSchedulerContentMouseOut}
