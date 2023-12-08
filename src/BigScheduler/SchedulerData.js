@@ -1120,7 +1120,7 @@ export default class SchedulerData {
      */
     const replaceArr =
       this?.renderData?.length > 0 ? getReplaceArr(this.renderData) : this?.resources
-    let xData = this._ggetResourceinitData(replaceArr, this.headers)
+    let xData = this._ggetResourceinitData(this?.resources, this.headers)
     // let initRenderData = this._createInitRenderData(this.resources, this.headers)
     //this.events.sort(this._compare);
     // console.log(...xData.values(), "MAPAPAPAP")
