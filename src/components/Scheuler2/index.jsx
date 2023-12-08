@@ -410,7 +410,7 @@ const Calender = (props) => {
 
   const toggleExpandFunc = (schedulerData, slotId) => {
     schedulerData.toggleExpandStatus(slotId)
-    triggerRerender(rerender + 1)
+    // triggerRerender(rerender + 1)
     setView(view + 1)
   }
   const expandAllItems = (schedulerData) => {
@@ -580,12 +580,12 @@ const Calender = (props) => {
 
       const newDataStart = dayjs(returnedData?.start_at).format(COMMON_FORMAT_FOR_EVENTS)
       schedulerData.updateEventStart(event, newDataStart)
+      setView(view + 1)
       getRenderSd(schedulerData)
       setCounter(counter + 1)
     } else {
       eventsOverLap()
     }
-    setView(view + 1)
   }
 
   const updateEventEnd = async (schedulerData, event, newEnd) => {
@@ -610,22 +610,28 @@ const Calender = (props) => {
       schedulerData.updateEventEnd(event, newDataEnd)
       getRenderSd(schedulerData)
       setCounter(counter + 1)
+      setView(view + 1)
     } else {
       schedulerData.updateEventEnd(event, event?.end)
       eventsOverLap()
       getRenderSd(schedulerData)
     }
-    setView(view + 1)
   }
   const moveEvent = async (schedulerData, event, slotId, slotName, start, end) => {
+    const { renderData } = schedulerData
+    let displayRenderData = renderData.filter((o) => o.render)
+    const myArray = []
+    let openArray = displayRenderData.forEach((i) => {
+      if (i?.expanded === true) {
+        myArray.push(i)
+      }
+    })
     const resourceChildMapObject = resoureMap.get(event?.resourceParentID)
-    setView(view + 1)
     const requiredData = {
       ...event,
       start: start,
       end: end
     }
-    console.log(event, "BEFORE")
     if (slotId === event?.resourceId && resourceChildMapObject?.id === event?.resourceParentID) {
       const checkDates = getCheckDate(requiredData, schedulerData?.events, "move")
       if (checkDates) {
@@ -639,20 +645,25 @@ const Calender = (props) => {
         }
         const parameter = [`${event?.id}/`]
         const returnedData = await updateSchedules(parameter, requiredData)
-
         const newStart = dayjs(returnedData?.start_at).format(COMMON_FORMAT_FOR_EVENTS)
         const newEnd = dayjs(returnedData?.end_at).format(COMMON_FORMAT_FOR_EVENTS)
-        console.log(event, slotId, slotName, newStart, newEnd, "AFTERDRAG")
         schedulerData.moveEvent(event, slotId, slotName, newStart, newEnd)
+        getRenderSd(schedulerData)
         getEventSd(schedulerData)
         setView(view + 1)
         setCounter(counter + 1)
+        myArray.forEach((arrayItem) => {
+          toggleExpandFunc(schedulerData, arrayItem?.slotId)
+        })
         // triggerRerender(render + 1)
         // setRetrigger((prev) => !prev)
       } else {
         eventsOverLap()
       }
     }
+    setView(view + 1)
+
+    console.log(myArray, "ARAYRAYYR")
   }
   const handleAddEventPopUp = (key) => {
     setPopupChild(key)
