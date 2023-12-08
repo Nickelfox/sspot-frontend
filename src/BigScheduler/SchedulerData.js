@@ -284,7 +284,6 @@ export default class SchedulerData {
       if (slotEntered === false) {
         if (item.slotId === slotId && item.hasChildren) {
           slotEntered = true
-
           isExpanded = !item.expanded
           item.expanded = isExpanded
           slotIndent = item.indent

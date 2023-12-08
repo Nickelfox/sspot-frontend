@@ -25,6 +25,7 @@ import { useSchedulerController } from "./scheduler.controller"
 import { getCheckDate } from "helpers/conversionFunctions/getDatesinRange"
 import { Toast } from "helpers/toasts/toastHelper"
 import { eventsOverLap } from "helpers/toasterFunction/toasterFunction"
+import { COMMON_FORMAT_FOR_API, COMMON_FORMAT_FOR_EVENTS } from "helpers/app-dates/dates"
 let resources = [
   {
     id: "r2",
@@ -143,15 +144,16 @@ const Calender = (props) => {
   const isTablet = useMediaQuery(theme.breakpoints.down("md"))
   const styles = useStyles()
   const cachedData = useMemo(() => schedulerData, [view])
-
-  console.log(cachedData, "CAHCHCAHA")
+  const [counter, setCounter] = useState(1)
+  console.log(cachedData)
   const {
     fetchDepartments,
     departments,
     getTeamMembers,
     teamMembers,
     fetchSchedules,
-    teamSchedules
+    teamSchedules,
+    updateSchedules
   } = useSchedulerController()
   useEffect(() => {
     getSchedulerData()
@@ -181,6 +183,7 @@ const Calender = (props) => {
     // eslint-disable-next-line no-extra-semi
     ;(openPopUp || isAddeventPopover) && handlePopUpClose()
   }, [])
+  useEffect(() => {}, [counter])
   const teamFetcher = () => {
     const startDate = dayjs(schedulerData?.startDate).format("YYYY-MM-DD")
     const endDate = dayjs(schedulerData?.endDate).format("YYYY-MM-DD")
@@ -557,30 +560,56 @@ const Calender = (props) => {
 
     schedulerContent.scrollLeft = 10
   }
-  const updateEventStart = (schedulerData, event, newStart) => {
+  const updateEventStart = async (schedulerData, event, newStart) => {
     const requiredData = {
       start: newStart,
       end: event?.end
     }
     const checkDates = getCheckDate(requiredData, schedulerData?.events, "start")
     if (checkDates) {
-      schedulerData.updateEventStart(event, newStart)
+      const requiredData = {
+        project_member: event?.projectMemberID,
+        start_at: dayjs(newStart).format(COMMON_FORMAT_FOR_API),
+        end_at: dayjs(event?.end).format(COMMON_FORMAT_FOR_API),
+        assigned_hour: event?.title,
+        schedule_type: "WORK",
+        notes: ""
+      }
+      const parameter = [`${event?.id}/`]
+      const returnedData = await updateSchedules(parameter, requiredData)
+
+      const newDataStart = dayjs(returnedData?.start_at).format(COMMON_FORMAT_FOR_EVENTS)
+      schedulerData.updateEventStart(event, newDataStart)
       getRenderSd(schedulerData)
+      setCounter(counter + 1)
     } else {
       eventsOverLap()
     }
     setView(view + 1)
   }
 
-  const updateEventEnd = (schedulerData, event, newEnd) => {
-    const requiredData = {
+  const updateEventEnd = async (schedulerData, event, newEnd) => {
+    const dateRequiredData = {
       ...event,
       end: newEnd
     }
-    const checkDates = getCheckDate(requiredData, schedulerData?.events, "end")
+    const checkDates = getCheckDate(dateRequiredData, schedulerData?.events, "end")
     if (checkDates) {
-      schedulerData.updateEventEnd(event, newEnd)
+      const requiredData = {
+        project_member: event?.projectMemberID,
+        start_at: dayjs(event?.start).format(COMMON_FORMAT_FOR_API),
+        end_at: dayjs(newEnd).format(COMMON_FORMAT_FOR_API),
+        assigned_hour: event?.title,
+        schedule_type: "WORK",
+        notes: ""
+      }
+      const parameter = [`${event?.id}/`]
+      const returnedData = await updateSchedules(parameter, requiredData)
+
+      const newDataEnd = dayjs(returnedData?.end_at).format(COMMON_FORMAT_FOR_EVENTS)
+      schedulerData.updateEventEnd(event, newDataEnd)
       getRenderSd(schedulerData)
+      setCounter(counter + 1)
     } else {
       schedulerData.updateEventEnd(event, event?.end)
       eventsOverLap()
@@ -588,20 +617,36 @@ const Calender = (props) => {
     }
     setView(view + 1)
   }
-  const moveEvent = (schedulerData, event, slotId, slotName, start, end) => {
-    setView(view + 1)
+  const moveEvent = async (schedulerData, event, slotId, slotName, start, end) => {
     const resourceChildMapObject = resoureMap.get(event?.resourceParentID)
+    setView(view + 1)
     const requiredData = {
       ...event,
       start: start,
       end: end
     }
+    console.log(event, "BEFORE")
     if (slotId === event?.resourceId && resourceChildMapObject?.id === event?.resourceParentID) {
       const checkDates = getCheckDate(requiredData, schedulerData?.events, "move")
       if (checkDates) {
-        schedulerData.moveEvent(event, slotId, slotName, start, end)
-        getEventSd(schedulerData)
+        const requiredData = {
+          project_member: event?.projectMemberID,
+          start_at: dayjs(start).format(COMMON_FORMAT_FOR_API),
+          end_at: dayjs(end).format(COMMON_FORMAT_FOR_API),
+          assigned_hour: event?.title,
+          schedule_type: "WORK",
+          notes: ""
+        }
+        const parameter = [`${event?.id}/`]
+        const returnedData = await updateSchedules(parameter, requiredData)
 
+        const newStart = dayjs(returnedData?.start_at).format(COMMON_FORMAT_FOR_EVENTS)
+        const newEnd = dayjs(returnedData?.end_at).format(COMMON_FORMAT_FOR_EVENTS)
+        console.log(event, slotId, slotName, newStart, newEnd, "AFTERDRAG")
+        schedulerData.moveEvent(event, slotId, slotName, newStart, newEnd)
+        getEventSd(schedulerData)
+        setView(view + 1)
+        setCounter(counter + 1)
         // triggerRerender(render + 1)
         // setRetrigger((prev) => !prev)
       } else {
@@ -618,6 +663,7 @@ const Calender = (props) => {
     const { events } = schedulerData
     schedulerData.setEvents(events)
     setView(view + 1)
+
     // setMoved(moved + 1)
     // triggerRerender(rerender - 1)
   }

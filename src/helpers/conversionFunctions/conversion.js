@@ -182,7 +182,8 @@ export const getEventListing = (eventArray) => {
       end: dayjs(event?.end_at).endOf("d").format("YYYY-MM-DD HH:mm:ss"),
       resourceId: event?.project_id,
       resourceParentID: event?.member_id,
-      title: new Date(event?.assigned_hour).getHours(),
+      projectMemberID: event?.member,
+      title: `${event?.assigned_hours}`,
       bgColor: "#DCC36B"
     }
   })
