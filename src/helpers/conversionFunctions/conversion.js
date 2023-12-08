@@ -6,11 +6,11 @@ export const getRequiredArray = (headers) => {
     let currentDate = new Date(item?.time)
     let month = months[currentDate.getMonth()]
     const year = dayjs(currentDate).year()
-    let newWeeknumber = dayjs(currentDate).format("w")
+    let newWeekNumber = dayjs(currentDate).format("w")
     const requiredObject = {
       time: item?.time,
       nonWorkingTime: item?.nonWorkingTime,
-      weekDay: dayjs(new Date()).year() === year ? newWeeknumber : year,
+      weekDay: newWeekNumber === "1" ? year : newWeekNumber,
       month: month
     }
     return requiredObject

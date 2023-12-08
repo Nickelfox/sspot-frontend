@@ -10,6 +10,7 @@ import { APIAborter } from "./abortController"
 import offlineManager from "./offlineManager"
 import { HTTP_STATUS } from "./statusCode"
 import { apiError, offlineNotation } from "./errorParser"
+import { UserState } from "redux/dispatcher/UserState"
 // import { UserState } from "redux/dispatcher/UserState"
 
 // ********************
@@ -91,7 +92,11 @@ export default function networkManager(router, withFile = false) {
           //   UserState.observeLogout()
           // }
           // } else
-          apiError("Internal server error!")
+          if (err?.response?.status === 401) {
+            UserState.observeLogout()
+          } else {
+            apiError("Internal server error!")
+          }
         }
       return new APIError(err.message, err.code)
     }
