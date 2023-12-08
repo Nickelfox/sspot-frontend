@@ -11,7 +11,6 @@ import offlineManager from "./offlineManager"
 import { HTTP_STATUS } from "./statusCode"
 import { apiError, offlineNotation } from "./errorParser"
 import { UserState } from "redux/dispatcher/UserState"
-// import { UserState } from "redux/dispatcher/UserState"
 
 // ********************
 // Create a new Instance of NetworkManager by passing APIRouter argument
@@ -30,7 +29,7 @@ import { UserState } from "redux/dispatcher/UserState"
 // Eg. If the URL is like "https://example.com/user/1/2", then request would look like below
 // const result = await instance.request(payload, ["id1", "id2"])
 // ********************
-
+let Bool = false
 export default function networkManager(router, withFile = false) {
   const { TIMEOUT, API_AUTH_HEADER, AUTH_TYPE, CONTENT_TYPE } = APIConfig
   const REQ_CONTENT_TYPE = withFile ? CONTENT_TYPE.MULTIPART : CONTENT_TYPE.JSON
@@ -65,6 +64,7 @@ export default function networkManager(router, withFile = false) {
       })
       // If token expired, get it refreshed
       const response = result.data
+      Bool = false
       return new APIResponse(
         response.data,
         response.success,
@@ -72,32 +72,39 @@ export default function networkManager(router, withFile = false) {
         response?.data?.message
       )
     } catch (err) {
+      // apiError(err?.response?.statusText)
       // Catch all errors
-      apiError(err?.response?.data?.message)
+
       const IsNetworkError = err.code === HTTP_STATUS.NETWORK_ERR
       if (router instanceof APIWithOfflineRouter && AppEnvIsDev && IsNetworkError) {
         offlineNotation()
         return offlineManager(router.offlineJson)
       }
-      if (err)
-        if (err.code === HTTP_STATUS.NETWORK_ERR) {
-          // if (err.response?.status === 401) {
-          // if (refreshCount < APIConfig.MAX_REFRESH_ATTEMPTS) {
-          //   const refreshToken = cookie.get(CookieKeys.REFRESH_TOKEN)
-          //   await refreshAuthToken(refreshToken)
-          //   refreshCount++
-          //   // pass the control back to network manager
-          //   return await request(body, params)
-          // } else {
-          //   UserState.observeLogout()
-          // }
-          // } else
-          if (err?.response?.status === 401) {
-            UserState.observeLogout()
-          } else {
-            apiError("Internal server error!")
+      if (err?.code === HTTP_STATUS.BAD_REQUEST) {
+        if (err?.response?.status === 401) {
+          UserState.observeLogout()
+          if (!Bool) {
+            apiError("Unauthorized!")
           }
+          Bool = true
+        } else {
+          apiError("Internal server error!")
         }
+      }
+      if (err.code === HTTP_STATUS.NETWORK_ERR) {
+        // if (err.response?.status === 401) {
+        // if (refreshCount < APIConfig.MAX_REFRESH_ATTEMPTS) {
+        //   const refreshToken = cookie.get(CookieKeys.REFRESH_TOKEN)
+        //   await refreshAuthToken(refreshToken)
+        //   refreshCount++
+        //   // pass the control back to network manager
+        //   return await request(body, params)
+        // } else {
+        //   UserState.observeLogout()
+        // }
+        // } else
+        apiError("Internal server error!")
+      }
       return new APIError(err.message, err.code)
     }
   }
