@@ -684,7 +684,7 @@ const Calender = (props) => {
         departmentsList={departments}
       />
     ),
-    assignResource: <AssignProject requiredObject={selectedObject} />,
+    assignResource: <AssignProject requiredObject={selectedObject} projects={projects} />,
     calenderFeed: <CalendarFeed requiredObject={selectedObject} handleClose={handlePopUpClose} />,
     deleteResource: (
       <DeleteResource requiredObject={selectedObject} handleClose={handlePopUpClose} />

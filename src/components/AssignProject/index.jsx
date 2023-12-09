@@ -24,14 +24,14 @@ const PopupIcon = () => {
     </Box>
   )
 }
-const top100Films = [
-  { label: "Project1", year: 1994 },
-  { label: "Project2", year: 1972 },
-  { label: "Project3", year: 1976 }
-]
+// const top100Films = [
+//   { label: "Project1", year: 1994 },
+//   { label: "Project2", year: 1972 },
+//   { label: "Project3", year: 1976 }
+// ]
 
 const AssignProject = (props) => {
-  const { requiredObject } = props
+  const { requiredObject, projects } = props
   const [assigneeVal, setAssigneVal] = useState([])
 
   return (
@@ -53,7 +53,7 @@ const AssignProject = (props) => {
         <Autocomplete
           sx={{ width: 300, height: "5rem", paddingRight: 0 }}
           value={assigneeVal}
-          options={top100Films}
+          options={projects}
           renderTags={
             (value, getTagProps) => (
               // value.map((option, index) => (
