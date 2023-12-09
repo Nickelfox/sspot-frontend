@@ -26,6 +26,7 @@ import { getCheckDate } from "helpers/conversionFunctions/getDatesinRange"
 import { Toast } from "helpers/toasts/toastHelper"
 import { eventsOverLap } from "helpers/toasterFunction/toasterFunction"
 import { COMMON_FORMAT_FOR_API, COMMON_FORMAT_FOR_EVENTS } from "helpers/app-dates/dates"
+import { getOpenArrays } from "helpers/dropDownListing/openArrays"
 let resources = [
   {
     id: "r2",
@@ -408,9 +409,9 @@ const Calender = (props) => {
 
   const eventClicked = (schedulerData, event) => {}
 
-  const toggleExpandFunc = (schedulerData, slotId) => {
-    schedulerData.toggleExpandStatus(slotId)
-    // triggerRerender(rerender + 1)
+  const toggleExpandFunc = (schedulerData, slotId, value) => {
+    schedulerData.toggleExpandStatus(slotId, value)
+    triggerRerender(rerender + 1)
     setView(view + 1)
   }
   const expandAllItems = (schedulerData) => {
@@ -561,6 +562,7 @@ const Calender = (props) => {
     schedulerContent.scrollLeft = 10
   }
   const updateEventStart = async (schedulerData, event, newStart) => {
+    const openArrays = getOpenArrays(schedulerData)
     const requiredData = {
       start: newStart,
       end: event?.end
@@ -583,12 +585,19 @@ const Calender = (props) => {
       setView(view + 1)
       getRenderSd(schedulerData)
       setCounter(counter + 1)
+      openArrays.forEach((arrayItem) => {
+        toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
+      })
     } else {
       eventsOverLap()
+      openArrays.forEach((arrayItem) => {
+        toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
+      })
     }
   }
 
   const updateEventEnd = async (schedulerData, event, newEnd) => {
+    const openArrays = getOpenArrays(schedulerData)
     const dateRequiredData = {
       ...event,
       end: newEnd
@@ -605,27 +614,27 @@ const Calender = (props) => {
       }
       const parameter = [`${event?.id}/`]
       const returnedData = await updateSchedules(parameter, requiredData)
-
       const newDataEnd = dayjs(returnedData?.end_at).format(COMMON_FORMAT_FOR_EVENTS)
       schedulerData.updateEventEnd(event, newDataEnd)
       getRenderSd(schedulerData)
       setCounter(counter + 1)
       setView(view + 1)
+      console.log(openArrays)
+      openArrays.forEach((arrayItem) => {
+        toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
+      })
     } else {
-      schedulerData.updateEventEnd(event, event?.end)
       eventsOverLap()
-      getRenderSd(schedulerData)
+      // getRenderSd(schedulerData)
+      // setCounter(counter + 1)
+      // setView(view + 1)
+      openArrays.forEach((arrayItem) => {
+        toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
+      })
     }
   }
   const moveEvent = async (schedulerData, event, slotId, slotName, start, end) => {
-    const { renderData } = schedulerData
-    let displayRenderData = renderData.filter((o) => o.render)
-    const myArray = []
-    let openArray = displayRenderData.forEach((i) => {
-      if (i?.expanded === true) {
-        myArray.push(i)
-      }
-    })
+    const openArrays = getOpenArrays(schedulerData)
     const resourceChildMapObject = resoureMap.get(event?.resourceParentID)
     const requiredData = {
       ...event,
@@ -652,18 +661,17 @@ const Calender = (props) => {
         getEventSd(schedulerData)
         setView(view + 1)
         setCounter(counter + 1)
-        myArray.forEach((arrayItem) => {
-          toggleExpandFunc(schedulerData, arrayItem?.slotId)
+        openArrays.forEach((arrayItem) => {
+          toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
         })
-        // triggerRerender(render + 1)
-        // setRetrigger((prev) => !prev)
       } else {
         eventsOverLap()
+        openArrays.forEach((arrayItem) => {
+          toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
+        })
       }
     }
-    setView(view + 1)
-
-    console.log(myArray, "ARAYRAYYR")
+    // setView(view + 1)
   }
   const handleAddEventPopUp = (key) => {
     setPopupChild(key)

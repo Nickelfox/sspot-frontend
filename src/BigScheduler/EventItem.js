@@ -641,7 +641,7 @@ class EventItem extends Component {
         className="timeline-event"
         ref={this.eventItemRef}
         onMouseMove={isPopoverPlacementMousePosition ? this.handleMouseMove : undefined}
-        style={{ left: left, width: width }}
+        style={{ left: left, width: width, marginLeft: 3, right: 0 }}
         onClick={() => {
           if (eventClick) eventItemClick(schedulerData, eventItem)
         }}>

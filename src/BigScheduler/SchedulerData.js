@@ -275,7 +275,7 @@ export default class SchedulerData {
     return !!this.config.schedulerWidth.endsWith && this.config.schedulerWidth.endsWith("%")
   }
 
-  toggleExpandStatus(slotId) {
+  toggleExpandStatus(slotId, value) {
     let slotEntered = false
     let slotIndent = -1
     let isExpanded = false
@@ -284,7 +284,7 @@ export default class SchedulerData {
       if (slotEntered === false) {
         if (item.slotId === slotId && item.hasChildren) {
           slotEntered = true
-          isExpanded = !item.expanded
+          isExpanded = value
           item.expanded = isExpanded
           slotIndent = item.indent
           expandedMap.set(item.indent, {

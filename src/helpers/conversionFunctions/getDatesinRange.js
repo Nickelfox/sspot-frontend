@@ -27,6 +27,7 @@ export const getCheckDate = (requiredData, scheduleArray, key) => {
   const dateInRange = getDatesInRange(requiredData?.start, requiredData?.end)
   const startDateSet = new Set(startDateArray)
   const endDateSet = new Set(endDateArray)
+  console.log(endDateSet)
   const areDatesInRangeArray = []
   dateInRange.forEach((date) => {
     switch (key) {
