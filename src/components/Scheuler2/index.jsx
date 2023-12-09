@@ -155,13 +155,16 @@ const Calender = (props) => {
     teamSchedules,
     updateSchedules,
     fetchProjects,
-    projects
+    projects,
+    fetchClients,
+    clients
   } = useSchedulerController()
   useEffect(() => {
     getSchedulerData()
   }, [teamMembers?.length, teamSchedules?.length])
   useEffect(() => {
     fetchDepartments()
+    fetchClients()
     // getTeamMembers()
   }, [])
 
@@ -207,6 +210,7 @@ const Calender = (props) => {
     }
     fetchSchedules(params)
   }
+  console.log(clients, "HERE ARE CLIENTS")
   const eventItemTemplateResolver = (...props) => {
     const [
       schedulerData,
@@ -624,7 +628,6 @@ const Calender = (props) => {
       getRenderSd(schedulerData)
       setCounter(counter + 1)
       setView(view + 1)
-      console.log(openArrays)
       openArrays.forEach((arrayItem) => {
         toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
       })
