@@ -1,7 +1,7 @@
-import * as React from "react";
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
+import * as React from "react"
+import TextField from "@mui/material/TextField"
+import Autocomplete from "@mui/material/Autocomplete"
+import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown"
 
 export const NewIcon = (props) => {
   return (
@@ -14,15 +14,14 @@ export const NewIcon = (props) => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center"
-      }}
-    >
+      }}>
       <KeyboardArrowDown />
       {/* <img src={ExpandMoreIcon} style={styles.dropDownIcon} /> */}
     </div>
-  );
-};
+  )
+}
 const CustomAutoComplete = (props) => {
-  const { options = [] } = props;
+  const { options = [], handlePopup = () => {} } = props
   // popupIcon={<YourCustomIcon />}
   return (
     <Autocomplete
@@ -48,6 +47,6 @@ const CustomAutoComplete = (props) => {
         />
       )}
     />
-  );
-};
-export default CustomAutoComplete;
+  )
+}
+export default CustomAutoComplete

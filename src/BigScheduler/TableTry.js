@@ -464,7 +464,7 @@ const TableTry = (props) => {
                     // setFieldValue(`weeklyAvailability`, e.target?.value)
                   }}
                 /> */}
-                <CustomAutoComplete options={project} />
+                <CustomAutoComplete options={project} handlePopup={handlePopUp} />
                 {/* <CustomAutoComplete options={[]} /> */}
                 {/* <input type="text" list="cars" className="projectselctor" placeholder="Projects" />
                 <datalist id="cars" style={{ listStyleType: "solid" }}>
