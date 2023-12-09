@@ -9,3 +9,6 @@ export function Dates() {
     addInCurrent
   }
 }
+
+export const COMMON_FORMAT_FOR_API = "YYYY-MM-DD"
+export const COMMON_FORMAT_FOR_EVENTS = "YYYY-MM-DD HH:mm:ss"

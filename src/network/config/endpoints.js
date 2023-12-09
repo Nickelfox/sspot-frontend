@@ -51,6 +51,7 @@ export const API = {
     DEPARTMENTS: new APIRouter("/departments/", HTTP_METHODS.GET),
     TEAM_MEMBERS: new APIRouter("/timeline/team/", HTTP_METHODS.GET),
     SCHEDULE: new APIRouter("/schedules/", HTTP_METHODS.GET),
+    SCHEDULE_UPDATE: new APIRouter("/schedules", HTTP_METHODS.PATCH),
     PROJECTS_LIST: new APIRouter("/projects/", HTTP_METHODS.GET)
   }
 }

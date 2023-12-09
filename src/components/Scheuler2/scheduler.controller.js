@@ -51,6 +51,10 @@ export const useSchedulerController = () => {
     }
     setTeamSchedules(requiredArray)
   }
+  const updateSchedules = async (params, body) => {
+    const responseData = await model.updateSchedule(params, body)
+    return responseData
+  }
   const fetchProjects = async (params) => {
     const responseData = await model.fetchProjects(params)
     let requiredArray
@@ -67,7 +71,6 @@ export const useSchedulerController = () => {
     }
     setProjects(requiredArray)
   }
-
   return {
     fetchDepartments,
     departments,
@@ -75,6 +78,7 @@ export const useSchedulerController = () => {
     teamMembers,
     fetchSchedules,
     teamSchedules,
+    updateSchedules,
     fetchProjects,
     projects
   }

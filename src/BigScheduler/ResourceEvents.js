@@ -93,7 +93,7 @@ class ResourceEvents extends Component {
     //es-lint-disable-next-line no-unused-vars
     // const { schedulerData } = this.props;
     // let cellWidth = schedulerData.getContentCellWidth();
-    let cellWidth = 50
+    let cellWidth = 50.5
     let pos = getPos(this.eventContainer)
     let startX = clientX - pos.x
     let leftIndex = Math.floor(startX / cellWidth)
@@ -304,7 +304,7 @@ class ResourceEvents extends Component {
             let eventEnd = localeDayjs(evt.eventItem.end)
             let isStart = eventStart >= durationStart
             let isEnd = eventEnd <= durationEnd
-            let left = index * 50 + (index > 0 ? 2 : 3)
+            let left = index * 50 + (index > 0 ? 4 : 3)
             let width =
               evt.span * 50 - (index > 0 ? 5 : 6) > 0 ? evt.span * 50 - (index > 0 ? 5 : 6) : 0
             let top = marginTop + idx * config.eventItemLineHeight
@@ -406,6 +406,7 @@ class ResourceEvents extends Component {
   }
 
   eventContainerRef = (element) => {
+    console.log(element, "HEHHEEHH")
     this.eventContainer = element
   }
 }

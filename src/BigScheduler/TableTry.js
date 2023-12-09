@@ -109,7 +109,7 @@ const TableTry = (props) => {
         style={{}}
         className=""
         onClick={() => {
-          if (toggleExpandFunc) toggleExpandFunc(schedulerData, item.slotId)
+          if (toggleExpandFunc) toggleExpandFunc(schedulerData, item.slotId, false)
           expandItem.add(item?.slotName)
         }}
       />
@@ -119,7 +119,7 @@ const TableTry = (props) => {
         style={{}}
         className=""
         onClick={() => {
-          if (toggleExpandFunc) toggleExpandFunc(schedulerData, item.slotId)
+          if (toggleExpandFunc) toggleExpandFunc(schedulerData, item.slotId, true)
           expandItem.delete(item?.slotName)
         }}
       />
