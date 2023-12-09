@@ -1,8 +1,9 @@
-import * as React from "react";
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
-
+import * as React from "react"
+import TextField from "@mui/material/TextField"
+import Autocomplete from "@mui/material/Autocomplete"
+import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown"
+import { Paper, Typography } from "@mui/material"
+import styles from "./autocomplete.module.scss"
 export const NewIcon = (props) => {
   return (
     <div
@@ -14,19 +15,16 @@ export const NewIcon = (props) => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center"
-      }}
-    >
+      }}>
       <KeyboardArrowDown />
       {/* <img src={ExpandMoreIcon} style={styles.dropDownIcon} /> */}
     </div>
-  );
-};
+  )
+}
 const CustomAutoComplete = (props) => {
-  const { options = [] } = props;
-  // popupIcon={<YourCustomIcon />}
+  const { options = [] } = props
   return (
     <Autocomplete
-      disablePortal
       id="combo-box-demo"
       options={options}
       size="small"
@@ -37,6 +35,22 @@ const CustomAutoComplete = (props) => {
           <NewIcon />
         </div>
       }
+      PaperComponent={({ children }) => {
+        return (
+          <Paper className={styles.matrix_box}>
+            {children}
+            <button
+              className={`${styles?.add_new} btn`}
+              style={{ justifyContent: "center", pl: 2 }}
+              onMouseDown={() => {
+                console.log("Add new")
+              }}>
+              <Typography variant="c1">Add Project</Typography>
+            </button>
+          </Paper>
+        )
+      }}
+      noOptionsText={options?.length === 0 ? null : "No Match Found"}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -48,6 +62,6 @@ const CustomAutoComplete = (props) => {
         />
       )}
     />
-  );
-};
-export default CustomAutoComplete;
+  )
+}
+export default CustomAutoComplete

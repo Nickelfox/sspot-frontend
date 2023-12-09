@@ -632,8 +632,7 @@ class EventItem extends Component {
         isStart,
         isEnd,
         "event-item",
-        config.eventItemHeight,
-        width
+        config.eventItemHeight
       )
     let eventClick = !!eventItemClick
     let a = (
@@ -641,7 +640,7 @@ class EventItem extends Component {
         className="timeline-event"
         ref={this.eventItemRef}
         onMouseMove={isPopoverPlacementMousePosition ? this.handleMouseMove : undefined}
-        style={{ left: left, width: width, marginLeft: 3, right: 0 }}
+        style={{ left: left, width: width + 1, right: 0 }}
         onClick={() => {
           if (eventClick) eventItemClick(schedulerData, eventItem)
         }}>

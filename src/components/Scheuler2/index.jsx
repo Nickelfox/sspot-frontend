@@ -157,7 +157,9 @@ const Calender = (props) => {
     fetchProjects,
     projects,
     fetchClients,
-    clients
+    clients,
+    fetchTeamList,
+    addEvents
   } = useSchedulerController()
   useEffect(() => {
     getSchedulerData()
@@ -165,6 +167,7 @@ const Calender = (props) => {
   useEffect(() => {
     fetchDepartments()
     fetchClients()
+    fetchTeamList()
     // getTeamMembers()
   }, [])
 
@@ -210,7 +213,6 @@ const Calender = (props) => {
     }
     fetchSchedules(params)
   }
-  console.log(clients, "HERE ARE CLIENTS")
   const eventItemTemplateResolver = (...props) => {
     const [
       schedulerData,
@@ -223,7 +225,9 @@ const Calender = (props) => {
       agendaMaxEventWidth,
       width
     ] = props
-    const resourceObjectForEvent = resoureMap.get(event?.resourceId)
+    const resources = resoureMap.get(event?.resourceId)
+    const filterItem = resources.filter((resource) => resource.id === event?.resourceId)
+    const resourceObjectForEvent = filterItem[0]
     const resourceChildArray = resources?.map((item) => item?.projects)
     const resourceFlatArray = resourceChildArray.flat()
     const filteredArray = resourceFlatArray.filter((item) => item !== undefined)
@@ -275,8 +279,8 @@ const Calender = (props) => {
       // backgroundColor: event?.bgColor,
       background:
         resourceObjectForEvent?.parentId === undefined ? bColor : resourceObjectForEvent?.color,
-      minHeight: 40,
-      height: 40,
+      minHeight: 36,
+      height: 36,
       borderRadius: 4,
       display: "flex",
       justifyContent: "center",
@@ -436,14 +440,21 @@ const Calender = (props) => {
   }
   const newStyles = {}
 
-  const newEvent = (schedulerData, slotId, slotName, start, end, type, item) => {
+  const newEvent = (schedulerData, slotId, slotName, start, end, item) => {
     handlePopUpClose()
+    console.log(resoureMap, item, "ITEM<RESOURCE")
     const requiredDataObject = {}
+
     const childObject = resoureMap.get(slotId)
+    const childObjectArray = childObject?.filter(
+      (childObject) => childObject?.parentId === item?.parentId
+    )
+    const newChildObject = childObjectArray[0]
     if (slotName) {
-      const requiredObject = resoureMap.get(childObject?.parentId)
-      requiredDataObject.parent = requiredObject
-      requiredDataObject.child = childObject
+      const requiredObject = resoureMap.get(item?.parentId)
+      console.log(childObject, "ITEM<PARENT")
+      requiredDataObject.parent = requiredObject[0]
+      requiredDataObject.child = newChildObject
       const el = (sel, par) => (par || document).querySelector(sel)
       const elArea = el("#area")
       let bodyRect = document.body.getBoundingClientRect(),
@@ -528,6 +539,34 @@ const Calender = (props) => {
     // } else {
     //   alert("Event in progress");
     // }
+  }
+  const postEvent = async (apiData) => {
+    const newApiData = {
+      project_member: apiData?.project_member,
+      start_at: dayjs(apiData?.start_at).format(COMMON_FORMAT_FOR_API),
+      end_at: dayjs(apiData?.end_at).format(COMMON_FORMAT_FOR_API),
+      assigned_hour: apiData?.assigned_hours,
+      schedule_type: "WORK",
+      notes: apiData.notes
+    }
+    const response = await addEvents(apiData)
+    const requiredEventObject = {
+      id: response?.id,
+      title: response?.assigned_hour,
+      start: dayjs(response?.start_at).startOf("d").format("YYYY-MM-DD HH:MM:ss"),
+      end: dayjs(response?.end_at).endOf("d").format("YYYY-MM-DD HH:MM:ss"),
+      resourceId: apiData?.resourceId,
+      resourceParentID: apiData?.resourceParentID,
+      bgColor: getBgColor(apiData?.resourceParentID, apiData?.resourceId)
+    }
+    createNewEvent(requiredEventObject)
+  }
+  const getBgColor = (id, resourceId) => {
+    const responseMap = resoureMap.get(id)
+    const projectArray = responseMap.map((item) => item?.projects)
+    const flatArray = projectArray.flat()
+    const filteredArray = flatArray.filter((item) => item?.id === resourceId)
+    return filteredArray[0]?.color
   }
   const createNewEvent = (requiredData) => {
     //TODO: Write a function to get dates from events and check if startand end date exists in it
@@ -644,12 +683,15 @@ const Calender = (props) => {
   const moveEvent = async (schedulerData, event, slotId, slotName, start, end) => {
     const openArrays = getOpenArrays(schedulerData)
     const resourceChildMapObject = resoureMap.get(event?.resourceParentID)
+    const projectArray = resourceChildMapObject.map((item) => item?.projects)
+    const flatArray = projectArray.flat()
+    const filteredArray = flatArray.filter((item) => item?.id === slotId)
     const requiredData = {
       ...event,
       start: start,
       end: end
     }
-    if (slotId === event?.resourceId && resourceChildMapObject?.id === event?.resourceParentID) {
+    if (slotId === event?.resourceId && filteredArray[0]?.parentId === event?.resourceParentID) {
       const checkDates = getCheckDate(requiredData, schedulerData?.events, "move")
       if (checkDates) {
         const requiredData = {
@@ -740,6 +782,7 @@ const Calender = (props) => {
         resourceData={selectedObject}
         eventData={resourceEvent}
         createNewEvent={createNewEvent}
+        postEvent={postEvent}
       />
     ),
     addResource: (

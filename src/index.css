@@ -301,10 +301,10 @@ table.scheduler-table tr:last-child td {
   color: #fff;
   /* padding-right: 20px !important; */
   /* margin-bottom: 4rem; */
-  height: 5rem;
+  /* height: 5rem; */
   /* opacity: 0.5; */
   display: flex;
-  align-items: center;
+  align-items: start;
 }
 
 .overflow-text {
