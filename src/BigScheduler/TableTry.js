@@ -1,6 +1,6 @@
 /*eslint-disable no-unused-vars */
 /*eslint no-constant-condition: ["error", { "checkLoops": false }]*/
-import React from "react"
+import React, { useEffect } from "react"
 import BodyView from "./BodyView"
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp"
@@ -19,6 +19,8 @@ import {
 import dayjs from "dayjs"
 import { DATETIME_FORMAT } from "."
 import { Popover } from "antd"
+import DropDown from "components/DropDown"
+import CustomAutoComplete from "./schedulerComponents/AutoComplete"
 const editItemObject = [
   /**
    * @Actions
@@ -42,10 +44,21 @@ const editItemObject = [
   }
 ]
 const TableTry = (props) => {
-  const { schedulerData, toggleExpandFunc, dnd, openEditItemPopUp, closePopup, handlePopUp } = props
+  const {
+    schedulerData,
+    toggleExpandFunc,
+    dnd,
+    openEditItemPopUp,
+    closePopup,
+    handlePopUp,
+    fetchProjects
+  } = props
   //eslint-disable-next-line no-unused-vars
   const { renderData, cellUnit, config, headers } = schedulerData
   const displayRenderData = renderData.filter((o) => o.render)
+  useEffect(() => {
+    fetchProjects()
+  }, [])
 
   const borderBottom = "1px solid #c4c4c4"
   let contentScrollbarHeight = 17,
@@ -145,6 +158,7 @@ const TableTry = (props) => {
                 dndSource={eventDndSource}
               />
             )
+            console.log(item, "ITEMMMMMM")
             return (
               <Box key={item?.slotId + index} marginTop={index === 0 ? "-0.2rem" : 0}>
                 {!item?.parentId && (
@@ -248,7 +262,8 @@ const TableTry = (props) => {
                         item?.slotId,
                         eventDndSource,
                         DndResourceEvents,
-                        item
+                        item,
+                        item?.assignedProjects
                       )}
                   </TableContainer>
                 )}
@@ -259,7 +274,14 @@ const TableTry = (props) => {
       )
     })
   }
-  const getInnerTable = (displayRenderData, slotid, eventDndSource, DndResourceEvents, item) => {
+  const getInnerTable = (
+    displayRenderData,
+    slotid,
+    eventDndSource,
+    DndResourceEvents,
+    item,
+    project
+  ) => {
     const filteredData = displayRenderData.filter((item) => item?.parentId === slotid)
     const requiredHeaders = headers.map((header) => {
       return {
@@ -434,14 +456,24 @@ const TableTry = (props) => {
                 </Typography>
               </Box>
               <Box className="w-full pr-1">
+                {/* <DropDown
+                  value={""}
+                  name={"weeklyAvailability"}
+                  label="weeklyAvailability"
+                  items={project}
+                  handleChange={(e) => {
+                    // setFieldValue(`weeklyAvailability`, e.target?.value)
+                  }}
+                /> */}
+                <CustomAutoComplete options={project} />
                 {/* <CustomAutoComplete options={[]} /> */}
-                <input type="text" list="cars" className="projectselctor" placeholder="Projects" />
+                {/* <input type="text" list="cars" className="projectselctor" placeholder="Projects" />
                 <datalist id="cars" style={{ listStyleType: "solid" }}>
                   <option>Project-1</option>
                   <option>Project-2</option>
                   <option>Project-3</option>
                   <option>Project-4</option>
-                </datalist>
+                </datalist> */}
               </Box>
             </Box>
           </TableCell>

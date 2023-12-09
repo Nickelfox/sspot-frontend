@@ -31,11 +31,18 @@ export const useSchedulerModel = () => {
     Loader.hide()
     return dataReturner(response)
   }
-
+  const fetchProjects = async () => {
+    Loader.show()
+    const instance = NetworkManager(API.SCHEDULER.PROJECTS_LIST)
+    const response = await instance.request()
+    Loader.hide()
+    return dataReturner(response)
+  }
   return {
     fetchDepartments,
     fetchTeamMembers,
     fetchSchedules,
-    updateSchedule
+    updateSchedule,
+    fetchProjects
   }
 }

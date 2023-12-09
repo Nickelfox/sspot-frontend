@@ -8,7 +8,7 @@ export const useSchedulerController = () => {
   const [departments, setDepartments] = useState([])
   const [teamMembers, setTeamMemebers] = useState([])
   const [teamSchedules, setTeamSchedules] = useState([])
-
+  const [projects, setProjects] = useState([])
   const model = useSchedulerModel()
   const fetchDepartments = async () => {
     const data = await model.fetchDepartments()
@@ -34,7 +34,7 @@ export const useSchedulerController = () => {
     const responseData = await model.fetchTeamMembers(params)
     let requiredArray
     if (responseData?.length > 0) {
-      requiredArray = getDataArray(responseData)
+      requiredArray = getDataArray(responseData, projects)
     } else {
       requiredArray = []
     }
@@ -55,7 +55,22 @@ export const useSchedulerController = () => {
     const responseData = await model.updateSchedule(params, body)
     return responseData
   }
-
+  const fetchProjects = async (params) => {
+    const responseData = await model.fetchProjects(params)
+    let requiredArray
+    if (responseData?.length > 0) {
+      requiredArray = responseData.map((project) => {
+        return {
+          label: project?.project_name,
+          value: project.id,
+          ...project
+        }
+      })
+    } else {
+      requiredArray = []
+    }
+    setProjects(requiredArray)
+  }
   return {
     fetchDepartments,
     departments,
@@ -63,6 +78,8 @@ export const useSchedulerController = () => {
     teamMembers,
     fetchSchedules,
     teamSchedules,
-    updateSchedules
+    updateSchedules,
+    fetchProjects,
+    projects
   }
 }

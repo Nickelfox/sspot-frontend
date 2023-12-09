@@ -146,7 +146,6 @@ const Calender = (props) => {
   const styles = useStyles()
   const cachedData = useMemo(() => schedulerData, [view])
   const [counter, setCounter] = useState(1)
-  console.log(cachedData)
   const {
     fetchDepartments,
     departments,
@@ -154,7 +153,9 @@ const Calender = (props) => {
     teamMembers,
     fetchSchedules,
     teamSchedules,
-    updateSchedules
+    updateSchedules,
+    fetchProjects,
+    projects
   } = useSchedulerController()
   useEffect(() => {
     getSchedulerData()
@@ -165,11 +166,14 @@ const Calender = (props) => {
   }, [])
 
   useEffect(() => {
-    teamFetcher()
-    scheduleFetcher()
+    if (projects?.length > 0) {
+      teamFetcher()
+      scheduleFetcher()
+    }
   }, [
     dayjs(schedulerData?.startDate).format("YYYY-MM-DD"),
-    dayjs(schedulerData?.endDate).format("YYYY-MM-DD")
+    dayjs(schedulerData?.endDate).format("YYYY-MM-DD"),
+    projects?.length
   ])
   useEffect(() => {
     triggerRerender(render + 1)
@@ -391,7 +395,8 @@ const Calender = (props) => {
     setSelectedObject(itemToEdit)
     getRenderSd(schedulerData)
     schedulerData.setResources(requiredArray)
-    triggerRerender(rerender + 1)
+    setView(view + 1)
+    // triggerRerender(rerender + 1)
   }
   const onSelectDate = (schedulerData, date) => {
     getRenderSd(schedulerData)
@@ -743,7 +748,7 @@ const Calender = (props) => {
         departmentsList={departments}
       />
     ),
-    assignResource: <AssignProject requiredObject={selectedObject} />,
+    assignResource: <AssignProject requiredObject={selectedObject} projects={projects} />,
     calenderFeed: <CalendarFeed requiredObject={selectedObject} handleClose={handlePopUpClose} />,
     deleteResource: (
       <DeleteResource requiredObject={selectedObject} handleClose={handlePopUpClose} />
@@ -811,6 +816,8 @@ const Calender = (props) => {
             showResourceEditPopup={showResourceEditPopup}
             closePopUp={closePopUp}
             handlePopUp={handlePopUp}
+            fetchProjects={fetchProjects}
+            projects={projects}
             {...props}
           />
         )}{" "}

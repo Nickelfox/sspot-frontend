@@ -135,7 +135,8 @@ const dummyData = [
   }
 ]
 
-export const getDataArray = (array) => {
+export const getDataArray = (array, projects) => {
+  console.log(projects, "PROOOOOO")
   let requiredUserInfo = []
   array.forEach((data) => {
     const requiredObject = {
@@ -147,8 +148,9 @@ export const getDataArray = (array) => {
       email: data?.user?.email,
       editPopup: false,
       expanded: false,
-      projects: getProjectsArray(data?.project_member, data),
-      department: data?.department?.name
+      projects: getProjectsArray(data?.project_member, data, projects),
+      department: data?.department?.name,
+      assignedProjects: getAssignedProjects(data?.project_member, projects)
     }
     requiredUserInfo.push(requiredObject)
   })
@@ -187,5 +189,12 @@ export const getEventListing = (eventArray) => {
       bgColor: "#DCC36B"
     }
   })
+  return requiredArray
+}
+const getAssignedProjects = (projectArray, projects) => {
+  const projectIdMap = projectArray.map((project) => project?.project?.id)
+
+  const requiredArray = projects.filter((project) => !projectIdMap.includes(project?.value))
+  console.log(requiredArray, "ARRRAy")
   return requiredArray
 }
