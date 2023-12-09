@@ -1,7 +1,7 @@
 /*eslint-disable no-unused-vars */
 /*eslint no-constant-condition: ["error", { "checkLoops": false }]*/
+import React, { useState } from "react"
 import { Box, Grid, Typography, useMediaQuery, useTheme } from "@mui/material"
-import React from "react"
 import { useStyles } from "components/AddResource/resourseFormStyles"
 import { Formik } from "formik"
 import InputField from "../Input"
@@ -9,12 +9,18 @@ import PrimaryButton from "../PrimaryButton"
 import SecondaryButton from "../SecondaryButton"
 import { FormValidator } from "../../helpers/validations/addResourceValidations"
 import DropDown from "../DropDown"
-import BasicTooltip from "../ToolTip"
-import QuestionMarkIcon from "@mui/icons-material/QuestionMark"
 import { items } from "helpers/dropDownListing/hoursListing"
 import ErrorText from "components/ErrorText"
-import { useResourceController } from "components/AddResource/addResource.controller"
-
+import { Input, DatePicker } from "antd"
+import dayjs from "dayjs"
+const { TextArea } = Input
+const inputSyles = {
+  multiLine: { width: "100%" },
+  input: { width: "6rem", height: "3rem", fontSize: "1.2rem" },
+  border: {
+    borderRadius: "0.4rem"
+  }
+}
 const workDays = [
   { value: "MON", label: "MON" },
   { value: "TUE", label: "TUE" },
@@ -26,12 +32,13 @@ const workDays = [
 ]
 const AddProjectForm = (props) => {
   const { handleClose, addResorceInScheduler, resourceLength, departmentsList } = props
-  const { initialValues } = useResourceController(props)
+  //   const { initialValues } = useResourceController(props)
   const styles = useStyles()
   const theme = useTheme()
   const isTablet = useMediaQuery(theme.breakpoints.down("sm"))
   const isNotLaptop = useMediaQuery(theme.breakpoints.down("md"))
   const isMobile = useMediaQuery(theme.breakpoints.down("xs"))
+  const [date, setDate] = useState(null)
 
   const createResource = (values) => {
     const requiredObject = {
@@ -89,42 +96,21 @@ const AddProjectForm = (props) => {
                 <Box sx={{ maxHeight: "fit-content" }}>
                   <InputField
                     size="medium"
-                    name="firstName"
+                    name="projectName"
                     hiddenLabel
-                    placeholder="First Name*"
+                    placeholder="Project Name*"
                     InputProps={{ disableUnderline: true }}
-                    value={values.firstName}
+                    value={values.projectName}
                     variant="filled"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    error={touched.firstName && Boolean(errors.firstName)}
+                    error={touched.projectName && Boolean(errors.projectName)}
                     type="text"
                     fullWidth
                     margin="normal"
                     helperText={
-                      touched.firstName && errors.firstName && <ErrorText text={errors.firstName} />
-                    }
-                  />
-                </Box>
-              </Grid>
-              <Grid item xs={12}>
-                <Box sx={{ maxHeight: "fit-content" }}>
-                  <InputField
-                    size="medium"
-                    name="lastName"
-                    hiddenLabel
-                    placeholder="Last Name*"
-                    InputProps={{ disableUnderline: true }}
-                    value={values.lastName}
-                    variant="filled"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={touched.lastName && Boolean(errors.lastName)}
-                    type="text"
-                    fullWidth
-                    margin="normal"
-                    helperText={
-                      touched.lastName && errors.lastName && <ErrorText text={errors.lastName} />
+                      touched.projectName &&
+                      errors.projectName && <ErrorText text={errors.projectName} />
                     }
                   />
                 </Box>
@@ -132,129 +118,134 @@ const AddProjectForm = (props) => {
               {/* <Grid item xs={12} className="flex items-center justify-around"> */}
               <Grid item xs={3} className="flex items-center">
                 <Typography className="text-slate-500 text-xl" variant="p3">
-                  Department
+                  Client
                 </Typography>
               </Grid>
               <Grid item xs={9} m={0} height={"fit-content"}>
                 <DropDown
-                  value={values.departments}
-                  name={"departments"}
-                  label="departments"
-                  items={departmentsList}
+                  handleSize
+                  value={values?.clients}
+                  name={"client"}
+                  label="client"
+                  items={[]}
+                  style={{ width: "100%" }}
+                  fullWidth
                   handleChange={(e) => {
-                    setFieldValue(`departments`, e.target?.value)
+                    setFieldValue(`client`, e.target?.value)
                   }}
                 />
               </Grid>
               {/* </Grid> */}
               <Grid item xs={3} className="flex items-center">
                 <Typography className="text-slate-500 text-xl" variant="p3">
-                  Designation
+                  Project Code
                 </Typography>{" "}
-                <BasicTooltip
-                  title={
-                    <Box style={{ color: "#000", fontSize: "1.2rem" }}>
-                      <Typography variant={"c1"}>
-                        Add designation to take advantage of filtering and search on your schedule
-                      </Typography>
-                    </Box>
-                  }>
-                  <QuestionMarkIcon />
-                </BasicTooltip>
               </Grid>
               <Grid item xs={9} m={0} className="flex items-center">
                 <InputField
                   size="medium"
-                  name="designation"
+                  name="code"
                   hiddenLabel
-                  placeholder="Designation*"
+                  placeholder="Optional"
                   InputProps={{ disableUnderline: true }}
-                  value={values.designation}
+                  value={values.code}
                   variant="filled"
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  error={touched.designation && Boolean(errors.designation)}
+                  error={touched.code && Boolean(errors.code)}
                   type="text"
                   fullWidth
                   margin="normal"
-                  helperText={
-                    touched.designation &&
-                    errors.designation && <ErrorText text={errors.designation} />
-                  }
+                  helperText={touched.code && errors.code && <ErrorText text={errors.code} />}
                 />
               </Grid>
 
               <Grid item xs={3} className="flex items-center">
                 <Typography className="pr-2 text-slate-500 text-xl" variant="p3">
-                  Capacity
+                  Color Label
                 </Typography>
               </Grid>
               <Grid item xs={9} className="flex items-center" m={0}>
                 <Box>
                   {" "}
                   <DropDown
-                    value={values?.weeklyAvailability ? values?.weeklyAvailability : 35}
-                    name={"weeklyAvailability"}
-                    label="weeklyAvailability"
+                    value={values?.color}
+                    name={"color"}
+                    label="color"
                     items={items}
                     handleChange={(e) => {
-                      setFieldValue(`weeklyAvailability`, e.target?.value)
+                      setFieldValue(`color`, e.target?.value)
                     }}
                   />
                 </Box>
-                <Box>
-                  <Typography className="pl-2 text-slate-500 text-xl" variant="p3">
-                    hours per day{" "}
-                  </Typography>
-                </Box>
               </Grid>
-              {touched.weeklyAvailability &&
-                errors.weeklyAvailability &&
-                "Kindly Select Weekly Availability"}
+              {touched.Color && errors.Color && "Kindly Select Weekly Availability"}
+            </Grid>
+            <Grid item xs={3}>
+              Start Date
+            </Grid>
+            <Grid item xs={4} display={"flex"}>
+              <DatePicker
+                format={"YYYY-MM-DD"}
+                size="small"
+                value={dayjs(date, "YYYY-MM-DD")}
+                name="startDate"
+                allowClear={false}
+                style={{
+                  cursor: "pointer",
+                  fontSize: "1.7rem",
+                  ...inputSyles?.border
+                }}
+                onChange={(e) => {
+                  const formattedDate = dayjs(e).format("YYYY-MM-DD")
+                  setFieldValue(`startDate`, formattedDate)
+                  setDate(formattedDate)
+                }}
+                className="h-14 w-full"
+                popupStyle={{ zIndex: 9999 }}
+              />{" "}
             </Grid>
             <Grid container>
               <Grid item xs={3} alignItems={"center"} display={"flex"}>
                 <Typography className="text-slate-500 text-xl" variant="p3">
-                  Work Days{" "}
+                  Project Tags
                 </Typography>
               </Grid>
-              <Grid item xs={9} display={"flex"}>
-                {workDays.map((workDay, index) => {
-                  return (
-                    <Box
-                      key={`${workDay?.value}`}
-                      className="flex items-center justify-center "
-                      // style={styles.daySelector}
-                      style={getStylesforSelector(values?.workDays, workDay.value, index)}
-                      onKeyDown={() => {
-                        const daySet = new Set(values?.workDays)
-                        if (daySet?.has(workDay.value)) {
-                          daySet.delete(workDay.value)
-                        } else {
-                          daySet.add(workDay.value)
-                        }
-                        setFieldValue(`workDays`, Array.from(daySet))
-                      }}
-                      onClick={() => {
-                        const daySet = new Set(values?.workDays)
-                        if (daySet?.has(workDay.value)) {
-                          daySet.delete(workDay.value)
-                        } else {
-                          daySet.add(workDay.value)
-                        }
-                        setFieldValue(`workDays`, Array.from(daySet))
-                      }}>
-                      <Typography style={styles.daySelectorText}>{workDay?.label}</Typography>
-                    </Box>
-                  )
-                })}
+              <Grid item xs={9} m={0} className="flex items-center">
+                <InputField
+                  size="medium"
+                  name="tags"
+                  hiddenLabel
+                  placeholder="Optional"
+                  InputProps={{ disableUnderline: true }}
+                  value={values.tags}
+                  variant="filled"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={touched.tags && Boolean(errors.tags)}
+                  type="text"
+                  fullWidth
+                  margin="normal"
+                  helperText={touched.tags && errors.tags && <ErrorText text={errors.tags} />}
+                />
               </Grid>
-              <div style={{ marginTop: "2px", color: "#FF000D" }}>
-                {touched.workDays &&
-                  errors?.workDays &&
-                  values?.workDays?.length === 0 &&
-                  "Kindly Select Work Days"}
-              </div>
+              <Grid container alignItems={"center"} paddingBottom={"2rem"}>
+                <Grid item xs={3}>
+                  <Typography variant="c1" color="#929292">
+                    Notes
+                  </Typography>
+                </Grid>
+                <Grid item xs={9}>
+                  <TextArea
+                    name="notes"
+                    rows="3"
+                    placeholder="Additional Notes or Custom Link"
+                    style={{ ...inputSyles?.multiLine, ...inputSyles?.border }}
+                    value={values?.notes}
+                    onChange={handleChange}
+                  />
+                </Grid>
+              </Grid>
             </Grid>
             <Grid container paddingBottom={3}></Grid>
             <Grid container>

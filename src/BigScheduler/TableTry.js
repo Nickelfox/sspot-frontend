@@ -158,7 +158,6 @@ const TableTry = (props) => {
                 dndSource={eventDndSource}
               />
             )
-            console.log(item, "ITEMMMMMM")
             return (
               <Box key={item?.slotId + index} marginTop={index === 0 ? "-0.2rem" : 0}>
                 {!item?.parentId && (
