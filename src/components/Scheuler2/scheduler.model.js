@@ -38,11 +38,19 @@ export const useSchedulerModel = () => {
     Loader.hide()
     return dataReturner(response)
   }
+  const fetchClients = async () => {
+    Loader.show()
+    const instance = NetworkManager(API.SCHEDULER.CLIENT_LIST)
+    const response = await instance.request()
+    Loader.hide()
+    return dataReturner(response)
+  }
   return {
     fetchDepartments,
     fetchTeamMembers,
     fetchSchedules,
     updateSchedule,
-    fetchProjects
+    fetchProjects,
+    fetchClients
   }
 }

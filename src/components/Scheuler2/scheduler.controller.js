@@ -9,6 +9,7 @@ export const useSchedulerController = () => {
   const [teamMembers, setTeamMemebers] = useState([])
   const [teamSchedules, setTeamSchedules] = useState([])
   const [projects, setProjects] = useState([])
+  const [clients, setClients] = useState([])
   const model = useSchedulerModel()
   const fetchDepartments = async () => {
     const data = await model.fetchDepartments()
@@ -71,6 +72,22 @@ export const useSchedulerController = () => {
     }
     setProjects(requiredArray)
   }
+  const fetchClients = async () => {
+    const responseData = await model.fetchClients()
+    let requiredArray
+    if (responseData?.length > 0) {
+      requiredArray = responseData.map((client) => {
+        return {
+          label: client?.name,
+          value: client.id,
+          ...client
+        }
+      })
+    } else {
+      requiredArray = []
+    }
+    setClients(requiredArray)
+  }
   return {
     fetchDepartments,
     departments,
@@ -80,6 +97,8 @@ export const useSchedulerController = () => {
     teamSchedules,
     updateSchedules,
     fetchProjects,
-    projects
+    projects,
+    fetchClients,
+    clients
   }
 }
