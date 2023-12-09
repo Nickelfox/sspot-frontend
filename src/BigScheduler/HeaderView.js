@@ -80,8 +80,8 @@ class HeaderView extends Component {
           }}>
           <div
             style={{
-              width: "23.9rem",
-              minWidth: "23rem",
+              width: "24rem",
+              minWidth: "24rem",
               minHeight: "5rem",
               backgroundColor: "#fff"
             }}

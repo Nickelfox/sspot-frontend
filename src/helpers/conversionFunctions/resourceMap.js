@@ -25,7 +25,8 @@ export const getReplaceArr = (displayRenderData) => {
       editPopup: false,
       email: i?.email,
       department: i?.department,
-      color: i?.color
+      color: i?.color,
+      assignedProjects: i?.assignedProjects
     }
   })
   return requiredArray
