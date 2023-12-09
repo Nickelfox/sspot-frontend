@@ -1,5 +1,14 @@
 // /* eslint-disable-next-line no-unused-vars */
-import { Autocomplete, Box, Chip, InputAdornment, TextField, Typography } from "@mui/material"
+import {
+  Autocomplete,
+  Box,
+  Chip,
+  InputAdornment,
+  MenuItem,
+  Paper,
+  TextField,
+  Typography
+} from "@mui/material"
 import React, { useState } from "react"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 // /* eslint-disable-next-line no-unused-vars */
@@ -66,6 +75,21 @@ const AssignProject = (props) => {
             )
             // ))
           }
+          PaperComponent={({ children }) => {
+            return (
+              <Paper>
+                {children}
+                <button
+                  className="btn"
+                  // sx={{ justifyContent: "flex-start", pl: 2 }}
+                  onMouseDown={() => {
+                    console.log("Add new")
+                  }}>
+                  + Add New
+                </button>
+              </Paper>
+            )
+          }}
           renderInput={(params) => {
             return (
               <TextField
@@ -92,6 +116,13 @@ const AssignProject = (props) => {
             // const asigneeCopy = [...assigneeVal]
             console.log(newValue)
             setAssigneVal(newValue)
+          }}
+          renderOption={(props, option) => {
+            return (
+              <MenuItem {...props}>
+                <Box>{option?.label}</Box>
+              </MenuItem>
+            )
           }}
           popupIcon={<PopupIcon />}></Autocomplete>
       </Box>

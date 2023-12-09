@@ -27,6 +27,7 @@ import { Toast } from "helpers/toasts/toastHelper"
 import { eventsOverLap } from "helpers/toasterFunction/toasterFunction"
 import { COMMON_FORMAT_FOR_API, COMMON_FORMAT_FOR_EVENTS } from "helpers/app-dates/dates"
 import { getOpenArrays } from "helpers/dropDownListing/openArrays"
+import AddProjectForm from "components/AssignProjectForm"
 let resources = [
   {
     id: "r2",
@@ -132,7 +133,7 @@ const Calender = (props) => {
   const [schedulerData, setSchedulerData] = useState(null)
   const [triger, setRetrigger] = useState(false)
   const [popupChild, setPopupChild] = useState("")
-  const [openPopUp, setOpenPopup] = useState(false)
+  const [openPopUp, setOpenPopup] = useState(true)
   const [view, setView] = useState(1)
   const [id, setId] = useState("")
   const [resoureMap, setResourceMap] = useState(new Map())
@@ -767,6 +768,15 @@ const Calender = (props) => {
     ),
     archiveResource: (
       <ArchiveResource requiredObject={selectedObject} handleClose={handlePopUpClose} />
+    ),
+    projectForm: (
+      <AddProjectForm
+        handleClose={handlePopUpClose}
+        addResorceInScheduler={addResorceInScheduler}
+        resourceLength={schedulerData?.resources?.length}
+        isEdit={false}
+        departmentsList={departments}
+      />
     )
   }
   const handlePopUp = (key) => {
