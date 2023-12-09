@@ -43,9 +43,7 @@ const CustomAutoComplete = (props) => {
             <button
               className={`${styles?.add_new} btn`}
               style={{ justifyContent: "center", pl: 2 }}
-              onMouseDown={() => {
-                console.log("Add new")
-              }}>
+              onMouseDown={handlePopup.bind(null, "add")}>
               <Typography variant="c1">Add Project</Typography>
             </button>
           </Paper>

@@ -776,10 +776,12 @@ const Calender = (props) => {
         resourceLength={schedulerData?.resources?.length}
         isEdit={false}
         departmentsList={departments}
+        clients={clients}
       />
     )
   }
   const handlePopUp = (key) => {
+    console.log("Fired")
     switch (key) {
       case "cal":
         setPopupChild("calenderFeed")
@@ -795,6 +797,10 @@ const Calender = (props) => {
         return
       case "arc":
         setPopupChild("archiveResource")
+        setOpenPopup(true)
+        return
+      case "add":
+        setPopupChild("projectForm")
         setOpenPopup(true)
         return
     }

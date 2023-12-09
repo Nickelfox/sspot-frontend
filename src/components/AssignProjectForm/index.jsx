@@ -7,12 +7,13 @@ import { Formik } from "formik"
 import InputField from "../Input"
 import PrimaryButton from "../PrimaryButton"
 import SecondaryButton from "../SecondaryButton"
-import { FormValidator } from "../../helpers/validations/addResourceValidations"
 import DropDown from "../DropDown"
 import { items } from "helpers/dropDownListing/hoursListing"
 import ErrorText from "components/ErrorText"
 import { Input, DatePicker } from "antd"
 import dayjs from "dayjs"
+import { COMMON_FORMAT_FOR_API } from "helpers/app-dates/dates"
+import { AddProjectValidator } from "helpers/validations/addProjectValidations"
 const { TextArea } = Input
 const inputSyles = {
   multiLine: { width: "100%" },
@@ -22,35 +23,110 @@ const inputSyles = {
   }
 }
 const workDays = [
-  { value: "MON", label: "MON" },
-  { value: "TUE", label: "TUE" },
-  { value: "WED", label: "WED" },
-  { value: "THU", label: "THU" },
-  { value: "FRI", label: "FRI" },
-  { value: "SAT", label: "SAT" },
-  { value: "SUN", label: "SUN" }
+  {
+    value: "#FF7034",
+    label: (
+      <Box display={"flex"} alignItems={"center"} j>
+        <div
+          style={{
+            height: "1.5rem",
+            width: "1.5rem",
+            borderRadius: "0.2rem",
+            backgroundColor: "#FF7034"
+          }}
+        />
+        <Typography paddingLeft={"1rem"} variant="s1">
+          Orange
+        </Typography>
+      </Box>
+    )
+  },
+  {
+    value: "#89def6",
+    label: (
+      <Box display={"flex"} alignItems={"center"}>
+        <div
+          style={{
+            height: "1.5rem",
+            width: "1.5rem",
+            borderRadius: "0.2rem",
+            backgroundColor: "#89def6"
+          }}
+        />
+        <Typography paddingLeft={"1rem"} variant="s1">
+          Aqua
+        </Typography>
+      </Box>
+    )
+  },
+  {
+    value: "#57f287",
+    label: (
+      <Box display={"flex"} alignItems={"center"}>
+        <div
+          style={{
+            height: "1.5rem",
+            width: "1.5rem",
+            borderRadius: "0.2rem",
+            backgroundColor: "#57f287"
+          }}
+        />
+        <Typography paddingLeft={"1rem"} variant="s1">
+          Green
+        </Typography>
+      </Box>
+    )
+  },
+  {
+    value: "#150DF7",
+    label: (
+      <Box display={"flex"} alignItems={"center"}>
+        <div
+          style={{
+            height: "1.5rem",
+            width: "1.5rem",
+            borderRadius: "0.2rem",
+            backgroundColor: "#150DF7"
+          }}
+        />
+        <Typography paddingLeft={"1rem"} variant="s1">
+          Blue
+        </Typography>
+      </Box>
+    )
+  },
+  {
+    value: "#46166b",
+    label: (
+      <Box display={"flex"} alignItems={"center"}>
+        <div
+          style={{
+            height: "1.5rem",
+            width: "1.5rem",
+            borderRadius: "0.2rem",
+            backgroundColor: "#46166b"
+          }}
+        />
+        <Typography paddingLeft={"1rem"} variant="s1">
+          Purple
+        </Typography>
+      </Box>
+    )
+  }
 ]
 const AddProjectForm = (props) => {
-  const { handleClose, addResorceInScheduler, resourceLength, departmentsList } = props
+  const { handleClose, addResorceInScheduler, resourceLength, clients } = props
   //   const { initialValues } = useResourceController(props)
   const styles = useStyles()
   const theme = useTheme()
   const isTablet = useMediaQuery(theme.breakpoints.down("sm"))
   const isNotLaptop = useMediaQuery(theme.breakpoints.down("md"))
   const isMobile = useMediaQuery(theme.breakpoints.down("xs"))
-  const [date, setDate] = useState(null)
+  const [date, setDate] = useState(dayjs(new Date()).format(COMMON_FORMAT_FOR_API))
 
   const createResource = (values) => {
-    const requiredObject = {
-      name: `${values?.firstName} ${values?.lastName}`,
-      id: resourceLength + 1,
-      rrule: `FREQ=WEEKLY;DTSTART=20171219T013000Z;BYDAY=${values?.workDays.toString()}`, //this is going to be used for availability
-      groupOnly: false,
-      // parentId: resourceLength + 1,
-      workDays: values?.workDays,
-      department: values?.departments
-    }
-    addResorceInScheduler(requiredObject)
+    console.log(values)
+    // addResorceInScheduler(requiredObject)
   }
   const getStylesforSelector = (workDays, value, index) => {
     if (value === "SA" || value === "SU") {
@@ -73,8 +149,8 @@ const AddProjectForm = (props) => {
     <Box sx={styles.formDisplay}>
       <Formik
         validateOnMount
-        initialValues={FormValidator.initialValues}
-        validationSchema={FormValidator.validationSchema}
+        initialValues={AddProjectValidator.initialValues}
+        validationSchema={AddProjectValidator.validationSchema}
         onSubmit={createResource}>
         {({
           isValid,
@@ -91,7 +167,7 @@ const AddProjectForm = (props) => {
               padding: "0.2rem",
               maxWidth: maxWidth
             }}>
-            <Grid container justifyContent="center" paddingBottom={"2rem"}>
+            <Grid container paddingBottom={1} justifyContent="center">
               <Grid item xs={12} height={"fit-content"}>
                 <Box sx={{ maxHeight: "fit-content" }}>
                   <InputField
@@ -114,8 +190,9 @@ const AddProjectForm = (props) => {
                     }
                   />
                 </Box>
-              </Grid>
-              {/* <Grid item xs={12} className="flex items-center justify-around"> */}
+              </Grid>{" "}
+            </Grid>
+            <Grid container>
               <Grid item xs={3} className="flex items-center">
                 <Typography className="text-slate-500 text-xl" variant="p3">
                   Client
@@ -127,7 +204,7 @@ const AddProjectForm = (props) => {
                   value={values?.clients}
                   name={"client"}
                   label="client"
-                  items={[]}
+                  items={clients}
                   style={{ width: "100%" }}
                   fullWidth
                   handleChange={(e) => {
@@ -136,6 +213,8 @@ const AddProjectForm = (props) => {
                 />
               </Grid>
               {/* </Grid> */}
+            </Grid>
+            <Grid container paddingBottom={1}>
               <Grid item xs={3} className="flex items-center">
                 <Typography className="text-slate-500 text-xl" variant="p3">
                   Project Code
@@ -159,51 +238,55 @@ const AddProjectForm = (props) => {
                   helperText={touched.code && errors.code && <ErrorText text={errors.code} />}
                 />
               </Grid>
-
+            </Grid>
+            <Grid container paddingBottom={1}>
               <Grid item xs={3} className="flex items-center">
                 <Typography className="pr-2 text-slate-500 text-xl" variant="p3">
                   Color Label
                 </Typography>
               </Grid>
-              <Grid item xs={9} className="flex items-center" m={0}>
-                <Box>
-                  {" "}
-                  <DropDown
-                    value={values?.color}
-                    name={"color"}
-                    label="color"
-                    items={items}
-                    handleChange={(e) => {
-                      setFieldValue(`color`, e.target?.value)
-                    }}
-                  />
-                </Box>
+              <Grid item xs={9} m={0} height={"fit-content"}>
+                <DropDown
+                  handleSize
+                  value={values?.color}
+                  name={"color"}
+                  label="color"
+                  items={workDays}
+                  style={{ width: "100%" }}
+                  fullWidth
+                  handleChange={(e) => {
+                    setFieldValue(`color`, e.target?.value)
+                  }}
+                />
               </Grid>
-              {touched.Color && errors.Color && "Kindly Select Weekly Availability"}
             </Grid>
-            <Grid item xs={3}>
-              Start Date
-            </Grid>
-            <Grid item xs={4} display={"flex"}>
-              <DatePicker
-                format={"YYYY-MM-DD"}
-                size="small"
-                value={dayjs(date, "YYYY-MM-DD")}
-                name="startDate"
-                allowClear={false}
-                style={{
-                  cursor: "pointer",
-                  fontSize: "1.7rem",
-                  ...inputSyles?.border
-                }}
-                onChange={(e) => {
-                  const formattedDate = dayjs(e).format("YYYY-MM-DD")
-                  setFieldValue(`startDate`, formattedDate)
-                  setDate(formattedDate)
-                }}
-                className="h-14 w-full"
-                popupStyle={{ zIndex: 9999 }}
-              />{" "}
+            <Grid container>
+              <Grid item xs={3} alignItems={"center"} display={"flex"}>
+                <Typography className="pr-2 text-slate-500 text-xl" variant="p3">
+                  Start Date
+                </Typography>{" "}
+              </Grid>
+              <Grid item xs={9} display={"flex"}>
+                <DatePicker
+                  format={"YYYY-MM-DD"}
+                  size="small"
+                  value={dayjs(date, "YYYY-MM-DD")}
+                  name="startDate"
+                  allowClear={false}
+                  style={{
+                    cursor: "pointer",
+                    fontSize: "1.7rem",
+                    ...inputSyles?.border
+                  }}
+                  onChange={(e) => {
+                    const formattedDate = dayjs(e).format("YYYY-MM-DD")
+                    setFieldValue(`startDate`, formattedDate)
+                    setDate(formattedDate)
+                  }}
+                  className="h-14 w-full"
+                  popupStyle={{ zIndex: 9999 }}
+                />{" "}
+              </Grid>
             </Grid>
             <Grid container>
               <Grid item xs={3} alignItems={"center"} display={"flex"}>
@@ -229,33 +312,33 @@ const AddProjectForm = (props) => {
                   helperText={touched.tags && errors.tags && <ErrorText text={errors.tags} />}
                 />
               </Grid>
-              <Grid container alignItems={"center"} paddingBottom={"2rem"}>
-                <Grid item xs={3}>
-                  <Typography variant="c1" color="#929292">
-                    Notes
-                  </Typography>
-                </Grid>
-                <Grid item xs={9}>
-                  <TextArea
-                    name="notes"
-                    rows="3"
-                    placeholder="Additional Notes or Custom Link"
-                    style={{ ...inputSyles?.multiLine, ...inputSyles?.border }}
-                    value={values?.notes}
-                    onChange={handleChange}
-                  />
-                </Grid>
+            </Grid>
+            <Grid container paddingBottom={1} alignItems={"center"}>
+              <Grid item xs={3}>
+                <Typography variant="c1" color="#929292">
+                  Notes
+                </Typography>
+              </Grid>
+              <Grid item xs={9}>
+                <TextArea
+                  name="notes"
+                  rows="3"
+                  placeholder="Additional Notes or Custom Link"
+                  style={{ ...inputSyles?.multiLine, ...inputSyles?.border }}
+                  value={values?.notes}
+                  onChange={handleChange}
+                />
               </Grid>
             </Grid>
-            <Grid container paddingBottom={3}></Grid>
             <Grid container>
               <Grid item xs={6} className="flex items-end">
                 <div>
                   <PrimaryButton
                     height={"3rem"}
                     onClick={handleSubmit}
-                    style={{ marginRight: "2rem" }}>
-                    Save Person
+                    style={{ marginRight: "2rem" }}
+                    width={"12rem"}>
+                    Create Project
                   </PrimaryButton>
                 </div>
                 <div>

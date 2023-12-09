@@ -1,7 +1,7 @@
 import dayjs from "dayjs"
 import * as Yup from "yup"
 // import { checkTest } from "./dealerDetailForm"
-export const FormValidator = {
+export const AddProjectValidator = {
   initialValues: {
     projectName: "",
     client: "",
