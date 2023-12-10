@@ -125,7 +125,6 @@ const AddProjectForm = (props) => {
   const [date, setDate] = useState(dayjs(new Date()).format(COMMON_FORMAT_FOR_API))
 
   const createResource = (values) => {
-    console.log(values)
     const requiredObject = {
       project_name: values?.projectName,
       project_code: values?.code,

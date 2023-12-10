@@ -7,6 +7,5 @@ export const convertEventsToMap = (eventsArray) => {
       eventsMap.set(event.resourceId, [event])
     }
   })
-  console.log(eventsMap, "Map")
   return eventsMap
 }

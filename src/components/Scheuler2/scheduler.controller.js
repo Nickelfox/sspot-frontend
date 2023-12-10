@@ -119,6 +119,7 @@ export const useSchedulerController = () => {
     } else {
       requiredArray = []
     }
+    /*eslint-disable-next-line no-console*/
     console.log(requiredArray, "TEAM_MEMBERS")
   }
   return {

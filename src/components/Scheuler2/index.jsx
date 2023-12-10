@@ -359,7 +359,6 @@ const Calender = (props) => {
 
   const newEvent = (schedulerData, slotId, slotName, start, end, item) => {
     handlePopUpClose()
-    console.log(resoureMap, item, "ITEM<RESOURCE")
     const requiredDataObject = {}
 
     const childObject = resoureMap.get(slotId)
@@ -369,7 +368,6 @@ const Calender = (props) => {
     const newChildObject = childObjectArray[0]
     if (slotName) {
       const requiredObject = resoureMap.get(item?.parentId)
-      console.log(childObject, "ITEM<PARENT")
       requiredDataObject.parent = requiredObject[0]
       requiredDataObject.child = newChildObject
       const el = (sel, par) => (par || document).querySelector(sel)
@@ -407,7 +405,6 @@ const Calender = (props) => {
       }
       setSelectedObject(requiredObject)
     } else {
-      // console.log(childObject,"inesle")
       setSelectedObject(childObject)
       const el = (sel, par) => (par || document).querySelector(sel)
       const elArea = el("#area")
@@ -457,9 +454,17 @@ const Calender = (props) => {
     //   alert("Event in progress");
     // }
   }
-  const deleteScheduleEvent = async (id) => {
+  const deleteScheduleEvent = async (id, event) => {
+    const openArrays = getOpenArrays(schedulerData)
     const params = [`${id}/`]
-    await deleteEvent(params)
+    const response = await deleteEvent(params)
+    if (response?.success) {
+      handlePopUpClose()
+      schedulerData?.removeEvent(event)
+    }
+    openArrays.forEach((arrayItem) => {
+      toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
+    })
   }
   const postEvent = async (apiData) => {
     const newApiData = {
@@ -701,13 +706,17 @@ const Calender = (props) => {
     setPopUpStyles(null)
   }
   const addResorceInScheduler = (values) => {
-    const startDate = new Date()
-    const convertedStartDate = new dayjs(startDate).format("YYYY-MM-DD hh:mm:ss")
-    const endDate = new dayjs().day(7).endOf("day").format("YYYY-MM-DD hh:mm:ss")
+    const resourcesArray = schedulerData?.resources
+    const requiredArray = [...resourcesArray, values]
+    setResourceMap(convertArrayToMap(requiredArray))
+    // const startDate = new Date()
+    // const convertedStartDate = new dayjs(startDate).format("YYYY-MM-DD hh:mm:ss")
+    // const endDate = new dayjs().day(7).endOf("day").format("YYYY-MM-DD hh:mm:ss")
     schedulerData.addResource(values)
-    // triggerRerender(rerender + 1)
     handlePopUpClose()
-    newEventfromResource(schedulerData, values?.id, convertedStartDate, endDate)
+    // getRenderSd(schedulerData)
+    triggerRerender(rerender + 1)
+    // newEventfromResource(schedulerData, values?.id, convertedStartDate, endDate)
   }
   const getRenderSd = (schedulerData, newProject) => {
     /**@MehranSiddiqui
@@ -735,6 +744,24 @@ const Calender = (props) => {
   }
   const allocateProject = async (body) => {
     const responseData = await assignProject(body)
+    if (responseData?.success) {
+      const filteredProject = projects?.filter((item) => item?.id === responseData?.data?.project)
+      const parentObject = resoureMap.get(body?.member)
+      const data = responseData?.data
+      const requiredObject = {
+        projectId: data?.id,
+        name: filteredProject[0]?.label,
+        workDays: parentObject[0]?.workDays,
+        hoursAssigned: JSON.parse(parentObject[0]?.weeklyAvailability),
+        expanded: false,
+        id: data?.project,
+        parentId: data?.member,
+        email: parentObject[0]?.email,
+        department: parentObject[0]?.department,
+        color: filteredProject[0]?.color_code
+      }
+      addResorceInScheduler(requiredObject)
+    }
   }
   const popUpChildren = {
     addEvent: (
@@ -830,7 +857,7 @@ const Calender = (props) => {
   return (
     <div
       style={{
-        maxHeight: "100vh",
+        // maxHeight: "100vh",
         maxWidth: "100vw",
         overflowX: "hidden",
         overflowY: "auto",

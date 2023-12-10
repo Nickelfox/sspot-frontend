@@ -138,7 +138,6 @@ const dummyData = [
 export const getDataArray = (array, projects) => {
   let requiredUserInfo = []
   array.forEach((data) => {
-    console.log(data, "here is data")
     const requiredObject = {
       id: data.id,
       name: data?.user?.full_name,
@@ -158,7 +157,6 @@ export const getDataArray = (array, projects) => {
 }
 //add Data here
 const getProjectsArray = (projectArray, data) => {
-  console.log(data)
   const requiredProjectArray = projectArray.map((project) => {
     return {
       projectId: project.id,

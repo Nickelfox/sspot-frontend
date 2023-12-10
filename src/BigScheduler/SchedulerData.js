@@ -122,7 +122,8 @@ export default class SchedulerData {
         workDays: resource.workDays,
         editPopup: false,
         email: resource?.email,
-        department: resource?.department
+        department: resource?.department,
+        color: resource?.color
       }
     })
     let requiredArray = [...existedValues, resource]
@@ -870,7 +871,8 @@ export default class SchedulerData {
         availability: slot?.weeklyAvailability,
         department: slot?.department,
         color: slot?.color ?? null,
-        assignedProjects: slot?.assignedProjects
+        assignedProjects: slot?.assignedProjects,
+        ...slot
       }
 
       let id = slot.id
@@ -928,7 +930,6 @@ export default class SchedulerData {
         slotStack.push(currentNode.children[i])
       }
     }
-    console.log(initRenderData, "INITIAL")
     return initRenderData
   }
 

@@ -4,7 +4,6 @@ export function getDatesInRange(startDate, endDate) {
   const date = new Date(startDate)
   const endDat = new Date(endDate)
   const dates = []
-  console.log(date, endDat, "DATESSSS")
   while (date <= endDat) {
     dates.push(dayjs(new Date(date)).format("DD-MM-YYYY"))
     date.setDate(date.getDate() + 1)

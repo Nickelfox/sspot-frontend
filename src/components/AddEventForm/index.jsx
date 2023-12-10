@@ -73,7 +73,7 @@ const AddEvent = (props) => {
   }
   const deleteScheduleEvent = () => {
     const params = eventData?.event?.id
-    deleteEvent(params)
+    deleteEvent(params, eventData?.event)
   }
   const getInitialValues = () => {
     if (isEdit) {

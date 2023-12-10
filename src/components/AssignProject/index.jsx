@@ -82,9 +82,7 @@ const AssignProject = (props) => {
                 <button
                   className="btn"
                   // sx={{ justifyContent: "flex-start", pl: 2 }}
-                  onMouseDown={() => {
-                    console.log("Add new")
-                  }}>
+                  onMouseDown={() => {}}>
                   + Add New
                 </button>
               </Paper>
@@ -114,7 +112,6 @@ const AssignProject = (props) => {
           }}
           onChange={(event, newValue) => {
             // const asigneeCopy = [...assigneeVal]
-            console.log(newValue)
             setAssigneVal(newValue)
           }}
           renderOption={(props, option) => {
