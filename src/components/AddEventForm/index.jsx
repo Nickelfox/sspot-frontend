@@ -88,7 +88,7 @@ const AddEvent = (props) => {
       project_member: eventData?.child?.projectId,
       start_at: dayjs(date).format(COMMON_FORMAT_FOR_API),
       end_at: dayjs(endDate).format(COMMON_FORMAT_FOR_API),
-      assigned_hours: values?.totalHours,
+      assigned_hour: values?.totalHours,
       schedule_type: "WORK",
       notes: values.notes,
       resourceId: eventData?.event?.resourceId,
