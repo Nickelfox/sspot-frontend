@@ -27,101 +27,6 @@ import { Toast } from "helpers/toasts/toastHelper"
 import { eventsOverLap } from "helpers/toasterFunction/toasterFunction"
 import { COMMON_FORMAT_FOR_API, COMMON_FORMAT_FOR_EVENTS } from "helpers/app-dates/dates"
 import { getOpenArrays } from "helpers/dropDownListing/openArrays"
-let resources = [
-  {
-    id: "r2",
-    name: "Staff_Tom",
-    weeklyAvailability: 40,
-    expanded: false,
-    workDays: ["MON", "TUE", "WED", "THU", "FRI"],
-    editPopup: false,
-    projects: [
-      {
-        id: "r1",
-        name: "Staff_Val",
-        parentId: "r2",
-        expanded: false,
-        workDays: ["MON", "TUE", "WED", "THU", "FRI"],
-        hoursAssigned: 4
-      },
-      {
-        id: "r7",
-        name: "Manager_C",
-        expanded: false,
-        workDays: ["MON", "TUE", "WED", "THU", "FRI"],
-        editPopup: false,
-        parentId: "r2",
-        hoursAssigned: 6
-      }
-    ]
-  },
-  {
-    id: "r4",
-    name: "Manager_B",
-    weeklyAvailability: 40,
-    expanded: false,
-    workDays: [],
-    editPopup: false
-  },
-
-  {
-    id: "r8",
-    name: "Manager_D",
-    weeklyAvailability: 40,
-    expanded: false,
-    workDays: [],
-    editPopup: false,
-    projectsAssigned: []
-  },
-  {
-    id: "r9",
-    name: "Manager_D",
-    weeklyAvailability: 40,
-    expanded: false,
-    workDays: [],
-    editPopup: false,
-    projectsAssigned: []
-  }
-]
-let events = [
-  {
-    id: 1,
-    start: "2023-11-24 09:30:00",
-    end: "2023-12-15 23:30:00",
-    resourceId: "ec4dd3b4-a9b6-4a28-824b-f3b73a9e4c46",
-    title: "A1",
-    bgColor: "#488FAB",
-    type: "parent"
-  },
-  {
-    id: 3,
-    start: "2023-11-24 12:30:00",
-    end: "2023-11-29 23:30:00",
-    resourceId: "r7",
-    title: "Fixed",
-    movable: true,
-    bgColor: "#d7d5a2"
-  },
-  {
-    id: 4,
-    start: "2023-11-24 14:30:00",
-    end: "2023-11-24 23:30:00",
-    resourceId: "r4",
-    title: "Try",
-    startResizable: true,
-    bgColor: "#9C48AB",
-    rrule: "FREQ=WEEKLY;DTSTART=20171219T013000Z;BYDAY=TU,TH" //this is going to be used for availability
-  },
-  {
-    id: 5,
-    start: "2023-11-24 00:00:00",
-    end: "2023-11-30 23:59:00",
-    resourceId: "r2",
-    title: "R2",
-    // rrule: "FREQ=WEEKLY;DTSTART=20171219T013000Z;BYDAY=TU,FR", //this is going to be used for availability
-    bgColor: "#DCC36B"
-  }
-]
 const parentViewArray = [
   { name: "Projects", value: 0 },
   { name: "Team", value: 1 }
@@ -184,9 +89,7 @@ const Calender = (props) => {
   useEffect(() => {
     triggerRerender(render + 1)
   }, [triger])
-  useEffect(() => {
-    setEventsMap(convertEventsToMap(events))
-  }, [])
+  useEffect(() => {}, [])
   // useEffect(() => {
   //   ;(openPopUp || isAddeventPopover) && handlePopUpClose()
   // }, [])
@@ -351,7 +254,10 @@ const Calender = (props) => {
       sd.setResources(requiredArray)
       setResourceMap(convertArrayToMap(requiredArray))
     }
-    sd.setEvents(teamSchedules)
+    if (teamSchedules?.length > 0) {
+      setEventsMap(convertEventsToMap(teamSchedules))
+      sd.setEvents(teamSchedules)
+    }
     setSchedulerData(sd)
   }
 
@@ -379,7 +285,7 @@ const Calender = (props) => {
   }
   const onViewChange = (schedulerData, view) => {
     schedulerData.setViewType(view.viewType, view.showAgenda, view.isEventPerspective)
-    schedulerData.setEvents(events)
+    schedulerData.setEvents(teamSchedules)
     triggerRerender(rerender + 1)
   }
   const onParentViewChange = () => {
@@ -416,7 +322,7 @@ const Calender = (props) => {
     const date = new Date()
     getRenderSd(schedulerData)
     schedulerData.setDate(date)
-    schedulerData.setEvents(events)
+    schedulerData.setEvents(teamSchedules)
     triggerRerender(rerender + 1)
   }
 
@@ -778,7 +684,7 @@ const Calender = (props) => {
     addEvent: (
       <AddEvent
         handleClose={handlePopUpClose}
-        resources={resources}
+        resources={teamMembers}
         resourceData={selectedObject}
         eventData={resourceEvent}
         createNewEvent={createNewEvent}
