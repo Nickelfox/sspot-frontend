@@ -138,6 +138,7 @@ const dummyData = [
 export const getDataArray = (array, projects) => {
   let requiredUserInfo = []
   array.forEach((data) => {
+    console.log(data, "here is data")
     const requiredObject = {
       id: data.id,
       name: data?.user?.full_name,
@@ -147,7 +148,7 @@ export const getDataArray = (array, projects) => {
       email: data?.user?.email,
       editPopup: false,
       expanded: false,
-      projects: getProjectsArray(data?.project_member, data, projects),
+      projects: getProjectsArray(data?.project_member, data),
       department: data?.department?.name,
       assignedProjects: getAssignedProjects(data?.project_member, projects)
     }
@@ -157,12 +158,13 @@ export const getDataArray = (array, projects) => {
 }
 //add Data here
 const getProjectsArray = (projectArray, data) => {
+  console.log(data)
   const requiredProjectArray = projectArray.map((project) => {
     return {
       projectId: project.id,
       id: project?.project?.id,
       name: project?.project?.project_name,
-      hoursAssigned: 4,
+      hoursAssigned: `${JSON.parse(data?.capacity)}`,
       workDays: data?.work_days,
       // workDays: ["MON", "TUE", "THU", "FRI"],
       expanded: false,

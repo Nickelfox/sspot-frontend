@@ -53,6 +53,13 @@ export const useSchedulerModel = () => {
     Loader.hide()
     return dataReturner(response)
   }
+  const assignProject = async (body) => {
+    Loader.show()
+    const instance = NetworkManager(API.SCHEDULER.ASSIGN_PROJECT)
+    const response = await instance.request(body)
+    Loader.hide()
+    return { data: dataReturner(response), success: response?.success }
+  }
   return {
     fetchDepartments,
     fetchTeamMembers,
@@ -60,6 +67,7 @@ export const useSchedulerModel = () => {
     updateSchedule,
     fetchProjects,
     fetchClients,
-    createProject
+    createProject,
+    assignProject
   }
 }

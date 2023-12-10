@@ -1,4 +1,4 @@
-import * as React from "react"
+import React from "react"
 import TextField from "@mui/material/TextField"
 import Autocomplete from "@mui/material/Autocomplete"
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown"
@@ -22,8 +22,17 @@ export const NewIcon = (props) => {
   )
 }
 const CustomAutoComplete = (props) => {
-  const { options = [], handlePopup = () => {} } = props
-  // popupIcon={<YourCustomIcon />}
+  const { options = [], handlePopup = () => {}, memberId = "", assignProject } = props
+  // const [projects, setProjects] = useState(options)
+  const handleChange = (newValue) => {
+    // const filterProjects = projects.filter((item) => item?.value !== newValue)
+    // setProjects(filterProjects)
+    const payLoad = {
+      project: newValue,
+      member: memberId
+    }
+    assignProject(payLoad)
+  }
   return (
     <Autocomplete
       id="combo-box-demo"
@@ -50,16 +59,22 @@ const CustomAutoComplete = (props) => {
         )
       }}
       noOptionsText={options?.length === 0 ? null : "No Match Found"}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          sx={{
-            "& legend": { display: "none" },
-            "& fieldset": { top: 0 },
-            padding: 0
-          }}
-        />
-      )}
+      renderInput={(params) => {
+        console.log(params, "PARAMETERS")
+        return (
+          <TextField
+            {...params}
+            sx={{
+              "& legend": { display: "none" },
+              "& fieldset": { top: 0 },
+              padding: 0
+            }}
+          />
+        )
+      }}
+      onChange={(event, newValue) => {
+        handleChange(newValue?.id)
+      }}
     />
   )
 }

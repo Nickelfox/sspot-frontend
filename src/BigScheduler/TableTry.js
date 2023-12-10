@@ -51,7 +51,8 @@ const TableTry = (props) => {
     openEditItemPopUp,
     closePopup,
     handlePopUp,
-    fetchProjects
+    fetchProjects,
+    assignProject
   } = props
   //eslint-disable-next-line no-unused-vars
   const { renderData, cellUnit, config, headers } = schedulerData
@@ -464,7 +465,12 @@ const TableTry = (props) => {
                     // setFieldValue(`weeklyAvailability`, e.target?.value)
                   }}
                 /> */}
-                <CustomAutoComplete options={project} handlePopup={handlePopUp} />
+                <CustomAutoComplete
+                  options={project}
+                  handlePopup={handlePopUp}
+                  assignProject={assignProject}
+                  memberId={item?.slotId}
+                />
                 {/* <CustomAutoComplete options={[]} /> */}
                 {/* <input type="text" list="cars" className="projectselctor" placeholder="Projects" />
                 <datalist id="cars" style={{ listStyleType: "solid" }}>
