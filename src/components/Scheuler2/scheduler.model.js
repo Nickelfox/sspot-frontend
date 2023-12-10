@@ -31,12 +31,20 @@ export const useSchedulerModel = () => {
     Loader.hide()
     return dataReturner(response)
   }
+
   const fetchProjects = async () => {
     Loader.show()
     const instance = NetworkManager(API.SCHEDULER.PROJECTS_LIST)
     const response = await instance.request()
     Loader.hide()
     return dataReturner(response)
+  }
+  const createProject = async (body) => {
+    Loader.show()
+    const instance = NetworkManager(API.SCHEDULER.PROJECTS_CREATE)
+    const response = await instance.request(body)
+    Loader.hide()
+    return { data: dataReturner(response), success: response?.success }
   }
   const fetchClients = async () => {
     Loader.show()
@@ -51,6 +59,7 @@ export const useSchedulerModel = () => {
     fetchSchedules,
     updateSchedule,
     fetchProjects,
-    fetchClients
+    fetchClients,
+    createProject
   }
 }

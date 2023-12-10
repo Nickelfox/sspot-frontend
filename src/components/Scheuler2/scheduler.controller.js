@@ -72,6 +72,10 @@ export const useSchedulerController = () => {
     }
     setProjects(requiredArray)
   }
+  const createProject = async (body) => {
+    const responseData = await model.createProject(body)
+    return responseData
+  }
   const fetchClients = async () => {
     const responseData = await model.fetchClients()
     let requiredArray
@@ -99,6 +103,7 @@ export const useSchedulerController = () => {
     fetchProjects,
     projects,
     fetchClients,
-    clients
+    clients,
+    createProject
   }
 }

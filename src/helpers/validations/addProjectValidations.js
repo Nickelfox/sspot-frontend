@@ -6,7 +6,7 @@ export const AddProjectValidator = {
     projectName: "",
     client: "",
     code: "",
-    color: "",
+    color: "#FF7034",
     startDate: dayjs(new Date()),
     notes: ""
   },

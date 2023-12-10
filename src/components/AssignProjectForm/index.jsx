@@ -115,7 +115,7 @@ const workDays = [
   }
 ]
 const AddProjectForm = (props) => {
-  const { handleClose, addResorceInScheduler, resourceLength, clients } = props
+  const { handleClose, addResorceInScheduler, resourceLength, clients, createNewProject } = props
   //   const { initialValues } = useResourceController(props)
   const styles = useStyles()
   const theme = useTheme()
@@ -126,6 +126,17 @@ const AddProjectForm = (props) => {
 
   const createResource = (values) => {
     console.log(values)
+    const requiredObject = {
+      project_name: values?.projectName,
+      project_code: values?.code,
+      color_code: values?.color,
+      client: values?.client,
+      start_date: dayjs(date).format(COMMON_FORMAT_FOR_API),
+      end_date: "2023-12-31",
+      project_type: "FIXED",
+      notes: values?.notes
+    }
+    createNewProject(requiredObject)
     // addResorceInScheduler(requiredObject)
   }
   const getStylesforSelector = (workDays, value, index) => {

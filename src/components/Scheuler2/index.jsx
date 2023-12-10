@@ -13,7 +13,7 @@ import PrimaryButton from "components/PrimaryButton"
 import AddEvent from "components/AddEventForm"
 import { convertArrayToMap } from "helpers/conversionFunctions/resourceMap"
 import { convertEventsToMap } from "helpers/conversionFunctions/eventsMap"
-import { getDataArray } from "helpers/conversionFunctions/conversion"
+import { getDataArray, getProjects } from "helpers/conversionFunctions/conversion"
 import { Popover } from "antd"
 import AssignProject from "components/AssignProject"
 import CalendarFeed from "components/CalendarFeedForm"
@@ -158,7 +158,8 @@ const Calender = (props) => {
     fetchProjects,
     projects,
     fetchClients,
-    clients
+    clients,
+    createProject
   } = useSchedulerController()
   useEffect(() => {
     getSchedulerData()
@@ -642,6 +643,19 @@ const Calender = (props) => {
       })
     }
   }
+  const createNewProject = async (body) => {
+    const response = await createProject(body)
+    if (response?.success) {
+      handlePopUpClose()
+      fetchProjects()
+      const reqObj = {
+        label: response?.data?.project_name,
+        value: response?.data?.id,
+        ...response?.data
+      }
+      getRenderSd(schedulerData, reqObj)
+    }
+  }
   const moveEvent = async (schedulerData, event, slotId, slotName, start, end) => {
     const openArrays = getOpenArrays(schedulerData)
     const resourceChildMapObject = resoureMap.get(event?.resourceParentID)
@@ -710,13 +724,14 @@ const Calender = (props) => {
     handlePopUpClose()
     newEventfromResource(schedulerData, values?.id, convertedStartDate, endDate)
   }
-  const getRenderSd = (schedulerData) => {
+  const getRenderSd = (schedulerData, newProject) => {
     /**@MehranSiddiqui
      * @function
      * This Function is responsible for not rerendering scheduler Data and collapsing all Divs
      */
     const { renderData } = schedulerData
     let displayRenderData = renderData.filter((o) => o.render)
+    console.log(displayRenderData, "ITEM IS HERE")
     const replaceArr = displayRenderData.map((i) => {
       return {
         id: i.slotId,
@@ -728,7 +743,8 @@ const Calender = (props) => {
         editPopup: false,
         email: i?.email,
         department: i?.department,
-        color: i?.color
+        color: i?.color,
+        assignedProjects: getProjects(i, newProject)
       }
     })
     schedulerData.setResources(replaceArr)
@@ -777,6 +793,7 @@ const Calender = (props) => {
         isEdit={false}
         departmentsList={departments}
         clients={clients}
+        createNewProject={createNewProject}
       />
     )
   }

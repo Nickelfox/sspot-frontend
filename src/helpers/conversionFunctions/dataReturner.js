@@ -1,5 +1,5 @@
 export const dataReturner = (response) => {
-  if (response?.success && response?.code === 200) {
+  if (response?.success) {
     return response?.data?.data
   } else {
     return []

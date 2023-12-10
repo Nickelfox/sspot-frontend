@@ -136,7 +136,6 @@ const dummyData = [
 ]
 
 export const getDataArray = (array, projects) => {
-  console.log(projects, "PROOOOOO")
   let requiredUserInfo = []
   array.forEach((data) => {
     const requiredObject = {
@@ -195,6 +194,10 @@ const getAssignedProjects = (projectArray, projects) => {
   const projectIdMap = projectArray.map((project) => project?.project?.id)
 
   const requiredArray = projects.filter((project) => !projectIdMap.includes(project?.value))
-  console.log(requiredArray, "ARRRAy")
   return requiredArray
+}
+export const getProjects = (item, newProject) => {
+  return item?.assignedProjects !== undefined && newProject !== undefined
+    ? [...item.assignedProjects, newProject]
+    : item?.assignedProjects
 }
