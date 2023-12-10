@@ -18,6 +18,7 @@ export const getCheckDate = (requiredData, scheduleArray, key) => {
     (item) =>
       item?.id !== requiredData.id && item?.resourceParentID === requiredData?.resourceParentID
   )
+  console.log(filteredRenderData)
   const startDateArray = filteredRenderData.map((item) =>
     dayjs(new Date(item?.start)).format("DD-MM-YYYY")
   )

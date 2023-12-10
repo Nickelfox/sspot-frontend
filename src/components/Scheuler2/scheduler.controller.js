@@ -56,6 +56,11 @@ export const useSchedulerController = () => {
     const responseData = await model.updateSchedule(params, body)
     return responseData
   }
+  const addEvents = async (body) => {
+    const responseData = await model.addNewEvent(body)
+    return responseData
+  }
+
   const fetchProjects = async (params) => {
     const responseData = await model.fetchProjects(params)
     let requiredArray
@@ -80,6 +85,10 @@ export const useSchedulerController = () => {
     const responseData = await model.assignProject(body)
     return responseData
   }
+  const deleteEvent = async (params) => {
+    const responseData = await model.deleteEvent(params)
+    return responseData
+  }
   const fetchClients = async () => {
     const responseData = await model.fetchClients()
     let requiredArray
@@ -96,6 +105,22 @@ export const useSchedulerController = () => {
     }
     setClients(requiredArray)
   }
+  const fetchTeamList = async () => {
+    const responseData = await model.fetchTeamList()
+    let requiredArray
+    if (responseData?.length > 0) {
+      requiredArray = responseData.map((member) => {
+        return {
+          label: member?.user?.full_name,
+          value: member?.id,
+          ...member
+        }
+      })
+    } else {
+      requiredArray = []
+    }
+    console.log(requiredArray, "TEAM_MEMBERS")
+  }
   return {
     fetchDepartments,
     departments,
@@ -109,6 +134,9 @@ export const useSchedulerController = () => {
     fetchClients,
     clients,
     createProject,
-    assignProject
+    assignProject,
+    fetchTeamList,
+    addEvents,
+    deleteEvent
   }
 }

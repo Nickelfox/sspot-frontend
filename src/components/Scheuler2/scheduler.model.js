@@ -53,10 +53,31 @@ export const useSchedulerModel = () => {
     Loader.hide()
     return dataReturner(response)
   }
+  const fetchTeamList = async () => {
+    Loader.show()
+    const instance = NetworkManager(API.SCHEDULER.TEAM_LISTING)
+    const response = await instance.request()
+    Loader.hide()
+    return dataReturner(response)
+  }
+  const addNewEvent = async (body) => {
+    Loader.show()
+    const instance = NetworkManager(API.SCHEDULER.ADD_EVENT)
+    const response = await instance.request(body)
+    Loader.hide()
+    return dataReturner(response)
+  }
   const assignProject = async (body) => {
     Loader.show()
     const instance = NetworkManager(API.SCHEDULER.ASSIGN_PROJECT)
     const response = await instance.request(body)
+    Loader.hide()
+    return { data: dataReturner(response), success: response?.success }
+  }
+  const deleteEvent = async (params) => {
+    Loader.show()
+    const instance = NetworkManager(API.SCHEDULER.SCHEDULE_DELETE)
+    const response = await instance.request({}, params)
     Loader.hide()
     return { data: dataReturner(response), success: response?.success }
   }
@@ -68,6 +89,9 @@ export const useSchedulerModel = () => {
     fetchProjects,
     fetchClients,
     createProject,
-    assignProject
+    assignProject,
+    fetchTeamList,
+    addNewEvent,
+    deleteEvent
   }
 }

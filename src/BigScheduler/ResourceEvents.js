@@ -179,6 +179,7 @@ class ResourceEvents extends Component {
 
     let startTime = headers[leftIndex].time
     let endTime = resourceEvents.headerItems[rightIndex - 1].end
+    console.log(resourceEvents, "RESOURCE")
     if (cellUnit !== CellUnit.Hour)
       endTime = localeDayjs(new Date(resourceEvents.headerItems[rightIndex - 1].start))
         .hour(23)
@@ -241,7 +242,8 @@ class ResourceEvents extends Component {
         console.log("Conflict occurred, set conflictOccurred func in Scheduler to handle it")
       }
     } else {
-      if (newEvent !== undefined) newEvent(schedulerData, slotId, slotName, startTime, endTime)
+      if (newEvent !== undefined)
+        newEvent(schedulerData, slotId, slotName, startTime, endTime, resourceEvents)
     }
   }
 
