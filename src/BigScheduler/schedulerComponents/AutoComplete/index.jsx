@@ -1,8 +1,8 @@
-import React from "react"
+import React, { useState } from "react"
 import TextField from "@mui/material/TextField"
 import Autocomplete from "@mui/material/Autocomplete"
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown"
-import { Paper, Typography } from "@mui/material"
+import { Box, Paper, Typography } from "@mui/material"
 import styles from "./autocomplete.module.scss"
 export const NewIcon = (props) => {
   return (
@@ -24,6 +24,8 @@ export const NewIcon = (props) => {
 const CustomAutoComplete = (props) => {
   const { options = [], handlePopup = () => {}, memberId = "", assignProject } = props
   // const [projects, setProjects] = useState(options)
+  const [value, setValue] = useState("")
+  /*eslint-disable-next-line no-unused-vars*/
   const handleChange = (newValue) => {
     // const filterProjects = projects.filter((item) => item?.value !== newValue)
     // setProjects(filterProjects)
@@ -40,6 +42,7 @@ const CustomAutoComplete = (props) => {
       size="small"
       // sx={{ width: 300 }}
       sx={{ padding: 0 }}
+      value={value}
       popupIcon={
         <div style={{ padding: 0 }}>
           <NewIcon />
@@ -48,19 +51,23 @@ const CustomAutoComplete = (props) => {
       PaperComponent={({ children }) => {
         return (
           <Paper className={styles.matrix_box}>
-            {children}
-            <button
-              className={`${styles?.add_new} btn`}
-              style={{ justifyContent: "center", pl: 2 }}
-              onMouseDown={handlePopup.bind(null, "add")}>
-              <Typography variant="c1">Add Project</Typography>
-            </button>
+            <Typography variant="p3" sx={{ paddingBottom: "1rem" }}>
+              {children}
+            </Typography>
+            <Box paddingTop={"1rem"} width={"100%"}>
+              <button
+                className={`${styles?.add_new} btn`}
+                style={{ justifyContent: "center" }}
+                onMouseDown={handlePopup.bind(null, "add")}>
+                <Typography variant="c1">Add Project</Typography>
+              </button>
+            </Box>{" "}
           </Paper>
         )
       }}
+      clearOnBlur={true}
       noOptionsText={options?.length === 0 ? null : "No Match Found"}
       renderInput={(params) => {
-        console.log(params, "PARAMETERS")
         return (
           <TextField
             {...params}
@@ -74,6 +81,9 @@ const CustomAutoComplete = (props) => {
       }}
       onChange={(event, newValue) => {
         handleChange(newValue?.id)
+        if (event?.type === "click") {
+          setValue("")
+        }
       }}
     />
   )

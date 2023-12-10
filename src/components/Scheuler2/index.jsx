@@ -206,7 +206,9 @@ const Calender = (props) => {
             // fontWeight={600}
             // paddingLeft={"0.1rem"}
           >
-            {event?.title}
+            {resourceObjectForEvent?.parentId
+              ? `${resourceObjectForEvent?.hoursAssigned} h/day`
+              : notANumber}
           </Typography>
         </span>
       </div>
@@ -321,7 +323,10 @@ const Calender = (props) => {
     triggerRerender(rerender + 1)
   }
 
-  const eventClicked = (schedulerData, event) => {}
+  const eventClicked = (schedulerData, event) => {
+    console.log(teamSchedules)
+    console.log(event)
+  }
 
   const toggleExpandFunc = (schedulerData, slotId, value) => {
     schedulerData.toggleExpandStatus(slotId, value)
