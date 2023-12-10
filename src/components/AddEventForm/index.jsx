@@ -39,7 +39,8 @@ const AddEvent = (props) => {
     createNewEvent,
     postEvent,
     isEdit,
-    deleteEvent
+    deleteEvent,
+    patchEvent
   } = props
 
   const [initalValues, setInitalValues] = useState()
@@ -115,7 +116,8 @@ const AddEvent = (props) => {
       resourceId: eventData?.event?.resourceId,
       resourceParentID: eventData?.parent?.id
     }
-    postEvent(apiData)
+    const prams = eventData?.event?.id
+    !isEdit ? postEvent(apiData) : patchEvent(eventData?.event, apiData, prams)
   }
   const getHoursPercent = (values) => {
     return (values / eventData?.child?.hoursAssigned) * 100
@@ -179,7 +181,7 @@ const AddEvent = (props) => {
                 </Typography>
               </Grid>
             </Grid>
-            <Grid container alignItems={"center"} paddingBottom={"2rem"}>
+            {/* <Grid container alignItems={"center"} paddingBottom={"2rem"}>
               <Grid item xs={3}>
                 <Typography variant="c1" color="#929292">
                   Total Hours
@@ -202,7 +204,7 @@ const AddEvent = (props) => {
                   across {dateDiff} day
                 </Typography>
               </Grid>
-            </Grid>
+            </Grid> */}
             <Grid container alignItems={"center"} paddingBottom={"2rem"}>
               <Grid item xs={3}>
                 <Typography variant="c1" color="#929292">
@@ -279,13 +281,13 @@ const AddEvent = (props) => {
               </Grid>
             </Grid>
             <Grid container>
-              <Grid item xs={6} display={"flex"} pr={2}>
+              <Grid item xs={6} display={"flex"} pr={1}>
                 <Box marginRight={"1rem"}>
                   <PrimaryButton
                     height={"3rem"}
                     // onClick={createEvent.bind(null, values)}
                     onClick={handleSubmit}
-                    style={{ marginRight: "2rem", width: "max-content" }}>
+                    style={{ marginRight: "1rem", width: "max-content" }}>
                     Save Assignment
                   </PrimaryButton>
                 </Box>
@@ -295,11 +297,13 @@ const AddEvent = (props) => {
                   </SecondaryButton>
                 </div>
               </Grid>
-              <Grid item xs={6} display={"flex"} justifyContent={"end"} alignItems={"flex-end"}>
-                <DeleteButton height={"3rem"} onClick={deleteScheduleEvent}>
-                  Delete
-                </DeleteButton>
-              </Grid>
+              {isEdit && (
+                <Grid item xs={6} display={"flex"} justifyContent={"end"} alignItems={"flex-end"}>
+                  <DeleteButton height={"3rem"} onClick={deleteScheduleEvent}>
+                    Delete
+                  </DeleteButton>
+                </Grid>
+              )}
             </Grid>
           </form>
         )}

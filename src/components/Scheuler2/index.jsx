@@ -473,7 +473,7 @@ const Calender = (props) => {
     const response = await addEvents(apiData)
     const requiredEventObject = {
       id: response?.id,
-      title: response?.assigned_hour,
+      title: response?.assigned_hours,
       start: dayjs(response?.start_at).startOf("d").format("YYYY-MM-DD HH:MM:ss"),
       end: dayjs(response?.end_at).endOf("d").format("YYYY-MM-DD HH:MM:ss"),
       resourceId: apiData?.resourceId,
@@ -481,6 +481,27 @@ const Calender = (props) => {
       bgColor: getBgColor(apiData?.resourceParentID, apiData?.resourceId)
     }
     createNewEvent(requiredEventObject)
+  }
+  const patchEvent = async (event, apiData, id) => {
+    const openArrays = getOpenArrays(schedulerData)
+    const parameter = [`${id}/`]
+    const response = await updateSchedules(parameter, apiData)
+    if (response?.success) {
+      const requiredEventObject = {
+        title: response?.data?.assigned_hours,
+        start: dayjs(response?.data?.start_at).startOf("d").format(COMMON_FORMAT_FOR_EVENTS),
+        end: dayjs(response?.data?.end_at).endOf("d").format(COMMON_FORMAT_FOR_EVENTS)
+      }
+      schedulerData.updateEventStart(event, requiredEventObject?.start, requiredEventObject?.title)
+      schedulerData.updateEventEnd(event, requiredEventObject?.end, requiredEventObject?.title)
+      setView(view + 1)
+      getRenderSd(schedulerData)
+      setCounter(counter + 1)
+      openArrays.forEach((arrayItem) => {
+        toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
+      })
+      handlePopUpClose()
+    }
   }
   const getBgColor = (id, resourceId) => {
     const responseMap = resoureMap.get(id)
@@ -549,7 +570,7 @@ const Calender = (props) => {
       const parameter = [`${event?.id}/`]
       const returnedData = await updateSchedules(parameter, requiredData)
 
-      const newDataStart = dayjs(returnedData?.start_at).format(COMMON_FORMAT_FOR_EVENTS)
+      const newDataStart = dayjs(returnedData?.data?.start_at).format(COMMON_FORMAT_FOR_EVENTS)
       schedulerData.updateEventStart(event, newDataStart)
       setView(view + 1)
       getRenderSd(schedulerData)
@@ -583,7 +604,7 @@ const Calender = (props) => {
       }
       const parameter = [`${event?.id}/`]
       const returnedData = await updateSchedules(parameter, requiredData)
-      const newDataEnd = dayjs(returnedData?.end_at).format(COMMON_FORMAT_FOR_EVENTS)
+      const newDataEnd = dayjs(returnedData?.data?.end_at).format(COMMON_FORMAT_FOR_EVENTS)
       schedulerData.updateEventEnd(event, newDataEnd)
       getRenderSd(schedulerData)
       setCounter(counter + 1)
@@ -638,9 +659,12 @@ const Calender = (props) => {
         }
         const parameter = [`${event?.id}/`]
         const returnedData = await updateSchedules(parameter, requiredData)
-        const newStart = dayjs(returnedData?.start_at).format(COMMON_FORMAT_FOR_EVENTS)
-        const newEnd = dayjs(returnedData?.end_at).format(COMMON_FORMAT_FOR_EVENTS)
-        schedulerData.moveEvent(event, slotId, slotName, newStart, newEnd)
+        const newStart = dayjs(returnedData?.data?.start_at).format(COMMON_FORMAT_FOR_EVENTS)
+        const newEnd = dayjs(returnedData?.data?.end_at).format(COMMON_FORMAT_FOR_EVENTS)
+        // schedulerData.moveEvent(event, slotId, slotName, newStart, newEnd)
+        schedulerData.updateEventStart(event, newStart)
+        schedulerData.updateEventEnd(event, newEnd)
+
         getRenderSd(schedulerData)
         getEventSd(schedulerData)
         setView(view + 1)
@@ -734,6 +758,7 @@ const Calender = (props) => {
         postEvent={postEvent}
         deleteEvent={deleteScheduleEvent}
         isEdit={true}
+        patchEvent={patchEvent}
       />
     ),
     addResource: (
