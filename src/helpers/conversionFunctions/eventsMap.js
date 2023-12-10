@@ -4,7 +4,7 @@ export const convertEventsToMap = (eventsArray) => {
     if (eventsMap.has(event?.resourceId)) {
       eventsMap.set(event.resourceId, [...eventsMap.get(event?.resourceId), event])
     } else {
-      eventsMap.set(event.resourceId, event)
+      eventsMap.set(event.resourceId, [event])
     }
   })
   return eventsMap

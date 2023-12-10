@@ -27,101 +27,6 @@ import { Toast } from "helpers/toasts/toastHelper"
 import { eventsOverLap } from "helpers/toasterFunction/toasterFunction"
 import { COMMON_FORMAT_FOR_API, COMMON_FORMAT_FOR_EVENTS } from "helpers/app-dates/dates"
 import { getOpenArrays } from "helpers/dropDownListing/openArrays"
-let resources = [
-  {
-    id: "r2",
-    name: "Staff_Tom",
-    weeklyAvailability: 40,
-    expanded: false,
-    workDays: ["MON", "TUE", "WED", "THU", "FRI"],
-    editPopup: false,
-    projects: [
-      {
-        id: "r1",
-        name: "Staff_Val",
-        parentId: "r2",
-        expanded: false,
-        workDays: ["MON", "TUE", "WED", "THU", "FRI"],
-        hoursAssigned: 4
-      },
-      {
-        id: "r7",
-        name: "Manager_C",
-        expanded: false,
-        workDays: ["MON", "TUE", "WED", "THU", "FRI"],
-        editPopup: false,
-        parentId: "r2",
-        hoursAssigned: 6
-      }
-    ]
-  },
-  {
-    id: "r4",
-    name: "Manager_B",
-    weeklyAvailability: 40,
-    expanded: false,
-    workDays: [],
-    editPopup: false
-  },
-
-  {
-    id: "r8",
-    name: "Manager_D",
-    weeklyAvailability: 40,
-    expanded: false,
-    workDays: [],
-    editPopup: false,
-    projectsAssigned: []
-  },
-  {
-    id: "r9",
-    name: "Manager_D",
-    weeklyAvailability: 40,
-    expanded: false,
-    workDays: [],
-    editPopup: false,
-    projectsAssigned: []
-  }
-]
-let events = [
-  {
-    id: 1,
-    start: "2023-11-24 09:30:00",
-    end: "2023-12-15 23:30:00",
-    resourceId: "ec4dd3b4-a9b6-4a28-824b-f3b73a9e4c46",
-    title: "A1",
-    bgColor: "#488FAB",
-    type: "parent"
-  },
-  {
-    id: 3,
-    start: "2023-11-24 12:30:00",
-    end: "2023-11-29 23:30:00",
-    resourceId: "r7",
-    title: "Fixed",
-    movable: true,
-    bgColor: "#d7d5a2"
-  },
-  {
-    id: 4,
-    start: "2023-11-24 14:30:00",
-    end: "2023-11-24 23:30:00",
-    resourceId: "r4",
-    title: "Try",
-    startResizable: true,
-    bgColor: "#9C48AB",
-    rrule: "FREQ=WEEKLY;DTSTART=20171219T013000Z;BYDAY=TU,TH" //this is going to be used for availability
-  },
-  {
-    id: 5,
-    start: "2023-11-24 00:00:00",
-    end: "2023-11-30 23:59:00",
-    resourceId: "r2",
-    title: "R2",
-    // rrule: "FREQ=WEEKLY;DTSTART=20171219T013000Z;BYDAY=TU,FR", //this is going to be used for availability
-    bgColor: "#DCC36B"
-  }
-]
 const parentViewArray = [
   { name: "Projects", value: 0 },
   { name: "Team", value: 1 }
@@ -157,7 +62,9 @@ const Calender = (props) => {
     fetchProjects,
     projects,
     fetchClients,
-    clients
+    clients,
+    fetchTeamList,
+    addEvents
   } = useSchedulerController()
   useEffect(() => {
     getSchedulerData()
@@ -165,6 +72,7 @@ const Calender = (props) => {
   useEffect(() => {
     fetchDepartments()
     fetchClients()
+    fetchTeamList()
     // getTeamMembers()
   }, [])
 
@@ -181,9 +89,7 @@ const Calender = (props) => {
   useEffect(() => {
     triggerRerender(render + 1)
   }, [triger])
-  useEffect(() => {
-    setEventsMap(convertEventsToMap(events))
-  }, [])
+  useEffect(() => {}, [])
   // useEffect(() => {
   //   ;(openPopUp || isAddeventPopover) && handlePopUpClose()
   // }, [])
@@ -210,7 +116,6 @@ const Calender = (props) => {
     }
     fetchSchedules(params)
   }
-  console.log(clients, "HERE ARE CLIENTS")
   const eventItemTemplateResolver = (...props) => {
     const [
       schedulerData,
@@ -223,7 +128,9 @@ const Calender = (props) => {
       agendaMaxEventWidth,
       width
     ] = props
-    const resourceObjectForEvent = resoureMap.get(event?.resourceId)
+    const resources = resoureMap.get(event?.resourceId)
+    const filterItem = resources.filter((resource) => resource.id === event?.resourceId)
+    const resourceObjectForEvent = filterItem[0]
     const resourceChildArray = resources?.map((item) => item?.projects)
     const resourceFlatArray = resourceChildArray.flat()
     const filteredArray = resourceFlatArray.filter((item) => item !== undefined)
@@ -275,8 +182,8 @@ const Calender = (props) => {
       // backgroundColor: event?.bgColor,
       background:
         resourceObjectForEvent?.parentId === undefined ? bColor : resourceObjectForEvent?.color,
-      minHeight: 40,
-      height: 40,
+      minHeight: 36,
+      height: 36,
       borderRadius: 4,
       display: "flex",
       justifyContent: "center",
@@ -347,7 +254,10 @@ const Calender = (props) => {
       sd.setResources(requiredArray)
       setResourceMap(convertArrayToMap(requiredArray))
     }
-    sd.setEvents(teamSchedules)
+    if (teamSchedules?.length > 0) {
+      setEventsMap(convertEventsToMap(teamSchedules))
+      sd.setEvents(teamSchedules)
+    }
     setSchedulerData(sd)
   }
 
@@ -375,7 +285,7 @@ const Calender = (props) => {
   }
   const onViewChange = (schedulerData, view) => {
     schedulerData.setViewType(view.viewType, view.showAgenda, view.isEventPerspective)
-    schedulerData.setEvents(events)
+    schedulerData.setEvents(teamSchedules)
     triggerRerender(rerender + 1)
   }
   const onParentViewChange = () => {
@@ -412,7 +322,7 @@ const Calender = (props) => {
     const date = new Date()
     getRenderSd(schedulerData)
     schedulerData.setDate(date)
-    schedulerData.setEvents(events)
+    schedulerData.setEvents(teamSchedules)
     triggerRerender(rerender + 1)
   }
 
@@ -436,14 +346,21 @@ const Calender = (props) => {
   }
   const newStyles = {}
 
-  const newEvent = (schedulerData, slotId, slotName, start, end, type, item) => {
+  const newEvent = (schedulerData, slotId, slotName, start, end, item) => {
     handlePopUpClose()
+    console.log(resoureMap, item, "ITEM<RESOURCE")
     const requiredDataObject = {}
+
     const childObject = resoureMap.get(slotId)
+    const childObjectArray = childObject?.filter(
+      (childObject) => childObject?.parentId === item?.parentId
+    )
+    const newChildObject = childObjectArray[0]
     if (slotName) {
-      const requiredObject = resoureMap.get(childObject?.parentId)
-      requiredDataObject.parent = requiredObject
-      requiredDataObject.child = childObject
+      const requiredObject = resoureMap.get(item?.parentId)
+      console.log(childObject, "ITEM<PARENT")
+      requiredDataObject.parent = requiredObject[0]
+      requiredDataObject.child = newChildObject
       const el = (sel, par) => (par || document).querySelector(sel)
       const elArea = el("#area")
       let bodyRect = document.body.getBoundingClientRect(),
@@ -528,6 +445,34 @@ const Calender = (props) => {
     // } else {
     //   alert("Event in progress");
     // }
+  }
+  const postEvent = async (apiData) => {
+    const newApiData = {
+      project_member: apiData?.project_member,
+      start_at: dayjs(apiData?.start_at).format(COMMON_FORMAT_FOR_API),
+      end_at: dayjs(apiData?.end_at).format(COMMON_FORMAT_FOR_API),
+      assigned_hour: apiData?.assigned_hours,
+      schedule_type: "WORK",
+      notes: apiData.notes
+    }
+    const response = await addEvents(apiData)
+    const requiredEventObject = {
+      id: response?.id,
+      title: response?.assigned_hour,
+      start: dayjs(response?.start_at).startOf("d").format("YYYY-MM-DD HH:MM:ss"),
+      end: dayjs(response?.end_at).endOf("d").format("YYYY-MM-DD HH:MM:ss"),
+      resourceId: apiData?.resourceId,
+      resourceParentID: apiData?.resourceParentID,
+      bgColor: getBgColor(apiData?.resourceParentID, apiData?.resourceId)
+    }
+    createNewEvent(requiredEventObject)
+  }
+  const getBgColor = (id, resourceId) => {
+    const responseMap = resoureMap.get(id)
+    const projectArray = responseMap.map((item) => item?.projects)
+    const flatArray = projectArray.flat()
+    const filteredArray = flatArray.filter((item) => item?.id === resourceId)
+    return filteredArray[0]?.color
   }
   const createNewEvent = (requiredData) => {
     //TODO: Write a function to get dates from events and check if startand end date exists in it
@@ -644,12 +589,15 @@ const Calender = (props) => {
   const moveEvent = async (schedulerData, event, slotId, slotName, start, end) => {
     const openArrays = getOpenArrays(schedulerData)
     const resourceChildMapObject = resoureMap.get(event?.resourceParentID)
+    const projectArray = resourceChildMapObject.map((item) => item?.projects)
+    const flatArray = projectArray.flat()
+    const filteredArray = flatArray.filter((item) => item?.id === slotId)
     const requiredData = {
       ...event,
       start: start,
       end: end
     }
-    if (slotId === event?.resourceId && resourceChildMapObject?.id === event?.resourceParentID) {
+    if (slotId === event?.resourceId && filteredArray[0]?.parentId === event?.resourceParentID) {
       const checkDates = getCheckDate(requiredData, schedulerData?.events, "move")
       if (checkDates) {
         const requiredData = {
@@ -736,10 +684,11 @@ const Calender = (props) => {
     addEvent: (
       <AddEvent
         handleClose={handlePopUpClose}
-        resources={resources}
+        resources={teamMembers}
         resourceData={selectedObject}
         eventData={resourceEvent}
         createNewEvent={createNewEvent}
+        postEvent={postEvent}
       />
     ),
     addResource: (

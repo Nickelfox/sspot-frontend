@@ -45,12 +45,28 @@ export const useSchedulerModel = () => {
     Loader.hide()
     return dataReturner(response)
   }
+  const fetchTeamList = async () => {
+    Loader.show()
+    const instance = NetworkManager(API.SCHEDULER.TEAM_LISTING)
+    const response = await instance.request()
+    Loader.hide()
+    return dataReturner(response)
+  }
+  const addNewEvent = async (body) => {
+    Loader.show()
+    const instance = NetworkManager(API.SCHEDULER.ADD_EVENT)
+    const response = await instance.request(body)
+    Loader.hide()
+    return dataReturner(response)
+  }
   return {
     fetchDepartments,
     fetchTeamMembers,
     fetchSchedules,
     updateSchedule,
     fetchProjects,
-    fetchClients
+    fetchClients,
+    fetchTeamList,
+    addNewEvent
   }
 }

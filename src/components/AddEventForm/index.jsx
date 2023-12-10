@@ -10,6 +10,7 @@ import SecondaryButton from "../SecondaryButton"
 import { FormValidator } from "../../helpers/validations/addEventValidations"
 import DropDown from "../DropDown"
 import dayjs from "dayjs"
+import { COMMON_FORMAT_FOR_API } from "helpers/app-dates/dates"
 
 const { TextArea } = Input
 const inputSyles = {
@@ -28,8 +29,15 @@ const initValues = {
   workDays: []
 }
 const AddEvent = (props) => {
-  const { handleClose, addResorceInScheduler, resources, resourceData, eventData, createNewEvent } =
-    props
+  const {
+    handleClose,
+    addResorceInScheduler,
+    resources,
+    resourceData,
+    eventData,
+    createNewEvent,
+    postEvent
+  } = props
   const [counter, setCounter] = useState(1)
 
   useEffect(() => {
@@ -76,16 +84,17 @@ const AddEvent = (props) => {
   const checkTablet = isTablet ? "50vw" : checkLaptop
   const maxWidth = isMobile ? "100vw" : checkTablet
   const createEvent = (values) => {
-    const requiredEventObject = {
-      id: eventData?.event?.id,
-      title: "New Event",
-      start: dayjs(date).format("YYYY-MM-DD HH:MM:ss"),
-      end: dayjs(endDate).format("YYYY-MM-DD HH:MM:ss"),
+    const apiData = {
+      project_member: eventData?.child?.projectId,
+      start_at: dayjs(date).format(COMMON_FORMAT_FOR_API),
+      end_at: dayjs(endDate).format(COMMON_FORMAT_FOR_API),
+      assigned_hour: values?.totalHours,
+      schedule_type: "WORK",
+      notes: values.notes,
       resourceId: eventData?.event?.resourceId,
-      resourceParentID: eventData?.parent?.id,
-      bgColor: "#88152b"
+      resourceParentID: eventData?.parent?.id
     }
-    createNewEvent(requiredEventObject)
+    postEvent(apiData)
   }
   const getHoursPercent = (values) => {
     return (values / eventData?.child?.hoursAssigned) * 100
@@ -224,7 +233,7 @@ const AddEvent = (props) => {
                     setFieldValue(`endDate`, formattedDate)
                     setEndDate(formattedDate)
                     setFieldValue("totalHours", values?.hours * dateDiff)
-                    setTimeout(() => setFieldTouched("totalHours", true))
+                    setTimeout(() => setFieldTouched("totalHours", true), 10)
                   }}
                   className="h-14 w-full"
                   popupStyle={{ zIndex: 9999 }}
@@ -248,7 +257,7 @@ const AddEvent = (props) => {
                 />
               </Grid>
             </Grid>
-            <Grid container alignItems={"center"} paddingBottom={"2rem"}>
+            {/* <Grid container alignItems={"center"} paddingBottom={"2rem"}>
               <Grid item xs={3}>
                 <Typography variant="c1" color="#929292">
                   Persons
@@ -268,7 +277,7 @@ const AddEvent = (props) => {
                   }}
                 />
               </Grid>
-            </Grid>
+            </Grid> */}
             <Grid container>
               <Grid item xs={6} className="flex items-end">
                 <Box marginRight={"1rem"}>
