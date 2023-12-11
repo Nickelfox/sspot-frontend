@@ -383,13 +383,13 @@ const Calender = (props) => {
     triggerRerender(rerender + 1)
   }
 
-  const onScrollRight = (schedulerData, schedulerContent, maxScrollLeft) => {
-    schedulerData.next()
-    schedulerData.setEvents(teamSchedules)
-    triggerRerender(rerender + 1)
-    setRetrigger((prev) => !prev)
-    schedulerContent.scrollLeft = maxScrollLeft - 10
-  }
+  // const onScrollRight = (schedulerData, schedulerContent, maxScrollLeft) => {
+  //   schedulerData.next()
+  //   schedulerData.setEvents(teamSchedules)
+  //   triggerRerender(rerender + 1)
+  //   setRetrigger((prev) => !prev)
+  //   schedulerContent.scrollLeft = maxScrollLeft - 10
+  // }
   const onViewChange = (schedulerData, view) => {
     schedulerData.setViewType(view.viewType, view.showAgenda, view.isEventPerspective)
     schedulerData.setEvents(teamSchedules)
