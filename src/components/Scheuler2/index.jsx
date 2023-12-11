@@ -348,13 +348,13 @@ const Calender = (props) => {
       const resourceObject = resourcesArray[0]
       const key = uuid()
       const requiredArrayObject = {
-        id: key,
         start: dayjs(new Date(entry[0])).startOf("w").format("YYYY-MM-DD HH:mm:ss"),
         end: dayjs(new Date(entry[0])).endOf("w").format("YYYY-MM-DD HH:mm:ss"),
         resourceParentID: undefined,
         resourceId: entry[1].resourceParentID,
         title: "4",
-        ...resourceObject
+        ...resourceObject,
+        id: key
       }
       reqs.push(requiredArrayObject)
     })
