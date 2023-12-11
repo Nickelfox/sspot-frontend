@@ -417,7 +417,6 @@ class Scheduler extends Component {
             closePopup={this.closePopup}
             handlePopUp={this.props.handlePopUp}
             projects={this.props.projects}
-            fetchProjects={this.props.fetchProjects}
             assignProject={this.props.assignProject}
           />
         </div>

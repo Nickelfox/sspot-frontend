@@ -238,6 +238,7 @@ export const getUniqueMapFn = (displayRenderData, apiData) => {
       expanded: true
     })
   })
+  console.log(closedArray, openArray, responseMap, "RENRE")
   if (openArray?.length > 0) {
     return [...Array.from(newRequiredMap.values()), ...closedArray]
   } else {

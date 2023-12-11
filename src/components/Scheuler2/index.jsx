@@ -89,16 +89,11 @@ const Calender = (props) => {
   } = useSchedulerController()
   useEffect(() => {
     getSchedulerData()
-  }, [])
-  useEffect(() => {
-    setFetchEvents(false)
-  }, [])
-
-  useEffect(() => {
     fetchDepartments()
     fetchClients()
     fetchTeamList()
-    // getTeamMembers()
+    setFetchEvents(false)
+    fetchProjects()
   }, [])
 
   useEffect(() => {
@@ -786,8 +781,10 @@ const Calender = (props) => {
         }
         const parameter = [`${event?.id}/`]
         const returnedData = await updateSchedules(parameter, requiredData)
-        const newStart = dayjs(returnedData?.data?.start_at).format(COMMON_FORMAT_FOR_EVENTS)
-        const newEnd = dayjs(returnedData?.data?.end_at).format(COMMON_FORMAT_FOR_EVENTS)
+        const newStart = dayjs(returnedData?.data?.start_at)
+          .startOf("d")
+          .format(COMMON_FORMAT_FOR_EVENTS)
+        const newEnd = dayjs(returnedData?.data?.end_at).endOf("d").format(COMMON_FORMAT_FOR_EVENTS)
         // schedulerData.moveEvent(event, slotId, slotName, newStart, newEnd)
         schedulerData.updateEventStart(event, newStart)
         schedulerData.updateEventEnd(event, newEnd)
@@ -1010,7 +1007,6 @@ const Calender = (props) => {
             showResourceEditPopup={showResourceEditPopup}
             closePopUp={closePopUp}
             handlePopUp={handlePopUp}
-            fetchProjects={fetchProjects}
             projects={projects}
             assignProject={allocateProject}
             {...props}

@@ -37,7 +37,7 @@ export const useSchedulerModel = () => {
     const instance = NetworkManager(API.SCHEDULER.PROJECTS_LIST)
     const response = await instance.request()
     Loader.hide()
-    return dataReturner(response)
+    return { data: dataReturner(response), success: response?.success }
   }
   const createProject = async (body) => {
     Loader.show()

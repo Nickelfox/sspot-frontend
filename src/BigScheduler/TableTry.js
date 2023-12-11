@@ -53,15 +53,11 @@ const TableTry = (props) => {
     openEditItemPopUp,
     closePopup,
     handlePopUp,
-    fetchProjects,
     assignProject
   } = props
   //eslint-disable-next-line no-unused-vars
   const { renderData, cellUnit, config, headers } = schedulerData
   const displayRenderData = renderData.filter((o) => o.render)
-  useEffect(() => {
-    fetchProjects()
-  }, [])
 
   const borderBottom = "1px solid #c4c4c4"
   let contentScrollbarHeight = 17,

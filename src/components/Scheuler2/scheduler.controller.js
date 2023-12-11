@@ -62,8 +62,8 @@ export const useSchedulerController = () => {
     Loader.show()
     const responseData = await model.fetchProjects(params)
     let requiredArray
-    if (responseData?.length > 0) {
-      requiredArray = responseData.map((project) => {
+    if (responseData?.success) {
+      requiredArray = responseData?.data.map((project) => {
         return {
           label: project?.project_name,
           value: project.id,
@@ -120,6 +120,9 @@ export const useSchedulerController = () => {
     /*eslint-disable-next-line no-console*/
     console.log(requiredArray, "TEAM_MEMBERS")
   }
+  const reloader = () => {
+    setReload((prev) => prev)
+  }
   return {
     fetchDepartments,
     departments,
@@ -137,6 +140,7 @@ export const useSchedulerController = () => {
     fetchTeamList,
     addEvents,
     deleteEvent,
-    reload
+    reload,
+    reloader
   }
 }
