@@ -136,7 +136,8 @@ class EventItem extends Component {
       clientX = ev.clientX
     }
     const { left, width, leftIndex, rightIndex, schedulerData } = this.props
-    let cellWidth = schedulerData.getContentCellWidth()
+    // let cellWidth = schedulerData.getContentCellWidth()
+    let cellWidth = 50
     let offset = leftIndex > 0 ? 5 : 6
     let minWidth = cellWidth - offset
     let maxWidth = rightIndex * cellWidth - offset
@@ -196,7 +197,8 @@ class EventItem extends Component {
       clientX = ev.clientX
     }
     const { cellUnit, events, config, localeDayjs } = schedulerData
-    let cellWidth = schedulerData.getContentCellWidth()
+    // let cellWidth = schedulerData.getContentCellWidth()
+    let cellWidth = 50
     let offset = leftIndex > 0 ? 5 : 6
     let minWidth = cellWidth - offset
     let maxWidth = rightIndex * cellWidth - offset
@@ -371,7 +373,8 @@ class EventItem extends Component {
     }
     const { width, leftIndex, schedulerData } = this.props
     const { headers } = schedulerData
-    let cellWidth = schedulerData.getContentCellWidth()
+    // let cellWidth = schedulerData.getContentCellWidth()
+    let cellWidth = 50
     let offset = leftIndex > 0 ? 5 : 6
     let minWidth = cellWidth - offset
     let maxWidth = (headers.length - leftIndex) * cellWidth - offset
@@ -427,7 +430,8 @@ class EventItem extends Component {
       clientX = ev.clientX
     }
     const { headers, cellUnit, events, config, localeDayjs } = schedulerData
-    let cellWidth = schedulerData.getContentCellWidth()
+    // let cellWidth = schedulerData.getContentCellWidth()
+    let cellWidth = 50
     let offset = leftIndex > 0 ? 5 : 6
     let minWidth = cellWidth - offset
     let maxWidth = (headers.length - leftIndex) * cellWidth - offset
@@ -595,10 +599,11 @@ class EventItem extends Component {
 
     let start = localeDayjs(new Date(eventItem.start))
     let eventTitle = isInPopover ? `${start.format("HH:mm")} ${titleText}` : titleText
-    let startResizeDiv = <div style={{ borderRight: "2px dotted #fff" }} />
+    let startResizeDiv = <div style={{ borderRight: "2px dotted #fff", paddingLeft: "1rem" }} />
     if (this.startResizable(this.props))
       startResizeDiv = (
         <div
+          style={{ paddingLeft: "1rem" }}
           className="event-resizer event-start-resizer"
           ref={(ref) => (this.startResizer = ref)}></div>
       )
@@ -640,7 +645,7 @@ class EventItem extends Component {
         className="timeline-event"
         ref={this.eventItemRef}
         onMouseMove={isPopoverPlacementMousePosition ? this.handleMouseMove : undefined}
-        style={{ left: left, width: width + 1, right: 0 }}>
+        style={{ left: left, width: width, right: 0 }}>
         <div
           onClick={() => {
             if (eventClick) eventItemClick(schedulerData, eventItem)
@@ -701,7 +706,9 @@ class EventItem extends Component {
     return isDragging ? null : schedulerData._isResizing() ||
       config.eventItemPopoverEnabled == false ||
       eventItem.showPopover == false ? (
-      <div>{connectDragPreview(connectDragSource(a))}</div>
+      <div style={{ paddingLeft: "1rem", paddingRight: "1rem" }}>
+        {connectDragPreview(connectDragSource(a))}
+      </div>
     ) : (
       <Popover
         transitionName={isPopoverPlacementMousePosition ? "" : undefined}

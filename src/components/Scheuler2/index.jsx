@@ -250,7 +250,7 @@ const Calender = (props) => {
       }
     const notANumber = isNaN(sumPercent) ? "0%" : `${sumPercent.toFixed(0)} %`
     return (
-      <div key={event.id} className={mustAddCssClass} style={divStyle}>
+      <div key={event.id} className={`${mustAddCssClass} `} style={divStyle}>
         <span
           style={{
             lineHeight: `${mustBeHeight}px`
