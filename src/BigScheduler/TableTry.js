@@ -19,7 +19,6 @@ import {
 import dayjs from "dayjs"
 import { DATETIME_FORMAT } from "."
 import { Popover } from "antd"
-import DropDown from "components/DropDown"
 import CustomAutoComplete from "./schedulerComponents/AutoComplete"
 import { v4 as uuid } from "uuid"
 
