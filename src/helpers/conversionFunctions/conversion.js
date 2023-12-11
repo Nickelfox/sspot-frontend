@@ -1,5 +1,6 @@
 import dayjs from "dayjs"
 import { months } from "../Months/months"
+import { COMMON_FORMAT_FOR_EVENTS, getNextFriday } from "helpers/app-dates/dates"
 
 export const getRequiredArray = (headers) => {
   const requiredArray = headers.map((item) => {
@@ -200,4 +201,24 @@ export const getProjects = (item, newProject) => {
   return item?.assignedProjects !== undefined && newProject !== undefined
     ? [...item.assignedProjects, newProject]
     : item?.assignedProjects
+}
+
+export const getEventObject = (evt, event) => {
+  let start, end
+  if (event?.start > evt?.start && evt?.end < event?.end) {
+    return evt
+  } else {
+    if (event?.end < evt?.end) {
+      start = evt.start
+      end = getNextFriday(evt?.start)
+      return { end: end, start: start, ...evt }
+    }
+  }
+}
+export const getEndEventObject = (evt) => {
+  let start, end
+  start = dayjs(evt.end).startOf("w").format(COMMON_FORMAT_FOR_EVENTS)
+  end = evt?.end
+  const requiredObject = { end: end, start: start, ...evt }
+  return requiredObject
 }
