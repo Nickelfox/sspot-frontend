@@ -222,3 +222,25 @@ export const getEndEventObject = (evt) => {
   const requiredObject = { end: end, start: start, ...evt }
   return requiredObject
 }
+
+export const getUniqueMapFn = (displayRenderData, apiData) => {
+  const closedArray = displayRenderData.filter((item) => !item?.expanded)
+  const openArray = displayRenderData.filter((item) => item?.expanded)
+  const responseMap = new Map()
+  apiData.forEach((item) => {
+    responseMap?.set(item?.id, item)
+  })
+  const newRequiredMap = new Map()
+  openArray.forEach((data) => {
+    const apiResponseData = responseMap.get(data?.id)
+    newRequiredMap.set(data?.id, {
+      ...apiResponseData,
+      expanded: true
+    })
+  })
+  if (openArray?.length > 0) {
+    return [...Array.from(newRequiredMap.values()), ...closedArray]
+  } else {
+    return apiData
+  }
+}

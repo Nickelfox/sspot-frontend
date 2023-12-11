@@ -17,7 +17,8 @@ import {
   getDataArray,
   getEndEventObject,
   getEventObject,
-  getProjects
+  getProjects,
+  getUniqueMapFn
 } from "helpers/conversionFunctions/conversion"
 import { Popover } from "antd"
 import AssignProject from "components/AssignProject"
@@ -300,10 +301,17 @@ const Calender = (props) => {
     const filteredArray = projectsArray.filter((item) => item !== undefined)
     const newArray = [...dataArray, ...filteredArray]
     const requiredArray = newArray.flat()
-    schedulerData.setResources(requiredArray)
-    getRenderSd(schedulerData)
-    setCounter(counter + 1)
-    triggerRerender(rerender + 1)
+    if (schedulerData) {
+      const { renderData } = schedulerData
+      let displayRenderData = renderData.filter((o) => o.render)
+      const getUniqueMap = getUniqueMapFn(displayRenderData, requiredArray)
+      schedulerData.setResources(getUniqueMap)
+    } else {
+      schedulerData.setResources(requiredArray)
+      getRenderSd(schedulerData)
+      setCounter(counter + 1)
+      triggerRerender(rerender + 1)
+    }
     setResourceMap(convertArrayToMap(requiredArray))
     setFetchEvents(true)
     setRerenderData(true)
@@ -420,12 +428,19 @@ const Calender = (props) => {
     // triggerRerender(rerender + 1)
   }
   const onSelectDate = (schedulerData, date) => {
+    const openArrays = getOpenArrays(schedulerData)
     setStartDate(date)
     getRenderSd(schedulerData)
     schedulerData.setDate(date)
     schedulerData.setEvents(teamSchedules)
-    triggerRerender(rerender + 1)
+    // triggerRerender(rerender + 1)
     setFetchEvents(true)
+    keepDataOpen(openArrays, schedulerData)
+  }
+  const keepDataOpen = (openArrays, sd) => {
+    openArrays.forEach((arrayItem) => {
+      toggleExpandFunc(sd, arrayItem?.slotId, true)
+    })
   }
   const onThisWeekCick = (schedulerData) => {
     const date = new Date()
@@ -779,11 +794,11 @@ const Calender = (props) => {
 
         // getRenderSd(schedulerData)
         // getEventSd(schedulerData)
-        setView(view + 1)
-        setCounter(counter + 1)
-        openArrays.forEach((arrayItem) => {
-          toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
-        })
+        // setView(view + 1)
+        // setCounter(counter + 1)
+        // openArrays.forEach((arrayItem) => {
+        //   toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
+        // })
       } else {
         eventsOverLap()
         // openArrays.forEach((arrayItem) => {
@@ -791,7 +806,7 @@ const Calender = (props) => {
         // })
       }
     }
-    // setView(view + 1)
+    setView(view + 1)
   }
   const handleAddEventPopUp = (key) => {
     setPopupChild(key)

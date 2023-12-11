@@ -72,7 +72,6 @@ export default class SchedulerData {
   }
 
   setResources(resources) {
-    console.log("SET RESOURCE IS FIRED")
     this._validateResource(resources)
     this.resources = Array.from(new Set(resources))
     this._createRenderData()
