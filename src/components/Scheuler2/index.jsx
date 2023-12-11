@@ -446,14 +446,16 @@ const Calender = (props) => {
   }
 
   const eventClicked = (schedulerData, event) => {
-    const requiredDataObject = {}
-    const childObject = resoureMap.get(event?.resourceId)
-    const parentObject = resoureMap.get(event?.resourceParentID)
-    requiredDataObject.parent = parentObject[0]
-    requiredDataObject.child = childObject[0]
-    requiredDataObject.event = event
-    handlePopUp("editEvent")
-    setResourceEvent(requiredDataObject)
+    if (event?.resourceParentID) {
+      const requiredDataObject = {}
+      const childObject = resoureMap.get(event?.resourceId)
+      const parentObject = resoureMap.get(event?.resourceParentID)
+      requiredDataObject.parent = parentObject[0]
+      requiredDataObject.child = childObject[0]
+      requiredDataObject.event = event
+      handlePopUp("editEvent")
+      setResourceEvent(requiredDataObject)
+    }
   }
 
   const toggleExpandFunc = (schedulerData, slotId, value) => {
@@ -674,74 +676,78 @@ const Calender = (props) => {
     schedulerContent.scrollLeft = 10
   }
   const updateEventStart = async (schedulerData, event, newStart) => {
-    const openArrays = getOpenArrays(schedulerData)
-    const requiredData = {
-      start: newStart,
-      end: event?.end
-    }
-    const checkDates = getCheckDate(requiredData, schedulerData?.events, "start")
-    if (checkDates) {
+    if (event?.resourceParentID) {
+      const openArrays = getOpenArrays(schedulerData)
       const requiredData = {
-        project_member: event?.projectMemberID,
-        start_at: dayjs(newStart).format(COMMON_FORMAT_FOR_API),
-        end_at: dayjs(event?.end).format(COMMON_FORMAT_FOR_API),
-        assigned_hour: event?.title,
-        schedule_type: "WORK",
-        notes: ""
+        start: newStart,
+        end: event?.end
       }
-      const parameter = [`${event?.id}/`]
-      const returnedData = await updateSchedules(parameter, requiredData)
+      const checkDates = getCheckDate(requiredData, schedulerData?.events, "start")
+      if (checkDates) {
+        const requiredData = {
+          project_member: event?.projectMemberID,
+          start_at: dayjs(newStart).format(COMMON_FORMAT_FOR_API),
+          end_at: dayjs(event?.end).format(COMMON_FORMAT_FOR_API),
+          assigned_hour: event?.title,
+          schedule_type: "WORK",
+          notes: ""
+        }
+        const parameter = [`${event?.id}/`]
+        const returnedData = await updateSchedules(parameter, requiredData)
 
-      const newDataStart = dayjs(returnedData?.data?.start_at).format(COMMON_FORMAT_FOR_EVENTS)
-      schedulerData.updateEventStart(event, newDataStart)
-      setView(view + 1)
-      getRenderSd(schedulerData)
-      setCounter(counter + 1)
-      openArrays.forEach((arrayItem) => {
-        toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
-      })
-    } else {
-      eventsOverLap()
-      openArrays.forEach((arrayItem) => {
-        toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
-      })
+        const newDataStart = dayjs(returnedData?.data?.start_at).format(COMMON_FORMAT_FOR_EVENTS)
+        schedulerData.updateEventStart(event, newDataStart)
+        setView(view + 1)
+        getRenderSd(schedulerData)
+        setCounter(counter + 1)
+        openArrays.forEach((arrayItem) => {
+          toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
+        })
+      } else {
+        eventsOverLap()
+        openArrays.forEach((arrayItem) => {
+          toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
+        })
+      }
     }
   }
 
   const updateEventEnd = async (schedulerData, event, newEnd) => {
-    const openArrays = getOpenArrays(schedulerData)
-    const dateRequiredData = {
-      ...event,
-      end: newEnd
-    }
-    const checkDates = getCheckDate(dateRequiredData, schedulerData?.events, "end")
-    if (checkDates) {
-      const requiredData = {
-        project_member: event?.projectMemberID,
-        start_at: dayjs(event?.start).format(COMMON_FORMAT_FOR_API),
-        end_at: dayjs(newEnd).format(COMMON_FORMAT_FOR_API),
-        assigned_hour: event?.title,
-        schedule_type: "WORK",
-        notes: ""
+    if (event?.resourceParentID) {
+      const openArrays = getOpenArrays(schedulerData)
+      const dateRequiredData = {
+        ...event,
+        end: newEnd
       }
-      const parameter = [`${event?.id}/`]
-      const returnedData = await updateSchedules(parameter, requiredData)
-      const newDataEnd = dayjs(returnedData?.data?.end_at).format(COMMON_FORMAT_FOR_EVENTS)
-      schedulerData.updateEventEnd(event, newDataEnd)
-      getRenderSd(schedulerData)
-      setCounter(counter + 1)
-      setView(view + 1)
-      openArrays.forEach((arrayItem) => {
-        toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
-      })
-    } else {
-      eventsOverLap()
-      // getRenderSd(schedulerData)
-      // setCounter(counter + 1)
-      // setView(view + 1)
-      openArrays.forEach((arrayItem) => {
-        toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
-      })
+      const checkDates = getCheckDate(dateRequiredData, schedulerData?.events, "end")
+      if (checkDates) {
+        const requiredData = {
+          project_member: event?.projectMemberID,
+          start_at: dayjs(event?.start).format(COMMON_FORMAT_FOR_API),
+          end_at: dayjs(newEnd).format(COMMON_FORMAT_FOR_API),
+          assigned_hour: event?.title,
+          schedule_type: "WORK",
+          notes: ""
+        }
+        const parameter = [`${event?.id}/`]
+        const returnedData = await updateSchedules(parameter, requiredData)
+        const newDataEnd = dayjs(returnedData?.data?.end_at).format(COMMON_FORMAT_FOR_EVENTS)
+        schedulerData.updateEventEnd(event, newDataEnd)
+        getRenderSd(schedulerData)
+        setCounter(counter + 1)
+        setView(view + 1)
+        openArrays.forEach((arrayItem) => {
+          toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
+        })
+      } else {
+        eventsOverLap()
+        // getRenderSd(schedulerData)
+        // setCounter(counter + 1)
+        // setView(view + 1)
+        openArrays.forEach((arrayItem) => {
+          toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
+        })
+      }
     }
   }
   const createNewProject = async (body) => {
@@ -758,52 +764,56 @@ const Calender = (props) => {
     }
   }
   const moveEvent = async (schedulerData, event, slotId, slotName, start, end) => {
-    const openArrays = getOpenArrays(schedulerData)
-    const resourceChildMapObject = resoureMap.get(event?.resourceParentID)
-    const projectArray = resourceChildMapObject.map((item) => item?.projects)
-    const flatArray = projectArray.flat()
-    const filteredArray = flatArray.filter((item) => item?.id === slotId)
-    const requiredData = {
-      ...event,
-      start: start,
-      end: end
-    }
-    if (slotId === event?.resourceId && filteredArray[0]?.parentId === event?.resourceParentID) {
-      const checkDates = getCheckDate(requiredData, schedulerData?.events, "move")
-      if (checkDates) {
-        const requiredData = {
-          project_member: event?.projectMemberID,
-          start_at: dayjs(start).format(COMMON_FORMAT_FOR_API),
-          end_at: dayjs(end).format(COMMON_FORMAT_FOR_API),
-          assigned_hour: event?.title,
-          schedule_type: "WORK",
-          notes: ""
-        }
-        const parameter = [`${event?.id}/`]
-        const returnedData = await updateSchedules(parameter, requiredData)
-        const newStart = dayjs(returnedData?.data?.start_at)
-          .startOf("d")
-          .format(COMMON_FORMAT_FOR_EVENTS)
-        const newEnd = dayjs(returnedData?.data?.end_at).endOf("d").format(COMMON_FORMAT_FOR_EVENTS)
-        // schedulerData.moveEvent(event, slotId, slotName, newStart, newEnd)
-        schedulerData.updateEventStart(event, newStart)
-        schedulerData.updateEventEnd(event, newEnd)
-
-        // getRenderSd(schedulerData)
-        // getEventSd(schedulerData)
-        // setView(view + 1)
-        // setCounter(counter + 1)
-        openArrays.forEach((arrayItem) => {
-          toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
-        })
-      } else {
-        eventsOverLap()
-        // openArrays.forEach((arrayItem) => {
-        //   toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
-        // })
+    if (event?.resourceParentID) {
+      const openArrays = getOpenArrays(schedulerData)
+      const resourceChildMapObject = resoureMap.get(event?.resourceParentID)
+      const projectArray = resourceChildMapObject.map((item) => item?.projects)
+      const flatArray = projectArray.flat()
+      const filteredArray = flatArray.filter((item) => item?.id === slotId)
+      const requiredData = {
+        ...event,
+        start: start,
+        end: end
       }
+      if (slotId === event?.resourceId && filteredArray[0]?.parentId === event?.resourceParentID) {
+        const checkDates = getCheckDate(requiredData, schedulerData?.events, "move")
+        if (checkDates) {
+          const requiredData = {
+            project_member: event?.projectMemberID,
+            start_at: dayjs(start).format(COMMON_FORMAT_FOR_API),
+            end_at: dayjs(end).format(COMMON_FORMAT_FOR_API),
+            assigned_hour: event?.title,
+            schedule_type: "WORK",
+            notes: ""
+          }
+          const parameter = [`${event?.id}/`]
+          const returnedData = await updateSchedules(parameter, requiredData)
+          const newStart = dayjs(returnedData?.data?.start_at)
+            .startOf("d")
+            .format(COMMON_FORMAT_FOR_EVENTS)
+          const newEnd = dayjs(returnedData?.data?.end_at)
+            .endOf("d")
+            .format(COMMON_FORMAT_FOR_EVENTS)
+          // schedulerData.moveEvent(event, slotId, slotName, newStart, newEnd)
+          schedulerData.updateEventStart(event, newStart)
+          schedulerData.updateEventEnd(event, newEnd)
+
+          // getRenderSd(schedulerData)
+          // getEventSd(schedulerData)
+          // setView(view + 1)
+          // setCounter(counter + 1)
+          openArrays.forEach((arrayItem) => {
+            toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
+          })
+        } else {
+          eventsOverLap()
+          // openArrays.forEach((arrayItem) => {
+          //   toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
+          // })
+        }
+      }
+      setView(view + 1)
     }
-    setView(view + 1)
   }
   const handleAddEventPopUp = (key) => {
     setPopupChild(key)
