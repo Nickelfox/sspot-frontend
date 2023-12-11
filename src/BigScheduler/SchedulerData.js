@@ -456,6 +456,7 @@ export default class SchedulerData {
     event.start = newStart
     event.title = title ? title : event?.title
     this._attachEvent(event)
+    console.log(event, "DATAMOVED")
     this._createRenderData()
   }
 
@@ -473,6 +474,7 @@ export default class SchedulerData {
     event.end = newEnd
     event.start = newStart
     this._attachEvent(event)
+    console.log(event, "DAtedEvent")
     this._createRenderData()
   }
 
@@ -935,7 +937,7 @@ export default class SchedulerData {
 
   _getSpan(startTime, endTime, headers) {
     if (this.showAgenda) return 1
-
+    console.log(startTime, endTime)
     function startOfWeek(date) {
       let day = date.getDay()
       let diff = date.getDate() - day
@@ -976,10 +978,10 @@ export default class SchedulerData {
       windowStart = new Date(this.startDate),
       windowEnd = new Date(this.endDate)
     let startWeek = new Date(dayjs(windowStart).weekday(0))
-    if (eventStart < startWeek) {
-      let startOfWeek = new Date(startWeek)
-      eventStart = new Date(startOfWeek)
-    }
+    // if (eventStart < startWeek) {
+    //   let startOfWeek = new Date(startWeek)
+    //   eventStart = new Date(startOfWeek)
+    // }
     windowStart.setHours(0, 0, 0, 0)
 
     if (this.viewType === ViewType.Day) {
@@ -1067,9 +1069,8 @@ export default class SchedulerData {
     if (Object.prototype.toString.call(events) !== "[object Array]") {
       throw new Error("Events should be Array object")
     }
-
+    console.log(events)
     events.forEach((e, index) => {
-      console.log(e)
       if (e == undefined) {
         console.error(`Event undefined: ${index}`)
         throw new Error(`Event undefined: ${index}`)

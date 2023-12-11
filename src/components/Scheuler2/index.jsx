@@ -796,9 +796,9 @@ const Calender = (props) => {
         // getEventSd(schedulerData)
         // setView(view + 1)
         // setCounter(counter + 1)
-        // openArrays.forEach((arrayItem) => {
-        //   toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
-        // })
+        openArrays.forEach((arrayItem) => {
+          toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
+        })
       } else {
         eventsOverLap()
         // openArrays.forEach((arrayItem) => {

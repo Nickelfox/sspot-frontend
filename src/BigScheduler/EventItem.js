@@ -595,7 +595,7 @@ class EventItem extends Component {
 
     let start = localeDayjs(new Date(eventItem.start))
     let eventTitle = isInPopover ? `${start.format("HH:mm")} ${titleText}` : titleText
-    let startResizeDiv = <div />
+    let startResizeDiv = <div style={{ borderRight: "2px dotted #fff" }} />
     if (this.startResizable(this.props))
       startResizeDiv = (
         <div
@@ -697,11 +697,11 @@ class EventItem extends Component {
     const { popoverOffsetX, mousePositionPlacement } = getMousePositionOptionsData()
 
     const aItem = config.dragAndDropEnabled ? connectDragPreview(connectDragSource(a)) : a
-
+    const item = connectDragPreview(connectDragSource(a))
     return isDragging ? null : schedulerData._isResizing() ||
       config.eventItemPopoverEnabled == false ||
       eventItem.showPopover == false ? (
-      <div>{aItem}</div>
+      <div>{connectDragPreview(connectDragSource(a))}</div>
     ) : (
       <Popover
         transitionName={isPopoverPlacementMousePosition ? "" : undefined}
@@ -758,9 +758,9 @@ class EventItem extends Component {
   subscribeResizeEvent = (props) => {
     if (this.startResizer != undefined) {
       if (this.supportTouch) {
-        // this.startResizer.removeEventListener('touchstart', this.initStartDrag, false);
-        // if (this.startResizable(props))
-        //     this.startResizer.addEventListener('touchstart', this.initStartDrag, false);
+        this.startResizer.removeEventListener("touchstart", this.initStartDrag, false)
+        if (this.startResizable(props))
+          this.startResizer.addEventListener("touchstart", this.initStartDrag, false)
       } else {
         this.startResizer.removeEventListener("mousedown", this.initStartDrag, false)
         if (this.startResizable(props))

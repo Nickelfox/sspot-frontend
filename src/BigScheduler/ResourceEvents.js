@@ -276,7 +276,7 @@ class ResourceEvents extends Component {
     let cellMaxEvents = schedulerData.getCellMaxEvents()
     let rowWidth = schedulerData.getContentTableWidth()
     let DnDEventItem = dndSource.getDragSource()
-
+    console.log(rowWidth)
     let selectedArea = isSelecting ? (
       <SelectedArea {...this.props} left={left} width={width} />
     ) : (
@@ -305,9 +305,9 @@ class ResourceEvents extends Component {
             let eventEnd = localeDayjs(evt.eventItem.end)
             let isStart = eventStart >= durationStart
             let isEnd = eventEnd <= durationEnd
-            let left = index * 50 + (index > 0 ? 4 : 3)
+            let left = index * 50 + (index > 0 ? 2 : 3)
             let width =
-              evt.span * 50 - (index > 0 ? 5 : 6) > 0 ? evt.span * 50 - (index > 0 ? 5 : 6) : 0
+              evt.span * 50 - (index > 0 ? 5 : 6) > 0 ? evt.span * 50 - (index > 0 ? 3 : 3) : 0
             let top = marginTop + idx * config.eventItemLineHeight
             let eventItem = (
               <DnDEventItem
@@ -319,7 +319,9 @@ class ResourceEvents extends Component {
                 isInPopover={false}
                 left={left}
                 width={width}
+                right={0}
                 top={top}
+                border-radius={8}
                 leftIndex={index}
                 rightIndex={index + evt.span}
               />
