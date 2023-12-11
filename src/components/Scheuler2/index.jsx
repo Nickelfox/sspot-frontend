@@ -28,6 +28,8 @@ import { eventsOverLap } from "helpers/toasterFunction/toasterFunction"
 import { COMMON_FORMAT_FOR_API, COMMON_FORMAT_FOR_EVENTS } from "helpers/app-dates/dates"
 import { getOpenArrays } from "helpers/dropDownListing/openArrays"
 import AddProjectForm from "components/AssignProjectForm"
+import { v4 as uuid } from "uuid"
+
 const parentViewArray = [
   { name: "Projects", value: 0 },
   { name: "Team", value: 1 }
@@ -52,7 +54,9 @@ const Calender = (props) => {
   const styles = useStyles()
   const cachedData = useMemo(() => schedulerData, [view])
   const [counter, setCounter] = useState(1)
-  const [editEventData, setDditEventData] = useState(1)
+  const [fetchEvents, setFetchEvents] = useState(false)
+  const [rerenderData, setRerenderData] = useState(false)
+  const [startDate, setStartDate] = useState(new dayjs(new Date()).format(DATE_FORMAT))
   const {
     fetchDepartments,
     departments,
@@ -73,7 +77,8 @@ const Calender = (props) => {
   } = useSchedulerController()
   useEffect(() => {
     getSchedulerData()
-  }, [teamMembers?.length, teamSchedules?.length])
+  }, [])
+
   useEffect(() => {
     fetchDepartments()
     fetchClients()
@@ -86,14 +91,23 @@ const Calender = (props) => {
       teamFetcher()
       scheduleFetcher()
     }
-  }, [
-    dayjs(schedulerData?.startDate).format("YYYY-MM-DD"),
-    dayjs(schedulerData?.endDate).format("YYYY-MM-DD"),
-    projects?.length
-  ])
+  }, [projects?.length])
+  useEffect(() => {
+    teamFetcher()
+    scheduleFetcher()
+  }, [startDate])
+  useEffect(() => {
+    teamMembers?.length > 0 && teamInScheduler()
+  }, [teamMembers?.length])
+  useEffect(() => {
+    fetchEvents && eventsInScheduler()
+  }, [fetchEvents])
   useEffect(() => {
     triggerRerender(render + 1)
   }, [triger])
+  useEffect(() => {
+    rerenderData && getRenderSd(schedulerData)
+  }, [rerenderData])
   // useEffect(() => {
   //   ;(openPopUp || isAddeventPopover) && handlePopUpClose()
   // }, [])
@@ -221,51 +235,105 @@ const Calender = (props) => {
   }
 
   const getSchedulerData = () => {
-    const sd = new SchedulerData(
-      new dayjs(new Date()).format(DATE_FORMAT),
-      ViewType.Month,
-      false,
-      false,
-      {
-        displayWeekend: true,
-        eventItemPopoverEnabled: false,
-        schedulerMaxHeight: 700,
-        tableHeaderHeight: 60,
-        availability: ["Day", "Week"],
-        // checkConflict: true,
-        // tableHeaderHeight: 60,
-        // dayCellWidth: 100,
-        parentView: parentViewArray,
-        views: [
-          {
-            viewName: "Resource View",
-            viewType: ViewType.Month,
-            showAgenda: false,
-            isEventPerspective: true
-            // checkConflict: true
-          }
-        ]
-      }
-    )
-    if (teamMembers?.length > 0) {
-      const dataArray = teamMembers
-      const projectsArray = dataArray.map((item) => item?.projects)
-      const filteredArray = projectsArray.filter((item) => item !== undefined)
-      const newArray = [...dataArray, ...filteredArray]
-      const requiredArray = newArray.flat()
-      sd.setResources(requiredArray)
-      setResourceMap(convertArrayToMap(requiredArray))
-    }
-    if (teamSchedules?.length > 0) {
-      setEventsMap(convertEventsToMap(teamSchedules))
-      sd.setEvents(teamSchedules)
-    }
+    const sd = new SchedulerData(startDate, ViewType.Month, false, false, {
+      displayWeekend: true,
+      eventItemPopoverEnabled: false,
+      schedulerMaxHeight: 700,
+      tableHeaderHeight: 60,
+      availability: ["Day", "Week"],
+      // checkConflict: true,
+      // tableHeaderHeight: 60,
+      // dayCellWidth: 100,
+      parentView: parentViewArray,
+      views: [
+        {
+          viewName: "Resource View",
+          viewType: ViewType.Month,
+          showAgenda: false,
+          isEventPerspective: true
+          // checkConflict: true
+        }
+      ]
+    })
     setSchedulerData(sd)
   }
-
+  const teamInScheduler = () => {
+    const dataArray = teamMembers
+    const projectsArray = dataArray.map((item) => item?.projects)
+    const filteredArray = projectsArray.filter((item) => item !== undefined)
+    const newArray = [...dataArray, ...filteredArray]
+    const requiredArray = newArray.flat()
+    schedulerData.setResources(requiredArray)
+    setCounter(counter + 1)
+    triggerRerender(rerender + 1)
+    getRenderSd(schedulerData)
+    setResourceMap(convertArrayToMap(requiredArray))
+    setFetchEvents(true)
+    setRerenderData(true)
+  }
+  const eventsInScheduler = () => {
+    setEventsMap(convertEventsToMap(teamSchedules))
+    makeResourceEvents(teamSchedules, resoureMap)
+    // schedulerData.setEvents(teamSchedules)
+  }
+  const makeResourceEvents = (events, resources) => {
+    const resourcedEvents = new Map()
+    events.forEach((schedule) => {
+      if (!resourcedEvents.has(schedule?.resourceParentID)) {
+        resourcedEvents.set(
+          schedule.resourceParentID,
+          getEventDate(teamSchedules, schedule?.resourceParentID)
+        )
+      }
+    })
+    const eventsResource = []
+    Array.from(resourcedEvents.values()).forEach((entry) => {
+      const entryArray = Array.from(entry.entries())
+      const getWeekEvents = getEventsForParent(entryArray, resources)
+      eventsResource.push(getWeekEvents)
+    })
+    const flatArray = eventsResource.flat()
+    schedulerData.setEvents([...events, ...flatArray])
+    setFetchEvents(false)
+  }
+  const getEventsForParent = (parentArray, resource) => {
+    const reqs = []
+    parentArray.forEach((entry) => {
+      const resourcesArray = resource.get(entry[1].resourceParentID)
+      const resourceObject = resourcesArray[0]
+      const key = uuid()
+      const requiredArrayObject = {
+        id: key,
+        start: dayjs(new Date(entry[0])).startOf("w").format("YYYY-MM-DD HH:mm:ss"),
+        end: dayjs(new Date(entry[0])).endOf("w").format("YYYY-MM-DD HH:mm:ss"),
+        resourceParentID: undefined,
+        resourceId: entry[1].resourceParentID,
+        title: "4",
+        ...resourceObject
+      }
+      reqs.push(requiredArrayObject)
+    })
+    return reqs
+  }
+  const getEventDate = (schedules, id) => {
+    const filteredArray = schedules?.filter((item) => item.resourceParentID === id)
+    const weekMap = new Map()
+    filteredArray.forEach((item) => {
+      const startWeek = dayjs(item?.start).startOf("week").format(COMMON_FORMAT_FOR_EVENTS)
+      const endWeek = dayjs(item?.end).startOf("week").format(COMMON_FORMAT_FOR_EVENTS)
+      if (!weekMap.has(startWeek)) {
+        weekMap.set(startWeek, item)
+      }
+      if (!weekMap.has(endWeek)) {
+        weekMap.set(endWeek, item)
+      }
+    })
+    return weekMap
+  }
   const prevClick = (schedulerData) => {
     schedulerData.prev()
-    schedulerData.setEvents(DemoData.events)
+    const newDate = dayjs(startDate).add(-1, "week")
+    schedulerData.setEvents(teamSchedules)
     triggerRerender(rerender + 1)
   }
   const closePopUp = (schedulerData) => {
@@ -274,13 +342,13 @@ const Calender = (props) => {
   }
   const nextClick = (schedulerData) => {
     schedulerData.next()
-    schedulerData.setEvents(DemoData.events)
+    schedulerData.setEvents(teamSchedules)
     triggerRerender(rerender + 1)
   }
 
   const onScrollRight = (schedulerData, schedulerContent, maxScrollLeft) => {
     schedulerData.next()
-    schedulerData.setEvents(DemoData.events)
+    schedulerData.setEvents(teamSchedules)
     triggerRerender(rerender + 1)
     setRetrigger((prev) => !prev)
     schedulerContent.scrollLeft = maxScrollLeft - 10
@@ -315,10 +383,12 @@ const Calender = (props) => {
     // triggerRerender(rerender + 1)
   }
   const onSelectDate = (schedulerData, date) => {
+    setStartDate(date)
     getRenderSd(schedulerData)
     schedulerData.setDate(date)
-    schedulerData.setEvents([])
+    schedulerData.setEvents(teamSchedules)
     triggerRerender(rerender + 1)
+    setFetchEvents(true)
   }
   const onThisWeekCick = (schedulerData) => {
     const date = new Date()
@@ -523,6 +593,7 @@ const Calender = (props) => {
       getRenderSd(schedulerData)
       schedulerData.addEvent(requiredData)
       handlePopUpClose()
+      fetchSchedules()
     } else {
       eventsOverLap()
     }
@@ -716,6 +787,7 @@ const Calender = (props) => {
     handlePopUpClose()
     // getRenderSd(schedulerData)
     triggerRerender(rerender + 1)
+    setCounter(counter + 1)
     // newEventfromResource(schedulerData, values?.id, convertedStartDate, endDate)
   }
   const getRenderSd = (schedulerData, newProject) => {
@@ -747,6 +819,7 @@ const Calender = (props) => {
     if (responseData?.success) {
       const filteredProject = projects?.filter((item) => item?.id === responseData?.data?.project)
       const parentObject = resoureMap.get(body?.member)
+      console.log(parentObject, "PARENTObject")
       const data = responseData?.data
       const requiredObject = {
         projectId: data?.id,
@@ -857,7 +930,7 @@ const Calender = (props) => {
   return (
     <div
       style={{
-        // maxHeight: "100vh",
+        maxHeight: "100vh",
         maxWidth: "100vw",
         overflowX: "hidden",
         overflowY: "auto",

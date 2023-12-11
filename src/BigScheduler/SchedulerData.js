@@ -72,6 +72,7 @@ export default class SchedulerData {
   }
 
   setResources(resources) {
+    console.log("SET RESOURCE IS FIRED")
     this._validateResource(resources)
     this.resources = Array.from(new Set(resources))
     this._createRenderData()
@@ -174,7 +175,7 @@ export default class SchedulerData {
 
   prev() {
     this._resolveDate(-1)
-    this.events = []
+    // this.events = []
     this._createHeaders()
     this._createRenderData()
   }
@@ -1069,6 +1070,7 @@ export default class SchedulerData {
     }
 
     events.forEach((e, index) => {
+      console.log(e)
       if (e == undefined) {
         console.error(`Event undefined: ${index}`)
         throw new Error(`Event undefined: ${index}`)

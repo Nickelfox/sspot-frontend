@@ -115,7 +115,7 @@ const workDays = [
   }
 ]
 const AddProjectForm = (props) => {
-  const { handleClose, addResorceInScheduler, resourceLength, clients, createNewProject } = props
+  const { handleClose, clients, createNewProject } = props
   //   const { initialValues } = useResourceController(props)
   const styles = useStyles()
   const theme = useTheme()

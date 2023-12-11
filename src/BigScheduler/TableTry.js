@@ -21,6 +21,8 @@ import { DATETIME_FORMAT } from "."
 import { Popover } from "antd"
 import DropDown from "components/DropDown"
 import CustomAutoComplete from "./schedulerComponents/AutoComplete"
+import { v4 as uuid } from "uuid"
+
 const editItemObject = [
   /**
    * @Actions
@@ -74,7 +76,7 @@ const TableTry = (props) => {
     height: 48
     // paddingBottom: contentPaddingBottom
   }
-
+  let key = 1
   let editItems = (items) => {
     return editItemObject.map((item, index) => {
       return (
@@ -139,8 +141,9 @@ const TableTry = (props) => {
       }
     })
     return [...rMap.entries()].map((department, index) => {
+      const key1 = uuid()
       return (
-        <Box key={`${department - index}`}>
+        <Box key={key1}>
           <Box
             paddingLeft={1}
             marginBottom={"0.2rem"}
@@ -159,8 +162,10 @@ const TableTry = (props) => {
                 dndSource={eventDndSource}
               />
             )
+            const key2 = uuid()
+
             return (
-              <Box key={item?.slotId + index} marginTop={index === 0 ? "-0.2rem" : 0}>
+              <Box key={key2} marginTop={index === 0 ? "-0.2rem" : 0}>
                 {!item?.parentId && (
                   <TableContainer sx={{ overflow: "hidden" }}>
                     <Table
@@ -328,9 +333,10 @@ const TableTry = (props) => {
               dndSource={eventDndSource}
             />
           )
+          const key3 = uuid()
           return (
             <TableRow
-              key={filteredItem?.slotId + index}
+              key={key3}
               style={{
                 // maxWidth: "24rem",
                 minWidth: "23.9rem",
@@ -436,7 +442,6 @@ const TableTry = (props) => {
               <Box
                 className="w-full cursor-pointer pl-2"
                 onClick={openEditItemPopUp.bind(null, item)}>
-                {" "}
                 <Typography variant="p2" sx={{ color: "#888888", textDecoration: "underline" }}>
                   Actions <KeyboardArrowDownIcon />
                   {item?.editPopup && (
