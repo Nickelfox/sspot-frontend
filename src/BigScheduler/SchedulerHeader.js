@@ -249,7 +249,6 @@ class SchedulerHeader extends Component {
               <RightOutlined type="right" className="icon-nav" />
             </button>
           </div>
-          X
           <Spin spinning={this.state.dateSpinning} />
         </Grid>
         {/* <Grid item xs={4}>
