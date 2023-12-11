@@ -10,6 +10,7 @@ export const useSchedulerController = () => {
   const [teamSchedules, setTeamSchedules] = useState([])
   const [projects, setProjects] = useState([])
   const [clients, setClients] = useState([])
+  const [reload, setReload] = useState(false)
   const model = useSchedulerModel()
   const fetchDepartments = async () => {
     const data = await model.fetchDepartments()
@@ -22,13 +23,8 @@ export const useSchedulerController = () => {
         }
       })
       setDepartments(requiredData)
-      Loader.hide()
-      // } else {
-      //   Loader.hide()
-      // }
     } else {
       setDepartments([])
-      Loader.hide()
     }
   }
   const getTeamMembers = async (params) => {
@@ -40,9 +36,10 @@ export const useSchedulerController = () => {
       requiredArray = []
     }
     setTeamMemebers(requiredArray)
-    Loader.hide()
+    setReload((prev) => !prev)
   }
   const fetchSchedules = async (params) => {
+    Loader.show()
     const responseData = await model.fetchSchedules(params)
     let requiredArray
     if (responseData?.length > 0) {
@@ -62,6 +59,7 @@ export const useSchedulerController = () => {
   }
 
   const fetchProjects = async (params) => {
+    Loader.show()
     const responseData = await model.fetchProjects(params)
     let requiredArray
     if (responseData?.length > 0) {
@@ -76,6 +74,18 @@ export const useSchedulerController = () => {
       requiredArray = []
     }
     setProjects(requiredArray)
+  }
+  const createProject = async (body) => {
+    const responseData = await model.createProject(body)
+    return responseData
+  }
+  const assignProject = async (body) => {
+    const responseData = await model.assignProject(body)
+    return responseData
+  }
+  const deleteEvent = async (params) => {
+    const responseData = await model.deleteEvent(params)
+    return responseData
   }
   const fetchClients = async () => {
     const responseData = await model.fetchClients()
@@ -107,6 +117,7 @@ export const useSchedulerController = () => {
     } else {
       requiredArray = []
     }
+    /*eslint-disable-next-line no-console*/
     console.log(requiredArray, "TEAM_MEMBERS")
   }
   return {
@@ -121,7 +132,11 @@ export const useSchedulerController = () => {
     projects,
     fetchClients,
     clients,
+    createProject,
+    assignProject,
     fetchTeamList,
-    addEvents
+    addEvents,
+    deleteEvent,
+    reload
   }
 }

@@ -29,14 +29,22 @@ export const useSchedulerModel = () => {
     const instance = NetworkManager(API.SCHEDULER.SCHEDULE_UPDATE)
     const response = await instance.request(body, params)
     Loader.hide()
-    return dataReturner(response)
+    return { data: dataReturner(response), success: response?.success }
   }
+
   const fetchProjects = async () => {
     Loader.show()
     const instance = NetworkManager(API.SCHEDULER.PROJECTS_LIST)
     const response = await instance.request()
     Loader.hide()
     return dataReturner(response)
+  }
+  const createProject = async (body) => {
+    Loader.show()
+    const instance = NetworkManager(API.SCHEDULER.PROJECTS_CREATE)
+    const response = await instance.request(body)
+    Loader.hide()
+    return { data: dataReturner(response), success: response?.success }
   }
   const fetchClients = async () => {
     Loader.show()
@@ -59,6 +67,20 @@ export const useSchedulerModel = () => {
     Loader.hide()
     return dataReturner(response)
   }
+  const assignProject = async (body) => {
+    Loader.show()
+    const instance = NetworkManager(API.SCHEDULER.ASSIGN_PROJECT)
+    const response = await instance.request(body)
+    Loader.hide()
+    return { data: dataReturner(response), success: response?.success }
+  }
+  const deleteEvent = async (params) => {
+    Loader.show()
+    const instance = NetworkManager(API.SCHEDULER.SCHEDULE_DELETE)
+    const response = await instance.request({}, params)
+    Loader.hide()
+    return { data: dataReturner(response), success: response?.success }
+  }
   return {
     fetchDepartments,
     fetchTeamMembers,
@@ -66,7 +88,10 @@ export const useSchedulerModel = () => {
     updateSchedule,
     fetchProjects,
     fetchClients,
+    createProject,
+    assignProject,
     fetchTeamList,
-    addNewEvent
+    addNewEvent,
+    deleteEvent
   }
 }

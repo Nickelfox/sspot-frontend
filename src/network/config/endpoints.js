@@ -52,8 +52,11 @@ export const API = {
     TEAM_MEMBERS: new APIRouter("/timeline/team/", HTTP_METHODS.GET),
     SCHEDULE: new APIRouter("/schedules/", HTTP_METHODS.GET),
     SCHEDULE_UPDATE: new APIRouter("/schedules", HTTP_METHODS.PATCH),
+    SCHEDULE_DELETE: new APIRouter("/schedules", HTTP_METHODS.DEL),
     PROJECTS_LIST: new APIRouter("/projects/", HTTP_METHODS.GET),
+    PROJECTS_CREATE: new APIRouter("/projects/", HTTP_METHODS.POST),
     CLIENT_LIST: new APIRouter("/clients/", HTTP_METHODS.GET),
+    ASSIGN_PROJECT: new APIRouter("/project-members/", HTTP_METHODS.POST),
     ADD_EVENT: new APIRouter("/schedules/", HTTP_METHODS.POST),
     TEAM_LISTING: new APIRouter("/team-members", HTTP_METHODS.GET)
   }

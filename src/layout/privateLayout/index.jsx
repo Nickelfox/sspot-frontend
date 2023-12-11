@@ -58,34 +58,34 @@ export default function PrivateLayout(props) {
   const { navigate, handleLogout, activeMenu } = usePrivateLayoutController(props)
 
   return (
-    <Box sx={{ minHeight: "100vh" }}>
+    <Box>
+      <DrawerHeader position="fixed" open={"open"} sx={styles.appbar} ref={appRef}>
+        <Toolbar
+          sx={{
+            minWidth: 0,
+            width: "100%",
+            height: "4rem",
+            borderColor: "transparent",
+            backgroundColor: theme.palette.background.gray,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between"
+          }}>
+          <Box>
+            <Typography sx={styles.drawerHeader} variant="h5" color={theme.palette.text.main}>
+              {process.env.REACT_APP_APP_NAME}
+            </Typography>
+          </Box>
+          <Box>
+            <ListItemButton onClick={handleLogout}>
+              <ListItemIcon sx={styles.icon}>
+                <LogoutIcon color="secondary" fontSize="large" />
+              </ListItemIcon>
+            </ListItemButton>
+          </Box>
+        </Toolbar>
+      </DrawerHeader>
       <Main open={"open"}>
-        <DrawerHeader position="fixed" open={"open"} sx={styles.appbar} ref={appRef}>
-          <Toolbar
-            sx={{
-              minWidth: 0,
-              width: "100%",
-              height: "4rem",
-              borderColor: "transparent",
-              backgroundColor: theme.palette.background.gray,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between"
-            }}>
-            <Box>
-              <Typography sx={styles.drawerHeader} variant="h5" color={theme.palette.text.main}>
-                {process.env.REACT_APP_APP_NAME}
-              </Typography>
-            </Box>
-            <Box>
-              <ListItemButton onClick={handleLogout}>
-                <ListItemIcon sx={styles.icon}>
-                  <LogoutIcon color="secondary" fontSize="large" />
-                </ListItemIcon>
-              </ListItemButton>
-            </Box>
-          </Toolbar>
-        </DrawerHeader>
         <Outlet />
       </Main>
     </Box>

@@ -11,6 +11,7 @@ import { FormValidator } from "../../helpers/validations/addEventValidations"
 import DropDown from "../DropDown"
 import dayjs from "dayjs"
 import { COMMON_FORMAT_FOR_API } from "helpers/app-dates/dates"
+import DeleteButton from "components/DeleteButton"
 
 const { TextArea } = Input
 const inputSyles = {
@@ -36,13 +37,13 @@ const AddEvent = (props) => {
     resourceData,
     eventData,
     createNewEvent,
-    postEvent
+    postEvent,
+    isEdit,
+    deleteEvent,
+    patchEvent
   } = props
-  const [counter, setCounter] = useState(1)
 
-  useEffect(() => {
-    getInitialValues()
-  }, [counter])
+  const [initalValues, setInitalValues] = useState()
   const styles = useStyles()
   const theme = useTheme()
   const isTablet = useMediaQuery(theme.breakpoints.down("sm"))
@@ -51,8 +52,10 @@ const AddEvent = (props) => {
   const [hours, setHours] = useState("")
   const [date, setDate] = useState(null)
   const [endDate, setEndDate] = useState(null)
-  const [requiredInitValues, setRequiredInitValues] = useState(initValues)
   const [dateDiff, setDateDiff] = useState(0)
+  useEffect(() => {
+    getInitialValues()
+  }, [])
   useEffect(() => {
     setDate(eventData?.event?.start)
     setEndDate(eventData?.event?.end)
@@ -61,20 +64,39 @@ const AddEvent = (props) => {
     dateDifference()
   }, [date, endDate])
   useEffect(() => {}, [date, endDate])
-  const getInitialValues = () => {
-    const initValues = {
-      hours: "",
-      startDate: dayjs(new Date(eventData?.event?.start)),
-      endDate: dayjs(new Date(eventData?.event?.end)),
-      notes: "",
-      person: "",
-      workDays: []
-    }
-    setRequiredInitValues(initValues)
+  const getTotalHours = (start, end, hours) => {
+    const endDate = dayjs(end)
+    const startDate = dayjs(start)
+    const diff = endDate.diff(startDate, "d")
+    const hrs = JSON.parse(hours)
+    return diff * hrs
   }
-  useEffect(() => {
-    getInitialValues()
-  }, [eventData?.event?.start])
+  const deleteScheduleEvent = () => {
+    const params = eventData?.event?.id
+    deleteEvent(params, eventData?.event)
+  }
+  const getInitialValues = () => {
+    if (isEdit) {
+      const initValues = {
+        hours: JSON.parse(eventData?.event?.title),
+        totalHours: getTotalHours(
+          eventData?.event?.start,
+          eventData?.event?.end,
+          eventData?.event?.title
+        ),
+        startDate: dayjs(new Date(eventData?.event?.start)),
+        endDate: dayjs(new Date(eventData?.event?.end)),
+        notes: eventData?.event?.notes,
+        workDays: []
+      }
+      setInitalValues(initValues)
+    } else {
+      setInitalValues(FormValidator.initialValues)
+    }
+  }
+  // useEffect(() => {
+  //   getInitialValues()
+  // }, [eventData?.event?.start])
 
   useEffect(() => {
     getHoursPercent()
@@ -94,7 +116,8 @@ const AddEvent = (props) => {
       resourceId: eventData?.event?.resourceId,
       resourceParentID: eventData?.parent?.id
     }
-    postEvent(apiData)
+    const prams = eventData?.event?.id
+    !isEdit ? postEvent(apiData) : patchEvent(eventData?.event, apiData, prams)
   }
   const getHoursPercent = (values) => {
     return (values / eventData?.child?.hoursAssigned) * 100
@@ -111,7 +134,7 @@ const AddEvent = (props) => {
         gutterBottom={1}>{`${eventData?.parent?.name} Assignmet`}</Typography>
       <Formik
         validateOnMount
-        initialValues={!eventData ? FormValidator.initialValues : requiredInitValues}
+        initialValues={initalValues}
         validationSchema={FormValidator.validationSchema}
         onSubmit={createEvent}
         enableReinitialize={true}>
@@ -158,7 +181,7 @@ const AddEvent = (props) => {
                 </Typography>
               </Grid>
             </Grid>
-            <Grid container alignItems={"center"} paddingBottom={"2rem"}>
+            {/* <Grid container alignItems={"center"} paddingBottom={"2rem"}>
               <Grid item xs={3}>
                 <Typography variant="c1" color="#929292">
                   Total Hours
@@ -181,7 +204,7 @@ const AddEvent = (props) => {
                   across {dateDiff} day
                 </Typography>
               </Grid>
-            </Grid>
+            </Grid> */}
             <Grid container alignItems={"center"} paddingBottom={"2rem"}>
               <Grid item xs={3}>
                 <Typography variant="c1" color="#929292">
@@ -257,35 +280,14 @@ const AddEvent = (props) => {
                 />
               </Grid>
             </Grid>
-            {/* <Grid container alignItems={"center"} paddingBottom={"2rem"}>
-              <Grid item xs={3}>
-                <Typography variant="c1" color="#929292">
-                  Persons
-                </Typography>
-              </Grid>
-              <Grid item xs={9}>
-                <DropDown
-                  handleSize
-                  value={values?.person}
-                  name={"person"}
-                  label="weeklyAvailability"
-                  items={[]}
-                  style={{ width: "100%" }}
-                  fullWidth
-                  handleChange={(e) => {
-                    setFieldValue(`weeklyAvailability`, e.target?.value)
-                  }}
-                />
-              </Grid>
-            </Grid> */}
             <Grid container>
-              <Grid item xs={6} className="flex items-end">
+              <Grid item xs={6} display={"flex"} pr={1}>
                 <Box marginRight={"1rem"}>
                   <PrimaryButton
                     height={"3rem"}
                     // onClick={createEvent.bind(null, values)}
                     onClick={handleSubmit}
-                    style={{ marginRight: "2rem", width: "max-content" }}>
+                    style={{ marginRight: "1rem", width: "max-content" }}>
                     Save Assignment
                   </PrimaryButton>
                 </Box>
@@ -295,6 +297,13 @@ const AddEvent = (props) => {
                   </SecondaryButton>
                 </div>
               </Grid>
+              {isEdit && (
+                <Grid item xs={6} display={"flex"} justifyContent={"end"} alignItems={"flex-end"}>
+                  <DeleteButton height={"3rem"} onClick={deleteScheduleEvent}>
+                    Delete
+                  </DeleteButton>
+                </Grid>
+              )}
             </Grid>
           </form>
         )}

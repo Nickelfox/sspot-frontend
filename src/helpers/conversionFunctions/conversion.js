@@ -1,5 +1,6 @@
 import dayjs from "dayjs"
 import { months } from "../Months/months"
+import { COMMON_FORMAT_FOR_EVENTS, getNextFriday } from "helpers/app-dates/dates"
 
 export const getRequiredArray = (headers) => {
   const requiredArray = headers.map((item) => {
@@ -136,7 +137,6 @@ const dummyData = [
 ]
 
 export const getDataArray = (array, projects) => {
-  console.log(projects, "PROOOOOO")
   let requiredUserInfo = []
   array.forEach((data) => {
     const requiredObject = {
@@ -148,7 +148,7 @@ export const getDataArray = (array, projects) => {
       email: data?.user?.email,
       editPopup: false,
       expanded: false,
-      projects: getProjectsArray(data?.project_member, data, projects),
+      projects: getProjectsArray(data?.project_member, data),
       department: data?.department?.name,
       assignedProjects: getAssignedProjects(data?.project_member, projects)
     }
@@ -163,7 +163,7 @@ const getProjectsArray = (projectArray, data) => {
       projectId: project.id,
       id: project?.project?.id,
       name: project?.project?.project_name,
-      hoursAssigned: 4,
+      hoursAssigned: `${JSON.parse(data?.capacity)}`,
       workDays: data?.work_days,
       // workDays: ["MON", "TUE", "THU", "FRI"],
       expanded: false,
@@ -195,6 +195,30 @@ const getAssignedProjects = (projectArray, projects) => {
   const projectIdMap = projectArray.map((project) => project?.project?.id)
 
   const requiredArray = projects.filter((project) => !projectIdMap.includes(project?.value))
-  console.log(requiredArray, "ARRRAy")
   return requiredArray
+}
+export const getProjects = (item, newProject) => {
+  return item?.assignedProjects !== undefined && newProject !== undefined
+    ? [...item.assignedProjects, newProject]
+    : item?.assignedProjects
+}
+
+export const getEventObject = (evt, event) => {
+  let start, end
+  if (event?.start > evt?.start && evt?.end < event?.end) {
+    return evt
+  } else {
+    if (event?.end < evt?.end) {
+      start = evt.start
+      end = getNextFriday(evt?.start)
+      return { end: end, start: start, ...evt }
+    }
+  }
+}
+export const getEndEventObject = (evt) => {
+  let start, end
+  start = dayjs(evt.end).startOf("w").format(COMMON_FORMAT_FOR_EVENTS)
+  end = evt?.end
+  const requiredObject = { end: end, start: start, ...evt }
+  return requiredObject
 }
