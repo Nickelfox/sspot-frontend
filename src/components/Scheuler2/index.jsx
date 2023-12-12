@@ -582,9 +582,11 @@ const Calender = (props) => {
     if (response?.success) {
       handlePopUpClose()
       schedulerData?.removeEvent(event)
-      setFetcher((prev) => !prev)
+      setFetchEvents((prev) => !prev)
+      // setFetcher((prev) => !prev)
     }
     keepDataOpen(openArrays, schedulerData)
+    getRenderSd(schedulerData)
   }
   const postEvent = async (apiData) => {
     const response = await addEvents(apiData)
