@@ -93,7 +93,7 @@ class ResourceEvents extends Component {
     //es-lint-disable-next-line no-unused-vars
     // const { schedulerData } = this.props;
     // let cellWidth = schedulerData.getContentCellWidth();
-    let cellWidth = 50.5
+    let cellWidth = 50
     let pos = getPos(this.eventContainer)
     let startX = clientX - pos.x
     let leftIndex = Math.floor(startX / cellWidth)
@@ -276,7 +276,6 @@ class ResourceEvents extends Component {
     let cellMaxEvents = schedulerData.getCellMaxEvents()
     let rowWidth = schedulerData.getContentTableWidth()
     let DnDEventItem = dndSource.getDragSource()
-    console.log(rowWidth)
     let selectedArea = isSelecting ? (
       <SelectedArea {...this.props} left={left} width={width} />
     ) : (
