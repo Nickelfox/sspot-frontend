@@ -22,7 +22,7 @@ export const useSchedulerModel = () => {
     const instance = NetworkManager(API.SCHEDULER.SCHEDULE)
     const response = await instance.request({}, params)
     Loader.hide()
-    return dataReturner(response)
+    return { data: dataReturner(response), success: response?.success }
   }
   const updateSchedule = async (params, body) => {
     Loader.show()

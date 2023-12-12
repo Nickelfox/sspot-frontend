@@ -70,6 +70,7 @@ class HeaderView extends Component {
     const requiredArray = getRequiredArray(headers)
     const newHeaderMap = getHeaders(requiredArray)
     const headerMapArray = Array.from(newHeaderMap)
+    console.log(headerMapArray, "HeaderaaMap")
     headerList = (
       <th style={{ width: cellWidth, display: "flex" }}>
         <tr

@@ -530,9 +530,7 @@ const TableTry = (props) => {
       </>
     )
   }
-  return (
-    <div style={{ maxWidth: "100vw", overflow: "auto", border: "1px solid gray" }}>{getDivs()}</div>
-  )
+  return <div style={{ overflow: "auto", border: "1px solid gray" }}>{getDivs()}</div>
 }
 
 export default TableTry

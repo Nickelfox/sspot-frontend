@@ -11,7 +11,7 @@ export const getRequiredArray = (headers) => {
     const requiredObject = {
       time: item?.time,
       nonWorkingTime: item?.nonWorkingTime,
-      weekDay: newWeekNumber === "1" ? year : newWeekNumber,
+      weekDay: month === "Jan" && newWeekNumber === "1" ? year : newWeekNumber,
       month: month
     }
     return requiredObject
@@ -148,9 +148,11 @@ export const getDataArray = (array, projects) => {
       email: data?.user?.email,
       editPopup: false,
       expanded: false,
-      projects: getProjectsArray(data?.project_member, data),
+      projects: getProjectsArray(data?.project_members, data),
       department: data?.department?.name,
-      assignedProjects: getAssignedProjects(data?.project_member, projects)
+      assignedProjects: getAssignedProjects(data?.project_members, projects),
+      weeklyCapacity: data?.weekly_capacity,
+      weeklyAssignedHours: data?.weekly_assigned_hours
     }
     requiredUserInfo.push(requiredObject)
   })

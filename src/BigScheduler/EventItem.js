@@ -8,7 +8,7 @@ import { Popover } from "antd"
 import EventItemPopover from "./EventItemPopover"
 import { CellUnit, DATETIME_FORMAT } from "./index"
 import { DnDTypes } from "./DnDTypes"
-
+import { Box } from "@mui/material"
 class EventItem extends Component {
   constructor(props) {
     super(props)
@@ -646,12 +646,12 @@ class EventItem extends Component {
         ref={this.eventItemRef}
         onMouseMove={isPopoverPlacementMousePosition ? this.handleMouseMove : undefined}
         style={{ left: left, width: width, right: 0 }}>
-        <div
+        <Box
           onClick={() => {
             if (eventClick) eventItemClick(schedulerData, eventItem)
           }}>
           {eventItemTemplate}
-        </div>
+        </Box>
         {startResizeDiv}
         {endResizeDiv}
       </a>

@@ -7,7 +7,7 @@ import { getDataArray, getEventListing } from "helpers/conversionFunctions/conve
 export const useSchedulerController = () => {
   const [departments, setDepartments] = useState([])
   const [teamMembers, setTeamMemebers] = useState([])
-  const [teamSchedules, setTeamSchedules] = useState([])
+  // const [teamSchedules, setTeamSchedules] = useState([])
   const [projects, setProjects] = useState([])
   const [clients, setClients] = useState([])
   const [reload, setReload] = useState(false)
@@ -41,13 +41,11 @@ export const useSchedulerController = () => {
   const fetchSchedules = async (params) => {
     Loader.show()
     const responseData = await model.fetchSchedules(params)
-    let requiredArray
-    if (responseData?.length > 0) {
-      requiredArray = getEventListing(responseData)
-    } else {
-      requiredArray = []
+    // let requiredArray
+    if (responseData?.data?.length > 0) {
+      return { data: getEventListing(responseData?.data), success: responseData?.success }
     }
-    setTeamSchedules(requiredArray)
+    // setTeamSchedules(requiredArray)
   }
   const updateSchedules = async (params, body) => {
     const responseData = await model.updateSchedule(params, body)
@@ -129,7 +127,7 @@ export const useSchedulerController = () => {
     getTeamMembers,
     teamMembers,
     fetchSchedules,
-    teamSchedules,
+    // teamSchedules,
     updateSchedules,
     fetchProjects,
     projects,

@@ -173,22 +173,22 @@ export default class SchedulerData {
   }
 
   prev() {
+    this.events = []
     this._resolveDate(-1)
-    // this.events = []
     this._createHeaders()
     this._createRenderData()
   }
 
   next() {
-    this._resolveDate(1)
     this.events = []
+    this._resolveDate(1)
     this._createHeaders()
     this._createRenderData()
   }
 
   setDate(date = dayjs(new Date())) {
-    this._resolveDate(0, date)
     this.events = []
+    this._resolveDate(0, date)
     this._createHeaders()
     this._createRenderData()
   }
@@ -215,7 +215,7 @@ export default class SchedulerData {
             this.endDate = this.localeDayjs(new Date(this.startDate)).endOf("week")
           } else if (viewType === ViewType.Month) {
             this.startDate = this.localeDayjs(new Date(date)).startOf("month")
-            this.endDate = this.localeDayjs(new Date(this.startDate)).endOf("year")
+            this.endDate = this.localeDayjs(new Date(this.startDate)).add(4, "w").endOf("year")
           } else if (viewType === ViewType.Quarter) {
             this.startDate = this.localeDayjs(new Date(date)).startOf("quarter")
             this.endDate = this.localeDayjs(new Date(this.startDate)).endOf("quarter")
@@ -248,7 +248,7 @@ export default class SchedulerData {
             this.endDate = this.localeDayjs(new Date(this.startDate)).endOf("week")
           } else if (viewType === ViewType.Month) {
             this.startDate = this.localeDayjs(new Date(date)).startOf("month")
-            this.endDate = this.localeDayjs(new Date(this.startDate)).endOf("year")
+            this.endDate = this.localeDayjs(new Date(this.startDate)).endOf("year").add(5, "w")
           } else if (viewType === ViewType.Quarter) {
             this.startDate = this.localeDayjs(new Date(date)).startOf("quarter")
             this.endDate = this.localeDayjs(new Date(this.startDate)).endOf("quarter")
@@ -654,7 +654,7 @@ export default class SchedulerData {
         date != undefined
           ? this.localeDayjs(date)
           : this.localeDayjs(this.startDate).add(num, "months")
-      this.endDate = this.localeDayjs(this.startDate).endOf("year")
+      this.endDate = this.localeDayjs(this.startDate).add(4, "w").endOf("year")
     } else if (this.viewType === ViewType.Quarter) {
       this.startDate =
         date != undefined
@@ -937,7 +937,6 @@ export default class SchedulerData {
 
   _getSpan(startTime, endTime, headers) {
     if (this.showAgenda) return 1
-    console.log(startTime, endTime)
     function startOfWeek(date) {
       let day = date.getDay()
       let diff = date.getDate() - day
@@ -978,10 +977,10 @@ export default class SchedulerData {
       windowStart = new Date(this.startDate),
       windowEnd = new Date(this.endDate)
     let startWeek = new Date(dayjs(windowStart).weekday(0))
-    // if (eventStart < startWeek) {
-    //   let startOfWeek = new Date(startWeek)
-    //   eventStart = new Date(startOfWeek)
-    // }
+    if (eventStart < startWeek) {
+      let startOfWeek = new Date(startWeek)
+      eventStart = new Date(startOfWeek)
+    }
     windowStart.setHours(0, 0, 0, 0)
 
     if (this.viewType === ViewType.Day) {
@@ -1126,7 +1125,7 @@ export default class SchedulerData {
      */
     const replaceArr = this?.resources
     let xData = this._ggetResourceinitData(replaceArr, this.headers)
-    // let initRenderData = this._createInitRenderData(this.resources, this.headers)
+    let initRenderData = this._createInitRenderData(this.resources, this.headers)
     //this.events.sort(this._compare);
     // console.log(...xData.values(), "MAPAPAPAP")
     const ArrayValue = [...xData.values()]
@@ -1138,6 +1137,7 @@ export default class SchedulerData {
       // let resourceEventsList = flatArray.filter((x) => x?.parentId === item?.resourceParentID)
       if (resourceEventsList.length > 0) {
         let resourceEvents = resourceEventsList[0]
+        console.log(resourceEvents, "1140")
         let span = this._getSpan(item.start, item.end, this.headers)
         let eventStart = new Date(item.start),
           eventEnd = new Date(item.end)

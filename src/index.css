@@ -295,6 +295,7 @@ table.scheduler-table tr:last-child td {
 
 .event-container {
   position: relative;
+  border: "1px red solid"
 }
 
 .border-cell {
