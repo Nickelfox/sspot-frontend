@@ -13,20 +13,19 @@ class SelectedArea extends Component {
   }
 
   render() {
-    const { left, width, schedulerData } = this.props
+    const { left, schedulerData } = this.props
     const { config } = schedulerData
-    console.log(left)
     return (
       <div
         className="selected-area"
         style={{
           left: left,
-          width: width,
+          width: 45,
           top: 0,
           bottom: 0,
           backgroundColor: config.selectedAreaColor,
           height: "4.2rem",
-          // margin: "0.1rem",
+          marginLeft: "0.1rem",
           borderRadius: "0.4rem"
         }}
         id="area"></div>

@@ -68,6 +68,7 @@ const Calender = (props) => {
   const [fetchEvents, setFetchEvents] = useState(false)
   const [rerenderData, setRerenderData] = useState(false)
   const [startDate, setStartDate] = useState(new dayjs(new Date()).format(DATE_FORMAT))
+  const [fetcher, setFetcher] = useState(false)
   const {
     fetchDepartments,
     departments,
@@ -103,7 +104,7 @@ const Calender = (props) => {
   useEffect(() => {
     teamFetcher()
     // scheduleFetcher()
-  }, [startDate])
+  }, [fetcher, startDate])
   useEffect(() => {
     teamInScheduler()
   }, [teamMembers?.length])
@@ -348,7 +349,6 @@ const Calender = (props) => {
         eventsResource.push(getWeekEvents)
       })
       const flatArray = eventsResource.flat()
-      console.log([...events, ...flatArray], "REquiredArray")
       schedulerData.setEvents([...events, ...flatArray])
     }
   }
@@ -568,46 +568,23 @@ const Calender = (props) => {
       }
     }
     setId(slotName)
-    // if (slotName) {
-    //   if (
-    //     window.confirm(
-    //       `Do you want to create a new event? {slotId: ${slotId}, slotName: ${slotName}, start: ${start}, end: ${end}, type: ${type}, item: ${item}}`
-    //     )
-    //   ) {
-    // let newFreshId = 0;
-    // schedulerData.events.forEach((item) => {
-    //   if (item.id >= newFreshId) newFreshId = item.id + 1;
-    // });
-    // const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-    // let newEvent = {
-    //   id: newFreshId,
-    //   title: "New Event",
-    //   start: start,
-    //   end: end,
-    //   resourceId: slotId,
-    //   bgColor: `#${randomColor}`
-    // };
-    // setResourceEvent(newEvent);
-    //     getRenderSd(schedulerData);
-    //     schedulerData.addEvent(newEvent);
-    //     triggerRerender(rerender + 1);
-    //   }
-    // } else {
-    //   alert("Event in progress");
-    // }
   }
   const deleteScheduleEvent = async (id, event) => {
+    /**
+     * @mehran-nickelfox
+     * @function
+     * deltes the item from Object
+     * @Fixed
+     */
     const openArrays = getOpenArrays(schedulerData)
     const params = [`${id}/`]
     const response = await deleteEvent(params)
     if (response?.success) {
       handlePopUpClose()
       schedulerData?.removeEvent(event)
-      makeResourceEvents(schedulerData?.events, resoureMap)
+      setFetcher((prev) => !prev)
     }
-    openArrays.forEach((arrayItem) => {
-      toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
-    })
+    keepDataOpen(openArrays, schedulerData)
   }
   const postEvent = async (apiData) => {
     const response = await addEvents(apiData)
