@@ -223,47 +223,77 @@ export const getEndEventObject = (evt) => {
   return requiredObject
 }
 
-export const getUniqueMapFn = (displayRenderData, apiData, projects) => {
+export const getUniqueMapFn = (displayRenderData, apiData) => {
   const closedArray = displayRenderData.filter((item) => !item?.expanded)
   const openArray = displayRenderData.filter((item) => item?.expanded)
   const responseMap = new Map()
+
   apiData.forEach((item) => {
-    responseMap?.set(item?.id, item)
+    if (!responseMap?.has(item?.id)) {
+      responseMap?.set(item?.id, [
+        {
+          ...item,
+          expanded: getExpandedValue(openArray, item)
+        }
+      ])
+    } else {
+      responseMap?.set(item?.id, [
+        ...responseMap.get(item?.id),
+        {
+          ...item,
+          expanded: getExpandedValue(openArray, item)
+        }
+      ])
+    }
   })
-  const newRequiredMap = new Map()
-  openArray.forEach((d) => {
+  const closeRequiredMap = new Map()
+
+  closedArray.forEach((d) => {
     const data = responseMap.get(d?.slotId)
-    newRequiredMap.set(d?.slotId, {
+    closeRequiredMap.set(d?.slotId, {
       ...data,
       expanded: true
     })
   })
-
-  const replaceArr = closedArray.map((i) => {
-    return {
-      id: i.slotId,
-      name: i.slotName,
-      weeklyAvailability: 40,
-      expanded: i.expanded,
-      parentId: i.parentId,
-      workDays: i.workDays,
-      editPopup: false,
-      email: i?.email,
-      department: i?.department,
-      color: i?.color,
-      assignedProjects: getProjects(i, projects)
-    }
-  })
-  const sortedArray = getSortedArray([...Array.from(newRequiredMap.values()), ...replaceArr])
+  console.log(Array.from(responseMap.values()).flat(2), "Response")
+  // const replaceArr = closedArray.map((i) => {
+  //   return {
+  //     id: i.slotId,
+  //     name: i.slotName,
+  //     weeklyAvailability: 40,
+  //     expanded: i.expanded,
+  //     parentId: i.parentId,
+  //     workDays: i.workDays,
+  //     editPopup: false,
+  //     email: i?.email,
+  //     department: i?.department,
+  //     color: i?.color,
+  //     assignedProjects: getProjects(i, projects)
+  //   }
+  // })
+  // const sortedArray = getSortedArray([
+  //   ...Array.from(openRequiredMap.values()),
+  //   ...Array.from(closeRequiredMap.values())
+  // ])
   if (openArray?.length > 0) {
+    // console.log(sortedArray, "OPENARRAY")
     // return [...Array.from(newRequiredMap.values()), ...closedArray]
-    return sortedArray
+    return Array.from(responseMap.values()).flat(2)
   } else {
+    console.log("APIDATA")
     return apiData
   }
 }
-function getSortedArray(arr) {
-  return arr.sort(function (a, b) {
-    return a.name > b.name ? 1 : a === b ? 0 : -1
+// function getSortedArray(arr) {
+//   return arr.sort(function (a, b) {
+//     return a.name > b.name ? 1 : a === b ? 0 : -1
+//   })
+// }
+
+const getExpandedValue = (array, item) => {
+  const openRequiredMap = new Map()
+  array.forEach((d) => {
+    openRequiredMap.set(d?.slotId, d)
   })
+  return openRequiredMap.has(item?.id) ? true : false
 }

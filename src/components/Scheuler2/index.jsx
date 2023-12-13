@@ -797,15 +797,6 @@ const Calender = (props) => {
     setPopupChild(key)
     setOpenPopup(true)
   }
-  const getEventSd = (schedulerData) => {
-    setSchedulerData(schedulerData)
-    const { events } = schedulerData
-    schedulerData.setEvents(events)
-    setView(view + 1)
-
-    // setMoved(moved + 1)
-    // triggerRerender(rerender - 1)
-  }
   const handlePopUpClose = () => {
     setOpenPopup(false)
     setPopupChild("")
@@ -813,19 +804,10 @@ const Calender = (props) => {
     setPopUpStyles(null)
   }
   const addResorceInScheduler = (values) => {
-    // const resourcesArray = schedulerData?.resources
-    // const requiredArray = [...resourcesArray, values]
-    // setResourceMap(convertArrayToMap(requiredArray))
-    // // // const startDate = new Date()
-    // // // const convertedStartDate = new dayjs(startDate).format("YYYY-MM-DD hh:mm:ss")
-    // // // const endDate = new dayjs().day(7).endOf("day").format("YYYY-MM-DD hh:mm:ss")
-    // setFetcher((prev) => !prev)
-    // handlePopUpClose()
-    // // getRenderSd(schedulerData)
-    // triggerRerender(rerender + 1)
-    // setCounter(counter + 1)
-    // newEventfromResource(schedulerData, values?.id, convertedStartDate, endDate)
-    schedulerData.addResource(values)
+    /**@mehran-nickelfox
+     * @Fixed
+     * Api call on adding a project
+     */
     setFetcher((prev) => !prev)
   }
   const getRenderSd = (schedulerData, newProject) => {
@@ -967,6 +949,7 @@ const Calender = (props) => {
         return
     }
   }
+  console.log(schedulerData, "SD")
   return (
     <div
       style={{
