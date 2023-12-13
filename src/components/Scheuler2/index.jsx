@@ -985,13 +985,13 @@ const Calender = (props) => {
           />
         )}{" "}
       </DndProvider>
-      <Box className="flex flex-col px-4" sx={{ paddingTop: "2rem" }}>
+      {/* <Box className="flex flex-col px-4" sx={{ paddingTop: "2rem" }}>
         <PrimaryButton
           sx={styles?.addPersonButton}
           onClick={handleAddEventPopUp.bind(null, "addResource")}>
           + Add Person
         </PrimaryButton>
-      </Box>
+      </Box> */}
       <Popup
         open={openPopUp}
         handleClose={handlePopUpClose}

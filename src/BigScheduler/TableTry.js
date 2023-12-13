@@ -458,7 +458,7 @@ const TableTry = (props) => {
                   )}
                 </Typography>
               </Box> */}
-              <Box className="w-full pr-1">
+              <Box className="w-full py-3">
                 {/* <DropDown
                   value={""}
                   name={"weeklyAvailability"}
