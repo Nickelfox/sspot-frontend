@@ -224,10 +224,13 @@ export const getEndEventObject = (evt) => {
 }
 
 export const getUniqueMapFn = (displayRenderData, apiData) => {
+  /**@mehran-nickelfox
+   * @Fixed
+   * This Function will reset resources in scheduler once for next api calls of fetch schedules
+   */
   const closedArray = displayRenderData.filter((item) => !item?.expanded)
   const openArray = displayRenderData.filter((item) => item?.expanded)
   const responseMap = new Map()
-
   apiData.forEach((item) => {
     if (!responseMap?.has(item?.id)) {
       responseMap?.set(item?.id, [
@@ -255,41 +258,12 @@ export const getUniqueMapFn = (displayRenderData, apiData) => {
       expanded: true
     })
   })
-  console.log(Array.from(responseMap.values()).flat(2), "Response")
-  // const replaceArr = closedArray.map((i) => {
-  //   return {
-  //     id: i.slotId,
-  //     name: i.slotName,
-  //     weeklyAvailability: 40,
-  //     expanded: i.expanded,
-  //     parentId: i.parentId,
-  //     workDays: i.workDays,
-  //     editPopup: false,
-  //     email: i?.email,
-  //     department: i?.department,
-  //     color: i?.color,
-  //     assignedProjects: getProjects(i, projects)
-  //   }
-  // })
-  // const sortedArray = getSortedArray([
-  //   ...Array.from(openRequiredMap.values()),
-  //   ...Array.from(closeRequiredMap.values())
-  // ])
   if (openArray?.length > 0) {
-    // console.log(sortedArray, "OPENARRAY")
-    // return [...Array.from(newRequiredMap.values()), ...closedArray]
     return Array.from(responseMap.values()).flat(2)
   } else {
-    console.log("APIDATA")
     return apiData
   }
 }
-// function getSortedArray(arr) {
-//   return arr.sort(function (a, b) {
-//     return a.name > b.name ? 1 : a === b ? 0 : -1
-//   })
-// }
-
 const getExpandedValue = (array, item) => {
   const openRequiredMap = new Map()
   array.forEach((d) => {
