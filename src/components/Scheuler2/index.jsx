@@ -661,6 +661,12 @@ const Calender = (props) => {
     schedulerContent.scrollLeft = 10
   }
   const updateEventStart = async (schedulerData, event, newStart) => {
+    /**
+     * @mehran-nickelfox
+     * @function
+     * Updates Event Start for Object
+     * @Fixed
+     */
     if (event?.resourceParentID) {
       const openArrays = getOpenArrays(schedulerData)
       const requiredData = {
@@ -679,25 +685,24 @@ const Calender = (props) => {
         }
         const parameter = [`${event?.id}/`]
         const returnedData = await updateSchedules(parameter, requiredData)
-
         const newDataStart = dayjs(returnedData?.data?.start_at).format(COMMON_FORMAT_FOR_EVENTS)
         schedulerData.updateEventStart(event, newDataStart)
-        setView(view + 1)
-        getRenderSd(schedulerData)
-        setCounter(counter + 1)
-        openArrays.forEach((arrayItem) => {
-          toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
-        })
+        setFetchEvents((prev) => !prev)
       } else {
         eventsOverLap()
-        openArrays.forEach((arrayItem) => {
-          toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
-        })
       }
+      keepDataOpen(openArrays, schedulerData)
+      getRenderSd(schedulerData)
     }
   }
 
   const updateEventEnd = async (schedulerData, event, newEnd) => {
+    /**
+     * @mehran-nickelfox
+     * @function
+     * Updates Event End for Object
+     * @Fixed
+     */
     if (event?.resourceParentID) {
       const openArrays = getOpenArrays(schedulerData)
       const dateRequiredData = {
@@ -718,21 +723,12 @@ const Calender = (props) => {
         const returnedData = await updateSchedules(parameter, requiredData)
         const newDataEnd = dayjs(returnedData?.data?.end_at).format(COMMON_FORMAT_FOR_EVENTS)
         schedulerData.updateEventEnd(event, newDataEnd)
-        getRenderSd(schedulerData)
-        setCounter(counter + 1)
-        setView(view + 1)
-        openArrays.forEach((arrayItem) => {
-          toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
-        })
+        setFetchEvents((prev) => !prev)
       } else {
         eventsOverLap()
-        // getRenderSd(schedulerData)
-        // setCounter(counter + 1)
-        // setView(view + 1)
-        openArrays.forEach((arrayItem) => {
-          toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
-        })
       }
+      keepDataOpen(openArrays, schedulerData)
+      getRenderSd(schedulerData)
     }
   }
   const createNewProject = async (body) => {
@@ -749,6 +745,12 @@ const Calender = (props) => {
     }
   }
   const moveEvent = async (schedulerData, event, slotId, slotName, start, end) => {
+    /**
+     * @mehran-nickelfox
+     * @function
+     * Updates Event Start for Object
+     * @Fixed
+     */
     if (event?.resourceParentID) {
       const openArrays = getOpenArrays(schedulerData)
       const resourceChildMapObject = resoureMap.get(event?.resourceParentID)
@@ -782,22 +784,13 @@ const Calender = (props) => {
           // schedulerData.moveEvent(event, slotId, slotName, newStart, newEnd)
           schedulerData.updateEventStart(event, newStart)
           schedulerData.updateEventEnd(event, newEnd)
-
-          // getRenderSd(schedulerData)
-          // getEventSd(schedulerData)
-          // setView(view + 1)
-          // setCounter(counter + 1)
-          openArrays.forEach((arrayItem) => {
-            toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
-          })
+          setFetchEvents((prev) => !prev)
         } else {
           eventsOverLap()
-          // openArrays.forEach((arrayItem) => {
-          //   toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
-          // })
         }
+        keepDataOpen(openArrays, schedulerData)
+        getRenderSd(schedulerData)
       }
-      setView(view + 1)
     }
   }
   const handleAddEventPopUp = (key) => {
