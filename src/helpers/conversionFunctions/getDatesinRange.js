@@ -29,6 +29,7 @@ export const getCheckDate = (requiredData, scheduleArray, key) => {
   const commonArray = [...startDateArray, ...endDateArray]
   const commonSet = new Set(commonArray)
   const areDatesInRangeArray = []
+  console.log(scheduleArray, requiredData, "DATESET")
   dateInRange.forEach((date) => {
     switch (key) {
       case "create":
