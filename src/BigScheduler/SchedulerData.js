@@ -12,6 +12,7 @@ import { CellUnit, DATE_FORMAT, DATETIME_FORMAT } from "./index"
 import { ViewTypes as ViewType } from "./helpers"
 import { months } from "../helpers/Months/months"
 import { getReplaceArr } from "helpers/conversionFunctions/resourceMap"
+import { Loader } from "redux/dispatcher/Loader"
 
 export default class SchedulerData {
   constructor(
@@ -652,7 +653,7 @@ export default class SchedulerData {
         date != undefined
           ? this.localeDayjs(date)
           : this.localeDayjs(this.startDate).add(num, "months")
-      this.endDate = this.localeDayjs(this.startDate).add(4, "w").endOf("year")
+      this.endDate = this.localeDayjs(this.startDate).add(4, "w").endOf("week")
     } else if (this.viewType === ViewType.Quarter) {
       this.startDate =
         date != undefined
@@ -692,12 +693,13 @@ export default class SchedulerData {
     /**Check
      * Here it is going to bet end of year
      */
-    let end = this.localeDayjs(new Date(new Date(this.startDate).getFullYear(), 11, 31))
-    if (now.getMonth() == 11) {
-      end = this.localeDayjs(new Date(now.getFullYear() + 1, 0, 1))
-    } else {
-      end = this.localeDayjs(new Date(new Date(this.startDate).getFullYear(), 11, 31))
-    }
+    // let end = this.localeDayjs(new Date(new Date(this.startDate).getFullYear(), 11, 31))
+    // if (now.getMonth() == 11) {
+    //   end = this.localeDayjs(new Date(now.getFullYear() + 1, 0, 1))
+    // } else {
+    //   end = this.localeDayjs(new Date(new Date(this.startDate).getFullYear(), 11, 31))
+    // }
+    let end = this.localeDayjs(new Date(this.startDate)).add(3, "w").endOf("w")
 
     if (this.showAgenda) {
       headers.push({
@@ -726,9 +728,9 @@ export default class SchedulerData {
       } else {
         const headerStart = dayjs(header).year()
         const endStart = dayjs(end).year()
-        if (endStart > headerStart) {
-          end = this.localeDayjs(new Date(new Date(this.startDate).getFullYear() + 1, 9, 31))
-        }
+        // if (endStart > headerStart) {
+        //   end = this.localeDayjs(new Date(new Date(this.startDate).getFullYear() + 1, 9, 31))
+        // }
         if (header >= start && header <= end) {
           while (header >= start && header <= end) {
             let time = header.format(DATETIME_FORMAT)
@@ -748,6 +750,7 @@ export default class SchedulerData {
   }
 
   _createInitHeaderEvents(header) {
+    console.log(this.endDate, "Line Number 752")
     let start = this.localeDayjs(new Date(header.time)),
       startValue = start.format(DATETIME_FORMAT)
     let endValue = this.showAgenda
@@ -929,6 +932,7 @@ export default class SchedulerData {
         slotStack.push(currentNode.children[i])
       }
     }
+    Loader.hide()
     return initRenderData
   }
 
@@ -1114,6 +1118,7 @@ export default class SchedulerData {
     return requiredArray
   }
   _createRenderData() {
+    Loader.show()
     /**
      * @description
      * TODO: THIS FUNCTION WILL GET CHANGED 100%

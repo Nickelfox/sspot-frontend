@@ -22,6 +22,7 @@ import { Popover } from "antd"
 import DropDown from "components/DropDown"
 import CustomAutoComplete from "./schedulerComponents/AutoComplete"
 import { v4 as uuid } from "uuid"
+import AppLoader from "components/Loader/AppLoader"
 
 const editItemObject = [
   /**
@@ -242,6 +243,7 @@ const TableTry = (props) => {
                                       style={{ width: schedulerWidth, position: "relative" }}
                                       // ref={props.schedulerContentBgTableRef}
                                     >
+                                      {!resourceEventsList && <AppLoader />}
                                       <BodyView
                                         {...props}
                                         // scroller={this.bodyScroller}
