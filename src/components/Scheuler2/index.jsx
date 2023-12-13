@@ -482,7 +482,6 @@ const Calender = (props) => {
   const newEvent = (schedulerData, slotId, slotName, start, end, item) => {
     handlePopUpClose()
     const requiredDataObject = {}
-
     const childObject = resoureMap.get(slotId)
     const childObjectArray = childObject?.filter(
       (childObject) => childObject?.parentId === item?.parentId
@@ -574,16 +573,19 @@ const Calender = (props) => {
   }
   const postEvent = async (apiData) => {
     const response = await addEvents(apiData)
-    const requiredEventObject = {
-      id: response?.id,
-      title: response?.assigned_hours,
-      start: dayjs(response?.start_at).startOf("d").format("YYYY-MM-DD HH:MM:ss"),
-      end: dayjs(response?.end_at).endOf("d").format("YYYY-MM-DD HH:MM:ss"),
-      resourceId: apiData?.resourceId,
-      resourceParentID: apiData?.resourceParentID,
-      bgColor: getBgColor(apiData?.resourceParentID, apiData?.resourceId)
+    if (response?.success) {
+      const data = response?.data
+      const requiredEventObject = {
+        id: data?.id,
+        title: data?.assigned_hours,
+        start: dayjs(data?.start_at).startOf("d").format("YYYY-MM-DD HH:MM:ss"),
+        end: dayjs(data?.end_at).endOf("d").format("YYYY-MM-DD HH:MM:ss"),
+        resourceId: apiData?.resourceId,
+        resourceParentID: apiData?.resourceParentID,
+        bgColor: getBgColor(apiData?.resourceParentID, apiData?.resourceId)
+      }
+      createNewEvent(requiredEventObject)
     }
-    createNewEvent(requiredEventObject)
   }
   const patchEvent = async (event, apiData, id) => {
     const openArrays = getOpenArrays(schedulerData)
@@ -614,21 +616,22 @@ const Calender = (props) => {
     return filteredArray[0]?.color
   }
   const createNewEvent = (requiredData) => {
-    //TODO: Write a function to get dates from events and check if startand end date exists in it
+    /**
+     * @mehran-nickelfox
+     * @function
+     * Creates the item from Object
+     * @Fixed
+     */
     const checkDates = getCheckDate(requiredData, schedulerData?.events, "create")
+    const openArrays = getOpenArrays(schedulerData)
     if (checkDates) {
-      setResourceEvent(requiredData)
-      getRenderSd(schedulerData)
-      schedulerData.addEvent(requiredData)
       handlePopUpClose()
-      // fetchSchedules()
+      setFetchEvents((prev) => !prev)
+      keepDataOpen(openArrays, schedulerData)
+      getRenderSd(schedulerData)
     } else {
       eventsOverLap()
     }
-    // setFetchEvents(true)
-    // setCounter(counter + 1)
-    setView(view + 1)
-    // triggerRerender(rerender + 1)
   }
   const newEventfromResource = (schedulerData, slotId, start, end) => {
     let newFreshId = 0
