@@ -11,7 +11,7 @@ export const getRequiredArray = (headers) => {
     const requiredObject = {
       time: item?.time,
       nonWorkingTime: item?.nonWorkingTime,
-      weekDay: newWeekNumber === "1" ? year : newWeekNumber,
+      weekDay: month === "Jan" && newWeekNumber === "1" ? year : newWeekNumber,
       month: month
     }
     return requiredObject
@@ -38,104 +38,6 @@ export const getHeaderMap = (requiredArray) => {
   })
   return headerMap
 }
-//eslint-disable-next-line no-unused-vars
-const dummyData = [
-  {
-    id: "578e2d0d-60cf-4e0f-b17e-fb2879024b4a",
-    capacity: "00:00:09",
-    department: "e8107b89-6a7b-46e8-b0a5-ec6289d8580b",
-    departmentName: "DEVELOPER",
-    work_days: ["MON", "TUE", "WED", "THU", "FRI"],
-    user: {
-      full_name: "a1",
-      email: "a1@tcs.com",
-      role: "468920b7-8995-4a39-9ff9-121019e48877",
-      phone_number: null,
-      designation: null
-    },
-    company: "28971a3f-1b5c-4013-9b8e-8ee15e15c09e",
-    project_members: [
-      {
-        id: "f58b990b-8bba-4f6a-a2b5-19ee9362de77",
-        project: {
-          id: "ec4dd3b4-a9b6-4a28-824b-f3b73a9e4c46",
-          project_name: "Int512",
-          project_code: "PRJ123",
-          client: "bcdd930c-6bda-4137-8e5d-207e0c30e724",
-          start_date: "2023-10-15",
-          end_date: "2023-12-15",
-          project_type: "NON_BILLABLE",
-          notes: "This is a new project for testing.",
-          departmentName: "DEVELOPER"
-        },
-        member: "578e2d0d-60cf-4e0f-b17e-fb2879024b4a"
-      },
-      {
-        id: "a8d4ea39-caa1-4f4b-94b4-4d6c2c9ce3ce",
-        project: {
-          id: "cb90b196-cad4-4bad-88d0-940edaed4829",
-          project_name: "abx",
-          project_code: "abx",
-          client: "bcdd930c-6bda-4137-8e5d-207e0c30e724",
-          start_date: "2023-11-06",
-          end_date: null,
-          project_type: "FIXED",
-          notes: "",
-          departmentName: "DEVELOPER"
-        },
-        member: "578e2d0d-60cf-4e0f-b17e-fb2879024b4a"
-      },
-      {
-        id: "e636db20-1e7e-493a-a506-6b254f21bc3c",
-        project: {
-          id: "bae21368-baff-4225-b8c1-8322e9780158",
-          project_name: "test",
-          project_code: "test",
-          client: "bcdd930c-6bda-4137-8e5d-207e0c30e724",
-          start_date: "2023-11-02",
-          end_date: null,
-          project_type: "FIXED",
-          notes: "",
-          departmentName: "DEVELOPER"
-        },
-        member: "578e2d0d-60cf-4e0f-b17e-fb2879024b4a"
-      }
-    ]
-  },
-  {
-    id: "578e2d0d-60cf-4e0f-b17e-fb2879024bjkb",
-    capacity: "00:00:09",
-    department: "e8107b89-6a7b-46e8-b0a5-ec6289d85815",
-    departmentName: "HR",
-    work_days: ["MON", "TUE", "WED", "THU", "FRI"],
-    user: {
-      full_name: "Mehran",
-      email: "a1@tcs.com",
-      role: "468920b7-8995-4a39-9ff9-121019e48877",
-      phone_number: null,
-      designation: null
-    },
-    company: "28971a3f-1b5c-4013-9b8e-8ee15e15c06public",
-    project_members: []
-  },
-  {
-    id: "578e2d0d-60cf-4e0f-b17e-fb2879024bjpo",
-    capacity: "00:00:09",
-    department: "e8107b89-6a7b-46e8-b0a5-ec6289d85858",
-    departmentName: "DEVELOPER",
-    work_days: ["MON", "TUE", "WED", "THU", "FRI"],
-    user: {
-      full_name: "Rishab",
-      email: "a1@tcs.com",
-      role: "468920b7-8995-4a39-9ff9-121019e488sac",
-      phone_number: null,
-      designation: null
-    },
-    company: "28971a3f-1b5c-4013-9b8e-8ee15e15c06pri",
-    project_members: []
-  }
-]
-
 export const getDataArray = (array, projects) => {
   let requiredUserInfo = []
   array.forEach((data) => {
@@ -143,14 +45,15 @@ export const getDataArray = (array, projects) => {
       id: data.id,
       name: data?.user?.full_name,
       weeklyAvailability: data?.capacity,
-      workDays: data?.work_days, //TODO: uncooment this
-      // workDays: ["MON", "TUE", "THU", "FRI"],
+      workDays: data?.work_days,
       email: data?.user?.email,
       editPopup: false,
       expanded: false,
-      projects: getProjectsArray(data?.project_member, data),
+      projects: getProjectsArray(data?.project_members, data),
       department: data?.department?.name,
-      assignedProjects: getAssignedProjects(data?.project_member, projects)
+      assignedProjects: getAssignedProjects(data?.project_members, projects),
+      weeklyCapacity: data?.weekly_capacity,
+      weeklyAssignedHours: data?.weekly_assigned_hours
     }
     requiredUserInfo.push(requiredObject)
   })
@@ -193,7 +96,6 @@ export const getEventListing = (eventArray) => {
 }
 const getAssignedProjects = (projectArray, projects) => {
   const projectIdMap = projectArray.map((project) => project?.project?.id)
-
   const requiredArray = projects.filter((project) => !projectIdMap.includes(project?.value))
   return requiredArray
 }
@@ -221,4 +123,53 @@ export const getEndEventObject = (evt) => {
   end = evt?.end
   const requiredObject = { end: end, start: start, ...evt }
   return requiredObject
+}
+
+export const getUniqueMapFn = (displayRenderData, apiData) => {
+  /**@mehran-nickelfox
+   * @Fixed
+   * This Function will reset resources in scheduler once for next api calls of fetch schedules
+   */
+  const closedArray = displayRenderData.filter((item) => !item?.expanded)
+  const openArray = displayRenderData.filter((item) => item?.expanded)
+  const responseMap = new Map()
+  apiData.forEach((item) => {
+    if (!responseMap?.has(item?.id)) {
+      responseMap?.set(item?.id, [
+        {
+          ...item,
+          expanded: getExpandedValue(openArray, item)
+        }
+      ])
+    } else {
+      responseMap?.set(item?.id, [
+        ...responseMap.get(item?.id),
+        {
+          ...item,
+          expanded: getExpandedValue(openArray, item)
+        }
+      ])
+    }
+  })
+  const closeRequiredMap = new Map()
+
+  closedArray.forEach((d) => {
+    const data = responseMap.get(d?.slotId)
+    closeRequiredMap.set(d?.slotId, {
+      ...data,
+      expanded: true
+    })
+  })
+  if (openArray?.length > 0) {
+    return Array.from(responseMap.values()).flat(2)
+  } else {
+    return apiData
+  }
+}
+const getExpandedValue = (array, item) => {
+  const openRequiredMap = new Map()
+  array.forEach((d) => {
+    openRequiredMap.set(d?.slotId, d)
+  })
+  return openRequiredMap.has(item?.id) ? true : false
 }

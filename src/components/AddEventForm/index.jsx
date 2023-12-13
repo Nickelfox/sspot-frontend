@@ -126,6 +126,10 @@ const AddEvent = (props) => {
     const difference = dayjs(endDate).diff(date, "days")
     setDateDiff(difference === 0 ? 1 : difference + 1)
   }
+  const disabledDate = (current) => {
+    // Can not select days before today and today
+    return current && current < dayjs(date).endOf("day")
+  }
   return (
     <Box sx={styles.formDisplay}>
       <Typography
@@ -243,6 +247,7 @@ const AddEvent = (props) => {
                 <DatePicker
                   format={"YYYY-MM-DD"}
                   size="small"
+                  disabledDate={disabledDate}
                   value={dayjs(endDate, "YYYY-MM-DD")}
                   name="endDate"
                   allowClear={false}

@@ -56,12 +56,7 @@ class BodyView extends Component {
                           key={key3}
                           className={`body_${childItem[0]} flex`}
                           id={`X_${childItem[0]}`}
-                          style={{
-                            border: 0,
-                            marginTop: 0,
-                            marginBottom: 0,
-                            height: 43
-                          }}>
+                          style={{ border: 0, margin: 0, padding: 0 }}>
                           {getRows(Array.from(childItem[1]), daySet, currentItem)}
                         </td>
                       )
@@ -77,6 +72,20 @@ class BodyView extends Component {
 
     return tableRows
   }
+}
+{
+  /* <td
+                          key={key3}
+                          className={`body_${childItem[0]} flex`}
+                          id={`X_${childItem[0]}`}
+                          style={{
+                            border: 0,
+                            marginTop: 0,
+                            marginBottom: 0,
+                            height: 43
+                          }}>
+                          {getRows(Array.from(childItem[1]), daySet, currentItem)}
+                        </td> */
 }
 
 export default BodyView

@@ -21,6 +21,7 @@ import { DATETIME_FORMAT } from "."
 import { Popover } from "antd"
 import CustomAutoComplete from "./schedulerComponents/AutoComplete"
 import { v4 as uuid } from "uuid"
+import AppLoader from "components/Loader/AppLoader"
 
 const editItemObject = [
   /**
@@ -52,15 +53,11 @@ const TableTry = (props) => {
     openEditItemPopUp,
     closePopup,
     handlePopUp,
-    fetchProjects,
     assignProject
   } = props
   //eslint-disable-next-line no-unused-vars
   const { renderData, cellUnit, config, headers } = schedulerData
   const displayRenderData = renderData.filter((o) => o.render)
-  useEffect(() => {
-    fetchProjects()
-  }, [])
 
   const borderBottom = "1px solid #c4c4c4"
   let contentScrollbarHeight = 17,
@@ -219,8 +216,8 @@ const TableTry = (props) => {
                               className="scheduler-view"
                               style={{
                                 // width: schedulerContainerWidth,
-                                height: 43,
-                                marginTop: "-2px"
+                                height: 43
+                                // marginTop: "-2px"
                                 // verticalAlign: "top"
                               }}>
                               <div
@@ -245,6 +242,7 @@ const TableTry = (props) => {
                                       style={{ width: schedulerWidth, position: "relative" }}
                                       // ref={props.schedulerContentBgTableRef}
                                     >
+                                      {!resourceEventsList && <AppLoader />}
                                       <BodyView
                                         {...props}
                                         // scroller={this.bodyScroller}
@@ -438,7 +436,7 @@ const TableTry = (props) => {
             }}
             className="bg-[#fff] stickyCell flex justify-end items-center px-4 pl-2">
             <Box className="flex justify-space w-full">
-              <Box
+              {/* <Box
                 className="w-full cursor-pointer pl-2"
                 onClick={openEditItemPopUp.bind(null, item)}>
                 <Typography variant="p2" sx={{ color: "#888888", textDecoration: "underline" }}>
@@ -458,8 +456,8 @@ const TableTry = (props) => {
                     />
                   )}
                 </Typography>
-              </Box>
-              <Box className="w-full pr-1">
+              </Box> */}
+              <Box className="w-full py-3">
                 {/* <DropDown
                   value={""}
                   name={"weeklyAvailability"}
@@ -533,9 +531,7 @@ const TableTry = (props) => {
       </>
     )
   }
-  return (
-    <div style={{ maxWidth: "100vw", overflow: "auto", border: "1px solid gray" }}>{getDivs()}</div>
-  )
+  return <div style={{ overflow: "auto", border: "1px solid gray" }}>{getDivs()}</div>
 }
 
 export default TableTry

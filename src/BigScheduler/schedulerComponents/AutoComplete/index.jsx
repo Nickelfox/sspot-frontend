@@ -48,6 +48,8 @@ const CustomAutoComplete = (props) => {
           <NewIcon />
         </div>
       }
+      placeholder="Projects"
+      isOptionEqualToValue={(option, value) => option === value}
       PaperComponent={({ children }) => {
         return (
           <Paper className={styles.matrix_box}>
@@ -76,6 +78,7 @@ const CustomAutoComplete = (props) => {
               "& fieldset": { top: 0 },
               padding: 0
             }}
+            placeholder="Projects"
           />
         )
       }}

@@ -8,7 +8,7 @@ import { Popover } from "antd"
 import EventItemPopover from "./EventItemPopover"
 import { CellUnit, DATETIME_FORMAT } from "./index"
 import { DnDTypes } from "./DnDTypes"
-
+import { Box } from "@mui/material"
 class EventItem extends Component {
   constructor(props) {
     super(props)
@@ -136,7 +136,8 @@ class EventItem extends Component {
       clientX = ev.clientX
     }
     const { left, width, leftIndex, rightIndex, schedulerData } = this.props
-    let cellWidth = schedulerData.getContentCellWidth()
+    // let cellWidth = schedulerData.getContentCellWidth()
+    let cellWidth = 50
     let offset = leftIndex > 0 ? 5 : 6
     let minWidth = cellWidth - offset
     let maxWidth = rightIndex * cellWidth - offset
@@ -196,7 +197,8 @@ class EventItem extends Component {
       clientX = ev.clientX
     }
     const { cellUnit, events, config, localeDayjs } = schedulerData
-    let cellWidth = schedulerData.getContentCellWidth()
+    // let cellWidth = schedulerData.getContentCellWidth()
+    let cellWidth = 50
     let offset = leftIndex > 0 ? 5 : 6
     let minWidth = cellWidth - offset
     let maxWidth = rightIndex * cellWidth - offset
@@ -371,7 +373,8 @@ class EventItem extends Component {
     }
     const { width, leftIndex, schedulerData } = this.props
     const { headers } = schedulerData
-    let cellWidth = schedulerData.getContentCellWidth()
+    // let cellWidth = schedulerData.getContentCellWidth()
+    let cellWidth = 50
     let offset = leftIndex > 0 ? 5 : 6
     let minWidth = cellWidth - offset
     let maxWidth = (headers.length - leftIndex) * cellWidth - offset
@@ -427,7 +430,8 @@ class EventItem extends Component {
       clientX = ev.clientX
     }
     const { headers, cellUnit, events, config, localeDayjs } = schedulerData
-    let cellWidth = schedulerData.getContentCellWidth()
+    // let cellWidth = schedulerData.getContentCellWidth()
+    let cellWidth = 50
     let offset = leftIndex > 0 ? 5 : 6
     let minWidth = cellWidth - offset
     let maxWidth = (headers.length - leftIndex) * cellWidth - offset
@@ -595,10 +599,11 @@ class EventItem extends Component {
 
     let start = localeDayjs(new Date(eventItem.start))
     let eventTitle = isInPopover ? `${start.format("HH:mm")} ${titleText}` : titleText
-    let startResizeDiv = <div />
+    let startResizeDiv = <div style={{ borderRight: "2px dotted #fff", paddingLeft: "1rem" }} />
     if (this.startResizable(this.props))
       startResizeDiv = (
         <div
+          style={{ paddingLeft: "1rem" }}
           className="event-resizer event-start-resizer"
           ref={(ref) => (this.startResizer = ref)}></div>
       )
@@ -640,13 +645,13 @@ class EventItem extends Component {
         className="timeline-event"
         ref={this.eventItemRef}
         onMouseMove={isPopoverPlacementMousePosition ? this.handleMouseMove : undefined}
-        style={{ left: left, width: width + 1, right: 0 }}>
-        <div
+        style={{ left: left, width: width, right: 0 }}>
+        <Box
           onClick={() => {
             if (eventClick) eventItemClick(schedulerData, eventItem)
           }}>
           {eventItemTemplate}
-        </div>
+        </Box>
         {startResizeDiv}
         {endResizeDiv}
       </a>
@@ -697,11 +702,13 @@ class EventItem extends Component {
     const { popoverOffsetX, mousePositionPlacement } = getMousePositionOptionsData()
 
     const aItem = config.dragAndDropEnabled ? connectDragPreview(connectDragSource(a)) : a
-
+    const item = connectDragPreview(connectDragSource(a))
     return isDragging ? null : schedulerData._isResizing() ||
       config.eventItemPopoverEnabled == false ||
       eventItem.showPopover == false ? (
-      <div>{aItem}</div>
+      <div style={{ paddingLeft: "1rem", paddingRight: "1rem" }}>
+        {connectDragPreview(connectDragSource(a))}
+      </div>
     ) : (
       <Popover
         transitionName={isPopoverPlacementMousePosition ? "" : undefined}
@@ -758,9 +765,9 @@ class EventItem extends Component {
   subscribeResizeEvent = (props) => {
     if (this.startResizer != undefined) {
       if (this.supportTouch) {
-        // this.startResizer.removeEventListener('touchstart', this.initStartDrag, false);
-        // if (this.startResizable(props))
-        //     this.startResizer.addEventListener('touchstart', this.initStartDrag, false);
+        this.startResizer.removeEventListener("touchstart", this.initStartDrag, false)
+        if (this.startResizable(props))
+          this.startResizer.addEventListener("touchstart", this.initStartDrag, false)
       } else {
         this.startResizer.removeEventListener("mousedown", this.initStartDrag, false)
         if (this.startResizable(props))

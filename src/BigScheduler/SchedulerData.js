@@ -12,6 +12,7 @@ import { CellUnit, DATE_FORMAT, DATETIME_FORMAT } from "./index"
 import { ViewTypes as ViewType } from "./helpers"
 import { months } from "../helpers/Months/months"
 import { getReplaceArr } from "helpers/conversionFunctions/resourceMap"
+import { Loader } from "redux/dispatcher/Loader"
 
 export default class SchedulerData {
   constructor(
@@ -72,7 +73,6 @@ export default class SchedulerData {
   }
 
   setResources(resources) {
-    console.log("SET RESOURCE IS FIRED")
     this._validateResource(resources)
     this.resources = Array.from(new Set(resources))
     this._createRenderData()
@@ -174,22 +174,22 @@ export default class SchedulerData {
   }
 
   prev() {
+    this.events = []
     this._resolveDate(-1)
-    // this.events = []
     this._createHeaders()
     this._createRenderData()
   }
 
   next() {
-    this._resolveDate(1)
     this.events = []
+    this._resolveDate(1)
     this._createHeaders()
     this._createRenderData()
   }
 
   setDate(date = dayjs(new Date())) {
-    this._resolveDate(0, date)
     this.events = []
+    this._resolveDate(0, date)
     this._createHeaders()
     this._createRenderData()
   }
@@ -216,7 +216,7 @@ export default class SchedulerData {
             this.endDate = this.localeDayjs(new Date(this.startDate)).endOf("week")
           } else if (viewType === ViewType.Month) {
             this.startDate = this.localeDayjs(new Date(date)).startOf("month")
-            this.endDate = this.localeDayjs(new Date(this.startDate)).endOf("year")
+            this.endDate = this.localeDayjs(new Date(this.startDate)).add(4, "w").endOf("year")
           } else if (viewType === ViewType.Quarter) {
             this.startDate = this.localeDayjs(new Date(date)).startOf("quarter")
             this.endDate = this.localeDayjs(new Date(this.startDate)).endOf("quarter")
@@ -249,7 +249,7 @@ export default class SchedulerData {
             this.endDate = this.localeDayjs(new Date(this.startDate)).endOf("week")
           } else if (viewType === ViewType.Month) {
             this.startDate = this.localeDayjs(new Date(date)).startOf("month")
-            this.endDate = this.localeDayjs(new Date(this.startDate)).endOf("year")
+            this.endDate = this.localeDayjs(new Date(this.startDate)).endOf("year").add(5, "w")
           } else if (viewType === ViewType.Quarter) {
             this.startDate = this.localeDayjs(new Date(date)).startOf("quarter")
             this.endDate = this.localeDayjs(new Date(this.startDate)).endOf("quarter")
@@ -653,7 +653,7 @@ export default class SchedulerData {
         date != undefined
           ? this.localeDayjs(date)
           : this.localeDayjs(this.startDate).add(num, "months")
-      this.endDate = this.localeDayjs(this.startDate).endOf("year")
+      this.endDate = this.localeDayjs(this.startDate).add(4, "w").endOf("week")
     } else if (this.viewType === ViewType.Quarter) {
       this.startDate =
         date != undefined
@@ -693,12 +693,13 @@ export default class SchedulerData {
     /**Check
      * Here it is going to bet end of year
      */
-    let end = this.localeDayjs(new Date(new Date(this.startDate).getFullYear(), 11, 31))
-    if (now.getMonth() == 11) {
-      end = this.localeDayjs(new Date(now.getFullYear() + 1, 0, 1))
-    } else {
-      end = this.localeDayjs(new Date(new Date(this.startDate).getFullYear(), 11, 31))
-    }
+    // let end = this.localeDayjs(new Date(new Date(this.startDate).getFullYear(), 11, 31))
+    // if (now.getMonth() == 11) {
+    //   end = this.localeDayjs(new Date(now.getFullYear() + 1, 0, 1))
+    // } else {
+    //   end = this.localeDayjs(new Date(new Date(this.startDate).getFullYear(), 11, 31))
+    // }
+    let end = this.localeDayjs(new Date(this.startDate)).add(3, "w").endOf("w")
 
     if (this.showAgenda) {
       headers.push({
@@ -727,9 +728,9 @@ export default class SchedulerData {
       } else {
         const headerStart = dayjs(header).year()
         const endStart = dayjs(end).year()
-        if (endStart > headerStart) {
-          end = this.localeDayjs(new Date(new Date(this.startDate).getFullYear() + 1, 9, 31))
-        }
+        // if (endStart > headerStart) {
+        //   end = this.localeDayjs(new Date(new Date(this.startDate).getFullYear() + 1, 9, 31))
+        // }
         if (header >= start && header <= end) {
           while (header >= start && header <= end) {
             let time = header.format(DATETIME_FORMAT)
@@ -749,6 +750,7 @@ export default class SchedulerData {
   }
 
   _createInitHeaderEvents(header) {
+    console.log(this.endDate, "Line Number 752")
     let start = this.localeDayjs(new Date(header.time)),
       startValue = start.format(DATETIME_FORMAT)
     let endValue = this.showAgenda
@@ -872,8 +874,7 @@ export default class SchedulerData {
         availability: slot?.weeklyAvailability,
         department: slot?.department,
         color: slot?.color ?? null,
-        assignedProjects: slot?.assignedProjects,
-        ...slot
+        assignedProjects: slot?.assignedProjects
       }
 
       let id = slot.id
@@ -931,12 +932,12 @@ export default class SchedulerData {
         slotStack.push(currentNode.children[i])
       }
     }
+    Loader.hide()
     return initRenderData
   }
 
   _getSpan(startTime, endTime, headers) {
     if (this.showAgenda) return 1
-
     function startOfWeek(date) {
       let day = date.getDay()
       let diff = date.getDate() - day
@@ -1068,9 +1069,7 @@ export default class SchedulerData {
     if (Object.prototype.toString.call(events) !== "[object Array]") {
       throw new Error("Events should be Array object")
     }
-
     events.forEach((e, index) => {
-      console.log(e)
       if (e == undefined) {
         console.error(`Event undefined: ${index}`)
         throw new Error(`Event undefined: ${index}`)
@@ -1119,6 +1118,7 @@ export default class SchedulerData {
     return requiredArray
   }
   _createRenderData() {
+    Loader.show()
     /**
      * @description
      * TODO: THIS FUNCTION WILL GET CHANGED 100%
@@ -1126,7 +1126,7 @@ export default class SchedulerData {
      */
     const replaceArr = this?.resources
     let xData = this._ggetResourceinitData(replaceArr, this.headers)
-    // let initRenderData = this._createInitRenderData(this.resources, this.headers)
+    let initRenderData = this._createInitRenderData(this.resources, this.headers)
     //this.events.sort(this._compare);
     // console.log(...xData.values(), "MAPAPAPAP")
     const ArrayValue = [...xData.values()]
