@@ -300,7 +300,6 @@ const Calender = (props) => {
         schedulerData.setResources(getUniqueMap)
       } else {
         schedulerData.setResources(requiredArray)
-        // getRenderSd(schedulerData)
         setCounter(counter + 1)
         triggerRerender(rerender + 1)
       }
@@ -626,7 +625,7 @@ const Calender = (props) => {
     const openArrays = getOpenArrays(schedulerData)
     if (checkDates) {
       handlePopUpClose()
-      setFetchEvents((prev) => !prev)
+      setFetcher((prev) => !prev)
       keepDataOpen(openArrays, schedulerData)
       getRenderSd(schedulerData)
     } else {
