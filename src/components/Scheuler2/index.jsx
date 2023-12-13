@@ -45,6 +45,7 @@ const parentViewArray = [
   { name: "Projects", value: 0 },
   { name: "Team", value: 1 }
 ]
+let noSetting = true
 const Calender = (props) => {
   const theme = useTheme()
   const [rerender, triggerRerender] = useState(1)
@@ -88,7 +89,9 @@ const Calender = (props) => {
     reload
   } = useSchedulerController()
   useEffect(() => {
-    getSchedulerData()
+    noSetting && getSchedulerData()
+  }, [])
+  useEffect(() => {
     fetchDepartments()
     fetchClients()
     fetchTeamList()
@@ -100,14 +103,14 @@ const Calender = (props) => {
     if (projects?.length > 0) {
       teamFetcher()
     }
-  }, [projects?.length])
-  useEffect(() => {
-    teamFetcher()
-    // scheduleFetcher()
-  }, [fetcher, startDate])
+  }, [projects?.length, startDate, fetcher])
+  // useEffect(() => {
+  //   teamFetcher()
+  //   // scheduleFetcher()
+  // }, [fetcher, startDate])
   useEffect(() => {
     teamInScheduler()
-  }, [teamMembers?.length])
+  }, [reload])
   useEffect(() => {
     scheduleFetcher()
   }, [fetchEvents])
@@ -128,7 +131,6 @@ const Calender = (props) => {
   useEffect(() => {}, [counter])
   const teamFetcher = () => {
     const startDate = dayjs(schedulerData?.startDate).format("YYYY-MM-DD")
-    const endDate = dayjs(schedulerData?.endDate).format("YYYY-MM-DD")
     const fourWeeksFromStartDate = dayjs(schedulerData?.startDate)
       .add(3, "w")
       .endOf("w")
@@ -194,26 +196,6 @@ const Calender = (props) => {
       }
     })
 
-    // const getDiff = Array.from(newArray.entries()).map((evt) => {
-    //   let start,
-    //     end,
-    //     title = JSON.parse(evt[1]?.title)
-
-    //   if (evt[1]?.start > event?.start && evt[1]?.end < event?.end) {
-    //     start = evt[1]?.start
-    //     end = evt[1]?.end
-    //   } else {
-    //     if (evt[1]?.end > event?.start && evt[1]?.start < event?.start) {
-    //       end = evt[1]?.end
-    //       start = dayjs(evt[1]?.start).startOf("w").format(COMMON_FORMAT_FOR_EVENTS)
-    //     } else {
-    //       end = getNextFriday(evt[1]?.start)
-    //       start = evt[1]?.start
-    //     }
-    //   }
-
-    //   return { start: start, end: end, title: title }
-    // })
     const weeklyAvailability = requiredData.map((childResource) => childResource?.diff)
     // create a variable for the sum and initialize it
     let sum = 0
@@ -247,12 +229,13 @@ const Calender = (props) => {
       background:
         resourceObjectForEvent?.parentId === undefined ? bColor : resourceObjectForEvent?.color,
       minHeight: 36,
-      height: 36,
+      height: resourceObjectForEvent?.parentId === undefined ? 43 : 36,
       borderRadius: 1,
       display: "flex",
       justifyContent: "flex-start",
       alignItems: "center",
-      paddingLeft: 1
+      paddingLeft: 1,
+      marginTop: resourceObjectForEvent?.parentId === undefined ? "-0.15rem" : 0
       // width: props[7]
     }
     if (agendaMaxEventWidth)
@@ -301,6 +284,7 @@ const Calender = (props) => {
       ]
     })
     setSchedulerData(sd)
+    noSetting = false
   }
   const teamInScheduler = () => {
     if (teamMembers?.length > 0) {
@@ -309,14 +293,14 @@ const Calender = (props) => {
       const filteredArray = projectsArray.filter((item) => item !== undefined)
       const newArray = [...dataArray, ...filteredArray]
       const requiredArray = newArray.flat()
-      if (schedulerData) {
+      if (schedulerData?.resources?.length > 0) {
         const { renderData } = schedulerData
         let displayRenderData = renderData.filter((o) => o.render)
-        const getUniqueMap = getUniqueMapFn(displayRenderData, requiredArray)
+        const getUniqueMap = getUniqueMapFn(displayRenderData, requiredArray, projects)
         schedulerData.setResources(getUniqueMap)
       } else {
         schedulerData.setResources(requiredArray)
-        getRenderSd(schedulerData)
+        // getRenderSd(schedulerData)
         setCounter(counter + 1)
         triggerRerender(rerender + 1)
       }
@@ -833,18 +817,20 @@ const Calender = (props) => {
     setPopUpStyles(null)
   }
   const addResorceInScheduler = (values) => {
-    const resourcesArray = schedulerData?.resources
-    const requiredArray = [...resourcesArray, values]
-    setResourceMap(convertArrayToMap(requiredArray))
-    // const startDate = new Date()
-    // const convertedStartDate = new dayjs(startDate).format("YYYY-MM-DD hh:mm:ss")
-    // const endDate = new dayjs().day(7).endOf("day").format("YYYY-MM-DD hh:mm:ss")
-    schedulerData.addResource(values)
-    handlePopUpClose()
-    // getRenderSd(schedulerData)
-    triggerRerender(rerender + 1)
-    setCounter(counter + 1)
+    // const resourcesArray = schedulerData?.resources
+    // const requiredArray = [...resourcesArray, values]
+    // setResourceMap(convertArrayToMap(requiredArray))
+    // // // const startDate = new Date()
+    // // // const convertedStartDate = new dayjs(startDate).format("YYYY-MM-DD hh:mm:ss")
+    // // // const endDate = new dayjs().day(7).endOf("day").format("YYYY-MM-DD hh:mm:ss")
+    // setFetcher((prev) => !prev)
+    // handlePopUpClose()
+    // // getRenderSd(schedulerData)
+    // triggerRerender(rerender + 1)
+    // setCounter(counter + 1)
     // newEventfromResource(schedulerData, values?.id, convertedStartDate, endDate)
+    schedulerData.addResource(values)
+    setFetcher((prev) => !prev)
   }
   const getRenderSd = (schedulerData, newProject) => {
     Loader.show()

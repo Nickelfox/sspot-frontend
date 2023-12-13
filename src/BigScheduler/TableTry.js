@@ -216,8 +216,8 @@ const TableTry = (props) => {
                               className="scheduler-view"
                               style={{
                                 // width: schedulerContainerWidth,
-                                height: 43,
-                                marginTop: "-2px"
+                                height: 43
+                                // marginTop: "-2px"
                                 // verticalAlign: "top"
                               }}>
                               <div
@@ -435,7 +435,7 @@ const TableTry = (props) => {
             }}
             className="bg-[#fff] stickyCell flex justify-end items-center px-4 pl-2">
             <Box className="flex justify-space w-full">
-              <Box
+              {/* <Box
                 className="w-full cursor-pointer pl-2"
                 onClick={openEditItemPopUp.bind(null, item)}>
                 <Typography variant="p2" sx={{ color: "#888888", textDecoration: "underline" }}>
@@ -455,7 +455,7 @@ const TableTry = (props) => {
                     />
                   )}
                 </Typography>
-              </Box>
+              </Box> */}
               <Box className="w-full pr-1">
                 {/* <DropDown
                   value={""}

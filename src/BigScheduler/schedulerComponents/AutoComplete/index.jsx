@@ -48,6 +48,7 @@ const CustomAutoComplete = (props) => {
           <NewIcon />
         </div>
       }
+      isOptionEqualToValue={(option, value) => option === value}
       PaperComponent={({ children }) => {
         return (
           <Paper className={styles.matrix_box}>

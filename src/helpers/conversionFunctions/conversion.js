@@ -143,8 +143,7 @@ export const getDataArray = (array, projects) => {
       id: data.id,
       name: data?.user?.full_name,
       weeklyAvailability: data?.capacity,
-      workDays: data?.work_days, //TODO: uncooment this
-      // workDays: ["MON", "TUE", "THU", "FRI"],
+      workDays: data?.work_days,
       email: data?.user?.email,
       editPopup: false,
       expanded: false,
@@ -195,7 +194,6 @@ export const getEventListing = (eventArray) => {
 }
 const getAssignedProjects = (projectArray, projects) => {
   const projectIdMap = projectArray.map((project) => project?.project?.id)
-
   const requiredArray = projects.filter((project) => !projectIdMap.includes(project?.value))
   return requiredArray
 }
@@ -225,7 +223,7 @@ export const getEndEventObject = (evt) => {
   return requiredObject
 }
 
-export const getUniqueMapFn = (displayRenderData, apiData) => {
+export const getUniqueMapFn = (displayRenderData, apiData, projects) => {
   const closedArray = displayRenderData.filter((item) => !item?.expanded)
   const openArray = displayRenderData.filter((item) => item?.expanded)
   const responseMap = new Map()
@@ -233,17 +231,39 @@ export const getUniqueMapFn = (displayRenderData, apiData) => {
     responseMap?.set(item?.id, item)
   })
   const newRequiredMap = new Map()
-  openArray.forEach((data) => {
-    const apiResponseData = responseMap.get(data?.id)
-    newRequiredMap.set(data?.id, {
-      ...apiResponseData,
+  openArray.forEach((d) => {
+    const data = responseMap.get(d?.slotId)
+    newRequiredMap.set(d?.slotId, {
+      ...data,
       expanded: true
     })
   })
-  console.log(closedArray, openArray, responseMap, "RENRE")
+
+  const replaceArr = closedArray.map((i) => {
+    return {
+      id: i.slotId,
+      name: i.slotName,
+      weeklyAvailability: 40,
+      expanded: i.expanded,
+      parentId: i.parentId,
+      workDays: i.workDays,
+      editPopup: false,
+      email: i?.email,
+      department: i?.department,
+      color: i?.color,
+      assignedProjects: getProjects(i, projects)
+    }
+  })
+  const sortedArray = getSortedArray([...Array.from(newRequiredMap.values()), ...replaceArr])
   if (openArray?.length > 0) {
-    return [...Array.from(newRequiredMap.values()), ...closedArray]
+    // return [...Array.from(newRequiredMap.values()), ...closedArray]
+    return sortedArray
   } else {
     return apiData
   }
+}
+function getSortedArray(arr) {
+  return arr.sort(function (a, b) {
+    return a.name > b.name ? 1 : a === b ? 0 : -1
+  })
 }

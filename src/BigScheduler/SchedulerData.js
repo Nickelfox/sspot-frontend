@@ -456,7 +456,6 @@ export default class SchedulerData {
     event.start = newStart
     event.title = title ? title : event?.title
     this._attachEvent(event)
-    console.log(event, "DATAMOVED")
     this._createRenderData()
   }
 
@@ -474,7 +473,6 @@ export default class SchedulerData {
     event.end = newEnd
     event.start = newStart
     this._attachEvent(event)
-    console.log(event, "DAtedEvent")
     this._createRenderData()
   }
 
@@ -873,8 +871,7 @@ export default class SchedulerData {
         availability: slot?.weeklyAvailability,
         department: slot?.department,
         color: slot?.color ?? null,
-        assignedProjects: slot?.assignedProjects,
-        ...slot
+        assignedProjects: slot?.assignedProjects
       }
 
       let id = slot.id
@@ -1068,7 +1065,6 @@ export default class SchedulerData {
     if (Object.prototype.toString.call(events) !== "[object Array]") {
       throw new Error("Events should be Array object")
     }
-    console.log(events)
     events.forEach((e, index) => {
       if (e == undefined) {
         console.error(`Event undefined: ${index}`)
@@ -1137,7 +1133,6 @@ export default class SchedulerData {
       // let resourceEventsList = flatArray.filter((x) => x?.parentId === item?.resourceParentID)
       if (resourceEventsList.length > 0) {
         let resourceEvents = resourceEventsList[0]
-        console.log(resourceEvents, "1140")
         let span = this._getSpan(item.start, item.end, this.headers)
         let eventStart = new Date(item.start),
           eventEnd = new Date(item.end)
