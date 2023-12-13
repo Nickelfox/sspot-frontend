@@ -89,7 +89,7 @@ const Calender = (props) => {
     reload
   } = useSchedulerController()
   useEffect(() => {
-    noSetting && getSchedulerData()
+    getSchedulerData()
   }, [])
   useEffect(() => {
     fetchDepartments()
@@ -101,9 +101,9 @@ const Calender = (props) => {
 
   useEffect(() => {
     if (projects?.length > 0) {
-      teamFetcher()
+      schedulerData && teamFetcher()
     }
-  }, [projects?.length, startDate, fetcher])
+  }, [schedulerData, projects?.length, startDate, fetcher])
   // useEffect(() => {
   //   teamFetcher()
   //   // scheduleFetcher()
@@ -571,19 +571,33 @@ const Calender = (props) => {
     getRenderSd(schedulerData)
   }
   const postEvent = async (apiData) => {
-    const response = await addEvents(apiData)
-    if (response?.success) {
-      const data = response?.data
-      const requiredEventObject = {
-        id: data?.id,
-        title: data?.assigned_hours,
-        start: dayjs(data?.start_at).startOf("d").format("YYYY-MM-DD HH:MM:ss"),
-        end: dayjs(data?.end_at).endOf("d").format("YYYY-MM-DD HH:MM:ss"),
-        resourceId: apiData?.resourceId,
-        resourceParentID: apiData?.resourceParentID,
-        bgColor: getBgColor(apiData?.resourceParentID, apiData?.resourceId)
+    console.log(apiData, "API DATA")
+    const requiredEventObject = {
+      title: apiData?.assigned_hours,
+      start: dayjs(apiData?.start_at).startOf("d").format("YYYY-MM-DD HH:MM:ss"),
+      end: dayjs(apiData?.end_at).endOf("d").format("YYYY-MM-DD HH:MM:ss"),
+      resourceId: apiData?.resourceId,
+      resourceParentID: apiData?.resourceParentID,
+      bgColor: getBgColor(apiData?.resourceParentID, apiData?.resourceId)
+    }
+    const checkDates = getCheckDate(requiredEventObject, schedulerData?.events, "create")
+    if (checkDates) {
+      const response = await addEvents(apiData)
+      if (response?.success) {
+        const data = response?.data
+        const requiredEventObject = {
+          id: data?.id,
+          title: data?.assigned_hours,
+          start: dayjs(data?.start_at).startOf("d").format("YYYY-MM-DD HH:MM:ss"),
+          end: dayjs(data?.end_at).endOf("d").format("YYYY-MM-DD HH:MM:ss"),
+          resourceId: apiData?.resourceId,
+          resourceParentID: apiData?.resourceParentID,
+          bgColor: getBgColor(apiData?.resourceParentID, apiData?.resourceId)
+        }
+        createNewEvent(requiredEventObject)
       }
-      createNewEvent(requiredEventObject)
+    } else {
+      eventsOverLap()
     }
   }
   const patchEvent = async (event, apiData, id) => {
@@ -621,16 +635,11 @@ const Calender = (props) => {
      * Creates the item from Object
      * @Fixed
      */
-    const checkDates = getCheckDate(requiredData, schedulerData?.events, "create")
     const openArrays = getOpenArrays(schedulerData)
-    if (checkDates) {
-      handlePopUpClose()
-      setFetcher((prev) => !prev)
-      keepDataOpen(openArrays, schedulerData)
-      getRenderSd(schedulerData)
-    } else {
-      eventsOverLap()
-    }
+    handlePopUpClose()
+    setFetcher((prev) => !prev)
+    keepDataOpen(openArrays, schedulerData)
+    getRenderSd(schedulerData)
   }
   const newEventfromResource = (schedulerData, slotId, start, end) => {
     let newFreshId = 0

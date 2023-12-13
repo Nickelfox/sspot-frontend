@@ -156,7 +156,7 @@ class HeaderView extends Component {
     )
 
     return (
-      <TableContainer style={{ display: "flex" }}>
+      <TableContainer style={{ display: "flex", overflow: "hidden" }}>
         <Table
           style={{
             height: 80,
