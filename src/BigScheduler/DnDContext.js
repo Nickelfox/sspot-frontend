@@ -23,7 +23,8 @@ export default class DnDContext {
         const { cellUnit, localeDayjs } = schedulerData
         const type = monitor.getItemType()
         const pos = getPos(component.eventContainer)
-        let cellWidth = schedulerData.getContentCellWidth()
+        // let cellWidth = schedulerData.getContentCellWidth()
+        let cellWidth = 50
         let initialStartTime = null,
           initialEndTime = null
         if (type === DnDTypes.EVENT) {

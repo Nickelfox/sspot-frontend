@@ -138,7 +138,6 @@ export const getUniqueMapFn = (displayRenderData, apiData) => {
     openArrayMap.set(item?.slotId, item)
   })
   const responseMap = new Map()
-  console.log(apiData, "THIS IS PI DATA")
   apiData.forEach((item) => {
     if (!responseMap?.has(item?.id)) {
       responseMap?.set(item?.id, [

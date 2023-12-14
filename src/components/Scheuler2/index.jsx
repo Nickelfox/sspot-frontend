@@ -196,8 +196,8 @@ const Calender = (props) => {
       background:
         resourceObjectForEvent?.parentId === undefined ? bColor : resourceObjectForEvent?.color,
       minHeight: 36,
-      height: resourceObjectForEvent?.parentId === undefined ? 43 : 40,
-      borderRadius: 1,
+      height: 43,
+      borderRadius: resourceObjectForEvent?.parentId === undefined ? 0 : 4,
       display: "flex",
       justifyContent: "flex-start",
       alignItems: "center",
@@ -225,7 +225,7 @@ const Calender = (props) => {
             paddingLeft={"0.3rem"}>
             {resourceObjectForEvent?.parentId
               ? `${event?.title} h/day`
-              : `${JSON.parse(event?.title).toFixed(2)} %`}
+              : `${JSON.parse(event?.title).toFixed(1)} %`}
           </Typography>
         </span>
       </div>
@@ -704,9 +704,9 @@ const Calender = (props) => {
           const newEnd = dayjs(returnedData?.data?.end_at)
             .endOf("d")
             .format(COMMON_FORMAT_FOR_EVENTS)
-          // schedulerData.moveEvent(event, slotId, slotName, newStart, newEnd)
-          schedulerData.updateEventStart(event, newStart)
-          schedulerData.updateEventEnd(event, newEnd)
+          schedulerData.moveEvent(event, slotId, slotName, newStart, newEnd)
+          // schedulerData.updateEventStart(event, newStart)
+          // schedulerData.updateEventEnd(event, newEnd)
           // setFetchEvents((prev) => !prev)
           setFetcher((prev) => !prev)
         } else {
