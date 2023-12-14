@@ -88,7 +88,7 @@ export const getEventListing = (eventArray) => {
       end: dayjs(event?.end_at).endOf("d").format("YYYY-MM-DD HH:mm:ss"),
       resourceId: event?.project_id,
       resourceParentID: event?.member_id,
-      projectMemberID: event?.member,
+      projectMemberID: event?.project_member,
       title: `${event?.assigned_hours}`,
       bgColor: "#DCC36B"
     }
@@ -133,7 +133,12 @@ export const getUniqueMapFn = (displayRenderData, apiData) => {
    */
   const closedArray = displayRenderData.filter((item) => !item?.expanded)
   const openArray = displayRenderData.filter((item) => item?.expanded)
+  const openArrayMap = new Map()
+  openArray.forEach((item) => {
+    openArrayMap.set(item?.slotId, item)
+  })
   const responseMap = new Map()
+  console.log(apiData, "THIS IS PI DATA")
   apiData.forEach((item) => {
     if (!responseMap?.has(item?.id)) {
       responseMap?.set(item?.id, [

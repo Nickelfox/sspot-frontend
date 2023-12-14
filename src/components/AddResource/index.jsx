@@ -14,16 +14,8 @@ import QuestionMarkIcon from "@mui/icons-material/QuestionMark"
 import { items } from "helpers/dropDownListing/hoursListing"
 import ErrorText from "components/ErrorText"
 import { useResourceController } from "./addResource.controller"
+import { workDays } from "helpers/app-dates/dates"
 
-const workDays = [
-  { value: "MON", label: "MON" },
-  { value: "TUE", label: "TUE" },
-  { value: "WED", label: "WED" },
-  { value: "THU", label: "THU" },
-  { value: "FRI", label: "FRI" },
-  { value: "SAT", label: "SAT" },
-  { value: "SUN", label: "SUN" }
-]
 const AddResource = (props) => {
   const { handleClose, addResorceInScheduler, resourceLength, departmentsList } = props
   const { initialValues } = useResourceController(props)

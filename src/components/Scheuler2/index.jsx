@@ -186,25 +186,7 @@ const Calender = (props) => {
     const eventsOfParent = newFlatArray.filter(
       (item) => item?.resourceParentID === resourceObjectForEvent?.id
     )
-    // create a variable for the sum and initialize it
-    let bColor = event?.title < 100 ? "#6DB460" : "rgba(255, 0, 0)"
-    // if (sum > resourceObjectForEvent?.weeklyAvailability) {
-    //   bColor = "rgba(255, 0, 0, 0.5)"
-    // } else {
-    //   bColor = "rgba(131, 192, 120, 0.5)"
-    // }
-    // const sumPercent = (sum / resourceObjectForEvent?.weeklyAvailability) * 100
-
-    // if (!!event.type) {
-    //   borderColor =
-    //     event.type == 1
-    //       ? "rgba(0,139,236,1)"
-    //       : event.type == 3
-    //       ? "rgba(245,60,43,1)"
-    //       : "#999";
-    //   backgroundColor =
-    //     event.type == 1 ? "#80C5F6" : event.type == 3 ? "#FA9E95" : "#D9D9D9";
-    // }
+    let bColor = event?.title <= 100 ? "#6DB460" : "rgba(255, 0, 0)"
     let opacity
     opacity = event?.title / 100 < 0.5 ? 0.5 : event?.title / 100
 
@@ -398,10 +380,13 @@ const Calender = (props) => {
   const eventClicked = (schedulerData, event) => {
     if (event?.resourceParentID) {
       const requiredDataObject = {}
-      const childObject = resoureMap.get(event?.resourceId)
+      const childObjectArray = resoureMap.get(event?.resourceId)
       const parentObject = resoureMap.get(event?.resourceParentID)
+      const childFiter = childObjectArray.filter(
+        (item) => item?.projectId === event?.projectMemberID
+      )
       requiredDataObject.parent = parentObject[0]
-      requiredDataObject.child = childObject[0]
+      requiredDataObject.child = childFiter[0]
       requiredDataObject.event = event
       handlePopUp("editEvent")
       setResourceEvent(requiredDataObject)
@@ -741,6 +726,7 @@ const Calender = (props) => {
     setPopupChild("")
     setIsAddeventPopover(false)
     setPopUpStyles(null)
+    setResourceEvent(null)
   }
   const addResorceInScheduler = (values) => {
     /**@mehran-nickelfox
@@ -888,7 +874,6 @@ const Calender = (props) => {
         return
     }
   }
-  console.log(schedulerData, "SD")
   return (
     <div
       style={{
