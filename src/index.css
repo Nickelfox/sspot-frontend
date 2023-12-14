@@ -252,24 +252,22 @@ table.scheduler-table tr:last-child td {
 
 .timeline-event {
   position: absolute;
-  cursor: pointer;
+  /* cursor: pointer; */
   padding: 0;
 }
 
 .timeline-event:hover :nth-child(2) {
-  /* border-left: 2px dotted white;
-  border-image: 150%;
-  margin-left: 5px !important;
-  border-image: url("https://i.stack.imgur.com/wLdVc.png") 2 round; */
-  background-image: linear-gradient(#fff 33%, rgba(255, 255, 255, 0) 0%);
-  background-position: right;
-  background-size: 6px 6px;
-  background-repeat: repeat-y;
+  border-left: 6px dotted #fff;
+  margin-left: 2px;
+  height: 37px;
+  margin-top: 3px;
 }
 
 .timeline-event:hover :nth-child(3) {
-  border-right: 2px dotted white;
-  border-image: 150%;
+  border-left: 6px dotted #fff;
+  margin-right: 2px;
+  height: 37px;
+  margin-top: 3px;
 }
 
 .day-event {

@@ -222,7 +222,7 @@ const Calender = (props) => {
             color="#fff"
             fontSize={"1rem"}
             // fontWeight={600}
-            paddingLeft={"0.3rem"}>
+            paddingLeft={"0.8rem"}>
             {resourceObjectForEvent?.parentId
               ? `${event?.title} h/day`
               : `${JSON.parse(event?.title).toFixed(1)} %`}

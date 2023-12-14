@@ -11,6 +11,8 @@ export const useSchedulerController = () => {
   const [projects, setProjects] = useState([])
   const [clients, setClients] = useState([])
   const [reload, setReload] = useState(false)
+  //eslint-disable-next-line no-unused-vars
+  const [teamMemberArray, setTeamMemberArray] = useState(false)
   const model = useSchedulerModel()
   const fetchDepartments = async () => {
     const data = await model.fetchDepartments()
@@ -115,8 +117,7 @@ export const useSchedulerController = () => {
     } else {
       requiredArray = []
     }
-    /*eslint-disable-next-line no-console*/
-    console.log(requiredArray, "TEAM_MEMBERS")
+    setTeamMemberArray(requiredArray)
   }
   const reloader = () => {
     setReload((prev) => prev)
