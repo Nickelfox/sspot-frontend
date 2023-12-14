@@ -26,8 +26,10 @@ export default class DnDSource {
         const { moveEvent, newEvent, schedulerData } = props
         const { events, config, viewType, localeDayjs } = schedulerData
         const item = monitor.getItem()
+        console.log(monitor, "This Is Monitor")
         const type = monitor.getItemType()
         const dropResult = monitor.getDropResult()
+        console.log(dropResult, "This is move EVent")
         let slotId = dropResult.slotId,
           slotName = dropResult.slotName
         let newStart = dropResult.start,

@@ -1,6 +1,7 @@
 import dayjs from "dayjs"
 import { months } from "../Months/months"
 import { COMMON_FORMAT_FOR_EVENTS, getNextFriday } from "helpers/app-dates/dates"
+import { v4 as uuid } from "uuid"
 
 export const getRequiredArray = (headers) => {
   const requiredArray = headers.map((item) => {
@@ -87,7 +88,7 @@ export const getEventListing = (eventArray) => {
       end: dayjs(event?.end_at).endOf("d").format("YYYY-MM-DD HH:mm:ss"),
       resourceId: event?.project_id,
       resourceParentID: event?.member_id,
-      projectMemberID: event?.member,
+      projectMemberID: event?.project_member,
       title: `${event?.assigned_hours}`,
       bgColor: "#DCC36B"
     }
@@ -132,6 +133,10 @@ export const getUniqueMapFn = (displayRenderData, apiData) => {
    */
   const closedArray = displayRenderData.filter((item) => !item?.expanded)
   const openArray = displayRenderData.filter((item) => item?.expanded)
+  const openArrayMap = new Map()
+  openArray.forEach((item) => {
+    openArrayMap.set(item?.slotId, item)
+  })
   const responseMap = new Map()
   apiData.forEach((item) => {
     if (!responseMap?.has(item?.id)) {
@@ -172,4 +177,34 @@ const getExpandedValue = (array, item) => {
     openRequiredMap.set(d?.slotId, d)
   })
   return openRequiredMap.has(item?.id) ? true : false
+}
+
+export const getWeeklyAssignedHours = (object) => {
+  const requiredTimeArray = object.weeklyAssignedHours
+  const requiredAssignmentArray = object.weeklyCapacity
+  const assignedHourMap = new Map()
+  requiredTimeArray.forEach((item) => {
+    assignedHourMap.set(item?.start, item)
+  })
+  const assignedArray = []
+  requiredAssignmentArray.forEach((item) => {
+    const assignedMap = assignedHourMap.get(item?.start)
+    const key = uuid()
+    const requiredObject = {
+      resourceId: object?.id,
+      resourceParentID: undefined,
+      start: dayjs(new Date(item?.start)).startOf("d").format(COMMON_FORMAT_FOR_EVENTS),
+      end: dayjs(new Date(item?.end)).endOf("d").format(COMMON_FORMAT_FOR_EVENTS),
+      title: getTitle(assignedMap?.total_assigned, item?.total),
+      id: key
+    }
+    assignedArray.push(requiredObject)
+  })
+  return assignedArray
+}
+const getTitle = (assigned, total) => {
+  const assignedHours = JSON.parse(assigned)
+  const totalHours = JSON.parse(total)
+  const percentWork = (assignedHours / totalHours) * 100
+  return percentWork
 }

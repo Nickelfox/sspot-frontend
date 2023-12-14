@@ -750,7 +750,6 @@ export default class SchedulerData {
   }
 
   _createInitHeaderEvents(header) {
-    console.log(this.endDate, "Line Number 752")
     let start = this.localeDayjs(new Date(header.time)),
       startValue = start.format(DATETIME_FORMAT)
     let endValue = this.showAgenda
@@ -1128,7 +1127,6 @@ export default class SchedulerData {
     let xData = this._ggetResourceinitData(replaceArr, this.headers)
     let initRenderData = this._createInitRenderData(this.resources, this.headers)
     //this.events.sort(this._compare);
-    // console.log(...xData.values(), "MAPAPAPAP")
     const ArrayValue = [...xData.values()]
     const flatArray = ArrayValue.flat()
     let cellMaxEventsCount = this.getCellMaxEvents()

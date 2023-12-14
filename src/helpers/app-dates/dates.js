@@ -29,3 +29,13 @@ export function getNextFriday(date) {
 }
 export const COMMON_FORMAT_FOR_API = "YYYY-MM-DD"
 export const COMMON_FORMAT_FOR_EVENTS = "YYYY-MM-DD HH:mm:ss"
+
+export const workDays = [
+  { value: "MON", label: "MON" },
+  { value: "TUE", label: "TUE" },
+  { value: "WED", label: "WED" },
+  { value: "THU", label: "THU" },
+  { value: "FRI", label: "FRI" },
+  { value: "SAT", label: "SAT" },
+  { value: "SUN", label: "SUN" }
+]

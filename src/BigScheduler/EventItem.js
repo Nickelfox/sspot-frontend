@@ -642,18 +642,23 @@ class EventItem extends Component {
     let eventClick = !!eventItemClick
     let a = (
       <a
-        className="timeline-event"
+        className={`timeline-event`}
         ref={this.eventItemRef}
         onMouseMove={isPopoverPlacementMousePosition ? this.handleMouseMove : undefined}
-        style={{ left: left, width: width, right: 0 }}>
+        style={{
+          left: left,
+          width: width,
+          right: 0,
+          cursor: eventItem?.bgColor ? "pointer" : "default"
+        }}>
         <Box
           onClick={() => {
             if (eventClick) eventItemClick(schedulerData, eventItem)
           }}>
           {eventItemTemplate}
         </Box>
-        {startResizeDiv}
-        {endResizeDiv}
+        {eventItem?.bgColor && startResizeDiv}
+        {eventItem?.bgColor && endResizeDiv}
       </a>
     )
 
