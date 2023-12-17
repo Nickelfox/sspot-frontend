@@ -1,5 +1,5 @@
-import { ViewTypes as ViewType } from "./helpers";
-import SummaryPos from "./SummaryPos";
+import { ViewTypes as ViewType } from "./helpers"
+import SummaryPos from "./SummaryPos"
 
 export default {
   schedulerWidth: "100%",
@@ -92,7 +92,7 @@ export default {
       viewName: "Team"
     }
   ],
-  selectedParent: 1,
+  selectedParent: 0,
   views: [
     {
       viewName: "Day",
@@ -125,4 +125,4 @@ export default {
       isEventPerspective: false
     }
   ]
-};
+}

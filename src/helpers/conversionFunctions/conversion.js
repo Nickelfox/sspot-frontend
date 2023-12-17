@@ -58,6 +58,7 @@ export const getDataArray = (array, projects) => {
     }
     requiredUserInfo.push(requiredObject)
   })
+  console.log(requiredUserInfo, "THIS IS USER INFO")
   return requiredUserInfo
 }
 //add Data here
@@ -137,6 +138,7 @@ export const getUniqueMapFn = (displayRenderData, apiData) => {
   openArray.forEach((item) => {
     openArrayMap.set(item?.slotId, item)
   })
+  console.log(apiData, "THIS IS USER INFO")
   const responseMap = new Map()
   apiData.forEach((item) => {
     if (!responseMap?.has(item?.id)) {

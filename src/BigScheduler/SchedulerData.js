@@ -875,38 +875,43 @@ export default class SchedulerData {
         color: slot?.color ?? null,
         assignedProjects: slot?.assignedProjects
       }
-
       let id = slot.id
-      let value = undefined
       if (slotMap.has(id)) {
-        value = slotMap.get(id)
-        value.data = slotRenderData
+        slotMap.set(id, [...slotMap.get(id), slotRenderData])
       } else {
-        value = {
-          data: slotRenderData,
-          children: []
-        }
-        slotMap.set(id, value)
+        slotMap.set(id, [slotRenderData])
       }
-      let parentId = slot.parentId
-      if (!parentId || parentId === id) {
-        slotTree.push(value)
-      } else {
-        let parentValue = undefined
-        if (slotMap.has(parentId)) {
-          parentValue = slotMap.get(parentId)
-        } else {
-          parentValue = {
-            data: undefined,
-            children: []
-          }
-          slotMap.set(parentId, parentValue)
-        }
 
-        parentValue.children.push(value)
-      }
+      // let value = undefined
+      // if (slotMap.has(id)) {
+      //   value = slotMap.get(id)
+      //   value.data = slotRenderData
+      // } else {
+      //   value = {
+      //     data: slotRenderData,
+      //     children: []
+      //   }
+      //   slotMap.set(id, value)
+      // }
+      // let parentId = slot.parentId
+      // if (!parentId || parentId === id) {
+      //   slotTree.push(value)
+      // } else {
+      //   let parentValue = undefined
+      //   if (slotMap.has(parentId)) {
+      //     parentValue = slotMap.get(parentId)
+      //   } else {
+      //     parentValue = {
+      //       data: undefined,
+      //       children: []
+      //     }
+      //     slotMap.set(parentId, parentValue)
+      //   }
+
+      //   parentValue.children.push(value)
+      // }
     })
-
+    console.log(Array.from(slotMap.values()).flat(), "SLAX")
     let slotStack = []
     let i
     for (i = slotTree.length - 1; i >= 0; i--) {
@@ -932,7 +937,7 @@ export default class SchedulerData {
       }
     }
     Loader.hide()
-    return initRenderData
+    return Array.from(slotMap.values()).flat()
   }
 
   _getSpan(startTime, endTime, headers) {

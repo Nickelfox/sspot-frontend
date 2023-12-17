@@ -285,6 +285,7 @@ const TableTry = (props) => {
     project
   ) => {
     const filteredData = displayRenderData.filter((item) => item?.parentId === slotid)
+    console.log(displayRenderData, slotid, item?.slotName)
     const requiredHeaders = headers.map((header) => {
       return {
         ...header,

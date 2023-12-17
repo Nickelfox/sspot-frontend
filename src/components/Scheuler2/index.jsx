@@ -765,22 +765,13 @@ const Calender = (props) => {
   const allocateProject = async (body) => {
     const responseData = await assignProject(body)
     if (responseData?.success) {
-      const filteredProject = projects?.filter((item) => item?.id === responseData?.data?.project)
-      const parentObject = resoureMap.get(body?.member)
-      const data = responseData?.data
-      const requiredObject = {
-        projectId: data?.id,
-        name: filteredProject[0]?.label,
-        workDays: parentObject[0]?.workDays,
-        hoursAssigned: JSON.parse(parentObject[0]?.weeklyAvailability),
-        expanded: false,
-        id: data?.project,
-        parentId: data?.member,
-        email: parentObject[0]?.email,
-        department: parentObject[0]?.department,
-        color: filteredProject[0]?.color_code
-      }
-      addResorceInScheduler(requiredObject)
+      const projectMap = new Map()
+      projects.forEach((project) => {
+        projectMap.set(project.id, project, project)
+      })
+      /*TODO:Logic for new assigned project to be here */
+      const projectBody = {}
+      addResorceInScheduler()
     }
   }
   const popUpChildren = {
