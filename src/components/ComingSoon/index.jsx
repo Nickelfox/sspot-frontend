@@ -1,7 +1,7 @@
 import { Box } from "@mui/material"
 import React from "react"
 import styles from "./comingSoon.module.scss"
-import soon from "assets/images/backgrounds/Coming Soon.png"
+import soon from "assets/images/backgrounds/coming.svg"
 const ComingSoon = () => {
   return (
     <Box

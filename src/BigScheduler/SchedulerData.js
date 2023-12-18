@@ -699,7 +699,7 @@ export default class SchedulerData {
     // } else {
     //   end = this.localeDayjs(new Date(new Date(this.startDate).getFullYear(), 11, 31))
     // }
-    let end = this.localeDayjs(new Date(this.startDate)).add(3, "w").endOf("w")
+    let end = this.localeDayjs(new Date(this.startDate)).add(4, "w").endOf("w")
 
     if (this.showAgenda) {
       headers.push({

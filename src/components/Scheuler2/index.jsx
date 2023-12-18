@@ -71,6 +71,7 @@ const Calender = (props) => {
   const [rerenderData, setRerenderData] = useState(false)
   const [startDate, setStartDate] = useState(new dayjs(new Date()).format(DATE_FORMAT))
   const [fetcher, setFetcher] = useState(false)
+  const [childObject, setNewChildObject] = useState(null)
   const {
     fetchDepartments,
     departments,
@@ -133,7 +134,7 @@ const Calender = (props) => {
   const teamFetcher = () => {
     const startDate = dayjs(schedulerData?.startDate).startOf("w").format(COMMON_FORMAT_FOR_API)
     const fourWeeksFromStartDate = dayjs(schedulerData?.startDate)
-      .add(3, "w")
+      .add(4, "w")
       .endOf("w")
       .format(COMMON_FORMAT_FOR_API)
     const params = {
@@ -146,7 +147,7 @@ const Calender = (props) => {
     const startDate = dayjs(schedulerData?.startDate).startOf("w").format(COMMON_FORMAT_FOR_API)
     const endDate = dayjs(schedulerData?.endDate).format(COMMON_FORMAT_FOR_API)
     const fourWeeksFromStartDate = dayjs(schedulerData?.startDate)
-      .add(3, "w")
+      .add(4, "w")
       .endOf("w")
       .format(COMMON_FORMAT_FOR_API)
     const params = {
@@ -415,74 +416,115 @@ const Calender = (props) => {
     handlePopUpClose()
     const requiredDataObject = {}
     const childObject = resoureMap.get(slotId)
-    const childObjectArray = childObject?.filter(
-      (childObject) => childObject?.parentId === item?.parentId
-    )
-    const newChildObject = childObjectArray[0]
-    if (slotName) {
-      const requiredObject = resoureMap.get(item?.parentId)
-      requiredDataObject.parent = requiredObject[0]
-      requiredDataObject.child = newChildObject
-      const el = (sel, par) => (par || document).querySelector(sel)
-      const elArea = el("#area")
-      let bodyRect = document.body.getBoundingClientRect(),
-        elemRect = elArea.getBoundingClientRect()
-      let newFreshId = 0
-      schedulerData.events.forEach((item) => {
-        if (item.id >= newFreshId) newFreshId = item.id + 1
-      })
-      const randomColor = Math.floor(Math.random() * 16777215).toString(16)
-      let newEvent = {
-        id: newFreshId,
-        title: "New Event",
-        start: start,
-        end: end,
-        resourceId: slotId,
-        bgColor: `${requiredObject?.color}`
-      }
-      requiredDataObject.event = newEvent
-      setResourceEvent(requiredDataObject)
-      if (!isMobile && !isTablet) {
-        const newStyles = {
-          position: "absolute",
-          left: elemRect.x > 1180 ? 1180 : elemRect.left,
-          right: elemRect.right,
-          top: elemRect.top > 270 ? 265 : elemRect.top
+    if (childObject) {
+      const childObjectArray = childObject?.filter(
+        (childObject) => childObject?.parentId === item?.parentId
+      )
+      const newChildObject = childObjectArray[0]
+      if (slotName) {
+        const requiredObject = resoureMap.get(item?.parentId)
+        requiredDataObject.parent = requiredObject[0]
+        requiredDataObject.child = newChildObject
+        const el = (sel, par) => (par || document).querySelector(sel)
+        const elArea = el("#area")
+        let elemRect = elArea.getBoundingClientRect()
+        let newFreshId = 0
+        schedulerData.events.forEach((item) => {
+          if (item.id >= newFreshId) newFreshId = item.id + 1
+        })
+        let newEvent = {
+          id: newFreshId,
+          title: "New Event",
+          start: start,
+          end: end,
+          resourceId: slotId,
+          bgColor: `${requiredObject?.color}`
         }
-        setPopupChild("addEvent")
-        setIsAddeventPopover(true)
-        setPopUpStyles(newStyles)
+        requiredDataObject.event = newEvent
+        setResourceEvent(requiredDataObject)
+        if (!isMobile && !isTablet) {
+          const newStyles = {
+            position: "absolute",
+            left: elemRect.x > 1180 ? 1180 : elemRect.left,
+            right: elemRect.right,
+            top: elemRect.top > 270 ? 265 : elemRect.top
+          }
+          setPopupChild("addEvent")
+          setIsAddeventPopover(true)
+          setPopUpStyles(newStyles)
+        } else {
+          setPopupChild("addEvent")
+          setOpenPopup(true)
+        }
+        setSelectedObject(requiredObject)
       } else {
-        setPopupChild("addEvent")
-        setOpenPopup(true)
+        setSelectedObject(childObject)
+        const el = (sel, par) => (par || document).querySelector(sel)
+        const elArea = el("#area")
+        let bodyRect = document.body.getBoundingClientRect(),
+          elemRect = elArea.getBoundingClientRect()
+        if (!isMobile && !isTablet) {
+          const newStyles = {
+            position: "absolute",
+            left: elemRect.left > 1180 ? 1180 : elemRect.left,
+            right: elemRect.right,
+            top: elemRect.top > 250 ? 250 : elemRect.top
+          }
+
+          Toast.info("Kindly Assign to project first!")
+        } else {
+          Toast.info("Kindly Assign to project first!")
+        }
       }
-      setSelectedObject(requiredObject)
     } else {
-      setSelectedObject(childObject)
-      const el = (sel, par) => (par || document).querySelector(sel)
-      const elArea = el("#area")
-      let bodyRect = document.body.getBoundingClientRect(),
-        elemRect = elArea.getBoundingClientRect()
-      if (!isMobile && !isTablet) {
-        const newStyles = {
-          position: "absolute",
-          left: elemRect.left > 1180 ? 1180 : elemRect.left,
-          right: elemRect.right,
-          top: elemRect.top > 250 ? 250 : elemRect.top
-        }
-
-        Toast.info("Kindly Assign to project first!")
-        // setPopupChild("assignResource")
-        // setIsAddeventPopover(true)
-        // setPopUpStyles(newStyles)
-      } else {
-        Toast.info("Kindly Assign to project first!")
-
-        // setPopupChild("assignResource")
-        // setOpenPopup(true)
-      }
+      getNewObject(schedulerData, slotId, slotName, start, end, item)
     }
     setId(slotName)
+  }
+  const getNewObject = (rSchedulerData, slotId, slotName, start, end, item) => {
+    const { renderData } = rSchedulerData
+    const projectMap = new Map()
+    projects.forEach((project) => {
+      projectMap.set(project.id, project, project)
+    })
+    let displayRenderData = renderData.filter((o) => o.render)
+    const requiredMainObjectArray = displayRenderData.filter((o) => o?.slotId === slotId)
+    const requiredManObject = requiredMainObjectArray[0]
+    const parentObjectArray = resoureMap.get(requiredManObject?.parentId)
+    const requiredDataObject = {}
+    let freshId = 0
+    schedulerData.events.forEach((item) => {
+      if (item.id >= freshId) freshId = item.id + 1
+    })
+    let newEvent = {
+      id: freshId,
+      title: "New Event",
+      start: start,
+      end: end,
+      resourceId: slotId,
+      bgColor: parentObjectArray[0]?.color
+    }
+    const requiredProjectObject = projectMap.get(slotId)
+    const newChildData = {
+      projectId: null,
+      id: requiredProjectObject?.id,
+      name: requiredProjectObject?.label,
+      color: requiredProjectObject?.color_code,
+      parentId: requiredManObject?.parentId,
+      expanded: false,
+      editPopup: false,
+      workDays: parentObjectArray[0]?.workDays,
+      email: parentObjectArray[0]?.email,
+      department: parentObjectArray[0]?.department,
+      hoursAssigned: parentObjectArray[0]?.weeklyAvailability
+    }
+    console.log(requiredProjectObject, "PROJECTOBJECT")
+    requiredDataObject.parent = parentObjectArray[0]
+    requiredDataObject.child = newChildData
+    requiredDataObject.event = newEvent
+    setResourceEvent(requiredDataObject)
+    setPopupChild("addEvent")
+    setOpenPopup(true)
   }
   const deleteScheduleEvent = async (id, event) => {
     /**
@@ -504,14 +546,16 @@ const Calender = (props) => {
     getRenderSd(schedulerData)
   }
   const postEvent = async (apiData) => {
+    console.log(apiData, "HERE IS API DATA")
     const requiredEventObject = {
       title: apiData?.assigned_hours,
       start: dayjs(apiData?.start_at).startOf("d").format("YYYY-MM-DD HH:MM:ss"),
       end: dayjs(apiData?.end_at).endOf("d").format("YYYY-MM-DD HH:MM:ss"),
-      resourceId: apiData?.resourceId,
-      resourceParentID: apiData?.resourceParentID,
-      bgColor: getBgColor(apiData?.resourceParentID, apiData?.resourceId)
+      resourceId: apiData?.project_id,
+      resourceParentID: apiData?.member_id,
+      bgColor: getBgColor(apiData?.member_id, apiData?.project_id)
     }
+
     const checkDates = getCheckDate(requiredEventObject, schedulerData?.events, "create")
     if (checkDates) {
       const response = await addEvents(apiData)
@@ -522,9 +566,9 @@ const Calender = (props) => {
           title: data?.assigned_hours,
           start: dayjs(data?.start_at).startOf("d").format("YYYY-MM-DD HH:MM:ss"),
           end: dayjs(data?.end_at).endOf("d").format("YYYY-MM-DD HH:MM:ss"),
-          resourceId: apiData?.resourceId,
-          resourceParentID: apiData?.resourceParentID,
-          bgColor: getBgColor(apiData?.resourceParentID, apiData?.resourceId)
+          resourceId: apiData?.project_id,
+          resourceParentID: apiData?.member_id,
+          bgColor: getBgColor(apiData?.member_id, apiData?.project_id)
         }
         createNewEvent(requiredEventObject)
       }
@@ -728,12 +772,16 @@ const Calender = (props) => {
     setPopUpStyles(null)
     setResourceEvent(null)
   }
-  const addResorceInScheduler = (values) => {
+  const addResorceInScheduler = (sd, id, name, start, end) => {
     /**@mehran-nickelfox
      * @Fixed
      * Api call on adding a project
      */
-    setFetcher((prev) => !prev)
+    // setFetcher((prev) => !prev)
+    const { renderData } = schedulerData
+    let displayRenderData = renderData.filter((o) => o.render)
+    const displayItems = displayRenderData.filter((item) => item?.slotId === id)
+    newEvent(schedulerData, id, name, start, end, displayItems[0])
   }
   const getRenderSd = (schedulerData, newProject) => {
     Loader.show()
@@ -769,9 +817,36 @@ const Calender = (props) => {
       projects.forEach((project) => {
         projectMap.set(project.id, project, project)
       })
-      /*TODO:Logic for new assigned project to be here */
-      const projectBody = {}
-      addResorceInScheduler()
+      const data = responseData?.data
+      const requiredProjectObject = projectMap.get(data.project)
+      const requiredParentObject = resoureMap.get(data?.member)
+
+      const x = {
+        projectId: requiredProjectObject?.value,
+        id: requiredProjectObject?.id,
+        name: requiredProjectObject?.label,
+        color: requiredProjectObject?.color_code,
+        parentId: data?.member,
+        expanded: false,
+        editPopup: false,
+        workDays: requiredParentObject[0]?.workDays,
+        email: requiredParentObject[0]?.email,
+        department: requiredParentObject[0]?.department,
+        hoursAssigned: requiredParentObject[0]?.capacity
+      }
+      const newStart = dayjs().startOf("d").format(COMMON_FORMAT_FOR_EVENTS)
+      const newEnd = dayjs().endOf("d").format(COMMON_FORMAT_FOR_EVENTS)
+      console.log(childObject, "NEW STATIC")
+      schedulerData.addResource(x)
+      getRenderSd(schedulerData)
+      triggerRerender(rerender + 1)
+      addResorceInScheduler(
+        schedulerData,
+        requiredProjectObject?.id,
+        requiredProjectObject?.label,
+        newStart,
+        newEnd
+      )
     }
   }
   const popUpChildren = {
