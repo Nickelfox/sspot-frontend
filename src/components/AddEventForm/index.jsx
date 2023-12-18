@@ -106,15 +106,29 @@ const AddEvent = (props) => {
   const checkTablet = isTablet ? "50vw" : checkLaptop
   const maxWidth = isMobile ? "100vw" : checkTablet
   const createEvent = (values) => {
-    const apiData = {
-      project_member: eventData?.child?.projectId,
-      start_at: dayjs(date).format(COMMON_FORMAT_FOR_API),
-      end_at: dayjs(endDate).format(COMMON_FORMAT_FOR_API),
-      assigned_hour: values?.hours,
-      schedule_type: "WORK",
-      notes: values.notes,
-      resourceId: eventData?.event?.resourceId,
-      resourceParentID: eventData?.parent?.id
+    let apiData
+    if (eventData?.child?.projectId) {
+      apiData = {
+        project_member: eventData?.child?.projectId,
+        start_at: dayjs(date).format(COMMON_FORMAT_FOR_API),
+        end_at: dayjs(endDate).format(COMMON_FORMAT_FOR_API),
+        assigned_hour: values?.hours,
+        schedule_type: "WORK",
+        notes: values.notes,
+        project_id: eventData?.event?.resourceId,
+        member_id: eventData?.parent?.id
+      }
+    } else {
+      apiData = {
+        project_member: null,
+        project_id: eventData?.child?.id,
+        member_id: eventData?.parent?.id,
+        start_at: dayjs(date).format(COMMON_FORMAT_FOR_API),
+        end_at: dayjs(endDate).format(COMMON_FORMAT_FOR_API),
+        assigned_hour: values?.hours,
+        schedule_type: "WORK",
+        notes: values.notes
+      }
     }
     const prams = eventData?.event?.id
     !isEdit ? postEvent(apiData) : patchEvent(eventData?.event, apiData, prams)

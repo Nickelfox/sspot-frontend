@@ -44,6 +44,7 @@ import DemoData from "./DemoData"
 import SchedulerHeader from "./SchedulerHeader"
 import dayjs from "dayjs"
 import TableTry from "./TableTry"
+import ComingSoon from "components/ComingSoon"
 
 class Scheduler extends Component {
   constructor(props) {
@@ -74,7 +75,8 @@ class Scheduler extends Component {
       resourceScrollbarWidth: 17,
       documentWidth: 0,
       documentHeight: 0,
-      selectedWeek: dayjs().week()
+      selectedWeek: dayjs().week(),
+      selectedParent: 1
     }
     this.scrollLeft = 0
     this.scrollTop = 0
@@ -371,59 +373,68 @@ class Scheduler extends Component {
           leftCustomHeader={leftCustomHeader}
           onThisWeekClick={this.onThisWeekClick}
           expandAllItems={this.expandAllItems}
+          handleParentChange={this.handleParentChange}
+          selectedParent={this.state.selectedParent}
         />
-        <div></div>
-        <div
-          style={{
-            overflow: "hidden",
-            borderBottom: "1px solid #e9e9e9",
-            // height: config.tableHeaderHeight
-            height: 55
-          }}>
-          <div
-            style={{
-              overflowX: "scroll",
-              overflowY: "hidden"
-              // margin: `0px 0px -${contentScrollbarHeight}px`
-            }}
-            ref={this.schedulerHeadRef}
-            onMouseOver={this.onSchedulerHeadMouseOver}
-            onMouseOut={this.onSchedulerHeadMouseOut}
-            onScroll={this.onSchedulerHeadScroll}>
+        {this.state.selectedParent === 1 ? (
+          <>
             <div
-              style={
-                {
-                  // paddingRight: `${contentScrollbarWidth}px`,
-                  // width: schedulerWidth + contentScrollbarWidth
-                }
-              }>
-              <table className="scheduler-bg-table">
-                <HeaderView {...this.props} scroller={this.scroller} />
-              </table>
+              style={{
+                overflow: "hidden",
+                borderBottom: "1px solid #e9e9e9",
+                // height: config.tableHeaderHeight
+                height: 55
+              }}>
+              <div
+                style={{
+                  overflowX: "scroll",
+                  overflowY: "hidden"
+                  // margin: `0px 0px -${contentScrollbarHeight}px`
+                }}
+                ref={this.schedulerHeadRef}
+                onMouseOver={this.onSchedulerHeadMouseOver}
+                onMouseOut={this.onSchedulerHeadMouseOut}
+                onScroll={this.onSchedulerHeadScroll}>
+                <div
+                  style={
+                    {
+                      // paddingRight: `${contentScrollbarWidth}px`,
+                      // width: schedulerWidth + contentScrollbarWidth
+                    }
+                  }>
+                  <table className="scheduler-bg-table">
+                    <HeaderView {...this.props} scroller={this.scroller} />
+                  </table>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div ref={this.schedulerResourceRef}>
-          <TableTry
-            {...this.props}
-            dnd={this.state.dndContext}
-            schedulerContentRef={this.schedulerContentRef}
-            onSchedulerContentMouseOver={this.onSchedulerContentMouseOver}
-            onSchedulerContentMouseOut={this.onSchedulerContentMouseOut}
-            onSchedulerContentScroll={this.onSchedulerContentScroll}
-            schedulerContentBgTableRef={this.schedulerContentBgTableRef}
-            openEditItemPopUp={this.openEditItemPopUp}
-            width={width}
-            closePopup={this.closePopup}
-            handlePopUp={this.props.handlePopUp}
-            projects={this.props.projects}
-            assignProject={this.props.assignProject}
-          />
-        </div>
+            <div ref={this.schedulerResourceRef}>
+              <TableTry
+                {...this.props}
+                dnd={this.state.dndContext}
+                schedulerContentRef={this.schedulerContentRef}
+                onSchedulerContentMouseOver={this.onSchedulerContentMouseOver}
+                onSchedulerContentMouseOut={this.onSchedulerContentMouseOut}
+                onSchedulerContentScroll={this.onSchedulerContentScroll}
+                schedulerContentBgTableRef={this.schedulerContentBgTableRef}
+                openEditItemPopUp={this.openEditItemPopUp}
+                width={width}
+                closePopup={this.closePopup}
+                handlePopUp={this.props.handlePopUp}
+                projects={this.props.projects}
+                assignProject={this.props.assignProject}
+              />
+            </div>
+          </>
+        ) : (
+          <ComingSoon />
+        )}
       </>
     )
   }
-
+  handleParentChange = (value) => {
+    this.setState({ selectedParent: value })
+  }
   resolveScrollbarSize = () => {
     const { schedulerData } = this.props
     let contentScrollbarHeight = 17,

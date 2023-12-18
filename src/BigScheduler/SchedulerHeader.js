@@ -70,7 +70,9 @@ class SchedulerHeader extends Component {
       onSelectDate,
       selectedView,
       selectedParentView,
-      expandAllItems
+      expandAllItems,
+      handleParentChange,
+      selectedParent
     } = this.props
     const { viewTye, isViewTypeOpen } = this.state
     const { viewType, showAgenda, isEventPerspective, config } = schedulerData
@@ -144,7 +146,11 @@ class SchedulerHeader extends Component {
     return (
       <Grid display={"flex"} height={"4.1rem"} alignItems={"center"} className="scheduler-header">
         <Grid item width={"100%"} display={"flex"}>
-          <ViewSelector {...this.props} />{" "}
+          <ViewSelector
+            {...this.props}
+            handleParentChange={handleParentChange}
+            selectedParent={selectedParent}
+          />
           <Box paddingLeft={"1rem"}>
             <button
               style={{

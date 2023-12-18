@@ -6,7 +6,7 @@ import { defaultTheme } from "./themes/defaultTheme"
 
 import { CookiesProvider } from "react-cookie"
 import "./styles/global.scss"
-import AppLoader from "components/Loader/AppLoader"
+// import AppLoader from "components/Loader/AppLoader"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { SessionObserver } from "auth/Observer"
@@ -42,7 +42,7 @@ function App() {
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <ThemeProvider theme={currentTheme}>
-            <AppLoader />
+            {/* <AppLoader /> */}
             <AppRouter />
             <ToastContainer />
             <SessionObserver />

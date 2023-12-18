@@ -699,7 +699,7 @@ export default class SchedulerData {
     // } else {
     //   end = this.localeDayjs(new Date(new Date(this.startDate).getFullYear(), 11, 31))
     // }
-    let end = this.localeDayjs(new Date(this.startDate)).add(3, "w").endOf("w")
+    let end = this.localeDayjs(new Date(this.startDate)).add(4, "w").endOf("w")
 
     if (this.showAgenda) {
       headers.push({
@@ -875,38 +875,13 @@ export default class SchedulerData {
         color: slot?.color ?? null,
         assignedProjects: slot?.assignedProjects
       }
-
       let id = slot.id
-      let value = undefined
       if (slotMap.has(id)) {
-        value = slotMap.get(id)
-        value.data = slotRenderData
+        slotMap.set(id, [...slotMap.get(id), slotRenderData])
       } else {
-        value = {
-          data: slotRenderData,
-          children: []
-        }
-        slotMap.set(id, value)
-      }
-      let parentId = slot.parentId
-      if (!parentId || parentId === id) {
-        slotTree.push(value)
-      } else {
-        let parentValue = undefined
-        if (slotMap.has(parentId)) {
-          parentValue = slotMap.get(parentId)
-        } else {
-          parentValue = {
-            data: undefined,
-            children: []
-          }
-          slotMap.set(parentId, parentValue)
-        }
-
-        parentValue.children.push(value)
+        slotMap.set(id, [slotRenderData])
       }
     })
-
     let slotStack = []
     let i
     for (i = slotTree.length - 1; i >= 0; i--) {
@@ -932,7 +907,7 @@ export default class SchedulerData {
       }
     }
     Loader.hide()
-    return initRenderData
+    return Array.from(slotMap.values()).flat()
   }
 
   _getSpan(startTime, endTime, headers) {

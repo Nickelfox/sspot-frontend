@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Navigate, Routes } from "react-router-dom"
 import { AuthContext } from "../auth/AuthContext"
 import { PrivateRoutes, PublicRoutes } from "./routes"
 import Error404 from "pages/Error404"
-import AppLoader from "components/Loader/AppLoader"
+// import AppLoader from "components/Loader/AppLoader"
 import { useIsLoggedIn } from "hooks/state"
 import PublicLayout from "layout/publicLayout"
 import PrivateLayout from "layout/privateLayout"
@@ -12,7 +12,7 @@ const Router = () => {
   const isLoggedIn = useIsLoggedIn()
   return (
     <AuthContext.Provider value={isLoggedIn}>
-      <Suspense fallback={<AppLoader visible={true} />}>
+      <Suspense>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Navigate to="/u/dashboard" replace />} />

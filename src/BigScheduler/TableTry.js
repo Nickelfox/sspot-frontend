@@ -21,7 +21,7 @@ import { DATETIME_FORMAT } from "."
 import { Popover } from "antd"
 import CustomAutoComplete from "./schedulerComponents/AutoComplete"
 import { v4 as uuid } from "uuid"
-import AppLoader from "components/Loader/AppLoader"
+// import AppLoader from "components/Loader/AppLoader"
 
 const editItemObject = [
   /**
@@ -242,7 +242,7 @@ const TableTry = (props) => {
                                       style={{ width: schedulerWidth, position: "relative" }}
                                       // ref={props.schedulerContentBgTableRef}
                                     >
-                                      {!resourceEventsList && <AppLoader />}
+                                      {/* {!resourceEventsList && <AppLoader />} */}
                                       <BodyView
                                         {...props}
                                         // scroller={this.bodyScroller}
@@ -285,6 +285,7 @@ const TableTry = (props) => {
     project
   ) => {
     const filteredData = displayRenderData.filter((item) => item?.parentId === slotid)
+    console.log(displayRenderData, slotid, item?.slotName)
     const requiredHeaders = headers.map((header) => {
       return {
         ...header,
@@ -457,7 +458,7 @@ const TableTry = (props) => {
                   )}
                 </Typography>
               </Box> */}
-              <Box className="w-full py-3">
+              <Box className="w-full px-8">
                 {/* <DropDown
                   value={""}
                   name={"weeklyAvailability"}
