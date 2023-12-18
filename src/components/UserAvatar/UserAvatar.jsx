@@ -8,7 +8,7 @@ import { Typography } from "@mui/material"
 const UserAvatar = ({ username, profileImage }) => {
   const getNameInitials = (name) => {
     const nameArr = name.split(" ")
-    const initials = nameArr.map((word) => word.charAt(0)).join("")
+    const initials = nameArr.map((word) => word.charAt(0).toUpperCase()).join("")
     return initials
   }
   return (
