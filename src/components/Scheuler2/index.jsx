@@ -518,7 +518,6 @@ const Calender = (props) => {
       department: parentObjectArray[0]?.department,
       hoursAssigned: parentObjectArray[0]?.weeklyAvailability
     }
-    console.log(requiredProjectObject, "PROJECTOBJECT")
     requiredDataObject.parent = parentObjectArray[0]
     requiredDataObject.child = newChildData
     requiredDataObject.event = newEvent
@@ -546,7 +545,6 @@ const Calender = (props) => {
     getRenderSd(schedulerData)
   }
   const postEvent = async (apiData) => {
-    console.log(apiData, "HERE IS API DATA")
     const requiredEventObject = {
       title: apiData?.assigned_hours,
       start: dayjs(apiData?.start_at).startOf("d").format("YYYY-MM-DD HH:MM:ss"),
@@ -836,7 +834,6 @@ const Calender = (props) => {
       }
       const newStart = dayjs().startOf("d").format(COMMON_FORMAT_FOR_EVENTS)
       const newEnd = dayjs().endOf("d").format(COMMON_FORMAT_FOR_EVENTS)
-      console.log(childObject, "NEW STATIC")
       schedulerData.addResource(x)
       getRenderSd(schedulerData)
       triggerRerender(rerender + 1)

@@ -53,7 +53,6 @@ const AddEvent = (props) => {
   const [date, setDate] = useState(null)
   const [endDate, setEndDate] = useState(null)
   const [dateDiff, setDateDiff] = useState(0)
-  console.log(eventData, "INFORM")
   useEffect(() => {
     getInitialValues()
   }, [])

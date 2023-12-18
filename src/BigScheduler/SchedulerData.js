@@ -881,37 +881,7 @@ export default class SchedulerData {
       } else {
         slotMap.set(id, [slotRenderData])
       }
-
-      // let value = undefined
-      // if (slotMap.has(id)) {
-      //   value = slotMap.get(id)
-      //   value.data = slotRenderData
-      // } else {
-      //   value = {
-      //     data: slotRenderData,
-      //     children: []
-      //   }
-      //   slotMap.set(id, value)
-      // }
-      // let parentId = slot.parentId
-      // if (!parentId || parentId === id) {
-      //   slotTree.push(value)
-      // } else {
-      //   let parentValue = undefined
-      //   if (slotMap.has(parentId)) {
-      //     parentValue = slotMap.get(parentId)
-      //   } else {
-      //     parentValue = {
-      //       data: undefined,
-      //       children: []
-      //     }
-      //     slotMap.set(parentId, parentValue)
-      //   }
-
-      //   parentValue.children.push(value)
-      // }
     })
-    console.log(Array.from(slotMap.values()).flat(), "SLAX")
     let slotStack = []
     let i
     for (i = slotTree.length - 1; i >= 0; i--) {
