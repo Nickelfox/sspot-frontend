@@ -412,7 +412,7 @@ const Calender = (props) => {
   }
   const newStyles = {}
 
-  const newEvent = (schedulerData, slotId, slotName, start, end, item) => {
+  const newEvent = (schedulerData, slotId, slotName, start, end, item, parentId) => {
     handlePopUpClose()
     const requiredDataObject = {}
     const childObject = resoureMap.get(slotId)
@@ -421,76 +421,83 @@ const Calender = (props) => {
         (childObject) => childObject?.parentId === item?.parentId
       )
       const newChildObject = childObjectArray[0]
-      if (slotName) {
-        const requiredObject = resoureMap.get(item?.parentId)
-        requiredDataObject.parent = requiredObject[0]
-        requiredDataObject.child = newChildObject
-        const el = (sel, par) => (par || document).querySelector(sel)
-        const elArea = el("#area")
-        let elemRect = elArea.getBoundingClientRect()
-        let newFreshId = 0
-        schedulerData.events.forEach((item) => {
-          if (item.id >= newFreshId) newFreshId = item.id + 1
-        })
-        let newEvent = {
-          id: newFreshId,
-          title: "New Event",
-          start: start,
-          end: end,
-          resourceId: slotId,
-          bgColor: `${requiredObject?.color}`
-        }
-        requiredDataObject.event = newEvent
-        setResourceEvent(requiredDataObject)
-        if (!isMobile && !isTablet) {
-          const newStyles = {
-            position: "absolute",
-            left: elemRect.x > 1180 ? 1180 : elemRect.left,
-            right: elemRect.right,
-            top: elemRect.top > 270 ? 265 : elemRect.top
+      if (newChildObject) {
+        if (slotName) {
+          const requiredObject = resoureMap.get(item?.parentId)
+          requiredDataObject.parent = requiredObject[0]
+          requiredDataObject.child = newChildObject
+          const el = (sel, par) => (par || document).querySelector(sel)
+          const elArea = el("#area")
+          let elemRect = elArea && elArea.getBoundingClientRect()
+          let newFreshId = 0
+          schedulerData.events.forEach((item) => {
+            if (item.id >= newFreshId) newFreshId = item.id + 1
+          })
+          let newEvent = {
+            id: newFreshId,
+            title: "New Event",
+            start: start,
+            end: end,
+            resourceId: slotId,
+            bgColor: `${requiredObject?.color}`
           }
-          setPopupChild("addEvent")
-          setIsAddeventPopover(true)
-          setPopUpStyles(newStyles)
+          requiredDataObject.event = newEvent
+          setResourceEvent(requiredDataObject)
+          if (!isMobile && !isTablet && elArea) {
+            const newStyles = {
+              position: "absolute",
+              left: elemRect.x > 1180 ? 1180 : elemRect.left,
+              right: elemRect.right,
+              top: elemRect.top > 270 ? 265 : elemRect.top
+            }
+            setPopupChild("addEvent")
+            setIsAddeventPopover(true)
+            setPopUpStyles(newStyles)
+          } else {
+            setPopupChild("addEvent")
+            setOpenPopup(true)
+          }
+          setSelectedObject(requiredObject)
         } else {
-          setPopupChild("addEvent")
-          setOpenPopup(true)
-        }
-        setSelectedObject(requiredObject)
-      } else {
-        setSelectedObject(childObject)
-        const el = (sel, par) => (par || document).querySelector(sel)
-        const elArea = el("#area")
-        let bodyRect = document.body.getBoundingClientRect(),
-          elemRect = elArea.getBoundingClientRect()
-        if (!isMobile && !isTablet) {
-          const newStyles = {
-            position: "absolute",
-            left: elemRect.left > 1180 ? 1180 : elemRect.left,
-            right: elemRect.right,
-            top: elemRect.top > 250 ? 250 : elemRect.top
-          }
+          setSelectedObject(childObject)
+          const el = (sel, par) => (par || document).querySelector(sel)
+          const elArea = el("#area")
+          let bodyRect = document.body.getBoundingClientRect(),
+            elemRect = elArea.getBoundingClientRect()
+          if (!isMobile && !isTablet) {
+            const newStyles = {
+              position: "absolute",
+              left: elemRect.left > 1180 ? 1180 : elemRect.left,
+              right: elemRect.right,
+              top: elemRect.top > 250 ? 250 : elemRect.top
+            }
 
-          Toast.info("Kindly Assign to project first!")
-        } else {
-          Toast.info("Kindly Assign to project first!")
+            Toast.info("Kindly Assign to project first!")
+          } else {
+            Toast.info("Kindly Assign to project first!")
+          }
         }
+      } else {
+        getNewObject(schedulerData, slotId, slotName, start, end, item, parentId)
       }
     } else {
-      getNewObject(schedulerData, slotId, slotName, start, end, item)
+      getNewObject(schedulerData, slotId, slotName, start, end, item, parentId)
     }
     setId(slotName)
   }
-  const getNewObject = (rSchedulerData, slotId, slotName, start, end, item) => {
+  const getNewObject = (rSchedulerData, slotId, slotName, start, end, item, parentId) => {
     const { renderData } = rSchedulerData
+    const newStart = dayjs(schedulerData.start).startOf("d").format(COMMON_FORMAT_FOR_EVENTS)
+    const newEnd = dayjs(schedulerData.start).endOf("d").format(COMMON_FORMAT_FOR_EVENTS)
     const projectMap = new Map()
     projects.forEach((project) => {
       projectMap.set(project.id, project, project)
     })
     let displayRenderData = renderData.filter((o) => o.render)
-    const requiredMainObjectArray = displayRenderData.filter((o) => o?.slotId === slotId)
-    const requiredManObject = requiredMainObjectArray[0]
-    const parentObjectArray = resoureMap.get(requiredManObject?.parentId)
+    const requiredMainObjectArray = displayRenderData.filter((o) => o?.slotId === parentId)
+    const requiredDataObjectArray = requiredMainObjectArray.filter((i) => i?.id === item?.slotId)
+    const requiredManObject = requiredDataObjectArray[0]
+    const parentObjectArray = resoureMap.get(parentId)
     const requiredDataObject = {}
     let freshId = 0
     schedulerData.events.forEach((item) => {
@@ -499,8 +506,8 @@ const Calender = (props) => {
     let newEvent = {
       id: freshId,
       title: "New Event",
-      start: start,
-      end: end,
+      start: newStart,
+      end: newEnd,
       resourceId: slotId,
       bgColor: parentObjectArray[0]?.color
     }
@@ -770,7 +777,7 @@ const Calender = (props) => {
     setPopUpStyles(null)
     setResourceEvent(null)
   }
-  const addResorceInScheduler = (sd, id, name, start, end) => {
+  const addResorceInScheduler = (sd, id, name, start, end, parentId) => {
     /**@mehran-nickelfox
      * @Fixed
      * Api call on adding a project
@@ -778,8 +785,9 @@ const Calender = (props) => {
     // setFetcher((prev) => !prev)
     const { renderData } = schedulerData
     let displayRenderData = renderData.filter((o) => o.render)
-    const displayItems = displayRenderData.filter((item) => item?.slotId === id)
-    newEvent(schedulerData, id, name, start, end, displayItems[0])
+    const displayItems = displayRenderData.filter((item) => item?.slotId === parentId)
+    const requiredItem = displayRenderData?.filter((i) => i?.id === parentId)
+    newEvent(schedulerData, id, name, start, end, displayItems[0], parentId)
   }
   const getRenderSd = (schedulerData, newProject) => {
     Loader.show()
@@ -842,7 +850,8 @@ const Calender = (props) => {
         requiredProjectObject?.id,
         requiredProjectObject?.label,
         newStart,
-        newEnd
+        newEnd,
+        data?.member
       )
     }
   }
