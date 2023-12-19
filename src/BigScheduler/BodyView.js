@@ -73,20 +73,6 @@ class BodyView extends Component {
     return tableRows
   }
 }
-{
-  /* <td
-                          key={key3}
-                          className={`body_${childItem[0]} flex`}
-                          id={`X_${childItem[0]}`}
-                          style={{
-                            border: 0,
-                            marginTop: 0,
-                            marginBottom: 0,
-                            height: 43
-                          }}>
-                          {getRows(Array.from(childItem[1]), daySet, currentItem)}
-                        </td> */
-}
 
 export default BodyView
 
@@ -116,11 +102,13 @@ const getRows = (array, daySet, currentItem) => {
           marginTop: 0,
           marginBottom: 0
         }}>
-        {childrenItem?.nonWorkingTime ? (
-          <img src={nonWorking} alt="" style={{ zIndex: "1000" }} />
-        ) : (
-          dayCheck
-        )}
+        {/**@mehran-nickelfox
+       @Removed Check
+       @important
+       Removed Check of nonWorking Days from Scheduler Data and  
+       Just working days of user displayed here....
+       */}
+        {dayCheck}
       </td>
     )
   })

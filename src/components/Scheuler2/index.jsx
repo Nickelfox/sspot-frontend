@@ -410,8 +410,6 @@ const Calender = (props) => {
     schedulerData.setResources(newResources)
     triggerRerender(rerender + 1)
   }
-  const newStyles = {}
-
   const newEvent = (schedulerData, slotId, slotName, start, end, item, parentId) => {
     handlePopUpClose()
     const requiredDataObject = {}

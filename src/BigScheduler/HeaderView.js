@@ -96,6 +96,10 @@ class HeaderView extends Component {
               }}
               height={54}
               placeholder="Search..."
+              onChange={(e) => {
+                const value = e.target.value
+                console.log(value)
+              }}
             />
           </TableCell>
           {headerMapArray.map((item, parentIndex) => {

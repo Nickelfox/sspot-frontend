@@ -7,7 +7,12 @@ const ErrorText = ({ text }) => {
   return (
     <>
       {text ? (
-        <Grid container gap={1} alignItems="center" sx={{ marginTop: "0.75rem" }}>
+        <Grid
+          container
+          gap={1}
+          display={"flex"}
+          alignItems="center"
+          sx={{ marginTop: "0.75rem", width: "max-content" }}>
           <ErrorOutlineOutlinedIcon sx={{ color: "error.main" }} fontSize="medium" />
           <Typography variant="p3" color="error.main">
             {text}

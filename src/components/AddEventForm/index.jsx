@@ -8,40 +8,23 @@ import { Input, DatePicker } from "antd"
 import PrimaryButton from "../PrimaryButton"
 import SecondaryButton from "../SecondaryButton"
 import { FormValidator } from "../../helpers/validations/addEventValidations"
-import DropDown from "../DropDown"
 import dayjs from "dayjs"
 import { COMMON_FORMAT_FOR_API } from "helpers/app-dates/dates"
 import DeleteButton from "components/DeleteButton"
+import ErrorText from "components/ErrorText"
+import InputField from "components/Input"
+import { PropTypes } from "prop-types"
 
 const { TextArea } = Input
 const inputSyles = {
   multiLine: { width: "100%" },
-  input: { width: "6rem", height: "3rem", fontSize: "1.2rem" },
+  input: { width: "100%", height: "3rem", fontSize: "1.2rem" },
   border: {
     borderRadius: "0.4rem"
   }
 }
-const initValues = {
-  hours: "",
-  startDate: dayjs(new Date()),
-  endDate: dayjs(new Date()),
-  notes: "",
-  person: "",
-  workDays: []
-}
 const AddEvent = (props) => {
-  const {
-    handleClose,
-    addResorceInScheduler,
-    resources,
-    resourceData,
-    eventData,
-    createNewEvent,
-    postEvent,
-    isEdit,
-    deleteEvent,
-    patchEvent
-  } = props
+  const { handleClose, eventData, postEvent, isEdit, deleteEvent, patchEvent } = props
 
   const [initalValues, setInitalValues] = useState()
   const styles = useStyles()
@@ -149,7 +132,7 @@ const AddEvent = (props) => {
       <Typography
         variant="h6"
         color="#363636"
-        gutterBottom={1}>{`${eventData?.parent?.name} Assignmet`}</Typography>
+        gutterBottom={1}>{`${eventData?.parent?.name} Assignment`}</Typography>
       <Formik
         validateOnMount
         initialValues={initalValues}
@@ -172,14 +155,19 @@ const AddEvent = (props) => {
               padding: "0.2rem",
               maxWidth: maxWidth
             }}>
-            <Grid container alignItems={"center"} paddingBottom={"2rem"}>
+            <Grid
+              container
+              display={"flex"}
+              alignItems={"center"}
+              paddingTop={"2rem"}
+              paddingBottom={"4rem"}>
               <Grid item xs={3}>
                 <Typography variant="c1" color="#929292">
                   Hours/Day
                 </Typography>
               </Grid>
-              <Grid item xs={4}>
-                <Input
+              <Grid item xs={6}>
+                <InputField
                   name="hours"
                   type="telephone"
                   placeholder="0"
@@ -190,9 +178,11 @@ const AddEvent = (props) => {
                     setHours(e.target.value)
                     setFieldValue("totalHours", e?.target?.value * dateDiff)
                   }}
+                  error={touched.hours && Boolean(errors.hours)}
+                  helperText={touched.hours && errors.hours && <ErrorText text={errors.hours} />}
                 />{" "}
               </Grid>
-              <Grid item xs={5}>
+              <Grid item xs={3} className="pl-2">
                 <Typography variant="c1" color="#929292">
                   {getHoursPercent(values?.hours)}% of {eventData?.child?.hoursAssigned}
                   h/d
@@ -239,6 +229,7 @@ const AddEvent = (props) => {
                   style={{
                     cursor: "pointer",
                     fontSize: "1.7rem",
+                    height: "3rem",
                     ...inputSyles?.border
                   }}
                   onChange={(e) => {
@@ -268,6 +259,7 @@ const AddEvent = (props) => {
                   style={{
                     cursor: "pointer",
                     fontSize: "1.7rem",
+                    height: "3rem",
                     ...inputSyles?.border
                   }}
                   onChange={(e) => {
@@ -330,5 +322,12 @@ const AddEvent = (props) => {
     </Box>
   )
 }
-
+AddEvent.propTypes = {
+  handleClose: PropTypes.func,
+  eventData: PropTypes.object,
+  postEvent: PropTypes.func,
+  isEdit: PropTypes.bool,
+  deleteEvent: PropTypes.func,
+  patchEvent: PropTypes.func
+}
 export default AddEvent

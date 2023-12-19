@@ -11,6 +11,7 @@ import { Box, Button, Grid, Typography } from "@mui/material"
 import ViewSelector from "./schedulerComponents/ViewSelector"
 import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown"
 import CheckIcon from "@mui/icons-material/Check"
+import { connect } from "react-redux"
 const RadioButton = Radio.Button
 const RadioGroup = Radio.Group
 const availabiltyObject = [
@@ -76,7 +77,8 @@ class SchedulerHeader extends Component {
     } = this.props
     const { viewTye, isViewTypeOpen } = this.state
     const { viewType, showAgenda, isEventPerspective, config } = schedulerData
-    // let dateLabel = schedulerData.getDateLabel()
+    const visibleLoader = this?.props?.loader?.visible
+    console.log(visibleLoader, "PROOOOPS")
     let selectDate = schedulerData.getSelectedDate()
     let width = "20rem"
     // let width = schedulerData.getResourceTableWidth() - 2;
@@ -145,7 +147,7 @@ class SchedulerHeader extends Component {
 
     return (
       <Grid display={"flex"} height={"4.1rem"} alignItems={"center"} className="scheduler-header">
-        <Grid item width={"100%"} display={"flex"}>
+        <Grid item width={"100%"} display={"flex"} alignItems={"center"}>
           <ViewSelector
             {...this.props}
             handleParentChange={handleParentChange}
@@ -194,6 +196,7 @@ class SchedulerHeader extends Component {
               />
             )}
           </Box>
+          <Spin spinning={visibleLoader} />
         </Grid>
         <Grid
           item
@@ -255,7 +258,6 @@ class SchedulerHeader extends Component {
               <RightOutlined type="right" className="icon-nav" />
             </button>
           </div>
-          <Spin spinning={this.state.dateSpinning} />
         </Grid>
         {/* <Grid item xs={4}>
           <ViewSelector {...this.props} />
@@ -372,5 +374,8 @@ class SchedulerHeader extends Component {
     this.setState({ isViewTypeOpen: value })
   }
 }
+function mapStateToProps(state) {
+  return { loader: state?.loader }
+}
 
-export default SchedulerHeader
+export default connect(mapStateToProps)(SchedulerHeader)

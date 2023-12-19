@@ -13,9 +13,9 @@ export const FormValidator = {
   },
   validationSchema: Yup.object().shape({
     hours: Yup.string()
-      .required("Please enter customer name to continue")
+      .required("Hours are required")
       .matches(/^(?!\s+$).*/, "First Alphabet cannot be space")
-      .max(35, "Maximum of 35 characters allowed"),
+      .max(2, "Maximum of 2 characters allowed"),
     totalHours: Yup.string()
     // .required("Please enter customer name to continue")
     // .matches(/^(?!\s+$).*/, "First Alphabet cannot be space")
