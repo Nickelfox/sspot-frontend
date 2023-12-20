@@ -171,6 +171,7 @@ const Calender = (props) => {
       agendaMaxEventWidth,
       width
     ] = props
+    console.log(event, "Here is Event")
     const resources = resoureMap.get(event?.resourceId)
     const filterItem = resources.filter((resource) => resource.id === event?.resourceId)
     const resourceObjectForEvent = filterItem[0]
@@ -216,17 +217,21 @@ const Calender = (props) => {
       <div key={event.id} className={`${mustAddCssClass} `} style={divStyle}>
         <span
           style={{
-            lineHeight: `${mustBeHeight}px`
+            lineHeight: `${mustBeHeight}px`,
+            display: "flex",
+            flexDirection: "column"
           }}>
           <Typography
             variant="p3"
             color="#fff"
             fontSize={"1rem"}
+            sx={{ display: "flex", flexDirection: "column" }}
             // fontWeight={600}
             paddingLeft={"0.8rem"}>
             {resourceObjectForEvent?.parentId
               ? `${event?.title} h/day`
               : `${JSON.parse(event?.title).toFixed(1)} %`}
+            <span>{event?.assignedhours ? `${event?.assignedhours} hrs` : null}</span>
           </Typography>
         </span>
       </div>
