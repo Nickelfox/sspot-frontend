@@ -71,7 +71,7 @@ const Calender = (props) => {
   const [rerenderData, setRerenderData] = useState(false)
   const [startDate, setStartDate] = useState(new dayjs(new Date()).format(DATE_FORMAT))
   const [fetcher, setFetcher] = useState(false)
-  const [childObject, setNewChildObject] = useState(null)
+  const [search, setSearch] = useState("")
   const {
     fetchDepartments,
     departments,
@@ -105,11 +105,7 @@ const Calender = (props) => {
     if (projects?.length > 0) {
       schedulerData && teamFetcher()
     }
-  }, [schedulerData, projects?.length, startDate, fetcher])
-  // useEffect(() => {
-  //   teamFetcher()
-  //   // scheduleFetcher()
-  // }, [fetcher, startDate])
+  }, [schedulerData, projects?.length, startDate, fetcher, search])
   useEffect(() => {
     teamInScheduler()
   }, [reload])
@@ -139,13 +135,13 @@ const Calender = (props) => {
       .format(COMMON_FORMAT_FOR_API)
     const params = {
       start_date: startDate,
-      end_date: fourWeeksFromStartDate
+      end_date: fourWeeksFromStartDate,
+      search: search
     }
     getTeamMembers(params)
   }
   const scheduleFetcher = async () => {
     const startDate = dayjs(schedulerData?.startDate).startOf("w").format(COMMON_FORMAT_FOR_API)
-    const endDate = dayjs(schedulerData?.endDate).format(COMMON_FORMAT_FOR_API)
     const fourWeeksFromStartDate = dayjs(schedulerData?.startDate)
       .add(4, "w")
       .endOf("w")
@@ -171,7 +167,6 @@ const Calender = (props) => {
       agendaMaxEventWidth,
       width
     ] = props
-    console.log(event, "Here is Event")
     const resources = resoureMap.get(event?.resourceId)
     const filterItem = resources.filter((resource) => resource.id === event?.resourceId)
     const resourceObjectForEvent = filterItem[0]
@@ -317,6 +312,10 @@ const Calender = (props) => {
     setFetchEvents((prev) => !prev)
     // schedulerData.setEvents(teamSchedules)
     triggerRerender(rerender + 1)
+  }
+  const searchFilter = (schedulerData, searchValue) => {
+    schedulerData.search(searchValue)
+    setSearch(searchValue)
   }
   /**@Impportant
    * @template
@@ -981,6 +980,7 @@ const Calender = (props) => {
             handlePopUp={handlePopUp}
             projects={projects}
             assignProject={allocateProject}
+            searchFilter={searchFilter}
             {...props}
           />
         )}{" "}

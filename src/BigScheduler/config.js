@@ -80,7 +80,7 @@ export default {
   eventItemPopoverDateFormat: "MMM D",
   nonAgendaDayCellHeaderFormat: "ha",
   nonAgendaOtherCellHeaderFormat: "ddd M/D",
-
+  search: "",
   minuteStep: 30,
   availability: ["day", "week"],
 

@@ -98,7 +98,7 @@ class HeaderView extends Component {
               placeholder="Search..."
               onChange={(e) => {
                 const value = e.target.value
-                console.log(value)
+                this.props.search(value)
               }}
             />
           </TableCell>
