@@ -47,6 +47,7 @@ export default class SchedulerData {
     this._resolveDate(0, date)
     this._createHeaders()
     this._createRenderData()
+    this.searchValue = ""
   }
 
   setSchedulerLocale(preset, object) {
@@ -268,6 +269,10 @@ export default class SchedulerData {
     }
   }
   setParentViewType = (value) => {}
+  search = (value) => {
+    this.config.search = value
+    this.searchValue = value
+  }
 
   setSchedulerMaxHeight(newSchedulerMaxHeight) {
     this.config.schedulerMaxHeight = newSchedulerMaxHeight

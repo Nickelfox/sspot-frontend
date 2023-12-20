@@ -58,8 +58,14 @@ class HeaderView extends Component {
   }
 
   render() {
-    const { schedulerData, nonAgendaCellHeaderTemplateResolver, scroller, scrollBarWidth } =
-      this.props
+    const {
+      schedulerData,
+      nonAgendaCellHeaderTemplateResolver,
+      scroller,
+      scrollBarWidth,
+      searchValue,
+      search
+    } = this.props
     let resourceTableWidth = schedulerData.getResourceTableWidth()
     const { headers, cellUnit, config, localeDayjs } = schedulerData
     let headerHeight = schedulerData.getTableHeaderHeight()
@@ -94,8 +100,13 @@ class HeaderView extends Component {
                 minWidth: "100%",
                 backgroundColor: "#fff"
               }}
+              value={searchValue}
               height={54}
               placeholder="Search..."
+              onChange={(e) => {
+                const value = e.target.value
+                search(value)
+              }}
             />
           </TableCell>
           {headerMapArray.map((item, parentIndex) => {

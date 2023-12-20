@@ -403,7 +403,12 @@ class Scheduler extends Component {
                     }
                   }>
                   <table className="scheduler-bg-table">
-                    <HeaderView {...this.props} scroller={this.scroller} />
+                    <HeaderView
+                      {...this.props}
+                      scroller={this.scroller}
+                      search={this.search}
+                      searchValue={this.props.search}
+                    />
                   </table>
                 </div>
               </div>
@@ -652,6 +657,10 @@ class Scheduler extends Component {
   closePopup = () => {
     const { closePopUp, schedulerData } = this.props
     closePopUp(schedulerData)
+  }
+  search = (value) => {
+    const { schedulerData, searchFilter } = this.props
+    searchFilter(schedulerData, value)
   }
 }
 

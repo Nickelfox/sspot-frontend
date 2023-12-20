@@ -71,7 +71,7 @@ const Calender = (props) => {
   const [rerenderData, setRerenderData] = useState(false)
   const [startDate, setStartDate] = useState(new dayjs(new Date()).format(DATE_FORMAT))
   const [fetcher, setFetcher] = useState(false)
-  const [childObject, setNewChildObject] = useState(null)
+  const [search, setSearch] = useState("")
   const {
     fetchDepartments,
     departments,
@@ -105,11 +105,7 @@ const Calender = (props) => {
     if (projects?.length > 0) {
       schedulerData && teamFetcher()
     }
-  }, [schedulerData, projects?.length, startDate, fetcher])
-  // useEffect(() => {
-  //   teamFetcher()
-  //   // scheduleFetcher()
-  // }, [fetcher, startDate])
+  }, [schedulerData, projects?.length, startDate, fetcher, search])
   useEffect(() => {
     teamInScheduler()
   }, [reload])
@@ -139,13 +135,13 @@ const Calender = (props) => {
       .format(COMMON_FORMAT_FOR_API)
     const params = {
       start_date: startDate,
-      end_date: fourWeeksFromStartDate
+      end_date: fourWeeksFromStartDate,
+      search: search
     }
     getTeamMembers(params)
   }
   const scheduleFetcher = async () => {
     const startDate = dayjs(schedulerData?.startDate).startOf("w").format(COMMON_FORMAT_FOR_API)
-    const endDate = dayjs(schedulerData?.endDate).format(COMMON_FORMAT_FOR_API)
     const fourWeeksFromStartDate = dayjs(schedulerData?.startDate)
       .add(4, "w")
       .endOf("w")
@@ -216,17 +212,21 @@ const Calender = (props) => {
       <div key={event.id} className={`${mustAddCssClass} `} style={divStyle}>
         <span
           style={{
-            lineHeight: `${mustBeHeight}px`
+            lineHeight: `${mustBeHeight}px`,
+            display: "flex",
+            flexDirection: "column"
           }}>
           <Typography
             variant="p3"
             color="#fff"
             fontSize={"1rem"}
+            sx={{ display: "flex", flexDirection: "column" }}
             // fontWeight={600}
             paddingLeft={"0.8rem"}>
             {resourceObjectForEvent?.parentId
               ? `${event?.title} h/day`
               : `${JSON.parse(event?.title).toFixed(1)} %`}
+            <span>{event?.assignedhours ? `${event?.assignedhours} hrs` : null}</span>
           </Typography>
         </span>
       </div>
@@ -276,6 +276,8 @@ const Calender = (props) => {
       setResourceMap(convertArrayToMap(requiredArray))
       setFetchEvents((prev) => !prev)
       setRerenderData(true)
+    } else {
+      schedulerData && schedulerData.setResources([])
     }
   }
   const eventsInScheduler = (data) => {
@@ -312,6 +314,10 @@ const Calender = (props) => {
     setFetchEvents((prev) => !prev)
     // schedulerData.setEvents(teamSchedules)
     triggerRerender(rerender + 1)
+  }
+  const searchFilter = (schedulerData, searchValue) => {
+    schedulerData.search(searchValue)
+    setSearch(searchValue)
   }
   /**@Impportant
    * @template
@@ -410,8 +416,6 @@ const Calender = (props) => {
     schedulerData.setResources(newResources)
     triggerRerender(rerender + 1)
   }
-  const newStyles = {}
-
   const newEvent = (schedulerData, slotId, slotName, start, end, item, parentId) => {
     handlePopUpClose()
     const requiredDataObject = {}
@@ -978,6 +982,8 @@ const Calender = (props) => {
             handlePopUp={handlePopUp}
             projects={projects}
             assignProject={allocateProject}
+            searchFilter={searchFilter}
+            search={search}
             {...props}
           />
         )}{" "}

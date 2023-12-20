@@ -195,7 +195,8 @@ export const getWeeklyAssignedHours = (object) => {
       start: dayjs(new Date(item?.start)).startOf("d").format(COMMON_FORMAT_FOR_EVENTS),
       end: dayjs(new Date(item?.end)).endOf("d").format(COMMON_FORMAT_FOR_EVENTS),
       title: getTitle(assignedMap?.total_assigned, item?.total),
-      id: key
+      id: key,
+      assignedhours: JSON.parse(assignedMap?.total_assigned).toFixed(0)
     }
     assignedArray.push(requiredObject)
   })

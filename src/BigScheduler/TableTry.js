@@ -18,7 +18,7 @@ import {
 } from "@mui/material"
 import dayjs from "dayjs"
 import { DATETIME_FORMAT } from "."
-import { Popover } from "antd"
+import { PropTypes } from "prop-types"
 import CustomAutoComplete from "./schedulerComponents/AutoComplete"
 import { v4 as uuid } from "uuid"
 // import AppLoader from "components/Loader/AppLoader"
@@ -46,24 +46,12 @@ const editItemObject = [
   }
 ]
 const TableTry = (props) => {
-  const {
-    schedulerData,
-    toggleExpandFunc,
-    dnd,
-    openEditItemPopUp,
-    closePopup,
-    handlePopUp,
-    assignProject
-  } = props
+  const { schedulerData, toggleExpandFunc, dnd, handlePopUp, assignProject } = props
   //eslint-disable-next-line no-unused-vars
   const { renderData, cellUnit, config, headers } = schedulerData
   const displayRenderData = renderData.filter((o) => o.render)
 
   const borderBottom = "1px solid #c4c4c4"
-  let contentScrollbarHeight = 17,
-    resourceScrollbarHeight = 17,
-    contentHeight = config.schedulerContentHeight
-  let contentPaddingBottom = contentScrollbarHeight === 0 ? resourceScrollbarHeight : 0
   let schedulerContentStyle = {
     overflowX: config?.viewType === ViewTypes.Week ? "hidden" : "hidden",
     overflowY: "hidden",
@@ -73,27 +61,27 @@ const TableTry = (props) => {
     // paddingBottom: contentPaddingBottom
   }
   let key = 1
-  let editItems = (items) => {
-    return editItemObject.map((item, index) => {
-      return (
-        <Box
-          key={item?.value}
-          display={"flex"}
-          justifyContent={"center"}
-          alignItems={"start"}
-          flexDirection={"column"}
-          padding={"1rem"}
-          borderBottom={index === 1 && "1px solid #ccc"}
-          className={`cursor-pointer availabilitySelector`}
-          width={"10rem"}
-          onClick={handlePopUp.bind(null, item?.value)}>
-          <Typography variant="p3" color={"#333"}>
-            {item?.label}
-          </Typography>
-        </Box>
-      )
-    })
-  }
+  // let editItems = (items) => {
+  //   return editItemObject.map((item, index) => {
+  //     return (
+  //       <Box
+  //         key={item?.value}
+  //         display={"flex"}
+  //         justifyContent={"center"}
+  //         alignItems={"start"}
+  //         flexDirection={"column"}
+  //         padding={"1rem"}
+  //         borderBottom={index === 1 && "1px solid #ccc"}
+  //         className={`cursor-pointer availabilitySelector`}
+  //         width={"10rem"}
+  //         onClick={handlePopUp.bind(null, item?.value)}>
+  //         <Typography variant="p3" color={"#333"}>
+  //           {item?.label}
+  //         </Typography>
+  //       </Box>
+  //     )
+  //   })
+  // }
   let schedulerWidth = schedulerData.getContentTableWidth() - 1
   let resourceTableWidth = schedulerData.getResourceTableWidth()
   const width = schedulerData.getSchedulerWidth()
@@ -144,8 +132,11 @@ const TableTry = (props) => {
             paddingLeft={1}
             marginBottom={"0.2rem"}
             borderBottom={borderBottom}
-            borderTop={borderBottom}>
-            <Typography className="text-slate-500 text-2xl" variant="p3">
+            borderTop={borderBottom}
+            height={"4rem"}
+            display={"flex"}
+            alignItems={"center"}>
+            <Typography className="text-slate-500 text-2xl" variant="p1">
               {department[0]}
             </Typography>
           </Box>
@@ -196,9 +187,10 @@ const TableTry = (props) => {
                                 xs={6}
                                 display={"flex"}
                                 justifyContent={"start"}
-                                alignItems={"center"}>
-                                <Typography variant="p1" color="black">
-                                  {item?.slotName?.split(" ")[0]}
+                                alignItems={"center"}
+                                sx={{ width: "max-content" }}>
+                                <Typography variant="p3" color="black">
+                                  {item?.slotName}
                                 </Typography>{" "}
                               </Grid>
                               <Grid
@@ -534,5 +526,13 @@ const TableTry = (props) => {
   }
   return <div style={{ overflow: "auto", border: "1px solid gray" }}>{getDivs()}</div>
 }
-
+TableTry.propTypes = {
+  schedulerData: PropTypes.object,
+  toggleExpandFunc: PropTypes.func,
+  dnd: PropTypes.func,
+  handlePopUp: PropTypes.func,
+  assignProject: PropTypes.func,
+  schedulerContentRef: PropTypes.ref,
+  schedulerContentBgTableRef: PropTypes.ref
+}
 export default TableTry
