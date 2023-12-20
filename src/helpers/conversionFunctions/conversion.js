@@ -89,7 +89,8 @@ export const getEventListing = (eventArray) => {
       resourceParentID: event?.member_id,
       projectMemberID: event?.project_member,
       title: `${event?.assigned_hours}`,
-      bgColor: "#DCC36B"
+      bgColor: "#DCC36B",
+      assignedhours: event?.total_assigned_hours
     }
   })
   return requiredArray

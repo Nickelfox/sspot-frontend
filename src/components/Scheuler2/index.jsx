@@ -186,7 +186,7 @@ const Calender = (props) => {
     let bColor = event?.title <= 100 ? "#6DB460" : "rgba(255, 0, 0)"
     let opacity
     opacity = event?.title / 100 < 0.5 ? 0.5 : event?.title / 100
-
+    console.log(event)
     let divStyle = {
       //   borderLeft: borderWidth + "px solid " + borderColor,
       // backgroundColor: event?.bgColor,
