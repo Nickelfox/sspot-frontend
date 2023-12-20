@@ -7,9 +7,18 @@ import dayjs from "dayjs"
 import OutlinedInputField from "../components/OutlinedInput"
 import { getHeaders } from "../helpers/conversionFunctions/headerMap"
 import { getRequiredArray } from "../helpers/conversionFunctions/conversion"
-import { Box, Table, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
+import {
+  Box,
+  IconButton,
+  InputAdornment,
+  Table,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow
+} from "@mui/material"
 import { v4 as uuid } from "uuid"
-
+import CancelIcon from "@mui/icons-material/Cancel"
 class HeaderView extends Component {
   constructor(props) {
     super(props)
@@ -56,7 +65,16 @@ class HeaderView extends Component {
       )
     })
   }
-
+  endAdornment = () => {
+    const { search } = this.props
+    return (
+      <InputAdornment position="end" onClick={() => search("")}>
+        <IconButton>
+          <CancelIcon />
+        </IconButton>
+      </InputAdornment>
+    )
+  }
   render() {
     const {
       schedulerData,
@@ -101,6 +119,7 @@ class HeaderView extends Component {
                 backgroundColor: "#fff"
               }}
               value={searchValue}
+              endAdornment={searchValue !== "" ? this.endAdornment() : null}
               height={54}
               placeholder="Search..."
               onChange={(e) => {
