@@ -53,7 +53,7 @@ export const useStyles = () => {
     icon: {
       color: theme.palette.text.main,
       height: "3rem",
-      width: "3rem"
+      width: "2rem"
     },
     iconActive: {
       color: theme.palette.text.white

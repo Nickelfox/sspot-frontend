@@ -11,7 +11,7 @@ import {
   ListItemText,
   ListItemButton,
   Toolbar,
-  IconButton
+  Icon
 } from "@mui/material"
 import { DashboardMenus } from "router/routes/dashboardRoutes"
 import { Outlet } from "react-router-dom"
@@ -76,12 +76,16 @@ export default function PrivateLayout(props) {
               {process.env.REACT_APP_APP_NAME}
             </Typography>
           </Box>
-          <Box>
-            <ListItemButton onClick={handleLogout}>
-              <ListItemIcon sx={styles.icon}>
-                <LogoutIcon color="secondary" fontSize="large" />
-              </ListItemIcon>
-            </ListItemButton>
+          <Box
+            variant="contained"
+            color="primary"
+            onClick={handleLogout}
+            display={"flex"}
+            alignItems={"center"}>
+            <Typography variant="p3" color={"#fff"} pr={"0.5rem"}>
+              Logout
+            </Typography>{" "}
+            <LogoutIcon color="secondary" fontSize="large" />
           </Box>
         </Toolbar>
       </DrawerHeader>
