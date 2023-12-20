@@ -94,7 +94,7 @@ const TableTry = (props) => {
       <KeyboardArrowUpIcon
         key={`es${item.indent}`}
         style={{}}
-        className=""
+        className="cursor-pointer"
         onClick={() => {
           if (toggleExpandFunc) toggleExpandFunc(schedulerData, item.slotId, false)
           expandItem.add(item?.slotName)
@@ -104,7 +104,7 @@ const TableTry = (props) => {
       <KeyboardArrowDownIcon
         key={`es${item.indent}`}
         style={{}}
-        className=""
+        className="cursor-pointer"
         onClick={() => {
           if (toggleExpandFunc) toggleExpandFunc(schedulerData, item.slotId, true)
           expandItem.delete(item?.slotName)

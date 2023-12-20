@@ -13,6 +13,7 @@ export const appSlice = createSlice({
     login: (state, action) => {
       state.user = action.payload
       state.isLogged = true
+      state.observe = null
     },
     logout: (state) => {
       state.user = {}
