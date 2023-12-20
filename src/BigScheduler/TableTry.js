@@ -187,9 +187,10 @@ const TableTry = (props) => {
                                 xs={6}
                                 display={"flex"}
                                 justifyContent={"start"}
-                                alignItems={"center"}>
-                                <Typography variant="p1" color="black">
-                                  {item?.slotName?.split(" ")[0]}
+                                alignItems={"center"}
+                                sx={{ width: "max-content" }}>
+                                <Typography variant="p3" color="black">
+                                  {item?.slotName}
                                 </Typography>{" "}
                               </Grid>
                               <Grid

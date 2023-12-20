@@ -276,6 +276,8 @@ const Calender = (props) => {
       setResourceMap(convertArrayToMap(requiredArray))
       setFetchEvents((prev) => !prev)
       setRerenderData(true)
+    } else {
+      schedulerData && schedulerData.setResources([])
     }
   }
   const eventsInScheduler = (data) => {
@@ -981,6 +983,7 @@ const Calender = (props) => {
             projects={projects}
             assignProject={allocateProject}
             searchFilter={searchFilter}
+            search={search}
             {...props}
           />
         )}{" "}

@@ -403,7 +403,12 @@ class Scheduler extends Component {
                     }
                   }>
                   <table className="scheduler-bg-table">
-                    <HeaderView {...this.props} scroller={this.scroller} search={this.search} />
+                    <HeaderView
+                      {...this.props}
+                      scroller={this.scroller}
+                      search={this.search}
+                      searchValue={this.props.search}
+                    />
                   </table>
                 </div>
               </div>
