@@ -122,6 +122,29 @@ export const useSchedulerController = () => {
   const reloader = () => {
     setReload((prev) => prev)
   }
+  const getChildObjectArray = (childObject, item) => {
+    const childObjectArray = childObject?.filter(
+      (childObject) => childObject?.parentId === item?.parentId
+    )
+    return childObjectArray
+  }
+  const getFreshId = (schedulerData) => {
+    let newFreshId = 0
+    schedulerData.events.forEach((item) => {
+      if (item.id >= newFreshId) newFreshId = item.id + 1
+    })
+    return newFreshId
+  }
+  const newEventObject = (newFreshId, id, start, end, parentObject) => {
+    return {
+      id: newFreshId,
+      title: "New Event",
+      start: start,
+      end: end,
+      resourceId: id,
+      bgColor: `${parentObject?.color}`
+    }
+  }
   return {
     fetchDepartments,
     departments,
@@ -140,6 +163,9 @@ export const useSchedulerController = () => {
     addEvents,
     deleteEvent,
     reload,
-    reloader
+    reloader,
+    getChildObjectArray,
+    getFreshId,
+    newEventObject
   }
 }

@@ -1,22 +1,18 @@
 /*eslint-disable no-unused-vars */
 /*eslint no-constant-condition: ["error", { "checkLoops": false }]*/
+import React, { useEffect, useState } from "react"
 import dayjs from "dayjs"
-import React, { useEffect, useState, useMemo } from "react"
-import Scheduler, { SchedulerData, DemoData, ViewType, DATE_FORMAT } from "BigScheduler"
+import Scheduler, { SchedulerData, ViewType, DATE_FORMAT } from "BigScheduler"
 import { render } from "@testing-library/react"
 import { HTML5Backend } from "react-dnd-html5-backend"
 import { DndProvider } from "react-dnd"
-import { Box, Typography, useMediaQuery, useTheme } from "@mui/material"
+import { Typography, useMediaQuery, useTheme } from "@mui/material"
 import Popup from "components/PopUp"
 import AddResource from "components/AddResource"
-import PrimaryButton from "components/PrimaryButton"
 import AddEvent from "components/AddEventForm"
 import { convertArrayToMap } from "helpers/conversionFunctions/resourceMap"
 import { convertEventsToMap } from "helpers/conversionFunctions/eventsMap"
 import {
-  getDataArray,
-  getEndEventObject,
-  getEventObject,
   getProjects,
   getUniqueMapFn,
   getWeeklyAssignedHours
@@ -27,20 +23,15 @@ import CalendarFeed from "components/CalendarFeedForm"
 import DeleteResource from "components/DeleteModal"
 import ArchiveResource from "components/ArchiveForm"
 import { useStyles } from "./schedulerStyles"
-import { useSchedulerModel } from "./scheduler.model"
 import { useSchedulerController } from "./scheduler.controller"
 import { getCheckDate } from "helpers/conversionFunctions/getDatesinRange"
 import { Toast } from "helpers/toasts/toastHelper"
 import { eventsOverLap } from "helpers/toasterFunction/toasterFunction"
-import {
-  COMMON_FORMAT_FOR_API,
-  COMMON_FORMAT_FOR_EVENTS,
-  getNextFriday
-} from "helpers/app-dates/dates"
+import { COMMON_FORMAT_FOR_API, COMMON_FORMAT_FOR_EVENTS } from "helpers/app-dates/dates"
 import { getOpenArrays } from "helpers/dropDownListing/openArrays"
 import AddProjectForm from "components/AssignProjectForm"
-import { v4 as uuid } from "uuid"
 import { Loader } from "redux/dispatcher/Loader"
+import EventItemTemplateResolver from "components/EventItem"
 
 const parentViewArray = [
   { name: "Projects", value: 0 },
@@ -65,7 +56,6 @@ const Calender = (props) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const isTablet = useMediaQuery(theme.breakpoints.down("md"))
   const styles = useStyles()
-  const cachedData = useMemo(() => schedulerData, [view])
   const [counter, setCounter] = useState(1)
   const [fetchEvents, setFetchEvents] = useState(false)
   const [rerenderData, setRerenderData] = useState(false)
@@ -88,7 +78,10 @@ const Calender = (props) => {
     fetchTeamList,
     addEvents,
     deleteEvent,
-    reload
+    reload,
+    getChildObjectArray,
+    getFreshId,
+    newEventObject
   } = useSchedulerController()
   useEffect(() => {
     getSchedulerData()
@@ -155,83 +148,7 @@ const Calender = (props) => {
       eventsInScheduler(data?.data)
     }
   }
-  const eventItemTemplateResolver = (...props) => {
-    const [
-      schedulerData,
-      event,
-      bgColor,
-      isStart,
-      isEnd,
-      mustAddCssClass,
-      mustBeHeight,
-      agendaMaxEventWidth,
-      width
-    ] = props
-    const resources = resoureMap.get(event?.resourceId)
-    const filterItem = resources.filter((resource) => resource.id === event?.resourceId)
-    const resourceObjectForEvent = filterItem[0]
-    const resourceChildArray = teamMembers?.map((item) => item?.projects)
-    const resourceFlatArray = resourceChildArray.flat(3)
-    const resourceChildObject = resourceFlatArray.filter(
-      (item) => item?.parentId === event?.resourceId
-    )
-    const requiredData = resourceChildObject.map((child) => {
-      return eventsMap.get(child?.id)
-    })
-    const filteredArray = requiredData.filter((item) => item !== undefined)
-    const newFlatArray = filteredArray.flat(2)
-    const eventsOfParent = newFlatArray.filter(
-      (item) => item?.resourceParentID === resourceObjectForEvent?.id
-    )
-    let bColor = event?.title <= 100 ? "#6DB460" : "rgba(255, 0, 0)"
-    let opacity
-    opacity = event?.title / 100 < 0.5 ? 0.5 : event?.title / 100
-    console.log(event)
-    let divStyle = {
-      //   borderLeft: borderWidth + "px solid " + borderColor,
-      // backgroundColor: event?.bgColor,
-      background:
-        resourceObjectForEvent?.parentId === undefined ? bColor : resourceObjectForEvent?.color,
-      minHeight: 36,
-      height: 43,
-      borderRadius: resourceObjectForEvent?.parentId === undefined ? 0 : 4,
-      display: "flex",
-      justifyContent: "flex-start",
-      alignItems: "center",
-      paddingLeft: 1,
-      opacity: resourceObjectForEvent?.parentId === undefined ? opacity : 1,
-      marginTop: resourceObjectForEvent?.parentId === undefined ? "-0.15rem" : 0
-      // width: props[7]
-    }
-    if (agendaMaxEventWidth)
-      divStyle = {
-        ...divStyle,
-        maxWidth: agendaMaxEventWidth
-      }
-    return (
-      <div key={event.id} className={`${mustAddCssClass} `} style={divStyle}>
-        <span
-          style={{
-            lineHeight: `${mustBeHeight}px`,
-            display: "flex",
-            flexDirection: "column"
-          }}>
-          <Typography
-            variant="p3"
-            color="#fff"
-            fontSize={"1rem"}
-            sx={{ display: "flex", flexDirection: "column" }}
-            // fontWeight={600}
-            paddingLeft={"0.8rem"}>
-            {resourceObjectForEvent?.parentId
-              ? `${event?.title} h/day`
-              : `${JSON.parse(event?.title).toFixed(1)} %`}
-            <span>{event?.assignedhours ? `${event?.assignedhours} hrs` : null}</span>
-          </Typography>
-        </span>
-      </div>
-    )
-  }
+
   const getSchedulerData = () => {
     const sd = new SchedulerData(startDate, ViewType.Month, false, false, {
       displayWeekend: true,
@@ -429,72 +346,42 @@ const Calender = (props) => {
     triggerRerender(rerender + 1)
   }
   const newEvent = (schedulerData, slotId, slotName, start, end, item, parentId) => {
+    if (!slotName) {
+      Toast.info("Kindly Assign to project first!")
+      return
+    }
     handlePopUpClose()
     const requiredDataObject = {}
     const childObject = resoureMap.get(slotId)
-    if (!slotName) {
-      Toast.info("Kindly Assign to project first!")
-    } else if (childObject) {
-      const childObjectArray = childObject?.filter(
-        (childObject) => childObject?.parentId === item?.parentId
-      )
-      if (slotName) {
-        const newChildObject = childObjectArray[0]
-        if (newChildObject) {
-          const requiredObject = resoureMap.get(item?.parentId)
-          requiredDataObject.parent = requiredObject[0]
-          requiredDataObject.child = newChildObject
-          const el = (sel, par) => (par || document).querySelector(sel)
-          const elArea = el("#area")
-          let elemRect = elArea && elArea.getBoundingClientRect()
-          let newFreshId = 0
-          schedulerData.events.forEach((item) => {
-            if (item.id >= newFreshId) newFreshId = item.id + 1
-          })
-          let newEvent = {
-            id: newFreshId,
-            title: "New Event",
-            start: start,
-            end: end,
-            resourceId: slotId,
-            bgColor: `${requiredObject?.color}`
+    const requiredParentObject = resoureMap.get(item?.parentId)
+    if (childObject) {
+      const childObjectArray = getChildObjectArray(childObject, item)
+      const newChildObject = childObjectArray[0]
+      if (newChildObject) {
+        const el = (sel, par) => (par || document).querySelector(sel)
+        const elArea = el("#area")
+        let elemRect = elArea ? elArea.getBoundingClientRect() : null
+        let newFreshId = getFreshId(schedulerData)
+        let newEvent = newEventObject(newFreshId, slotId, start, end, requiredParentObject)
+        requiredDataObject.parent = requiredParentObject[0]
+        requiredDataObject.child = newChildObject
+        requiredDataObject.event = newEvent
+        setResourceEvent(requiredDataObject)
+        if (!isMobile && !isTablet && elArea) {
+          const newStyles = {
+            position: "absolute",
+            left: elemRect.x > 1180 ? 1180 : elemRect.left,
+            right: elemRect.right,
+            top: elemRect.top > 270 ? 265 : elemRect.top
           }
-          requiredDataObject.event = newEvent
-          setResourceEvent(requiredDataObject)
-          if (!isMobile && !isTablet && elArea) {
-            const newStyles = {
-              position: "absolute",
-              left: elemRect.x > 1180 ? 1180 : elemRect.left,
-              right: elemRect.right,
-              top: elemRect.top > 270 ? 265 : elemRect.top
-            }
-            setPopupChild("addEvent")
-            setIsAddeventPopover(true)
-            setPopUpStyles(newStyles)
-          } else {
-            setPopupChild("addEvent")
-            setOpenPopup(true)
-          }
-          setSelectedObject(requiredObject)
+          setPopupChild("addEvent")
+          setIsAddeventPopover(true)
+          setPopUpStyles(newStyles)
         } else {
-          setSelectedObject(childObject)
-          const el = (sel, par) => (par || document).querySelector(sel)
-          const elArea = el("#area")
-          let bodyRect = document.body.getBoundingClientRect(),
-            elemRect = elArea.getBoundingClientRect()
-          if (!isMobile && !isTablet) {
-            const newStyles = {
-              position: "absolute",
-              left: elemRect.left > 1180 ? 1180 : elemRect.left,
-              right: elemRect.right,
-              top: elemRect.top > 250 ? 250 : elemRect.top
-            }
-
-            Toast.info("Kindly Assign to project first!")
-          } else {
-            Toast.info("Kindly Assign to project first!")
-          }
+          setPopupChild("addEvent")
+          setOpenPopup(true)
         }
+        setSelectedObject(requiredParentObject)
       } else {
         getNewObject(schedulerData, slotId, slotName, start, end, item, parentId)
       }
@@ -964,11 +851,19 @@ const Calender = (props) => {
         return
     }
   }
+  const eventItemTemplateResolver = (eventItem, mustAddCssClass, eventHeight) => {
+    return (
+      <EventItemTemplateResolver
+        resourceMap={resoureMap}
+        item={eventItem}
+        mustAddCssClass={mustAddCssClass}
+        eventHeight={eventHeight}
+      />
+    )
+  }
   return (
     <div
       style={{
-        // maxHeight: "100vh",
-        // maxWidth: "100vw",
         overflowX: "hidden",
         overflowY: "auto",
         position: "relative"
@@ -976,7 +871,6 @@ const Calender = (props) => {
       <DndProvider backend={HTML5Backend}>
         {schedulerData && (
           <Scheduler
-            //   parentRef={props.parentRef}
             prevClick={prevClick}
             nextClick={nextClick}
             onSelectDate={onSelectDate}
@@ -1035,9 +929,6 @@ const Calender = (props) => {
             ...popupStyles
           }}
           overlayInnerStyle={{ padding: 0, borderRadius: "8px" }}
-          // onOpenChange={() => {
-          //   setIsAddeventPopover(false);
-          // }}
         />
       )}
     </div>
