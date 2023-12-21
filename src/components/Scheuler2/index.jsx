@@ -407,12 +407,24 @@ const Calender = (props) => {
   }
   const expandAllItems = (schedulerData) => {
     const { resources } = schedulerData
-    const newResources = resources.map((resource) => {
-      return {
-        ...resource,
-        expanded: !resource?.expanded
-      }
-    })
+    const getExpandedArray = resources.map((item) => item?.expanded)
+    const openCheck = getExpandedArray.every((item) => item === true)
+    let newResources
+    if (!openCheck) {
+      newResources = resources.map((resource) => {
+        return {
+          ...resource,
+          expanded: true
+        }
+      })
+    } else {
+      newResources = resources.map((resource) => {
+        return {
+          ...resource,
+          expanded: false
+        }
+      })
+    }
     schedulerData.setResources(newResources)
     triggerRerender(rerender + 1)
   }
