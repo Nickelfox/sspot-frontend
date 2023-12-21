@@ -1,25 +1,13 @@
 /*eslint-disable no-unused-vars */
 import React, { useRef } from "react"
 import { styled, useTheme } from "@mui/material/styles"
-import {
-  Box,
-  Drawer,
-  List,
-  Typography,
-  ListItemIcon,
-  Divider,
-  ListItemText,
-  ListItemButton,
-  Toolbar,
-  IconButton
-} from "@mui/material"
-import { DashboardMenus } from "router/routes/dashboardRoutes"
+import { Box, Typography, Toolbar, IconButton } from "@mui/material"
+// import { DashboardMenus } from "router/routes/dashboardRoutes" Required For Sidebar Component
 import { Outlet } from "react-router-dom"
 import LogoutIcon from "@mui/icons-material/Logout"
 import { usePrivateLayoutController } from "./privateLayout.controller"
 import { useStyles } from "layout/privateLayoutStyles"
-import { AppBar } from "./Appbar"
-
+import Logo from "assets/images/icons/SquadSpot.webp"
 const drawerWidth = 270
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -55,7 +43,7 @@ export default function PrivateLayout(props) {
   const styles = useStyles()
   const appRef = useRef()
   const theme = useTheme()
-  const { navigate, handleLogout, activeMenu } = usePrivateLayoutController(props)
+  const { handleLogout } = usePrivateLayoutController(props)
 
   return (
     <Box>
@@ -71,18 +59,23 @@ export default function PrivateLayout(props) {
             alignItems: "center",
             justifyContent: "space-between"
           }}>
-          <Box>
+          <Box className="flex items-center">
+            <img src={Logo} alt="SquadSpot" style={styles.logo} />
             <Typography sx={styles.drawerHeader} variant="h5" color={theme.palette.text.main}>
               {process.env.REACT_APP_APP_NAME}
             </Typography>
           </Box>
-          <Box>
-            <ListItemButton onClick={handleLogout}>
-              <ListItemIcon sx={styles.icon}>
-                <LogoutIcon color="secondary" fontSize="large" />
-              </ListItemIcon>
-            </ListItemButton>
-          </Box>
+          <IconButton
+            variant="contained"
+            color="primary"
+            onClick={handleLogout}
+            display={"flex"}
+            alignItems={"center"}>
+            <Typography variant="p3" color={"#fff"} pr={"0.5rem"}>
+              Logout
+            </Typography>{" "}
+            <LogoutIcon color="secondary" fontSize="large" />
+          </IconButton>
         </Toolbar>
       </DrawerHeader>
       <Main open={"open"}>

@@ -20,7 +20,8 @@ export const useStyles = () => {
       }
     },
     drawerHeader: {
-      color: theme.palette.text.main
+      color: theme.palette.text.main,
+      paddingLeft: "1rem"
     },
     divider: {
       border: `1px solid rgba(255, 255, 255, 0.1)`,
@@ -53,7 +54,7 @@ export const useStyles = () => {
     icon: {
       color: theme.palette.text.main,
       height: "3rem",
-      width: "3rem"
+      width: "2rem"
     },
     iconActive: {
       color: theme.palette.text.white
@@ -71,6 +72,10 @@ export const useStyles = () => {
       background: theme.palette.background.default,
       color: theme.palette.primary.main,
       boxShadow: "0px -1px 16px 0px #564AA93D"
+    },
+    logo: {
+      width: "4rem",
+      height: "4rem"
     }
   }
 }

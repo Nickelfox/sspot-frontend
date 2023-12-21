@@ -407,12 +407,24 @@ const Calender = (props) => {
   }
   const expandAllItems = (schedulerData) => {
     const { resources } = schedulerData
-    const newResources = resources.map((resource) => {
-      return {
-        ...resource,
-        expanded: !resource?.expanded
-      }
-    })
+    const getExpandedArray = resources.map((item) => item?.expanded)
+    const openCheck = getExpandedArray.every((item) => item === true)
+    let newResources
+    if (!openCheck) {
+      newResources = resources.map((resource) => {
+        return {
+          ...resource,
+          expanded: true
+        }
+      })
+    } else {
+      newResources = resources.map((resource) => {
+        return {
+          ...resource,
+          expanded: false
+        }
+      })
+    }
     schedulerData.setResources(newResources)
     triggerRerender(rerender + 1)
   }
@@ -420,13 +432,15 @@ const Calender = (props) => {
     handlePopUpClose()
     const requiredDataObject = {}
     const childObject = resoureMap.get(slotId)
-    if (childObject) {
+    if (!slotName) {
+      Toast.info("Kindly Assign to project first!")
+    } else if (childObject) {
       const childObjectArray = childObject?.filter(
         (childObject) => childObject?.parentId === item?.parentId
       )
-      const newChildObject = childObjectArray[0]
-      if (newChildObject) {
-        if (slotName) {
+      if (slotName) {
+        const newChildObject = childObjectArray[0]
+        if (newChildObject) {
           const requiredObject = resoureMap.get(item?.parentId)
           requiredDataObject.parent = requiredObject[0]
           requiredDataObject.child = newChildObject
