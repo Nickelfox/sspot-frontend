@@ -16,9 +16,9 @@ export const useStyles = () => {
     },
     divText: {
       fontSize: theme?.typography?.p5?.fontSize,
-      fontWeight: theme?.typography?.p3?.fontWeight,
+      fontWeight: theme?.typography?.p4?.fontWeight,
       color: theme?.palette?.text?.white,
-      paddingLeft: "0.8rem"
+      paddingLeft: "0.5rem"
     }
   }
 }

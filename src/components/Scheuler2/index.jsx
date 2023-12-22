@@ -6,7 +6,7 @@ import Scheduler, { SchedulerData, ViewType, DATE_FORMAT } from "BigScheduler"
 import { render } from "@testing-library/react"
 import { HTML5Backend } from "react-dnd-html5-backend"
 import { DndProvider } from "react-dnd"
-import { Typography, useMediaQuery, useTheme } from "@mui/material"
+import { useMediaQuery, useTheme } from "@mui/material"
 import Popup from "components/PopUp"
 import AddResource from "components/AddResource"
 import AddEvent from "components/AddEventForm"
@@ -106,7 +106,6 @@ const Calender = (props) => {
     scheduleFetcher()
   }, [fetchEvents])
   useEffect(() => {
-    // fetchEvents && eventsInScheduler()
     fetchEvents && getRenderSd(schedulerData)
   }, [counter])
   useEffect(() => {
@@ -156,9 +155,6 @@ const Calender = (props) => {
       schedulerMaxHeight: 700,
       tableHeaderHeight: 60,
       availability: ["Day", "Week"],
-      // checkConflict: true,
-      // tableHeaderHeight: 60,
-      // dayCellWidth: 100,
       parentView: parentViewArray,
       views: [
         {
@@ -166,7 +162,6 @@ const Calender = (props) => {
           viewType: ViewType.Month,
           showAgenda: false,
           isEventPerspective: true
-          // checkConflict: true
         }
       ]
     })
@@ -193,14 +188,13 @@ const Calender = (props) => {
       setResourceMap(convertArrayToMap(requiredArray))
       setFetchEvents((prev) => !prev)
       setRerenderData(true)
-    } else {
-      schedulerData && schedulerData.setResources([])
+    } else if (schedulerData) {
+      schedulerData.setResources([])
     }
   }
   const eventsInScheduler = (data) => {
     setEventsMap(convertEventsToMap(data))
     makeResourceEvents(data)
-    // schedulerData.setEvents(teamSchedules)
   }
   const makeResourceEvents = (events) => {
     const resourceArray = teamMembers
@@ -217,10 +211,7 @@ const Calender = (props) => {
   }
   const prevClick = (schedulerData) => {
     schedulerData.prev()
-    const newDate = dayjs(startDate).add(-1, "week")
     setFetchEvents((prev) => !prev)
-    // schedulerData.setEvents(teamSchedules)
-    // triggerRerender(rerender + 1)
   }
   const closePopUp = (schedulerData) => {
     getRenderSd(schedulerData)
@@ -229,32 +220,17 @@ const Calender = (props) => {
   const nextClick = (schedulerData) => {
     schedulerData.next()
     setFetchEvents((prev) => !prev)
-    // schedulerData.setEvents(teamSchedules)
     triggerRerender(rerender + 1)
   }
   const searchFilter = (schedulerData, searchValue) => {
     schedulerData.search(searchValue)
     setSearch(searchValue)
   }
-  /**@Impportant
-   * @template
-   * Fucntion from Library
-   */
-  // const onScrollRight = (schedulerData, schedulerContent, maxScrollLeft) => {
-  //   schedulerData.next()
-  //   // schedulerData.setEvents(teamSchedules)
-  //   triggerRerender(rerender + 1)
-  //   setRetrigger((prev) => !prev)
-  //   schedulerContent.scrollLeft = maxScrollLeft - 10
-  // }
   const onViewChange = (schedulerData, view) => {
     schedulerData.setViewType(view.viewType, view.showAgenda, view.isEventPerspective)
-    // schedulerData.setEvents(teamSchedules)
     triggerRerender(rerender + 1)
   }
-  const onParentViewChange = () => {
-    schedulerData.setParentViewType("Team")
-  }
+
   const showResourceEditPopup = (schedulerData, itemToEdit) => {
     const { renderData } = schedulerData
     const requiredArray = renderData.map((item) => {
@@ -274,16 +250,12 @@ const Calender = (props) => {
     getRenderSd(schedulerData)
     schedulerData.setResources(requiredArray)
     setView(view + 1)
-    // triggerRerender(rerender + 1)
   }
   const onSelectDate = (schedulerData, date) => {
     const openArrays = getOpenArrays(schedulerData)
     setStartDate(date)
     getRenderSd(schedulerData)
     schedulerData.setDate(date)
-    // schedulerData.setEvents(teamSchedules)
-    // triggerRerender(rerender + 1)
-    // setFetchEvents((prev) => !prev)
     setFetcher((prev) => !prev)
     keepDataOpen(openArrays, schedulerData)
   }
@@ -297,7 +269,6 @@ const Calender = (props) => {
     getRenderSd(schedulerData)
     schedulerData.setDate(date)
     setFetcher((prev) => !prev)
-    // schedulerData.setEvents(teamSchedules)
     triggerRerender(rerender + 1)
   }
 
@@ -353,42 +324,49 @@ const Calender = (props) => {
     handlePopUpClose()
     const requiredDataObject = {}
     const childObject = resoureMap.get(slotId)
+    if (!childObject) {
+      getNewObject(schedulerData, slotId, slotName, start, end, item, parentId)
+      return
+    }
     const requiredParentObject = resoureMap.get(item?.parentId)
     if (childObject) {
       const childObjectArray = getChildObjectArray(childObject, item)
       const newChildObject = childObjectArray[0]
-      if (newChildObject) {
-        const el = (sel, par) => (par || document).querySelector(sel)
-        const elArea = el("#area")
-        let elemRect = elArea ? elArea.getBoundingClientRect() : null
-        let newFreshId = getFreshId(schedulerData)
-        let newEvent = newEventObject(newFreshId, slotId, start, end, requiredParentObject)
-        requiredDataObject.parent = requiredParentObject[0]
-        requiredDataObject.child = newChildObject
-        requiredDataObject.event = newEvent
-        setResourceEvent(requiredDataObject)
-        if (!isMobile && !isTablet && elArea) {
-          const newStyles = {
-            position: "absolute",
-            left: elemRect.x > 1180 ? 1180 : elemRect.left,
-            right: elemRect.right,
-            top: elemRect.top > 270 ? 265 : elemRect.top
-          }
-          setPopupChild("addEvent")
-          setIsAddeventPopover(true)
-          setPopUpStyles(newStyles)
-        } else {
-          setPopupChild("addEvent")
-          setOpenPopup(true)
-        }
-        setSelectedObject(requiredParentObject)
-      } else {
+      if (!newChildObject) {
         getNewObject(schedulerData, slotId, slotName, start, end, item, parentId)
+        return
       }
-    } else {
-      getNewObject(schedulerData, slotId, slotName, start, end, item, parentId)
+      const el = (sel, par) => (par || document).querySelector(sel)
+      const elArea = el("#area")
+      let elemRect = elArea ? elArea.getBoundingClientRect() : null
+      let newFreshId = getFreshId(schedulerData)
+      let newEvent = newEventObject(newFreshId, slotId, start, end, requiredParentObject)
+      requiredDataObject.parent = requiredParentObject[0]
+      requiredDataObject.child = newChildObject
+      requiredDataObject.event = newEvent
+      const newLeft = elemRect.x > 1180 ? 1180 : elemRect.left
+      const newTop = elemRect.top > 270 ? 270 : elemRect.top
+      const newStyles = {
+        position: "absolute",
+        left: newLeft,
+        right: elemRect.right,
+        top: newTop
+      }
+      const ifCheck = !isMobile && !isTablet && elArea
+      setPopupChild("addEvent")
+      handlePopover(ifCheck, newStyles)
+      setSelectedObject(requiredParentObject)
+      setResourceEvent(requiredDataObject)
     }
     setId(slotName)
+  }
+  const handlePopover = (check, newStyles) => {
+    if (check) {
+      setIsAddeventPopover(true)
+      setPopUpStyles(newStyles)
+    } else {
+      setOpenPopup(true)
+    }
   }
   const getNewObject = (rSchedulerData, slotId, slotName, start, end, item, parentId) => {
     const { renderData } = rSchedulerData
@@ -491,16 +469,6 @@ const Calender = (props) => {
     const parameter = [`${id}/`]
     const response = await updateSchedules(parameter, apiData)
     if (response?.success) {
-      const requiredEventObject = {
-        title: response?.data?.assigned_hours,
-        start: dayjs(response?.data?.start_at).startOf("d").format(COMMON_FORMAT_FOR_EVENTS),
-        end: dayjs(response?.data?.end_at).endOf("d").format(COMMON_FORMAT_FOR_EVENTS)
-      }
-      // schedulerData.updateEventStart(event, requiredEventObject?.start, requiredEventObject?.title)
-      // schedulerData.updateEventEnd(event, requiredEventObject?.end, requiredEventObject?.title)
-      // setView(view + 1)
-      // getRenderSd(schedulerData)
-      // setCounter(counter + 1)
       setFetcher((prev) => !prev)
       openArrays.forEach((arrayItem) => {
         toggleExpandFunc(schedulerData, arrayItem?.slotId, true)
@@ -527,14 +495,6 @@ const Calender = (props) => {
     setFetcher((prev) => !prev)
     keepDataOpen(openArrays, schedulerData)
     getRenderSd(schedulerData)
-  }
-  const onScrollLeft = (schedulerData, schedulerContent, maxScrollLeft) => {
-    schedulerData.prev()
-    schedulerData.setEvents(schedulerData.events)
-    triggerRerender(render + 1)
-    setRetrigger((prev) => !prev)
-
-    schedulerContent.scrollLeft = 10
   }
   const updateEventStart = async (schedulerData, event, newStart) => {
     /**
@@ -599,7 +559,6 @@ const Calender = (props) => {
         const returnedData = await updateSchedules(parameter, requiredData)
         const newDataEnd = dayjs(returnedData?.data?.end_at).format(COMMON_FORMAT_FOR_EVENTS)
         schedulerData.updateEventEnd(event, newDataEnd)
-        // setFetchEvents((prev) => !prev)
         setFetcher((prev) => !prev)
       } else {
         eventsOverLap()
@@ -659,9 +618,6 @@ const Calender = (props) => {
             .endOf("d")
             .format(COMMON_FORMAT_FOR_EVENTS)
           schedulerData.moveEvent(event, slotId, slotName, newStart, newEnd)
-          // schedulerData.updateEventStart(event, newStart)
-          // schedulerData.updateEventEnd(event, newEnd)
-          // setFetchEvents((prev) => !prev)
           setFetcher((prev) => !prev)
         } else {
           eventsOverLap()
@@ -670,10 +626,6 @@ const Calender = (props) => {
         getRenderSd(schedulerData)
       }
     }
-  }
-  const handleAddEventPopUp = (key) => {
-    setPopupChild(key)
-    setOpenPopup(true)
   }
   const handlePopUpClose = () => {
     setOpenPopup(false)
@@ -691,7 +643,6 @@ const Calender = (props) => {
     const { renderData } = schedulerData
     let displayRenderData = renderData.filter((o) => o.render)
     const displayItems = displayRenderData.filter((item) => item?.slotId === parentId)
-    const requiredItem = displayRenderData?.filter((i) => i?.id === parentId)
     newEvent(schedulerData, id, name, start, end, displayItems[0], parentId)
   }
   const getRenderSd = (schedulerData, newProject) => {
@@ -894,15 +845,8 @@ const Calender = (props) => {
             search={search}
             {...props}
           />
-        )}{" "}
+        )}
       </DndProvider>
-      {/* <Box className="flex flex-col px-4" sx={{ paddingTop: "2rem" }}>
-        <PrimaryButton
-          sx={styles?.addPersonButton}
-          onClick={handleAddEventPopUp.bind(null, "addResource")}>
-          + Add Person
-        </PrimaryButton>
-      </Box> */}
       <Popup
         open={openPopUp}
         handleClose={handlePopUpClose}
