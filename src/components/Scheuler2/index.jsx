@@ -1,12 +1,11 @@
 /*eslint-disable no-unused-vars */
 /*eslint no-constant-condition: ["error", { "checkLoops": false }]*/
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import dayjs from "dayjs"
-import Scheduler, { SchedulerData, ViewType, DATE_FORMAT } from "BigScheduler"
+import Scheduler, { SchedulerData, ViewType } from "BigScheduler"
 import { render } from "@testing-library/react"
 import { HTML5Backend } from "react-dnd-html5-backend"
 import { DndProvider } from "react-dnd"
-import { useMediaQuery, useTheme } from "@mui/material"
 import Popup from "components/PopUp"
 import AddResource from "components/AddResource"
 import AddEvent from "components/AddEventForm"
@@ -22,7 +21,6 @@ import AssignProject from "components/AssignProject"
 import CalendarFeed from "components/CalendarFeedForm"
 import DeleteResource from "components/DeleteModal"
 import ArchiveResource from "components/ArchiveForm"
-import { useStyles } from "./schedulerStyles"
 import { useSchedulerController } from "./scheduler.controller"
 import { getCheckDate } from "helpers/conversionFunctions/getDatesinRange"
 import { Toast } from "helpers/toasts/toastHelper"
@@ -39,29 +37,6 @@ const parentViewArray = [
 ]
 let noSetting = true
 const Calender = (props) => {
-  const theme = useTheme()
-  const [rerender, triggerRerender] = useState(1)
-  const [schedulerData, setSchedulerData] = useState(null)
-  const [triger, setRetrigger] = useState(false)
-  const [popupChild, setPopupChild] = useState("")
-  const [openPopUp, setOpenPopup] = useState(true)
-  const [view, setView] = useState(1)
-  const [id, setId] = useState("")
-  const [resoureMap, setResourceMap] = useState(new Map())
-  const [eventsMap, setEventsMap] = useState(new Map())
-  const [selectedObject, setSelectedObject] = useState(null)
-  const [popupStyles, setPopUpStyles] = useState({})
-  const [isAddeventPopover, setIsAddeventPopover] = useState(false)
-  const [resourceEvent, setResourceEvent] = useState(null)
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
-  const isTablet = useMediaQuery(theme.breakpoints.down("md"))
-  const styles = useStyles()
-  const [counter, setCounter] = useState(1)
-  const [fetchEvents, setFetchEvents] = useState(false)
-  const [rerenderData, setRerenderData] = useState(false)
-  const [startDate, setStartDate] = useState(new dayjs(new Date()).format(DATE_FORMAT))
-  const [fetcher, setFetcher] = useState(false)
-  const [search, setSearch] = useState("")
   const {
     fetchDepartments,
     departments,
@@ -81,7 +56,52 @@ const Calender = (props) => {
     reload,
     getChildObjectArray,
     getFreshId,
-    newEventObject
+    newEventObject,
+    removeResource,
+    setRemoveResource,
+    rerender,
+    triggerRerender,
+    schedulerData,
+    setSchedulerData,
+    popupChild,
+    setPopupChild,
+    openPopUp,
+    setOpenPopup,
+    view,
+    setView,
+    setId,
+    resoureMap,
+    setResourceMap,
+    setEventsMap,
+    selectedObject,
+    setSelectedObject,
+    popupStyles,
+    setPopUpStyles,
+    isAddeventPopover,
+    setIsAddeventPopover,
+    resourceEvent,
+    setResourceEvent,
+    isMobile,
+    isTablet,
+    counter,
+    setCounter,
+    fetchEvents,
+    setFetchEvents,
+    rerenderData,
+    setRerenderData,
+    startDate,
+    setStartDate,
+    fetcher,
+    setFetcher,
+    search,
+    setSearch,
+    triger,
+    handlePopUpClose,
+    handlePopover,
+    keepDataOpen,
+    toggleExpandFunc,
+    getBgColor,
+    handlePopUp
   } = useSchedulerController()
   useEffect(() => {
     getSchedulerData()
@@ -259,11 +279,7 @@ const Calender = (props) => {
     setFetcher((prev) => !prev)
     keepDataOpen(openArrays, schedulerData)
   }
-  const keepDataOpen = (openArrays, sd) => {
-    openArrays.forEach((arrayItem) => {
-      toggleExpandFunc(sd, arrayItem?.slotId, true)
-    })
-  }
+
   const onThisWeekCick = (schedulerData) => {
     const date = new Date()
     getRenderSd(schedulerData)
@@ -288,11 +304,6 @@ const Calender = (props) => {
     }
   }
 
-  const toggleExpandFunc = (schedulerData, slotId, value) => {
-    schedulerData.toggleExpandStatus(slotId, value)
-    triggerRerender(rerender + 1)
-    setView(view + 1)
-  }
   const expandAllItems = (schedulerData) => {
     const { resources } = schedulerData
     const getExpandedArray = resources.map((item) => item?.expanded)
@@ -360,14 +371,7 @@ const Calender = (props) => {
     }
     setId(slotName)
   }
-  const handlePopover = (check, newStyles) => {
-    if (check) {
-      setIsAddeventPopover(true)
-      setPopUpStyles(newStyles)
-    } else {
-      setOpenPopup(true)
-    }
-  }
+
   const getNewObject = (rSchedulerData, slotId, slotName, start, end, item, parentId) => {
     const { renderData } = rSchedulerData
     const newStart = dayjs(schedulerData.start).startOf("d").format(COMMON_FORMAT_FOR_EVENTS)
@@ -476,13 +480,7 @@ const Calender = (props) => {
       handlePopUpClose()
     }
   }
-  const getBgColor = (id, resourceId) => {
-    const responseMap = resoureMap.get(id)
-    const projectArray = responseMap.map((item) => item?.projects)
-    const flatArray = projectArray.flat()
-    const filteredArray = flatArray.filter((item) => item?.id === resourceId)
-    return filteredArray[0]?.color
-  }
+
   const createNewEvent = (requiredData) => {
     /**
      * @mehran-nickelfox
@@ -627,13 +625,7 @@ const Calender = (props) => {
       }
     }
   }
-  const handlePopUpClose = () => {
-    setOpenPopup(false)
-    setPopupChild("")
-    setIsAddeventPopover(false)
-    setPopUpStyles(null)
-    setResourceEvent(null)
-  }
+
   const addResorceInScheduler = (sd, id, name, start, end, parentId) => {
     /**@mehran-nickelfox
      * @Fixed
@@ -644,6 +636,7 @@ const Calender = (props) => {
     let displayRenderData = renderData.filter((o) => o.render)
     const displayItems = displayRenderData.filter((item) => item?.slotId === parentId)
     newEvent(schedulerData, id, name, start, end, displayItems[0], parentId)
+    setRemoveResource(true)
   }
   const getRenderSd = (schedulerData, newProject) => {
     Loader.show()
@@ -774,34 +767,7 @@ const Calender = (props) => {
       />
     )
   }
-  const handlePopUp = (key) => {
-    switch (key) {
-      case "cal":
-        setPopupChild("calenderFeed")
-        setOpenPopup(true)
-        return
-      case "del":
-        setPopupChild("deleteResource")
-        setOpenPopup(true)
-        return
-      case "edit":
-        setPopupChild("editResource")
-        setOpenPopup(true)
-        return
-      case "arc":
-        setPopupChild("archiveResource")
-        setOpenPopup(true)
-        return
-      case "add":
-        setPopupChild("projectForm")
-        setOpenPopup(true)
-        return
-      case "editEvent":
-        setPopupChild("editEvent")
-        setOpenPopup(true)
-        return
-    }
-  }
+
   const eventItemTemplateResolver = (eventItem, mustAddCssClass, eventHeight) => {
     return (
       <EventItemTemplateResolver
