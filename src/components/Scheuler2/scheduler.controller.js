@@ -4,6 +4,7 @@ import { getDataArray, getEventListing } from "helpers/conversionFunctions/conve
 import { useMediaQuery, useTheme } from "@mui/material"
 import dayjs from "dayjs"
 import { DATE_FORMAT } from "BigScheduler"
+import { Loader } from "redux/dispatcher/Loader"
 export const useSchedulerController = () => {
   const theme = useTheme()
   const [departments, setDepartments] = useState([])
@@ -67,9 +68,10 @@ export const useSchedulerController = () => {
   const fetchSchedules = async (params) => {
     const responseData = await model.fetchSchedules(params)
     // let requiredArray
-    if (responseData?.data?.length > 0) {
-      return { data: getEventListing(responseData?.data), success: responseData?.success }
+    if (responseData?.data?.length === 0) {
+      Loader.hide()
     }
+    return { data: getEventListing(responseData?.data), success: responseData?.success }
   }
   const updateSchedules = async (params, body) => {
     const responseData = await model.updateSchedule(params, body)

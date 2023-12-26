@@ -64,7 +64,9 @@ const TableTry = (props) => {
     // paddingBottom: contentPaddingBottom
   }
   const hideLoader = () => {
-    schedulerData?.events?.length > 0 ? Loader.hide() : Loader.show()
+    schedulerData?.resources?.length > 0 && schedulerData?.events?.length > 0
+      ? Loader.hide()
+      : Loader.show()
   }
   let key = 1
   // let editItems = (items) => {
