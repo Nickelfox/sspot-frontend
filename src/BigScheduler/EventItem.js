@@ -630,15 +630,7 @@ class EventItem extends Component {
       </div>
     )
     if (eventItemTemplateResolver != undefined)
-      eventItemTemplate = eventItemTemplateResolver(
-        schedulerData,
-        eventItem,
-        bgColor,
-        isStart,
-        isEnd,
-        "event-item",
-        config.eventItemHeight
-      )
+      eventItemTemplate = eventItemTemplateResolver(eventItem, "event-item", config.eventItemHeight)
     let eventClick = !!eventItemClick
     let a = (
       <a

@@ -7,16 +7,7 @@ import dayjs from "dayjs"
 import OutlinedInputField from "../components/OutlinedInput"
 import { getHeaders } from "../helpers/conversionFunctions/headerMap"
 import { getRequiredArray } from "../helpers/conversionFunctions/conversion"
-import {
-  Box,
-  IconButton,
-  InputAdornment,
-  Table,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow
-} from "@mui/material"
+import { Box, IconButton, InputAdornment } from "@mui/material"
 import { v4 as uuid } from "uuid"
 import CancelIcon from "@mui/icons-material/Cancel"
 class HeaderView extends Component {
@@ -97,14 +88,14 @@ class HeaderView extends Component {
     const newHeaderMap = getHeaders(requiredArray)
     const headerMapArray = Array.from(newHeaderMap)
     headerList = (
-      <TableHead style={{ width: cellWidth, display: "flex" }}>
-        <TableRow
+      <Box style={{ width: cellWidth, display: "flex" }}>
+        <Box
           className="header3-text text-[#888888]"
           style={{
             display: "flex",
             minHeight: "5rem"
           }}>
-          <TableCell
+          <Box
             style={{
               width: "24rem",
               minWidth: "24rem",
@@ -127,7 +118,7 @@ class HeaderView extends Component {
                 search(value)
               }}
             />
-          </TableCell>
+          </Box>
           {headerMapArray.map((item, parentIndex) => {
             let currentDate = new Date(new Date())
             const weekNumber = dayjs(currentDate).format("w")
@@ -181,20 +172,20 @@ class HeaderView extends Component {
             )
           })}
           {/* <span style={{ width: "1.6rem" }}></span> */}
-        </TableRow>
-      </TableHead>
+        </Box>
+      </Box>
     )
 
     return (
-      <TableContainer style={{ display: "flex", overflow: "hidden" }}>
-        <Table
+      <Box style={{ display: "flex", overflow: "hidden" }}>
+        <Box
           style={{
-            height: 80,
-            width: resourceTableWidth + scrollBarWidth - 2
+            height: 80
+            // width: resourceTableWidth + scrollBarWidth - 2
           }}>
           {headerList}
-        </Table>
-      </TableContainer>
+        </Box>
+      </Box>
     )
   }
 }

@@ -6,11 +6,17 @@ export const useStyles = () => {
     container: {
       display: "flex",
       flexDirection: "column",
-      alignItems: "flex-start",
-      justifyContent: "center",
+
       margin: "auto",
+      maxHeight: "100vh",
       height: "100vh",
-      maxWidth: "66%"
+      maxWidth: "66%",
+      overflow: "hidden"
+    },
+    formContainer: {
+      display: "flex",
+      alignItems: "flex-start",
+      justifyContent: "center"
     },
     signupContainer: {
       display: "flex",
@@ -21,6 +27,14 @@ export const useStyles = () => {
       height: "100vh",
       maxWidth: "66%",
       marginTop: "100px"
+    },
+    title: {
+      color: theme.palette.text.black,
+      display: "flex",
+      justifyContent: "center",
+      cursor: "pointer",
+      paddingLeft: "2rem",
+      paddingRight: "2rem"
     },
     headerContainer: {
       position: "relative"
