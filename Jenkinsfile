@@ -40,7 +40,7 @@ pipeline {
             parallel {
                 stage('Deploying to Environment') {
                     when {
-                        expression { return BRANCH_NAME == 'develop' || BRANCH_NAME == 'qa' || BRANCH_NAME == 'staging' }
+                        expression { return BRANCH_NAME == 'develop' || BRANCH_NAME == 'qa' || BRANCH_NAME == 'staging' || BRANCH_NAME == 'master' }
                     }
                     steps {
                         sshagent(credentials : ['nfx-dev-server-do']) {
