@@ -1,5 +1,5 @@
 import { useTheme } from "@mui/system"
-import SideBanner from "assets/images/placeholders/onboardingng.jpg"
+import SideBanner from "assets/images/icons/SquadSpot.webp"
 
 export const useStyles = () => {
   const theme = useTheme()
@@ -9,8 +9,11 @@ export const useStyles = () => {
       margin: "16px",
       height: "96.6%",
       borderRadius: "12px",
-      background: `linear-gradient(0deg, rgba(41, 41, 41, 0.7), rgba(41, 41, 41, 0.7)), url(${SideBanner})`,
-      backgroundSize: "cover"
+      background: ` url(${SideBanner})`,
+      backgroundSize: "contain",
+      backgroundRepeat: "no-repeat",
+      backgroundPosition: "center",
+      boxShadow: "20px 20px 20px 20px #564AA93D"
     },
     image: {
       width: "100%",

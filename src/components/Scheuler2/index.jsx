@@ -639,7 +639,7 @@ const Calender = (props) => {
     setRemoveResource(true)
   }
   const getRenderSd = (schedulerData, newProject) => {
-    Loader.show()
+    // Loader.show()
     /**@MehranSiddiqui
      * @function
      * This Function is responsible for not rerendering scheduler Data and collapsing all Divs
@@ -663,7 +663,6 @@ const Calender = (props) => {
     })
     schedulerData.setResources(replaceArr)
     setRerenderData(false)
-    Loader.hide()
   }
   const allocateProject = async (body) => {
     const responseData = await assignProject(body)

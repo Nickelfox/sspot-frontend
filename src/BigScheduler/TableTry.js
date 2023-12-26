@@ -21,6 +21,7 @@ import { DATETIME_FORMAT } from "."
 import { PropTypes } from "prop-types"
 import CustomAutoComplete from "./schedulerComponents/AutoComplete"
 import { v4 as uuid } from "uuid"
+import { Loader } from "redux/dispatcher/Loader"
 // import AppLoader from "components/Loader/AppLoader"
 
 const editItemObject = [
@@ -50,7 +51,9 @@ const TableTry = (props) => {
   //eslint-disable-next-line no-unused-vars
   const { renderData, cellUnit, config, headers } = schedulerData
   const displayRenderData = renderData.filter((o) => o.render)
-
+  useEffect(() => {
+    hideLoader()
+  }, [schedulerData?.events?.length])
   const borderBottom = "1px solid #c4c4c4"
   let schedulerContentStyle = {
     overflowX: config?.viewType === ViewTypes.Week ? "hidden" : "hidden",
@@ -59,6 +62,9 @@ const TableTry = (props) => {
     position: "relative",
     height: 48
     // paddingBottom: contentPaddingBottom
+  }
+  const hideLoader = () => {
+    schedulerData?.events?.length > 0 ? Loader.hide() : Loader.show()
   }
   let key = 1
   // let editItems = (items) => {
@@ -124,6 +130,7 @@ const TableTry = (props) => {
         rMap.set(render?.department, [...rMap.get(render?.department), render])
       }
     })
+    console.log(displayRenderData)
     return [...rMap.entries()].map((department, index) => {
       const key1 = uuid()
       return (
@@ -528,10 +535,10 @@ const TableTry = (props) => {
 TableTry.propTypes = {
   schedulerData: PropTypes.object,
   toggleExpandFunc: PropTypes.func,
-  dnd: PropTypes.func,
+  dnd: PropTypes.object,
   handlePopUp: PropTypes.func,
   assignProject: PropTypes.func,
-  schedulerContentRef: PropTypes.ref,
-  schedulerContentBgTableRef: PropTypes.ref
+  schedulerContentRef: PropTypes.func,
+  schedulerContentBgTableRef: PropTypes.func
 }
 export default TableTry

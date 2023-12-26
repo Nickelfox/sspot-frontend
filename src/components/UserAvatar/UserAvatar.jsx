@@ -21,7 +21,8 @@ const UserAvatar = ({ username, profileImage }) => {
             borderRadius: 0,
             backgroundColor: "#333333",
             height: "4.6rem",
-            width: "4rem",
+            width: "max-content",
+            minWidth: "4rem",
             borderBottom: "1px solid #eee"
           }}>
           {!profileImage && <Typography variant="p1">{getNameInitials(username)}</Typography>}

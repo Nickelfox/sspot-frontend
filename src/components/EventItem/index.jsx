@@ -49,6 +49,6 @@ EventItemTemplateResolver.propTypes = {
   resourceMap: PropTypes.object,
   item: PropTypes.object,
   mustAddCssClass: PropTypes.string,
-  eventHeight: PropTypes.string
+  eventHeight: PropTypes.number
 }
 export default EventItemTemplateResolver

@@ -911,7 +911,6 @@ export default class SchedulerData {
         slotStack.push(currentNode.children[i])
       }
     }
-    Loader.hide()
     return Array.from(slotMap.values()).flat()
   }
 
@@ -1097,7 +1096,6 @@ export default class SchedulerData {
     return requiredArray
   }
   _createRenderData() {
-    Loader.show()
     /**
      * @description
      * TODO: THIS FUNCTION WILL GET CHANGED 100%

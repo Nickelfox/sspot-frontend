@@ -69,8 +69,7 @@ export default function PrivateLayout(props) {
             variant="contained"
             color="primary"
             onClick={handleLogout}
-            display={"flex"}
-            alignItems={"center"}>
+            sx={styles?.logoutButton}>
             <Typography variant="p3" color={"#fff"} pr={"0.5rem"}>
               Logout
             </Typography>{" "}

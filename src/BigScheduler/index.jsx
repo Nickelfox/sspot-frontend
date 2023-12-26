@@ -311,9 +311,9 @@ class Scheduler extends Component {
                       paddingRight: `${contentScrollbarWidth}px`,
                       width: schedulerWidth + contentScrollbarWidth
                     }}>
-                    <table className="scheduler-bg-table">
+                    <div className="scheduler-bg-table">
                       <HeaderView {...this.props} scroller={this.scroller} />
-                    </table>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -402,14 +402,14 @@ class Scheduler extends Component {
                       // width: schedulerWidth + contentScrollbarWidth
                     }
                   }>
-                  <table className="scheduler-bg-table">
+                  <div className="scheduler-bg-table">
                     <HeaderView
                       {...this.props}
                       scroller={this.scroller}
                       search={this.search}
                       searchValue={this.props.search}
                     />
-                  </table>
+                  </div>
                 </div>
               </div>
             </div>

@@ -38,6 +38,7 @@ export const useStyles = () => {
         backgroundColor: theme.palette.secondary.main
       }
     },
+    logoutButton: { display: "flex", alignItems: "center" },
     listItem: {
       color: theme.palette.text.main,
       width: "90%",

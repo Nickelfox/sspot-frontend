@@ -1,4 +1,3 @@
-import { Loader } from "redux/dispatcher/Loader"
 import { useSchedulerModel } from "./scheduler.model"
 import { useState } from "react"
 import { getDataArray, getEventListing } from "helpers/conversionFunctions/conversion"
@@ -66,7 +65,6 @@ export const useSchedulerController = () => {
     setReload((prev) => !prev)
   }
   const fetchSchedules = async (params) => {
-    Loader.show()
     const responseData = await model.fetchSchedules(params)
     // let requiredArray
     if (responseData?.data?.length > 0) {
@@ -83,7 +81,6 @@ export const useSchedulerController = () => {
   }
 
   const fetchProjects = async (params) => {
-    Loader.show()
     const responseData = await model.fetchProjects(params)
     let requiredArray
     if (responseData?.success) {
