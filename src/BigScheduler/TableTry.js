@@ -132,7 +132,6 @@ const TableTry = (props) => {
         rMap.set(render?.department, [...rMap.get(render?.department), render])
       }
     })
-    console.log(displayRenderData)
     return [...rMap.entries()].map((department, index) => {
       const key1 = uuid()
       return (
