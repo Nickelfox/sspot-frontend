@@ -29,7 +29,7 @@ class BodyView extends Component {
       const keys = uuid()
 
       return (
-        <table
+        <div
           key={keys}
           style={{
             width: "100%",
@@ -44,9 +44,9 @@ class BodyView extends Component {
             const key2 = uuid()
             const headerItemArray1 = Array.from(headerItem[1])
             return (
-              <tbody key={key2}>
-                <tr>
-                  <td
+              <div key={key2}>
+                <div>
+                  <div
                     className="flex w-full font-md border-spacing-0"
                     style={{ border: 0, margin: 0, padding: 0 }}>
                     {headerItemArray1.map((childItem) => {
@@ -62,12 +62,12 @@ class BodyView extends Component {
                           {getRows(Array.from(childItem[1]), daySet, currentItem)}
                         </td> */
                     })}
-                  </td>
-                </tr>
-              </tbody>
+                  </div>
+                </div>
+              </div>
             )
           })}
-        </table>
+        </div>
       )
     })
 
@@ -87,7 +87,7 @@ const getRows = (array, daySet, currentItem) => {
     )
     const key4 = uuid()
     return (
-      <td
+      <div
         key={key4}
         className="flex justify-center items-center"
         data-resource-id={currentItem.slotId}
@@ -110,7 +110,7 @@ const getRows = (array, daySet, currentItem) => {
        Just working days of user displayed here....
        */}
         {dayCheck}
-      </td>
+      </div>
     )
   })
 }
