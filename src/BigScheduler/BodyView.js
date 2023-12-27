@@ -50,16 +50,17 @@ class BodyView extends Component {
                     className="flex w-full font-md border-spacing-0"
                     style={{ border: 0, margin: 0, padding: 0 }}>
                     {headerItemArray1.map((childItem) => {
-                      const key3 = uuid()
-                      return (
-                        <td
+                      /* const key3 = uuid() */
+
+                      return getRows(Array.from(childItem[1]), daySet, currentItem)
+
+                      /* <td
                           key={key3}
                           className={`body_${childItem[0]} flex`}
                           id={`X_${childItem[0]}`}
                           style={{ border: 0, margin: 0, padding: 0 }}>
                           {getRows(Array.from(childItem[1]), daySet, currentItem)}
-                        </td>
-                      )
+                        </td> */
                     })}
                   </td>
                 </tr>
