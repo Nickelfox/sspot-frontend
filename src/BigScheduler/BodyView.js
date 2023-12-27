@@ -95,7 +95,7 @@ const getRows = (array, daySet, currentItem) => {
           width: 50,
           // height: "5rem",
           borderLeft: "1px solid #c4c4c4",
-          backgroundColor: itemDate === currentDate ? "#75b1e5" : "#fff",
+          backgroundColor: itemDate === currentDate ? "#ebf5ff" : "#fff",
           opacity: itemDate === currentDate ? 0.7 : 1,
           pointerEvents: childrenItem?.nonWorkingTime ? "none" : "auto",
           borderTop: 0,

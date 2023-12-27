@@ -16,7 +16,7 @@ const RadioButton = Radio.Button
 const RadioGroup = Radio.Group
 const availabiltyObject = [
   {
-    label: "Weekly Availabilty",
+    label: "Weekly Availability",
     value: "week",
     subLabel: " View The hours per week a person has booked"
   },

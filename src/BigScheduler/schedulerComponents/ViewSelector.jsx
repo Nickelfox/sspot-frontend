@@ -13,7 +13,7 @@ const ViewSelector = (props) => {
           border: "1px solid #666666",
           height: "3rem",
           borderRadius: "0.4rem",
-          width: "11rem",
+          width: "15rem",
           backgroundColor: selectedParent === item?.value ? "#d0d0d0" : "#f6f6f6",
           color: "#666666"
         }}
@@ -32,7 +32,8 @@ const ViewSelector = (props) => {
       defaultValue={selectedParent}
       //   size="default"
       style={{
-        maxWidth: "24rem",
+        minWidth: "30rem",
+        maxWidth: "30rem",
         borderRight: "2px solid black"
       }}
       className="text-xl font-semibold flex px-2"
