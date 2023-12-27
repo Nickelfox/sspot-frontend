@@ -162,17 +162,17 @@ const TableTry = (props) => {
             return (
               <Box key={key2} marginTop={index === 0 ? "-0.2rem" : 0}>
                 {!item?.parentId && (
-                  <TableContainer sx={{ overflow: "hidden" }}>
-                    <Table
+                  <div style={{ overflow: "hidden" }}>
+                    <div
                       style={{
-                        width: schedulerContainerWidth,
+                        // width: schedulerContainerWidth, Removed because now using div
                         height: 42
                         // verticalAlign: "top"
                       }}>
-                      <TableBody sx={{ overflow: "hidden" }}>
-                        <TableRow sx={{ minWidth: "100%", display: "flex" }}>
-                          <TableCell
-                            sx={{
+                      <div style={{ overflow: "hidden" }}>
+                        <div style={{ minWidth: "100%", display: "flex" }}>
+                          <div
+                            style={{
                               minWidth: "23.9rem",
                               borderBottom: borderBottom,
                               padding: 0,
@@ -196,7 +196,7 @@ const TableTry = (props) => {
                                 display={"flex"}
                                 justifyContent={"start"}
                                 alignItems={"center"}
-                                sx={{ width: "max-content" }}>
+                                style={{ width: "max-content" }}>
                                 <Typography variant="p3" color="black">
                                   {item?.slotName}
                                 </Typography>{" "}
@@ -210,8 +210,8 @@ const TableTry = (props) => {
                                 <Box id="arrow">{getExpandButton(item)}</Box>
                               </Grid>
                             </Grid>
-                          </TableCell>
-                          {/* <TableCell sx={{ padding: 0 }}> */}
+                          </div>
+                          {/* <TableCell style={{ padding: 0 }}> */}
                           <div
                             className="scheduler-view"
                             style={{
@@ -232,9 +232,9 @@ const TableTry = (props) => {
                               onScroll={props.onSchedulerContentScroll}>
                               <div style={{ width: schedulerWidth, position: "relative" }}>
                                 <div className="scheduler-content">
-                                  <table className="scheduler-content-table">
-                                    <tbody>{resourceEventsList}</tbody>
-                                  </table>
+                                  <div className="scheduler-content-table">
+                                    <div>{resourceEventsList}</div>
+                                  </div>
                                 </div>
                                 <div className="scheduler-bg">
                                   <Box
@@ -255,9 +255,9 @@ const TableTry = (props) => {
                             </div>
                           </div>
                           {/* </TableCell> */}
-                        </TableRow>
-                      </TableBody>
-                    </Table>
+                        </div>
+                      </div>
+                    </div>
                     {item?.expanded &&
                       getInnerTable(
                         displayRenderData,
@@ -267,7 +267,7 @@ const TableTry = (props) => {
                         item,
                         item?.assignedProjects
                       )}
-                  </TableContainer>
+                  </div>
                 )}
               </Box>
             )
@@ -332,7 +332,7 @@ const TableTry = (props) => {
           )
           const key3 = uuid()
           return (
-            <TableRow
+            <div
               key={key3}
               style={{
                 // maxWidth: "24rem",
@@ -341,8 +341,8 @@ const TableTry = (props) => {
                 display: "flex",
                 width: "fit-content"
               }}>
-              <TableCell
-                sx={{
+              <div
+                style={{
                   minWidth: "23.9rem",
                   width: 24,
                   borderBottom: borderBottom,
@@ -365,9 +365,9 @@ const TableTry = (props) => {
                     borderRadius: "8px"
                   }}
                 />
-              </TableCell>
+              </div>
 
-              {/* <TableCell sx={{ padding: 0 }}> */}
+              {/* <TableCell style={{ padding: 0 }}> */}
               <div
                 className="scheduler-view"
                 style={{
@@ -393,12 +393,12 @@ const TableTry = (props) => {
                       position: "relative"
                     }}>
                     <div className="scheduler-content">
-                      <table className="scheduler-content-table">
-                        <tbody>{resourceEventsList}</tbody>
-                      </table>
+                      <div className="scheduler-content-table">
+                        <div>{resourceEventsList}</div>
+                      </div>
                     </div>
                     <div className="scheduler-bg">
-                      <table
+                      <div
                         className="scheduler-bg-table"
                         style={{ width: schedulerWidth, position: "relative" }}
                         ref={props.schedulerContentBgTableRef}>
@@ -408,17 +408,17 @@ const TableTry = (props) => {
                           scroller={() => {}}
                           currentItem={filteredItem}
                         />
-                      </table>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
               {/* </TableCell> */}
-            </TableRow>
+            </div>
           )
         })}
 
-        <TableRow
+        <div
           style={{
             height: 43,
             minWidth: "24rem",
@@ -426,8 +426,8 @@ const TableTry = (props) => {
             backgroundColor: "#fff",
             display: "flex"
           }}>
-          <TableCell
-            sx={{
+          <div
+            style={{
               minWidth: "23.9rem",
               borderBottom: borderBottom,
               padding: 0,
@@ -439,7 +439,7 @@ const TableTry = (props) => {
               {/* <Box
                 className="w-full cursor-pointer pl-2"
                 onClick={openEditItemPopUp.bind(null, item)}>
-                <Typography variant="p2" sx={{ color: "#888888", textDecoration: "underline" }}>
+                <Typography variant="p2" style={{ color: "#888888", textDecoration: "underline" }}>
                   Actions <KeyboardArrowDownIcon />
                   {item?.editPopup && (
                     <Popover
@@ -483,8 +483,8 @@ const TableTry = (props) => {
                 </datalist> */}
               </Box>
             </Box>
-          </TableCell>
-          <TableCell sx={{ padding: 0 }}>
+          </div>
+          <div style={{ padding: 0 }}>
             <div
               className="scheduler-view"
               style={{
@@ -506,12 +506,12 @@ const TableTry = (props) => {
               >
                 <div style={{ width: schedulerWidth, position: "relative" }}>
                   <div className="scheduler-content">
-                    <table className="scheduler-content-table">
-                      <tbody>{dropDownEventList}</tbody>
-                    </table>
+                    <div className="scheduler-content-table">
+                      <div>{dropDownEventList}</div>
+                    </div>
                   </div>
                   <div className="scheduler-bg">
-                    <table
+                    <div
                       className="scheduler-bg-table"
                       style={{ width: schedulerWidth, position: "relative" }}
                       ref={props.schedulerContentBgTableRef}>
@@ -521,13 +521,13 @@ const TableTry = (props) => {
                         scroller={() => {}}
                         currentItem={dropDownItem}
                       />
-                    </table>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </TableCell>{" "}
-        </TableRow>
+          </div>{" "}
+        </div>
       </>
     )
   }

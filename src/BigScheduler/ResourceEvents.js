@@ -375,11 +375,11 @@ class ResourceEvents extends Component {
       </div>
     )
     return (
-      <tr>
-        <td style={{ width: rowWidth }}>
+      <div>
+        <div style={{ width: rowWidth }}>
           {config.dragAndDropEnabled ? connectDropTarget(eventContainer) : eventContainer}
-        </td>
-      </tr>
+        </div>
+      </div>
     )
   }
 

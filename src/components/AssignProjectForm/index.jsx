@@ -42,7 +42,7 @@ const workDays = [
     )
   },
   {
-    value: "#89def6",
+    value: "#7FFFD4",
     label: (
       <Box display={"flex"} alignItems={"center"}>
         <div
@@ -50,7 +50,7 @@ const workDays = [
             height: "1.5rem",
             width: "1.5rem",
             borderRadius: "0.2rem",
-            backgroundColor: "#89def6"
+            backgroundColor: "#7FFFD4"
           }}
         />
         <Typography paddingLeft={"1rem"} variant="s1">
@@ -78,7 +78,7 @@ const workDays = [
     )
   },
   {
-    value: "#150DF7",
+    value: "#4169e1",
     label: (
       <Box display={"flex"} alignItems={"center"}>
         <div
@@ -86,7 +86,7 @@ const workDays = [
             height: "1.5rem",
             width: "1.5rem",
             borderRadius: "0.2rem",
-            backgroundColor: "#150DF7"
+            backgroundColor: "#4169e1"
           }}
         />
         <Typography paddingLeft={"1rem"} variant="s1">
@@ -96,7 +96,7 @@ const workDays = [
     )
   },
   {
-    value: "#46166b",
+    value: "#9370db",
     label: (
       <Box display={"flex"} alignItems={"center"}>
         <div
@@ -104,7 +104,7 @@ const workDays = [
             height: "1.5rem",
             width: "1.5rem",
             borderRadius: "0.2rem",
-            backgroundColor: "#46166b"
+            backgroundColor: "#9370db"
           }}
         />
         <Typography paddingLeft={"1rem"} variant="s1">
@@ -114,7 +114,7 @@ const workDays = [
     )
   },
   {
-    value: "#FF00FF",
+    value: "#BA55D3",
     label: (
       <Box display={"flex"} alignItems={"center"}>
         <div
@@ -122,7 +122,7 @@ const workDays = [
             height: "1.5rem",
             width: "1.5rem",
             borderRadius: "0.2rem",
-            backgroundColor: "#FF00FF"
+            backgroundColor: "#BA55D3"
           }}
         />
         <Typography paddingLeft={"1rem"} variant="s1">
@@ -150,7 +150,7 @@ const workDays = [
     )
   },
   {
-    value: "#808080",
+    value: "#D3d3d3",
     label: (
       <Box display={"flex"} alignItems={"center"}>
         <div
@@ -158,7 +158,7 @@ const workDays = [
             height: "1.5rem",
             width: "1.5rem",
             borderRadius: "0.2rem",
-            backgroundColor: "#808080"
+            backgroundColor: "#D3d3d3"
           }}
         />
         <Typography paddingLeft={"1rem"} variant="s1">
