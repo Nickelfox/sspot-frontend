@@ -258,14 +258,14 @@ table.scheduler-table tr:last-child td {
 }
 
 .timeline-event:hover :nth-child(2) {
-  border-left: 6px dotted #fff;
+  border-left: 3px dotted #fff;
   margin-left: 2px;
   height: 37px;
   margin-top: 3px;
 }
 
 .timeline-event:hover :nth-child(3) {
-  border-left: 6px dotted #fff;
+  border-left: 3px dotted #fff;
   margin-right: 2px;
   height: 37px;
   margin-top: 3px;

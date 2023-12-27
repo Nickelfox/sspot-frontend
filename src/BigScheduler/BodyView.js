@@ -101,7 +101,8 @@ const getRows = (array, daySet, currentItem) => {
           borderTop: 0,
           borderBottom: 0,
           marginTop: 0,
-          marginBottom: 0
+          marginBottom: 0,
+          zIndex: 10000
         }}>
         {/**@mehran-nickelfox
        @Removed Check

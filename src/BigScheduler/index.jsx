@@ -413,7 +413,7 @@ class Scheduler extends Component {
                 </div>
               </div>
             </div>
-            <div ref={this.schedulerResourceRef}>
+            <div ref={this.schedulerResourceRef} style={{ background: "#d0d0d0" }}>
               <TableTry
                 {...this.props}
                 dnd={this.state.dndContext}

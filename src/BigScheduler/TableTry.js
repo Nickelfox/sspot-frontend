@@ -160,13 +160,21 @@ const TableTry = (props) => {
             const key2 = uuid()
 
             return (
-              <Box key={key2} marginTop={index === 0 ? "-0.2rem" : 0}>
+              <Box
+                key={key2}
+                // marginTop={index === 0 ? "-0.2rem" : 0}
+              >
                 {!item?.parentId && (
-                  <div style={{ overflow: "hidden" }}>
+                  <div
+                    style={{
+                      overflow: "hidden",
+                      marginBottom: expandItem?.size > 0 ? "0.4rem" : 0
+                    }}>
                     <div
                       style={{
                         // width: schedulerContainerWidth, Removed because now using div
                         height: 42
+
                         // verticalAlign: "top"
                       }}>
                       <div style={{ overflow: "hidden" }}>
@@ -231,11 +239,11 @@ const TableTry = (props) => {
                               onMouseOut={props.onSchedulerContentMouseOut}
                               onScroll={props.onSchedulerContentScroll}>
                               <div style={{ width: schedulerWidth, position: "relative" }}>
-                                <div className="scheduler-content">
+                                {/* <div className="scheduler-content">
                                   <div className="scheduler-content-table">
                                     <div>{resourceEventsList}</div>
                                   </div>
-                                </div>
+                                </div> */}
                                 <div className="scheduler-bg">
                                   <Box
                                     className="scheduler-bg-table"
@@ -250,6 +258,11 @@ const TableTry = (props) => {
                                       currentItem={item}
                                     />
                                   </Box>
+                                </div>
+                                <div className="scheduler-content">
+                                  <div className="scheduler-content-table">
+                                    <div>{resourceEventsList}</div>
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -340,6 +353,7 @@ const TableTry = (props) => {
                 height: 43,
                 display: "flex",
                 width: "fit-content"
+                // margin: "4px 0"
               }}>
               <div
                 style={{
@@ -392,11 +406,11 @@ const TableTry = (props) => {
                       width: schedulerWidth,
                       position: "relative"
                     }}>
-                    <div className="scheduler-content">
+                    {/* <div className="scheduler-content">
                       <div className="scheduler-content-table">
                         <div>{resourceEventsList}</div>
                       </div>
-                    </div>
+                    </div> */}
                     <div className="scheduler-bg">
                       <div
                         className="scheduler-bg-table"
@@ -408,6 +422,11 @@ const TableTry = (props) => {
                           scroller={() => {}}
                           currentItem={filteredItem}
                         />
+                      </div>
+                    </div>
+                    <div className="scheduler-content">
+                      <div className="scheduler-content-table">
+                        <div>{resourceEventsList}</div>
                       </div>
                     </div>
                   </div>
