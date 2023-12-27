@@ -112,6 +112,60 @@ const workDays = [
         </Typography>
       </Box>
     )
+  },
+  {
+    value: "#FF00FF",
+    label: (
+      <Box display={"flex"} alignItems={"center"}>
+        <div
+          style={{
+            height: "1.5rem",
+            width: "1.5rem",
+            borderRadius: "0.2rem",
+            backgroundColor: "#FF00FF"
+          }}
+        />
+        <Typography paddingLeft={"1rem"} variant="s1">
+          Magenta
+        </Typography>
+      </Box>
+    )
+  },
+  {
+    value: "#ff0000",
+    label: (
+      <Box display={"flex"} alignItems={"center"}>
+        <div
+          style={{
+            height: "1.5rem",
+            width: "1.5rem",
+            borderRadius: "0.2rem",
+            backgroundColor: "#ff0000"
+          }}
+        />
+        <Typography paddingLeft={"1rem"} variant="s1">
+          Red
+        </Typography>
+      </Box>
+    )
+  },
+  {
+    value: "#808080",
+    label: (
+      <Box display={"flex"} alignItems={"center"}>
+        <div
+          style={{
+            height: "1.5rem",
+            width: "1.5rem",
+            borderRadius: "0.2rem",
+            backgroundColor: "#808080"
+          }}
+        />
+        <Typography paddingLeft={"1rem"} variant="s1">
+          Gray
+        </Typography>
+      </Box>
+    )
   }
 ]
 const AddProjectForm = (props) => {
