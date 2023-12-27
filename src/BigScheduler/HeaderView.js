@@ -7,7 +7,7 @@ import dayjs from "dayjs"
 import OutlinedInputField from "../components/OutlinedInput"
 import { getHeaders } from "../helpers/conversionFunctions/headerMap"
 import { getRequiredArray } from "../helpers/conversionFunctions/conversion"
-import { Box, IconButton, InputAdornment } from "@mui/material"
+import { Box, IconButton, InputAdornment, Typography } from "@mui/material"
 import { v4 as uuid } from "uuid"
 import CancelIcon from "@mui/icons-material/Cancel"
 class HeaderView extends Component {
@@ -37,7 +37,7 @@ class HeaderView extends Component {
             width: 50,
             // borderTop: itemDate === currentDate ? "3px solid #336BAB" : 0,
             borderLeft: "1px solid #eee",
-            backgroundColor: itemDate === currentDate ? "#75b1e5" : "#fff",
+            backgroundColor: itemDate === currentDate ? "#ebf5ff" : "#fff",
             opacity: itemDate === currentDate ? 0.7 : 1,
             // borderTop: 0,
             // borderBottom: "3px solid #fff",
@@ -50,7 +50,9 @@ class HeaderView extends Component {
               border: itemDate === currentDate ? "2px solid #336BAB" : "2px solid #fff"
             }}
           />
-          {dayjs(childrenItem?.time).format("DD")}
+          <Typography variant={itemDate === currentDate ? "p3" : "p5"}>
+            {dayjs(childrenItem?.time).format("DD")}
+          </Typography>
           <Box sx={{ height: "0.3rem", width: "100%", display: "hidden" }} />
         </div>
       )
@@ -98,7 +100,7 @@ class HeaderView extends Component {
           <Box
             style={{
               width: "24rem",
-              minWidth: "24rem",
+              minWidth: "30rem",
               minHeight: "5rem",
               backgroundColor: "#fff",
               padding: 0

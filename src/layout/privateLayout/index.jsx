@@ -33,7 +33,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   height: "4rem",
-  backgroundColor: "#666666",
+  backgroundColor: "#333",
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
   justifyContent: "center"

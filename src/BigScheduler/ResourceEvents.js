@@ -368,7 +368,10 @@ class ResourceEvents extends Component {
     })
 
     const eventContainer = (
-      <div ref={this.eventContainerRef} className="event-container" style={{ height: "4.5rem" }}>
+      <div
+        ref={this.eventContainerRef}
+        className="event-container"
+        style={{ height: "4.5rem", paddingTop: "2px" }}>
         {selectedArea}
         {eventList}
       </div>

@@ -22,6 +22,7 @@ import { PropTypes } from "prop-types"
 import CustomAutoComplete from "./schedulerComponents/AutoComplete"
 import { v4 as uuid } from "uuid"
 import { Loader } from "redux/dispatcher/Loader"
+import useScehdulerController from "./scheduler.controller"
 // import AppLoader from "components/Loader/AppLoader"
 
 const editItemObject = [
@@ -47,9 +48,10 @@ const editItemObject = [
   }
 ]
 const TableTry = (props) => {
-  const { schedulerData, toggleExpandFunc, dnd, handlePopUp, assignProject } = props
+  const { schedulerData, toggleExpandFunc, dnd, handlePopUp, assignProject, projects } = props
   //eslint-disable-next-line no-unused-vars
   const { renderData, cellUnit, config, headers } = schedulerData
+  const { getProjectsMap } = useScehdulerController()
   const displayRenderData = renderData.filter((o) => o.render)
   useEffect(() => {
     hideLoader()
@@ -64,9 +66,13 @@ const TableTry = (props) => {
     // paddingBottom: contentPaddingBottom
   }
   const hideLoader = () => {
-    schedulerData?.resources?.length > 0 && schedulerData?.events?.length > 0
-      ? Loader.hide()
-      : Loader.show()
+    if (schedulerData?.resources?.length > 0 && schedulerData?.events?.length > 0) {
+      Loader.hide()
+    } else if (schedulerData?.resources?.length > 0) {
+      Loader.hide()
+    } else if (schedulerData?.events?.length > 0) {
+      Loader.hide()
+    } else Loader.show()
   }
   let key = 1
   // let editItems = (items) => {
@@ -104,8 +110,8 @@ const TableTry = (props) => {
         style={{}}
         className="cursor-pointer"
         onClick={() => {
-          if (toggleExpandFunc) toggleExpandFunc(schedulerData, item.slotId, false)
           expandItem.add(item?.slotName)
+          if (toggleExpandFunc) toggleExpandFunc(schedulerData, item.slotId, false)
         }}
       />
     ) : (
@@ -114,8 +120,8 @@ const TableTry = (props) => {
         style={{}}
         className="cursor-pointer"
         onClick={() => {
-          if (toggleExpandFunc) toggleExpandFunc(schedulerData, item.slotId, true)
           expandItem.delete(item?.slotName)
+          if (toggleExpandFunc) toggleExpandFunc(schedulerData, item.slotId, true)
         }}
       />
     )
@@ -158,7 +164,6 @@ const TableTry = (props) => {
               />
             )
             const key2 = uuid()
-
             return (
               <Box
                 key={key2}
@@ -168,7 +173,8 @@ const TableTry = (props) => {
                   <div
                     style={{
                       overflow: "hidden",
-                      marginBottom: expandItem?.size > 0 ? "0.4rem" : 0
+                      margin: item?.expanded ? "10px 0" : 0,
+                      border: item?.expanded ? "1px solid #d4d4d4" : 0
                     }}>
                     <div
                       style={{
@@ -181,11 +187,11 @@ const TableTry = (props) => {
                         <div style={{ minWidth: "100%", display: "flex" }}>
                           <div
                             style={{
-                              minWidth: "23.9rem",
-                              borderBottom: borderBottom,
+                              minWidth: "30rem",
+                              borderBottom: item?.expanded ? 0 : borderBottom,
                               padding: 0,
                               display: "flex",
-                              height: 43,
+                              height: 42,
                               width: "fit-content"
                             }}
                             className="bg-[#fff]  flex justify-center items-center w-full p-0">
@@ -205,7 +211,7 @@ const TableTry = (props) => {
                                 justifyContent={"start"}
                                 alignItems={"center"}
                                 style={{ width: "max-content" }}>
-                                <Typography variant="p3" color="black">
+                                <Typography variant="p6" color="black">
                                   {item?.slotName}
                                 </Typography>{" "}
                               </Grid>
@@ -278,7 +284,8 @@ const TableTry = (props) => {
                         eventDndSource,
                         DndResourceEvents,
                         item,
-                        item?.assignedProjects
+                        item?.assignedProjects,
+                        projects
                       )}
                   </div>
                 )}
@@ -295,9 +302,11 @@ const TableTry = (props) => {
     eventDndSource,
     DndResourceEvents,
     item,
-    project
+    project,
+    allProjects
   ) => {
     const filteredData = displayRenderData.filter((item) => item?.parentId === slotid)
+    const newMap = getProjectsMap(allProjects)
     const requiredHeaders = headers.map((header) => {
       return {
         ...header,
@@ -343,13 +352,14 @@ const TableTry = (props) => {
               dndSource={eventDndSource}
             />
           )
+          const getClientName = newMap.get(filteredItem.slotName)
           const key3 = uuid()
           return (
             <div
               key={key3}
               style={{
                 // maxWidth: "24rem",
-                minWidth: "23.9rem",
+                minWidth: "30rem",
                 height: 43,
                 display: "flex",
                 width: "fit-content"
@@ -357,22 +367,27 @@ const TableTry = (props) => {
               }}>
               <div
                 style={{
-                  minWidth: "23.9rem",
+                  minWidth: "30em",
                   width: 24,
-                  borderBottom: borderBottom,
+                  // borderBottom: borderBottom,
                   padding: 0,
                   display: "flex",
                   height: 43,
                   paddingRight: "0.3rem"
                 }}
                 className="bg-[#fff] stickyCell flex justify-end items-center px-4">
-                <Typography variant="c1" color="#666" paddingRight={"1rem"}>
-                  {filteredItem?.slotName}
-                </Typography>
+                <Box display={"flex"} flexDirection={"column"} alignItems={"flex-end"}>
+                  <Typography variant="label2" color="#666" paddingRight={"1rem"}>
+                    {getClientName?.client?.name}
+                  </Typography>
+                  <Typography variant="c2" color="#000" paddingRight={"1rem"}>
+                    {filteredItem?.slotName}
+                  </Typography>
+                </Box>
                 <div
                   style={{
                     height: "30px",
-                    border: `4px solid ${filteredItem?.color}`,
+                    border: `8px solid ${filteredItem?.color}`,
                     borderTop: 0,
                     borderRight: 0,
                     borderBottom: 0,
@@ -380,8 +395,6 @@ const TableTry = (props) => {
                   }}
                 />
               </div>
-
-              {/* <TableCell style={{ padding: 0 }}> */}
               <div
                 className="scheduler-view"
                 style={{
@@ -432,7 +445,6 @@ const TableTry = (props) => {
                   </div>
                 </div>
               </div>
-              {/* </TableCell> */}
             </div>
           )
         })}
@@ -447,7 +459,7 @@ const TableTry = (props) => {
           }}>
           <div
             style={{
-              minWidth: "23.9rem",
+              minWidth: "30rem",
               borderBottom: borderBottom,
               padding: 0,
               display: "flex",
@@ -477,29 +489,12 @@ const TableTry = (props) => {
                 </Typography>
               </Box> */}
               <Box className="w-full px-8">
-                {/* <DropDown
-                  value={""}
-                  name={"weeklyAvailability"}
-                  label="weeklyAvailability"
-                  items={project}
-                  handleChange={(e) => {
-                    // setFieldValue(`weeklyAvailability`, e.target?.value)
-                  }}
-                /> */}
                 <CustomAutoComplete
                   options={project}
                   handlePopup={handlePopUp}
                   assignProject={assignProject}
                   memberId={item?.slotId}
                 />
-                {/* <CustomAutoComplete options={[]} /> */}
-                {/* <input type="text" list="cars" className="projectselctor" placeholder="Projects" />
-                <datalist id="cars" style={{ listStyleType: "solid" }}>
-                  <option>Project-1</option>
-                  <option>Project-2</option>
-                  <option>Project-3</option>
-                  <option>Project-4</option>
-                </datalist> */}
               </Box>
             </Box>
           </div>

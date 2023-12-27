@@ -13,8 +13,15 @@ import { useEventItemController } from "./eventItem.controller"
 import { useStyles } from "components/EventItem/eventItemStyles"
 const EventItemTemplateResolver = (props) => {
   const { resourceMap, item, mustAddCssClass, eventHeight } = props
-  const { getBackground, getBorderRadius, getOpacity, getMarginTop, getBColor, getItemOpacity } =
-    useEventItemController()
+  const {
+    getBackground,
+    getBorderRadius,
+    getOpacity,
+    getMarginTop,
+    getBColor,
+    getItemOpacity,
+    getSpanStyles
+  } = useEventItemController()
   const styles = useStyles()
   const resources = resourceMap.get(item?.resourceId)
   const filterItem = resources.filter((resource) => resource.id === item?.resourceId)
@@ -24,26 +31,29 @@ const EventItemTemplateResolver = (props) => {
   let divStyle = {
     backgroundColor: getBackground(resourceObjectForEvent, bColor),
     borderRadius: getBorderRadius(resourceObjectForEvent),
-    opacity: getOpacity(resourceObjectForEvent, opacity),
+    opacity: !item?.resourceParentID ? getOpacity(resourceObjectForEvent, opacity) : 1,
     marginTop: getMarginTop(resourceObjectForEvent),
+    height: !item?.resourceParentID ? 43 : 35,
     ...styles?.divStyles
   }
   return (
-    <div key={item.id} className={`${mustAddCssClass} `} style={divStyle}>
-      <span
-        style={{
-          lineHeight: `${eventHeight}px`,
-          ...styles?.divSpan
-        }}>
-        <Typography sx={getStyles(item, styles)}>
-          {resourceObjectForEvent?.parentId
-            ? `${item?.title} h/day`
-            : `${JSON.parse(item?.title).toFixed(1)} %`}
-          <span style={{ paddingLeft: getPadding(item) }}>
-            {item?.assignedhours ? `${item?.assignedhours} hrs` : null}
-          </span>
-        </Typography>
-      </span>
+    <div key={item.id} style={{ height: 43 }}>
+      <div key={item.id} className={`${mustAddCssClass} `} style={divStyle}>
+        <span
+          style={{
+            lineHeight: `${eventHeight}px`,
+            ...styles?.divSpan
+          }}>
+          <Typography sx={getStyles(item, styles)}>
+            {resourceObjectForEvent?.parentId
+              ? `${item?.title} h/d`
+              : `${JSON.parse(item?.title).toFixed(1)} %`}
+            <span style={getSpanStyles(item, styles)}>
+              {item?.assignedhours ? `${item?.assignedhours} hrs` : null}
+            </span>
+          </Typography>
+        </span>
+      </div>
     </div>
   )
 }
@@ -54,9 +64,7 @@ const getStyles = (item, styles) => {
     return [styles?.divSpan, styles?.divText]
   }
 }
-const getPadding = (item) => {
-  return item?.resourceParentID ? "0.3rem" : 0
-}
+
 EventItemTemplateResolver.propTypes = {
   resourceMap: PropTypes.object,
   item: PropTypes.object,
