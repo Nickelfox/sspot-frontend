@@ -1,6 +1,6 @@
 /*eslint-disable no-unused-vars */
 /*eslint no-constant-condition: ["error", { "checkLoops": false }]*/
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import dayjs from "dayjs"
 import Scheduler, { SchedulerData, ViewType } from "BigScheduler"
 import { render } from "@testing-library/react"
@@ -103,6 +103,7 @@ const Calender = (props) => {
     getBgColor,
     handlePopUp
   } = useSchedulerController()
+  const [localFetcher, setLocalFetcher] = useState(false)
   useEffect(() => {
     getSchedulerData()
   }, [])
@@ -118,7 +119,7 @@ const Calender = (props) => {
     if (projects?.length > 0) {
       schedulerData && teamFetcher()
     }
-  }, [schedulerData, projects?.length, startDate, fetcher, search])
+  }, [schedulerData, projects?.length, startDate, fetcher, search, localFetcher])
   useEffect(() => {
     teamInScheduler()
   }, [reload])
@@ -488,9 +489,12 @@ const Calender = (props) => {
      * Creates the item from Object
      * @Fixed
      */
+    setLocalFetcher((prev) => !prev)
+
+    setFetcher((prev) => !prev)
+    console.log("fired")
     const openArrays = getOpenArrays(schedulerData)
     handlePopUpClose()
-    setFetcher((prev) => !prev)
     keepDataOpen(openArrays, schedulerData)
     getRenderSd(schedulerData)
   }
