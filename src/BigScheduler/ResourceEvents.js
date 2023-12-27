@@ -328,7 +328,6 @@ class ResourceEvents extends Component {
             eventList.push(eventItem)
           }
         })
-
         if (headerItem.addMore > 0) {
           let left = index * cellWidth + (index > 0 ? 2 : 3)
           let width = cellWidth - (index > 0 ? 5 : 6)

@@ -35,15 +35,27 @@ const EventItemTemplateResolver = (props) => {
           lineHeight: `${eventHeight}px`,
           ...styles?.divSpan
         }}>
-        <Typography sx={[styles?.divSpan, styles?.divText]}>
+        <Typography sx={getStyles(item, styles)}>
           {resourceObjectForEvent?.parentId
             ? `${item?.title} h/day`
             : `${JSON.parse(item?.title).toFixed(1)} %`}
-          <span>{item?.assignedhours ? `${item?.assignedhours} hrs` : null}</span>
+          <span style={{ paddingLeft: getPadding(item) }}>
+            {item?.assignedhours ? `${item?.assignedhours} hrs` : null}
+          </span>
         </Typography>
       </span>
     </div>
   )
+}
+const getStyles = (item, styles) => {
+  if (item?.resourceParentID) {
+    return [styles?.divText]
+  } else {
+    return [styles?.divSpan, styles?.divText]
+  }
+}
+const getPadding = (item) => {
+  return item?.resourceParentID ? "0.3rem" : 0
 }
 EventItemTemplateResolver.propTypes = {
   resourceMap: PropTypes.object,

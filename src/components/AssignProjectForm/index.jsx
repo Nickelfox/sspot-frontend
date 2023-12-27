@@ -24,7 +24,7 @@ const inputSyles = {
 }
 const workDays = [
   {
-    value: "#FF7034",
+    value: "#fa6400cc",
     label: (
       <Box display={"flex"} alignItems={"center"} j>
         <div
@@ -32,7 +32,7 @@ const workDays = [
             height: "1.5rem",
             width: "1.5rem",
             borderRadius: "0.2rem",
-            backgroundColor: "#FF7034"
+            backgroundColor: "#fa6400cc"
           }}
         />
         <Typography paddingLeft={"1rem"} variant="s1">
@@ -42,7 +42,7 @@ const workDays = [
     )
   },
   {
-    value: "#7FFFD4",
+    value: "#3ca0c8cc",
     label: (
       <Box display={"flex"} alignItems={"center"}>
         <div
@@ -50,7 +50,7 @@ const workDays = [
             height: "1.5rem",
             width: "1.5rem",
             borderRadius: "0.2rem",
-            backgroundColor: "#7FFFD4"
+            backgroundColor: "#3ca0c8cc"
           }}
         />
         <Typography paddingLeft={"1rem"} variant="s1">
@@ -60,7 +60,7 @@ const workDays = [
     )
   },
   {
-    value: "#57f287",
+    value: "#1e8c0acc",
     label: (
       <Box display={"flex"} alignItems={"center"}>
         <div
@@ -68,7 +68,7 @@ const workDays = [
             height: "1.5rem",
             width: "1.5rem",
             borderRadius: "0.2rem",
-            backgroundColor: "#57f287"
+            backgroundColor: "#1e8c0acc"
           }}
         />
         <Typography paddingLeft={"1rem"} variant="s1">
@@ -78,7 +78,7 @@ const workDays = [
     )
   },
   {
-    value: "#4169e1",
+    value: "#004696cc",
     label: (
       <Box display={"flex"} alignItems={"center"}>
         <div
@@ -86,7 +86,7 @@ const workDays = [
             height: "1.5rem",
             width: "1.5rem",
             borderRadius: "0.2rem",
-            backgroundColor: "#4169e1"
+            backgroundColor: "#004696cc"
           }}
         />
         <Typography paddingLeft={"1rem"} variant="s1">
@@ -96,7 +96,7 @@ const workDays = [
     )
   },
   {
-    value: "#9370db",
+    value: "#78328ccc",
     label: (
       <Box display={"flex"} alignItems={"center"}>
         <div
@@ -104,7 +104,7 @@ const workDays = [
             height: "1.5rem",
             width: "1.5rem",
             borderRadius: "0.2rem",
-            backgroundColor: "#9370db"
+            backgroundColor: "#78328ccc"
           }}
         />
         <Typography paddingLeft={"1rem"} variant="s1">
@@ -114,7 +114,7 @@ const workDays = [
     )
   },
   {
-    value: "#BA55D3",
+    value: "#d22864cc",
     label: (
       <Box display={"flex"} alignItems={"center"}>
         <div
@@ -122,7 +122,7 @@ const workDays = [
             height: "1.5rem",
             width: "1.5rem",
             borderRadius: "0.2rem",
-            backgroundColor: "#BA55D3"
+            backgroundColor: "#d22864cc"
           }}
         />
         <Typography paddingLeft={"1rem"} variant="s1">
@@ -132,7 +132,7 @@ const workDays = [
     )
   },
   {
-    value: "#ff0000",
+    value: "#d20a0acc",
     label: (
       <Box display={"flex"} alignItems={"center"}>
         <div
@@ -140,7 +140,7 @@ const workDays = [
             height: "1.5rem",
             width: "1.5rem",
             borderRadius: "0.2rem",
-            backgroundColor: "#ff0000"
+            backgroundColor: "#d20a0acc"
           }}
         />
         <Typography paddingLeft={"1rem"} variant="s1">
@@ -150,7 +150,7 @@ const workDays = [
     )
   },
   {
-    value: "#D3d3d3",
+    value: "#888888cc",
     label: (
       <Box display={"flex"} alignItems={"center"}>
         <div
@@ -158,7 +158,7 @@ const workDays = [
             height: "1.5rem",
             width: "1.5rem",
             borderRadius: "0.2rem",
-            backgroundColor: "#D3d3d3"
+            backgroundColor: "#888888cc"
           }}
         />
         <Typography paddingLeft={"1rem"} variant="s1">
