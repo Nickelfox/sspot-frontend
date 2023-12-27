@@ -492,7 +492,6 @@ const Calender = (props) => {
     setLocalFetcher((prev) => !prev)
 
     setFetcher((prev) => !prev)
-    console.log("fired")
     const openArrays = getOpenArrays(schedulerData)
     handlePopUpClose()
     keepDataOpen(openArrays, schedulerData)
