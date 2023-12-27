@@ -10,7 +10,7 @@ class EventItemPopover extends Component {
   static propTypes = {
     schedulerData: PropTypes.object.isRequired,
     eventItem: PropTypes.object.isRequired,
-    title: PropTypes.number.isRequired,
+    // title: PropTypes.number.isRequired,
     startTime: PropTypes.string.isRequired,
     endTime: PropTypes.string.isRequired,
     statusColor: PropTypes.string.isRequired,

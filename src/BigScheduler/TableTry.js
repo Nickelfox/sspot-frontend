@@ -22,6 +22,7 @@ import { PropTypes } from "prop-types"
 import CustomAutoComplete from "./schedulerComponents/AutoComplete"
 import { v4 as uuid } from "uuid"
 import { Loader } from "redux/dispatcher/Loader"
+import useScehdulerController from "./scheduler.controller"
 // import AppLoader from "components/Loader/AppLoader"
 
 const editItemObject = [
@@ -47,9 +48,10 @@ const editItemObject = [
   }
 ]
 const TableTry = (props) => {
-  const { schedulerData, toggleExpandFunc, dnd, handlePopUp, assignProject } = props
+  const { schedulerData, toggleExpandFunc, dnd, handlePopUp, assignProject, projects } = props
   //eslint-disable-next-line no-unused-vars
   const { renderData, cellUnit, config, headers } = schedulerData
+  const { getProjectsMap } = useScehdulerController()
   const displayRenderData = renderData.filter((o) => o.render)
   useEffect(() => {
     hideLoader()
@@ -64,9 +66,13 @@ const TableTry = (props) => {
     // paddingBottom: contentPaddingBottom
   }
   const hideLoader = () => {
-    schedulerData?.resources?.length > 0 && schedulerData?.events?.length > 0
-      ? Loader.hide()
-      : Loader.show()
+    if (schedulerData?.resources?.length > 0 && schedulerData?.events?.length > 0) {
+      Loader.hide()
+    } else if (schedulerData?.resources?.length > 0) {
+      Loader.hide()
+    } else if (schedulerData?.events?.length > 0) {
+      Loader.hide()
+    } else Loader.show()
   }
   let key = 1
   // let editItems = (items) => {
@@ -104,8 +110,8 @@ const TableTry = (props) => {
         style={{}}
         className="cursor-pointer"
         onClick={() => {
-          if (toggleExpandFunc) toggleExpandFunc(schedulerData, item.slotId, false)
           expandItem.add(item?.slotName)
+          if (toggleExpandFunc) toggleExpandFunc(schedulerData, item.slotId, false)
         }}
       />
     ) : (
@@ -114,8 +120,8 @@ const TableTry = (props) => {
         style={{}}
         className="cursor-pointer"
         onClick={() => {
-          if (toggleExpandFunc) toggleExpandFunc(schedulerData, item.slotId, true)
           expandItem.delete(item?.slotName)
+          if (toggleExpandFunc) toggleExpandFunc(schedulerData, item.slotId, true)
         }}
       />
     )
@@ -158,26 +164,34 @@ const TableTry = (props) => {
               />
             )
             const key2 = uuid()
-
             return (
-              <Box key={key2} marginTop={index === 0 ? "-0.2rem" : 0}>
+              <Box
+                key={key2}
+                // marginTop={index === 0 ? "-0.2rem" : 0}
+              >
                 {!item?.parentId && (
-                  <TableContainer sx={{ overflow: "hidden" }}>
-                    <Table
+                  <div
+                    style={{
+                      overflow: "hidden",
+                      margin: item?.expanded ? "10px 0" : 0,
+                      border: item?.expanded ? "1px solid #d4d4d4" : 0
+                    }}>
+                    <div
                       style={{
-                        width: schedulerContainerWidth,
+                        // width: schedulerContainerWidth, Removed because now using div
                         height: 42
+
                         // verticalAlign: "top"
                       }}>
-                      <TableBody sx={{ overflow: "hidden" }}>
-                        <TableRow sx={{ minWidth: "100%", display: "flex" }}>
-                          <TableCell
-                            sx={{
-                              minWidth: "23.9rem",
-                              borderBottom: borderBottom,
+                      <div style={{ overflow: "hidden" }}>
+                        <div style={{ minWidth: "100%", display: "flex" }}>
+                          <div
+                            style={{
+                              minWidth: "30rem",
+                              borderBottom: item?.expanded ? 0 : borderBottom,
                               padding: 0,
                               display: "flex",
-                              height: 43,
+                              height: 42,
                               width: "fit-content"
                             }}
                             className="bg-[#fff]  flex justify-center items-center w-full p-0">
@@ -196,8 +210,8 @@ const TableTry = (props) => {
                                 display={"flex"}
                                 justifyContent={"start"}
                                 alignItems={"center"}
-                                sx={{ width: "max-content" }}>
-                                <Typography variant="p3" color="black">
+                                style={{ width: "max-content" }}>
+                                <Typography variant="p6" color="black">
                                   {item?.slotName}
                                 </Typography>{" "}
                               </Grid>
@@ -210,8 +224,8 @@ const TableTry = (props) => {
                                 <Box id="arrow">{getExpandButton(item)}</Box>
                               </Grid>
                             </Grid>
-                          </TableCell>
-                          {/* <TableCell sx={{ padding: 0 }}> */}
+                          </div>
+                          {/* <TableCell style={{ padding: 0 }}> */}
                           <div
                             className="scheduler-view"
                             style={{
@@ -231,11 +245,11 @@ const TableTry = (props) => {
                               onMouseOut={props.onSchedulerContentMouseOut}
                               onScroll={props.onSchedulerContentScroll}>
                               <div style={{ width: schedulerWidth, position: "relative" }}>
-                                <div className="scheduler-content">
-                                  <table className="scheduler-content-table">
-                                    <tbody>{resourceEventsList}</tbody>
-                                  </table>
-                                </div>
+                                {/* <div className="scheduler-content">
+                                  <div className="scheduler-content-table">
+                                    <div>{resourceEventsList}</div>
+                                  </div>
+                                </div> */}
                                 <div className="scheduler-bg">
                                   <Box
                                     className="scheduler-bg-table"
@@ -251,13 +265,18 @@ const TableTry = (props) => {
                                     />
                                   </Box>
                                 </div>
+                                <div className="scheduler-content">
+                                  <div className="scheduler-content-table">
+                                    <div>{resourceEventsList}</div>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
                           {/* </TableCell> */}
-                        </TableRow>
-                      </TableBody>
-                    </Table>
+                        </div>
+                      </div>
+                    </div>
                     {item?.expanded &&
                       getInnerTable(
                         displayRenderData,
@@ -265,9 +284,10 @@ const TableTry = (props) => {
                         eventDndSource,
                         DndResourceEvents,
                         item,
-                        item?.assignedProjects
+                        item?.assignedProjects,
+                        projects
                       )}
-                  </TableContainer>
+                  </div>
                 )}
               </Box>
             )
@@ -282,9 +302,11 @@ const TableTry = (props) => {
     eventDndSource,
     DndResourceEvents,
     item,
-    project
+    project,
+    allProjects
   ) => {
     const filteredData = displayRenderData.filter((item) => item?.parentId === slotid)
+    const newMap = getProjectsMap(allProjects)
     const requiredHeaders = headers.map((header) => {
       return {
         ...header,
@@ -330,44 +352,49 @@ const TableTry = (props) => {
               dndSource={eventDndSource}
             />
           )
+          const getClientName = newMap.get(filteredItem.slotName)
           const key3 = uuid()
           return (
-            <TableRow
+            <div
               key={key3}
               style={{
                 // maxWidth: "24rem",
-                minWidth: "23.9rem",
+                minWidth: "30rem",
                 height: 43,
                 display: "flex",
                 width: "fit-content"
+                // margin: "4px 0"
               }}>
-              <TableCell
-                sx={{
-                  minWidth: "23.9rem",
+              <div
+                style={{
+                  minWidth: "30em",
                   width: 24,
-                  borderBottom: borderBottom,
+                  // borderBottom: borderBottom,
                   padding: 0,
                   display: "flex",
                   height: 43,
                   paddingRight: "0.3rem"
                 }}
                 className="bg-[#fff] stickyCell flex justify-end items-center px-4">
-                <Typography variant="c1" color="#666" paddingRight={"1rem"}>
-                  {filteredItem?.slotName}
-                </Typography>
+                <Box display={"flex"} flexDirection={"column"} alignItems={"flex-end"}>
+                  <Typography variant="label2" color="#666" paddingRight={"1rem"}>
+                    {getClientName?.client?.name}
+                  </Typography>
+                  <Typography variant="c2" color="#000" paddingRight={"1rem"}>
+                    {filteredItem?.slotName}
+                  </Typography>
+                </Box>
                 <div
                   style={{
                     height: "30px",
-                    border: `4px solid ${filteredItem?.color}`,
+                    border: `8px solid ${filteredItem?.color}`,
                     borderTop: 0,
                     borderRight: 0,
                     borderBottom: 0,
                     borderRadius: "8px"
                   }}
                 />
-              </TableCell>
-
-              {/* <TableCell sx={{ padding: 0 }}> */}
+              </div>
               <div
                 className="scheduler-view"
                 style={{
@@ -392,13 +419,13 @@ const TableTry = (props) => {
                       width: schedulerWidth,
                       position: "relative"
                     }}>
-                    <div className="scheduler-content">
-                      <table className="scheduler-content-table">
-                        <tbody>{resourceEventsList}</tbody>
-                      </table>
-                    </div>
+                    {/* <div className="scheduler-content">
+                      <div className="scheduler-content-table">
+                        <div>{resourceEventsList}</div>
+                      </div>
+                    </div> */}
                     <div className="scheduler-bg">
-                      <table
+                      <div
                         className="scheduler-bg-table"
                         style={{ width: schedulerWidth, position: "relative" }}
                         ref={props.schedulerContentBgTableRef}>
@@ -408,17 +435,21 @@ const TableTry = (props) => {
                           scroller={() => {}}
                           currentItem={filteredItem}
                         />
-                      </table>
+                      </div>
+                    </div>
+                    <div className="scheduler-content">
+                      <div className="scheduler-content-table">
+                        <div>{resourceEventsList}</div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-              {/* </TableCell> */}
-            </TableRow>
+            </div>
           )
         })}
 
-        <TableRow
+        <div
           style={{
             height: 43,
             minWidth: "24rem",
@@ -426,9 +457,9 @@ const TableTry = (props) => {
             backgroundColor: "#fff",
             display: "flex"
           }}>
-          <TableCell
-            sx={{
-              minWidth: "23.9rem",
+          <div
+            style={{
+              minWidth: "30rem",
               borderBottom: borderBottom,
               padding: 0,
               display: "flex",
@@ -439,7 +470,7 @@ const TableTry = (props) => {
               {/* <Box
                 className="w-full cursor-pointer pl-2"
                 onClick={openEditItemPopUp.bind(null, item)}>
-                <Typography variant="p2" sx={{ color: "#888888", textDecoration: "underline" }}>
+                <Typography variant="p2" style={{ color: "#888888", textDecoration: "underline" }}>
                   Actions <KeyboardArrowDownIcon />
                   {item?.editPopup && (
                     <Popover
@@ -458,33 +489,16 @@ const TableTry = (props) => {
                 </Typography>
               </Box> */}
               <Box className="w-full px-8">
-                {/* <DropDown
-                  value={""}
-                  name={"weeklyAvailability"}
-                  label="weeklyAvailability"
-                  items={project}
-                  handleChange={(e) => {
-                    // setFieldValue(`weeklyAvailability`, e.target?.value)
-                  }}
-                /> */}
                 <CustomAutoComplete
                   options={project}
                   handlePopup={handlePopUp}
                   assignProject={assignProject}
                   memberId={item?.slotId}
                 />
-                {/* <CustomAutoComplete options={[]} /> */}
-                {/* <input type="text" list="cars" className="projectselctor" placeholder="Projects" />
-                <datalist id="cars" style={{ listStyleType: "solid" }}>
-                  <option>Project-1</option>
-                  <option>Project-2</option>
-                  <option>Project-3</option>
-                  <option>Project-4</option>
-                </datalist> */}
               </Box>
             </Box>
-          </TableCell>
-          <TableCell sx={{ padding: 0 }}>
+          </div>
+          <div style={{ padding: 0 }}>
             <div
               className="scheduler-view"
               style={{
@@ -506,12 +520,12 @@ const TableTry = (props) => {
               >
                 <div style={{ width: schedulerWidth, position: "relative" }}>
                   <div className="scheduler-content">
-                    <table className="scheduler-content-table">
-                      <tbody>{dropDownEventList}</tbody>
-                    </table>
+                    <div className="scheduler-content-table">
+                      <div>{dropDownEventList}</div>
+                    </div>
                   </div>
                   <div className="scheduler-bg">
-                    <table
+                    <div
                       className="scheduler-bg-table"
                       style={{ width: schedulerWidth, position: "relative" }}
                       ref={props.schedulerContentBgTableRef}>
@@ -521,13 +535,13 @@ const TableTry = (props) => {
                         scroller={() => {}}
                         currentItem={dropDownItem}
                       />
-                    </table>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </TableCell>{" "}
-        </TableRow>
+          </div>{" "}
+        </div>
       </>
     )
   }

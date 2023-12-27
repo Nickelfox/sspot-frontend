@@ -5,7 +5,9 @@ export const useEventItemController = () => {
     if (parentObject?.parentId === undefined) {
       return bColor
     } else {
-      return parentObject?.color
+      let str = parentObject?.color
+      str = str.slice(0, -2)
+      return str
     }
   }
   const getBorderRadius = (parentObject) => {
@@ -35,7 +37,16 @@ export const useEventItemController = () => {
       : theme?.palette?.background?.overTime
   }
   const getItemOpacity = (item) => {
-    return item?.title / 100 < 0.5 ? 0.5 : item?.title / 100
+    if (!item?.resourceParentID) {
+      return item?.title / 100 < 0.5 ? 0.5 : item?.title / 100
+    } else {
+      return 1
+    }
+  }
+  const getSpanStyles = (item, styles) => {
+    return !item?.resourceParentID
+      ? styles?.spanText
+      : { ...styles?.spanText, ...styles?.paddingSpan }
   }
   return {
     getBackground,
@@ -43,6 +54,7 @@ export const useEventItemController = () => {
     getOpacity,
     getMarginTop,
     getBColor,
-    getItemOpacity
+    getItemOpacity,
+    getSpanStyles
   }
 }

@@ -25,6 +25,7 @@ export const useSchedulerModel = () => {
     Loader.show()
     const instance = NetworkManager(API.SCHEDULER.SCHEDULE_UPDATE)
     const response = await instance.request(body, params)
+    Loader.show()
     return { data: dataReturner(response), success: response?.success }
   }
 
@@ -37,6 +38,7 @@ export const useSchedulerModel = () => {
     Loader.show()
     const instance = NetworkManager(API.SCHEDULER.PROJECTS_CREATE)
     const response = await instance.request(body)
+    Loader.show()
     return { data: dataReturner(response), success: response?.success }
   }
   const fetchClients = async () => {
@@ -53,18 +55,21 @@ export const useSchedulerModel = () => {
     Loader.show()
     const instance = NetworkManager(API.SCHEDULER.ADD_EVENT)
     const response = await instance.request(body)
+    Loader.hide()
     return { data: dataReturner(response), success: response?.success }
   }
   const assignProject = async (body) => {
     Loader.show()
     const instance = NetworkManager(API.SCHEDULER.ASSIGN_PROJECT)
     const response = await instance.request(body)
+    Loader.show()
     return { data: dataReturner(response), success: response?.success }
   }
   const deleteEvent = async (params) => {
     Loader.show()
     const instance = NetworkManager(API.SCHEDULER.SCHEDULE_DELETE)
     const response = await instance.request({}, params)
+    Loader.show()
     return { data: dataReturner(response), success: response?.success }
   }
   return {

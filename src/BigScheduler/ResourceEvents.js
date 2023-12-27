@@ -328,7 +328,6 @@ class ResourceEvents extends Component {
             eventList.push(eventItem)
           }
         })
-
         if (headerItem.addMore > 0) {
           let left = index * cellWidth + (index > 0 ? 2 : 3)
           let width = cellWidth - (index > 0 ? 5 : 6)
@@ -369,17 +368,20 @@ class ResourceEvents extends Component {
     })
 
     const eventContainer = (
-      <div ref={this.eventContainerRef} className="event-container" style={{ height: "4.5rem" }}>
+      <div
+        ref={this.eventContainerRef}
+        className="event-container"
+        style={{ height: "4.5rem", paddingTop: "2px" }}>
         {selectedArea}
         {eventList}
       </div>
     )
     return (
-      <tr>
-        <td style={{ width: rowWidth }}>
+      <div>
+        <div style={{ width: rowWidth }}>
           {config.dragAndDropEnabled ? connectDropTarget(eventContainer) : eventContainer}
-        </td>
-      </tr>
+        </div>
+      </div>
     )
   }
 

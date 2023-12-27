@@ -17,7 +17,7 @@ export const defaultTheme = {
       default: "#FFFFFF",
       secondary: "#f4f4f4",
       gray: "#666666",
-      overTime: "#ff0000",
+      overTime: "#d20a0acc",
       limitTime: "#6DB460"
     },
     text: {
@@ -102,6 +102,11 @@ export const defaultTheme = {
       lineHeight: "1.6rem",
       fontWeight: 500
     },
+    p6: {
+      fontSize: "1.3rem",
+      lineHeight: "2rem",
+      fontWeight: 600
+    },
     button: {
       fontSize: "1.4rem",
       lineHeight: 18 / 13,
@@ -121,6 +126,11 @@ export const defaultTheme = {
     },
     label: {
       fontSize: "1.1rem",
+      lineHeight: 15 / 11,
+      fontWeight: 600
+    },
+    label2: {
+      fontSize: "0.9rem",
       lineHeight: 15 / 11,
       fontWeight: 600
     }

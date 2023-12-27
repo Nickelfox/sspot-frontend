@@ -28,7 +28,6 @@ import { eventsOverLap } from "helpers/toasterFunction/toasterFunction"
 import { COMMON_FORMAT_FOR_API, COMMON_FORMAT_FOR_EVENTS } from "helpers/app-dates/dates"
 import { getOpenArrays } from "helpers/dropDownListing/openArrays"
 import AddProjectForm from "components/AssignProjectForm"
-import { Loader } from "redux/dispatcher/Loader"
 import EventItemTemplateResolver from "components/EventItem"
 
 const parentViewArray = [
@@ -57,7 +56,6 @@ const Calender = (props) => {
     getChildObjectArray,
     getFreshId,
     newEventObject,
-    removeResource,
     setRemoveResource,
     rerender,
     triggerRerender,
@@ -76,9 +74,7 @@ const Calender = (props) => {
     selectedObject,
     setSelectedObject,
     popupStyles,
-    setPopUpStyles,
     isAddeventPopover,
-    setIsAddeventPopover,
     resourceEvent,
     setResourceEvent,
     isMobile,
@@ -106,8 +102,6 @@ const Calender = (props) => {
   const [localFetcher, setLocalFetcher] = useState(false)
   useEffect(() => {
     getSchedulerData()
-  }, [])
-  useEffect(() => {
     fetchDepartments()
     fetchClients()
     fetchTeamList()

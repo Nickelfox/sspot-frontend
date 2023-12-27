@@ -20,11 +20,11 @@ class SelectedArea extends Component {
         className="selected-area"
         style={{
           left: left,
-          width: 45,
+          width: 50,
           top: 0,
           bottom: 0,
           backgroundColor: config.selectedAreaColor,
-          height: "4.2rem",
+          height: 36,
           marginLeft: "0.1rem",
           borderRadius: "0.4rem"
         }}

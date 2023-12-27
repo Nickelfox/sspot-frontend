@@ -4,7 +4,6 @@ export const useStyles = () => {
   return {
     divStyles: {
       minHeight: 36,
-      height: 43,
       display: "flex",
       justifyContent: "flex-start",
       alignItems: "center",
@@ -16,9 +15,17 @@ export const useStyles = () => {
     },
     divText: {
       fontSize: theme?.typography?.p5?.fontSize,
-      fontWeight: theme?.typography?.p4?.fontWeight,
+      fontWeight: theme?.typography?.p3?.fontWeight,
       color: theme?.palette?.text?.white,
       paddingLeft: "0.5rem"
+    },
+    spanText: {
+      fontSize: theme?.typography?.p5?.fontSize,
+      fontWeight: theme?.typography?.p5?.fontWeight,
+      color: theme?.palette?.text?.white
+    },
+    paddingSpan: {
+      paddingLeft: "0.4rem"
     }
   }
 }

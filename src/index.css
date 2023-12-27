@@ -255,20 +255,23 @@ table.scheduler-table tr:last-child td {
   position: absolute;
   /* cursor: pointer; */
   padding: 0;
+  vertical-align: middle;
 }
 
 .timeline-event:hover :nth-child(2) {
-  border-left: 6px dotted #fff;
+  border-left: 3px dotted #d0d0d0;
   margin-left: 2px;
-  height: 37px;
-  margin-top: 3px;
+  height: 2rem;
+  margin-top: 10px;
+  margin-bottom: auto;
 }
 
 .timeline-event:hover :nth-child(3) {
-  border-left: 6px dotted #fff;
+  border-left: 3px dotted #d0d0d0;
   margin-right: 2px;
-  height: 37px;
-  margin-top: 3px;
+  height: 2rem;
+  margin-top: 10px;
+  margin-bottom: auto;
 }
 
 .day-event {

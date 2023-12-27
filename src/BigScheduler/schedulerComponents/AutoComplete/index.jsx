@@ -4,6 +4,7 @@ import Autocomplete from "@mui/material/Autocomplete"
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown"
 import { Box, Paper, Typography } from "@mui/material"
 import styles from "./autocomplete.module.scss"
+import Search from "@mui/icons-material/Search"
 export const NewIcon = (props) => {
   return (
     <div
@@ -24,6 +25,7 @@ export const NewIcon = (props) => {
 const CustomAutoComplete = (props) => {
   const { options = [], handlePopup = () => {}, memberId = "", assignProject } = props
   // const [projects, setProjects] = useState(options)
+  /*eslint-disable-next-line no-unused-vars*/
   const [value, setValue] = useState("")
   /*eslint-disable-next-line no-unused-vars*/
   const handleChange = (newValue) => {
@@ -34,6 +36,14 @@ const CustomAutoComplete = (props) => {
       member: memberId
     }
     assignProject(payLoad)
+  }
+  const Placeholder = () => {
+    return (
+      <Box>
+        <Search />
+        Assign To Projects....
+      </Box>
+    )
   }
   return (
     <Autocomplete
@@ -48,8 +58,8 @@ const CustomAutoComplete = (props) => {
           <NewIcon />
         </div>
       }
-      placeholder="Projects"
-      isOptionEqualToValue={(option, value) => option === value}
+      placeholder={<Placeholder />}
+      isOptionEqualToValue={(option, value) => option?.value === value?.value}
       PaperComponent={({ children }) => {
         return (
           <Paper className={styles.matrix_box}>
@@ -78,7 +88,7 @@ const CustomAutoComplete = (props) => {
               "& fieldset": { top: 0 },
               padding: 0
             }}
-            placeholder="Projects"
+            placeholder={"Assign To Projects..."}
           />
         )
       }}
