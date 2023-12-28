@@ -6,7 +6,7 @@ export const useEventItemController = () => {
       return bColor
     } else {
       let str = parentObject?.color
-      str = str.slice(0, -2)
+      // str = str.slice(0, -2)
       return str
     }
   }
