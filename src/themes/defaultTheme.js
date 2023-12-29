@@ -18,7 +18,7 @@ export const defaultTheme = {
       secondary: "#f4f4f4",
       gray: "#666666",
       overTime: "#d20a0acc",
-      limitTime: "#6DB460"
+      limitTime: "#4ba33b"
     },
     text: {
       main: "#eeeeee",

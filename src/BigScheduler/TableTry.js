@@ -58,11 +58,11 @@ const TableTry = (props) => {
   }, [schedulerData?.events?.length])
   const borderBottom = "1px solid #c4c4c4"
   let schedulerContentStyle = {
-    overflowX: config?.viewType === ViewTypes.Week ? "hidden" : "hidden",
-    overflowY: "hidden",
+    // overflowX: config?.viewType === ViewTypes.Week ? "hidden" : "hidden",
+    // overflowY: "hidden",
     margin: 0,
-    position: "relative",
-    height: 48
+    position: "relative"
+    // height: 48
     // paddingBottom: contentPaddingBottom
   }
   const hideLoader = () => {
@@ -72,7 +72,7 @@ const TableTry = (props) => {
       Loader.hide()
     } else if (schedulerData?.events?.length > 0) {
       Loader.hide()
-    } else Loader.show()
+    } else Loader.hide()
   }
   let key = 1
   // let editItems = (items) => {
@@ -141,7 +141,7 @@ const TableTry = (props) => {
     return [...rMap.entries()].map((department, index) => {
       const key1 = uuid()
       return (
-        <Box key={key1}>
+        <Box key={key1} overflow={"hidden"}>
           <Box
             paddingLeft={1}
             marginBottom={"0.2rem"}
@@ -177,13 +177,14 @@ const TableTry = (props) => {
                       border: item?.expanded ? "1px solid #d4d4d4" : 0
                     }}>
                     <div
-                      style={{
-                        // width: schedulerContainerWidth, Removed because now using div
-                        height: 42
-
-                        // verticalAlign: "top"
-                      }}>
-                      <div style={{ overflow: "hidden" }}>
+                      style={
+                        {
+                          // width: schedulerContainerWidth, Removed because now using div
+                          // height: 42
+                          // verticalAlign: "top"
+                        }
+                      }>
+                      <div>
                         <div style={{ minWidth: "100%", display: "flex" }}>
                           <div
                             style={{
@@ -191,7 +192,7 @@ const TableTry = (props) => {
                               borderBottom: item?.expanded ? 0 : borderBottom,
                               padding: 0,
                               display: "flex",
-                              height: 42,
+                              height: 45,
                               width: "fit-content"
                             }}
                             className="bg-[#fff]  flex justify-center items-center w-full p-0">
@@ -228,46 +229,47 @@ const TableTry = (props) => {
                           {/* <TableCell style={{ padding: 0 }}> */}
                           <div
                             className="scheduler-view"
-                            style={{
-                              // width: schedulerContainerWidth,
-                              height: 43
-                              // marginTop: "-2px"
-                              // verticalAlign: "top"
-                            }}>
+                            style={
+                              {
+                                // width: schedulerContainerWidth,
+                                // height: 43
+                              }
+                            }>
                             <div
                               style={{
-                                position: "relative",
+                                // position: "relative",
                                 ...schedulerContentStyle
                               }}
                               // style={schedulerContentStyle}
                               ref={props.schedulerContentRef}
                               onMouseOver={props.onSchedulerContentMouseOver}
+                              onFocus={props.onSchedulerContentMouseOver}
                               onMouseOut={props.onSchedulerContentMouseOut}
-                              onScroll={props.onSchedulerContentScroll}>
-                              <div style={{ width: schedulerWidth, position: "relative" }}>
+                              onBlur={props.onSchedulerContentMouseOut}
+                              // onScroll={props.onSchedulerContentScroll}
+                            >
+                              <div
+                                style={{
+                                  // width: schedulerWidth,
+                                  position: "relative"
+                                }}>
                                 {/* <div className="scheduler-content">
+                      <div className="scheduler-content-table">
+                        <div>{resourceEventsList}</div>
+                      </div>
+                    </div> */}
+
+                                <div className="scheduler-content">
                                   <div className="scheduler-content-table">
-                                    <div>{resourceEventsList}</div>
-                                  </div>
-                                </div> */}
-                                <div className="scheduler-bg">
-                                  <Box
-                                    className="scheduler-bg-table"
-                                    style={{ width: schedulerWidth, position: "relative" }}
-                                    // ref={props.schedulerContentBgTableRef}
-                                  >
-                                    {/* {!resourceEventsList && <AppLoader />} */}
+                                    <div style={{ position: "absolute", zIndex: 10000 }}>
+                                      {resourceEventsList}
+                                    </div>
                                     <BodyView
                                       {...props}
                                       // scroller={this.bodyScroller}
                                       scroller={() => {}}
                                       currentItem={item}
                                     />
-                                  </Box>
-                                </div>
-                                <div className="scheduler-content">
-                                  <div className="scheduler-content-table">
-                                    <div>{resourceEventsList}</div>
                                   </div>
                                 </div>
                               </div>
@@ -331,7 +333,8 @@ const TableTry = (props) => {
       rowheight: 68,
       rowMaxCount: 1,
       slotId: item?.slotId,
-      slotName: null
+      slotName: null,
+      timeOff: item?.timeOff
     }
     let dropDownEventList = (
       <DndResourceEvents
@@ -397,10 +400,12 @@ const TableTry = (props) => {
               </div>
               <div
                 className="scheduler-view"
-                style={{
-                  // width: schedulerContainerWidth,
-                  height: 43
-                }}>
+                style={
+                  {
+                    // width: schedulerContainerWidth,
+                    // height: 43
+                  }
+                }>
                 <div
                   style={{
                     // position: "relative",
@@ -424,22 +429,18 @@ const TableTry = (props) => {
                         <div>{resourceEventsList}</div>
                       </div>
                     </div> */}
-                    <div className="scheduler-bg">
-                      <div
-                        className="scheduler-bg-table"
-                        style={{ width: schedulerWidth, position: "relative" }}
-                        ref={props.schedulerContentBgTableRef}>
+
+                    <div className="scheduler-content">
+                      <div className="scheduler-content-table">
+                        <div style={{ position: "absolute", zIndex: 10000 }}>
+                          {resourceEventsList}
+                        </div>
                         <BodyView
                           {...props}
                           // scroller={this.bodyScroller}
                           scroller={() => {}}
                           currentItem={filteredItem}
                         />
-                      </div>
-                    </div>
-                    <div className="scheduler-content">
-                      <div className="scheduler-content-table">
-                        <div>{resourceEventsList}</div>
                       </div>
                     </div>
                   </div>
@@ -521,14 +522,7 @@ const TableTry = (props) => {
                 <div style={{ width: schedulerWidth, position: "relative" }}>
                   <div className="scheduler-content">
                     <div className="scheduler-content-table">
-                      <div>{dropDownEventList}</div>
-                    </div>
-                  </div>
-                  <div className="scheduler-bg">
-                    <div
-                      className="scheduler-bg-table"
-                      style={{ width: schedulerWidth, position: "relative" }}
-                      ref={props.schedulerContentBgTableRef}>
+                      <div style={{ position: "absolute", zIndex: 10000 }}>{dropDownEventList}</div>
                       <BodyView
                         {...props}
                         // scroller={this.bodyScroller}

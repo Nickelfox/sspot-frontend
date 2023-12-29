@@ -127,6 +127,9 @@ class HeaderView extends Component {
             const itemArray1 = Array.from(item[1])
             const keysArray1 = Array.from(item[1].keys())
             const borderLeftStyle = item[0] === weekNumber ? "2px solid #366BAB" : "2px solid #FFF"
+            const fontWeight = item[0] === weekNumber ? 600 : 500
+            const fontSize = item[0] === weekNumber ? "1.2rem" : "1.2rem"
+            const color = item[0] === weekNumber ? "#5d5249" : "#888888"
             const key2 = uuid()
             return (
               <Box key={key2}>
@@ -159,9 +162,15 @@ class HeaderView extends Component {
                             </Box>
                           )}
                           <Box className="w-full flex justify-center items-center">
-                            {keysArray1?.length === 2
-                              ? childIndex === 0 && `${keysArray1[0]}-${keysArray1[1]}`
-                              : childItem[0]}
+                            <Typography
+                              fontWeight={fontWeight}
+                              fontSize={fontSize}
+                              color={color}
+                              className="w-full flex justify-center items-center">
+                              {keysArray1?.length === 2
+                                ? childIndex === 0 && `${keysArray1[0]}-${keysArray1[1]}`
+                                : childItem[0]}
+                            </Typography>
                           </Box>
                         </Box>
                         <Box className="flex">{this.getRows(Array.from(childItem[1]))}</Box>

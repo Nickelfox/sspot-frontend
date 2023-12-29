@@ -22,6 +22,7 @@ class BodyView extends Component {
       (item) => item?.slotId === currentItem?.slotId || item?.slotId === currentItem?.parentId
     )
     const daySet = new Set(currentItem?.workDays)
+    const timeOffSet = new Set(currentItem?.timeOff)
     let tableRows = requiredMap.map(() => {
       const requiredArray = getRequiredArray(headers)
       const headerMap = getHeaderMap(requiredArray)
@@ -52,7 +53,7 @@ class BodyView extends Component {
                     {headerItemArray1.map((childItem) => {
                       /* const key3 = uuid() */
 
-                      return getRows(Array.from(childItem[1]), daySet, currentItem)
+                      return getRows(Array.from(childItem[1]), daySet, currentItem, timeOffSet)
 
                       /* <td
                           key={key3}
@@ -83,8 +84,14 @@ const getRows = (array, daySet, currentItem) => {
     const itemDate = dayjs(childrenItem?.time).format("DD-MM")
     const childrenDay = moment(childrenItem?.time).format("dddd").substring(0, 3).toUpperCase()
     const dayCheck = daySet.has(childrenDay) ? null : (
-      <img src={nonWorking} alt="" style={{ zIndex: 999 }} />
+      <img src={nonWorking} alt="" style={{ zIndex: 110000, opacity: 0.6 }} />
     )
+    // const timeOffCheck = timeOffSet.has(itemDate) ? (
+    //   <img src={nonWorking} alt="" style={{ zIndex: 110000, opacity: 0.6 }} />
+    // ) : (
+    //   dayCheck
+    // )
+
     const key4 = uuid()
     return (
       <div
@@ -94,15 +101,15 @@ const getRows = (array, daySet, currentItem) => {
         style={{
           width: 50,
           // height: "5rem",
-          borderLeft: "1px solid #c4c4c4",
+          borderLeft: "0.1px solid #c4c4c4",
           backgroundColor: itemDate === currentDate ? "#ebf5ff" : "#fff",
           opacity: itemDate === currentDate ? 0.7 : 1,
           pointerEvents: childrenItem?.nonWorkingTime ? "none" : "auto",
           borderTop: 0,
           borderBottom: 0,
           marginTop: 0,
-          marginBottom: 0,
-          zIndex: 10000
+          marginBottom: 0
+          // zIndex: 10000
         }}>
         {/**@mehran-nickelfox
        @Removed Check

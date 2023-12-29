@@ -120,9 +120,9 @@ const Calender = (props) => {
   useEffect(() => {
     scheduleFetcher()
   }, [fetchEvents])
-  useEffect(() => {
-    fetchEvents && getRenderSd(schedulerData)
-  }, [counter])
+  // useEffect(() => {
+  //   fetchEvents && getRenderSd(schedulerData)
+  // }, [counter])
   useEffect(() => {
     triggerRerender(render + 1)
   }, [triger])
@@ -258,7 +258,8 @@ const Calender = (props) => {
         workDays: item?.workDays,
         editPopup: item?.slotId === itemToEdit?.slotId ? !item?.editPopup : false,
         email: item?.email,
-        department: item?.department
+        department: item?.department,
+        timeOff: item?.timeOff
       }
     })
     setSelectedObject(itemToEdit)
@@ -655,7 +656,8 @@ const Calender = (props) => {
         email: i?.email,
         department: i?.department,
         color: i?.color,
-        assignedProjects: getProjects(i, newProject)
+        assignedProjects: getProjects(i, newProject),
+        timeOff: i?.timeOff
       }
     })
     schedulerData.setResources(replaceArr)

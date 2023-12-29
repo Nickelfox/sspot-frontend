@@ -193,7 +193,6 @@ class Scheduler extends Component {
       tbodyContent = <AgendaView {...this.props} />
     } else {
       let resourceTableWidth = schedulerData.getResourceTableWidth()
-      // console.log(resourceTableWidth, 205);
       let schedulerContainerWidth = width - (config.resourceViewEnabled ? resourceTableWidth : 0)
       let schedulerWidth = schedulerData.getContentTableWidth() - 1
       let DndResourceEvents = this.state.dndContext.getDropTarget(config.dragAndDropEnabled)

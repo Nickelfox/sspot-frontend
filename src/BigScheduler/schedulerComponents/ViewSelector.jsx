@@ -12,15 +12,15 @@ const ViewSelector = (props) => {
         style={{
           border: "1px solid #666666",
           height: "3rem",
-          borderRadius: "0.4rem",
-          width: "15rem",
+          // borderRadius: "0.4rem",
+          width: "14rem",
           backgroundColor: selectedParent === item?.value ? "#d0d0d0" : "#f6f6f6",
           color: "#666666"
         }}
         key={`${item?.value}${index}`}
         value={`${item.value}`}
         className={`${
-          selectedParent === item?.value ? "btn-selected" : "btn"
+          selectedParent === item?.value ? "selector-selected" : "selector"
         } text-xl font-semibold flex justify-center items-center`}>
         <span className={`text-xl font-semibold`}>{item.name}</span>
       </RadioButton>
