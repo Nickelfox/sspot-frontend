@@ -36,8 +36,9 @@ const EventItemTemplateResolver = (props) => {
     height: !item?.resourceParentID ? 43 : 35,
     ...styles?.divStyles
   }
+  const title = item?.title === 100 ? "Full" : `${JSON.parse(item?.title).toFixed(1)} %`
   return (
-    <div key={item.id} style={{ height: 43 }}>
+    <div key={item.id} style={{ height: 43, marginLeft: 2 }}>
       <div key={item.id} className={`${mustAddCssClass} `} style={divStyle}>
         <span
           style={{
@@ -45,9 +46,7 @@ const EventItemTemplateResolver = (props) => {
             ...styles?.divSpan
           }}>
           <Typography sx={getStyles(item, styles)}>
-            {resourceObjectForEvent?.parentId
-              ? `${item?.title} h/d`
-              : `${JSON.parse(item?.title).toFixed(1)} %`}
+            {resourceObjectForEvent?.parentId ? `${item?.title} h/d` : `${title}`}
             <span style={getSpanStyles(item, styles)}>
               {item?.assignedhours ? `${item?.assignedhours} hrs` : null}
             </span>

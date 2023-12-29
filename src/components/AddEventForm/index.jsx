@@ -90,6 +90,7 @@ const AddEvent = (props) => {
   const maxWidth = isMobile ? "100vw" : checkTablet
   const createEvent = (values) => {
     let apiData
+
     if (eventData?.child?.projectId) {
       apiData = {
         project_member: eventData?.child?.projectId,

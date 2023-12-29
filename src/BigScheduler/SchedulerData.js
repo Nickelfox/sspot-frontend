@@ -125,7 +125,8 @@ export default class SchedulerData {
         editPopup: false,
         email: resource?.email,
         department: resource?.department,
-        color: resource?.color
+        color: resource?.color,
+        timeOff: resource?.timeOff
       }
     })
     let requiredArray = [...existedValues, resource]
@@ -847,7 +848,6 @@ export default class SchedulerData {
      * This function will be created newly and requires whole day
      */
     let slots = resources.filter((resource) => resource.department === department)
-
     let slotTree = [],
       slotMap = new Map()
     slots.forEach((slot) => {
@@ -878,7 +878,8 @@ export default class SchedulerData {
         availability: slot?.weeklyAvailability,
         department: slot?.department,
         color: slot?.color ?? null,
-        assignedProjects: slot?.assignedProjects
+        assignedProjects: slot?.assignedProjects,
+        timeOff: slot?.timeOff
       }
       let id = slot.id
       if (slotMap.has(id)) {
@@ -1222,7 +1223,6 @@ export default class SchedulerData {
         }
       })
     }
-
     this.renderData = flatArray
   }
 

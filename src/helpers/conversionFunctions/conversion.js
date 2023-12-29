@@ -54,7 +54,8 @@ export const getDataArray = (array, projects) => {
       department: data?.department?.name,
       assignedProjects: getAssignedProjects(data?.project_members, projects),
       weeklyCapacity: data?.weekly_capacity,
-      weeklyAssignedHours: data?.weekly_assigned_hours
+      weeklyAssignedHours: data?.weekly_assigned_hours,
+      timeOff: [dayjs("2023-12-25").format("DD-MM"), dayjs("2023-12-26").format("DD-MM")]
     }
     requiredUserInfo.push(requiredObject)
   })
@@ -74,7 +75,8 @@ const getProjectsArray = (projectArray, data) => {
       parentId: project?.member,
       email: data?.user?.email,
       department: data?.department?.name,
-      color: project?.project?.color_code
+      color: project?.project?.color_code,
+      timeOff: [dayjs("2023-12-25").format("DD-MM"), dayjs("2023-12-26").format("DD-MM")]
     }
   })
   return requiredProjectArray
@@ -165,6 +167,7 @@ export const getUniqueMapFn = (displayRenderData, apiData) => {
       expanded: true
     })
   })
+  console.log(Array.from(responseMap.values()).flat(2), "ResponseMap")
   if (openArray?.length > 0) {
     return Array.from(responseMap.values()).flat(2)
   } else {
