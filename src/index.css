@@ -602,3 +602,12 @@ input::-webkit-calendar-picker-indicator:active {
   font-size: larger;
   color: "red" !important
 }
+
+.hideViewonHover {
+  display: none;
+}
+
+.hideViewonHover:hover {
+  display: block;
+  background-color: #108EE9;
+}

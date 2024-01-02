@@ -88,6 +88,8 @@ const AddEvent = (props) => {
   const checkLaptop = isNotLaptop ? "40vw" : "25vw"
   const checkTablet = isTablet ? "50vw" : checkLaptop
   const maxWidth = isMobile ? "100vw" : checkTablet
+  const workType = eventData?.child?.name === "TIME_OFF" ? "TIME_OFF" : "WORK"
+
   const createEvent = (values) => {
     let apiData
 
@@ -97,7 +99,7 @@ const AddEvent = (props) => {
         start_at: dayjs(date).format(COMMON_FORMAT_FOR_API),
         end_at: dayjs(endDate).format(COMMON_FORMAT_FOR_API),
         assigned_hour: values?.hours,
-        schedule_type: "WORK",
+        schedule_type: workType,
         notes: values.notes,
         project_id: eventData?.event?.resourceId,
         member_id: eventData?.parent?.id
@@ -110,7 +112,7 @@ const AddEvent = (props) => {
         start_at: dayjs(date).format(COMMON_FORMAT_FOR_API),
         end_at: dayjs(endDate).format(COMMON_FORMAT_FOR_API),
         assigned_hour: values?.hours,
-        schedule_type: "WORK",
+        schedule_type: workType,
         notes: values.notes
       }
     }
@@ -128,12 +130,14 @@ const AddEvent = (props) => {
     // Can not select days before today and today
     return current && current < dayjs(date).endOf("day")
   }
+  console.log(eventData, "Here is Event Data")
+  const assignmentName = eventData?.child?.name === "TIME_OFF" ? "Time Off" : "Assignment"
   return (
     <Box sx={styles.formDisplay}>
       <Typography
         variant="h6"
         color="#363636"
-        gutterBottom={1}>{`${eventData?.parent?.name} Assignment`}</Typography>
+        gutterBottom={1}>{`${eventData?.parent?.name} ${assignmentName}`}</Typography>
       <Formik
         validateOnMount
         initialValues={initalValues}
@@ -238,7 +242,7 @@ const AddEvent = (props) => {
                     setFieldValue(`startDate`, formattedDate)
                     setDate(formattedDate)
                     setFieldValue("totalHours", values?.hours * dateDiff)
-                    setTimeout(() => setFieldTouched("totalHours", true))
+                    // setTimeout(() => setFieldTouched("totalHours", true))
                   }}
                   className="h-14 w-full"
                   popupStyle={{ zIndex: 9999 }}
@@ -268,7 +272,7 @@ const AddEvent = (props) => {
                     setFieldValue(`endDate`, formattedDate)
                     setEndDate(formattedDate)
                     setFieldValue("totalHours", values?.hours * dateDiff)
-                    setTimeout(() => setFieldTouched("totalHours", true), 10)
+                    // setTimeout(() => setFieldTouched("totalHours", true), 10)
                   }}
                   className="h-14 w-full"
                   popupStyle={{ zIndex: 9999 }}

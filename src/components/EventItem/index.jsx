@@ -38,14 +38,14 @@ const EventItemTemplateResolver = (props) => {
   }
   const title = item?.title === 100 ? "Full" : `${JSON.parse(item?.title).toFixed(1)} %`
   return (
-    <div key={item.id} style={{ height: 43, marginLeft: 2 }}>
+    <div key={item.id} style={{ height: 43, marginLeft: 2, position: "relative" }}>
       <div key={item.id} className={`${mustAddCssClass} `} style={divStyle}>
         <span
           style={{
             lineHeight: `${eventHeight}px`,
             ...styles?.divSpan
           }}>
-          <Typography sx={getStyles(item, styles)}>
+          <Typography sx={getStyles(item, styles)} style={{ position: "relative" }}>
             {resourceObjectForEvent?.parentId ? `${item?.title} h/d` : `${title}`}
             <span style={getSpanStyles(item, styles)}>
               {item?.assignedhours ? `${item?.assignedhours} hrs` : null}

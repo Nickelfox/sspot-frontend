@@ -55,7 +55,7 @@ export const getDataArray = (array, projects) => {
       assignedProjects: getAssignedProjects(data?.project_members, projects),
       weeklyCapacity: data?.weekly_capacity,
       weeklyAssignedHours: data?.weekly_assigned_hours,
-      timeOff: [dayjs("2023-12-25").format("DD-MM"), dayjs("2023-12-26").format("DD-MM")]
+      timeOff: getTimeOffDates(data)
     }
     requiredUserInfo.push(requiredObject)
   })
@@ -76,10 +76,17 @@ const getProjectsArray = (projectArray, data) => {
       email: data?.user?.email,
       department: data?.department?.name,
       color: project?.project?.color_code,
-      timeOff: [dayjs("2023-12-25").format("DD-MM"), dayjs("2023-12-26").format("DD-MM")]
+      timeOff: getTimeOffDates(data)
     }
   })
   return requiredProjectArray
+}
+const getTimeOffDates = (data) => {
+  const weeklyTimeOffArray = data.weekly_time_off_hours
+  const timeOffDatesObjectArray = weeklyTimeOffArray.map((item) => item?.time_off_dates)
+  const flattenArray = timeOffDatesObjectArray.flat()
+  const startDateArray = flattenArray.map((item) => dayjs(item?.timeoff_start).format("DD-MM-YYYY"))
+  return startDateArray
 }
 export const getEventListing = (eventArray) => {
   let requiredArray = eventArray.map((event) => {
