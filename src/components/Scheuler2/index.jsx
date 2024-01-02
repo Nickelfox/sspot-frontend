@@ -500,7 +500,6 @@ const Calender = (props) => {
      * Updates Event Start for Object
      * @Fixed
      */
-    console.log(event)
     if (event?.resourceParentID) {
       const openArrays = getOpenArrays(schedulerData)
       const dateRequiredData = {
@@ -509,7 +508,6 @@ const Calender = (props) => {
       }
       const checkDates = getCheckDate(dateRequiredData, schedulerData?.events, "start")
       const dataObject = resoureMap.get(event?.resourceId)
-      console.log(dataObject)
       if (checkDates) {
         const requiredData = {
           project_member: event?.projectMemberID,

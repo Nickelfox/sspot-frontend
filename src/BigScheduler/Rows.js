@@ -18,7 +18,7 @@ const Rows = (props) => {
         height={"100%"}
         width={"100%"}
         sx={{
-          background: currentItem?.parentId ? `url(${nonWorking})` : `url(${timeoff})`,
+          background: `url(${timeoff})`,
           opacity: 0.8,
           zIndex: currentItem?.parentId ? 9999 : 110000,
           backgroundColor: currentItem?.parentId ? "#c2c2c2" : "#000"

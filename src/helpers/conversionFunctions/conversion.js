@@ -2,6 +2,7 @@ import dayjs from "dayjs"
 import { months } from "../Months/months"
 import { COMMON_FORMAT_FOR_EVENTS, getNextFriday } from "helpers/app-dates/dates"
 import { v4 as uuid } from "uuid"
+import { getDatesInRange } from "./getDatesinRange"
 
 export const getRequiredArray = (headers) => {
   const requiredArray = headers.map((item) => {
@@ -55,7 +56,8 @@ export const getDataArray = (array, projects) => {
       assignedProjects: getAssignedProjects(data?.project_members, projects),
       weeklyCapacity: data?.weekly_capacity,
       weeklyAssignedHours: data?.weekly_assigned_hours,
-      timeOff: getTimeOffDates(data)
+      timeOff: getTimeOffDates(data),
+      weeklyTimeOff: data?.weekly_time_off_hours
     }
     requiredUserInfo.push(requiredObject)
   })
@@ -85,8 +87,11 @@ const getTimeOffDates = (data) => {
   const weeklyTimeOffArray = data.weekly_time_off_hours
   const timeOffDatesObjectArray = weeklyTimeOffArray.map((item) => item?.time_off_dates)
   const flattenArray = timeOffDatesObjectArray.flat()
-  const startDateArray = flattenArray.map((item) => dayjs(item?.timeoff_start).format("DD-MM-YYYY"))
-  return startDateArray
+  const startDateArray = flattenArray.map((item) =>
+    getDatesInRange(item?.timeoff_start, item?.timeoff_end)
+  )
+  const flatDates = startDateArray.flat(1)
+  return flatDates
 }
 export const getEventListing = (eventArray) => {
   let requiredArray = eventArray.map((event) => {
