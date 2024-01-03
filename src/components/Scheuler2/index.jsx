@@ -100,6 +100,7 @@ const Calender = (props) => {
     handlePopUp
   } = useSchedulerController()
   const [localFetcher, setLocalFetcher] = useState(false)
+  const [eventsArray, setEventArray] = useState([])
   useEffect(() => {
     getSchedulerData()
     fetchDepartments()
@@ -109,17 +110,17 @@ const Calender = (props) => {
     fetchProjects()
   }, [])
 
-  useEffect(() => {
-    if (projects?.length > 0) {
-      schedulerData && teamFetcher()
-    }
-  }, [schedulerData, projects?.length, startDate, fetcher, search, localFetcher])
+  // useEffect(() => {
+  //   if (projects?.length > 0) {
+  //     schedulerData && teamFetcher()
+  //   }
+  // }, [schedulerData, projects?.length, startDate, fetcher, search, localFetcher])
   useEffect(() => {
     teamInScheduler()
   }, [reload])
   useEffect(() => {
-    scheduleFetcher()
-  }, [fetchEvents])
+    schedulerData && scheduleFetcher()
+  }, [schedulerData, startDate])
   // useEffect(() => {
   //   fetchEvents && getRenderSd(schedulerData)
   // }, [counter])
@@ -160,7 +161,9 @@ const Calender = (props) => {
     }
     const data = await fetchSchedules(params)
     if (data?.success) {
-      eventsInScheduler(data?.data)
+      // eventsInScheduler(data?.data)
+      setEventArray(data?.data)
+      teamFetcher()
     }
   }
 
@@ -202,17 +205,11 @@ const Calender = (props) => {
         triggerRerender(rerender + 1)
       }
       setResourceMap(convertArrayToMap(requiredArray))
-      setFetchEvents((prev) => !prev)
+      // setFetchEvents((prev) => !prev)
       setRerenderData(true)
     } else if (schedulerData) {
       schedulerData.setResources([])
     }
-  }
-  const eventsInScheduler = (data) => {
-    setEventsMap(convertEventsToMap(data))
-    makeResourceEvents(data)
-  }
-  const makeResourceEvents = (events) => {
     const resourceArray = teamMembers
     const weeklyAssignMentMap = new Map()
     resourceArray.forEach((member) => {
@@ -220,9 +217,26 @@ const Calender = (props) => {
     })
     const flatArray = [...weeklyAssignMentMap.values()].flat()
     const filteredArray = flatArray.filter((item) => item?.title !== 0)
-    if (resoureMap.size) {
-      schedulerData.setEvents([...events, ...filteredArray])
-    }
+    // filteredArray.forEach((item) => schedulerData.addEvent(item))
+    // setRerenderData(rerenderData + 1)
+    // triggerRerender(rerender + 1)
+    schedulerData && schedulerData.setEvents([...eventsArray, ...filteredArray])
+  }
+  const eventsInScheduler = (data) => {
+    setEventsMap(convertEventsToMap(data))
+    // makeResourceEvents(data)
+  }
+  const makeResourceEvents = (events) => {
+    // const resourceArray = teamMembers
+    // const weeklyAssignMentMap = new Map()
+    // resourceArray.forEach((member) => {
+    //   weeklyAssignMentMap.set(member.id, getWeeklyAssignedHours(member))
+    // })
+    // const flatArray = [...weeklyAssignMentMap.values()].flat()
+    // const filteredArray = flatArray.filter((item) => item?.title !== 0)
+    // if (resoureMap.size) {
+    // schedulerData.setEvents(events)
+    // }
   }
   const prevClick = (schedulerData) => {
     schedulerData.prev()

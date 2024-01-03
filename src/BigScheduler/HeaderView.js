@@ -21,7 +21,7 @@ class HeaderView extends Component {
   //   }
   static propTypes = {
     schedulerData: PropTypes.object.isRequired,
-    search: PropTypes.string,
+    // search: PropTypes.string,
     searchValue: PropTypes.string
   }
   getRows = (array) => {
