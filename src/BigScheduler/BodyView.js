@@ -12,26 +12,19 @@ class BodyView extends Component {
   render() {
     const { schedulerData, currentItem } = this.props
     const { renderData, headers } = schedulerData
-    let displayRenderData = renderData.filter((o) => o.render)
+    const displayRenderData = renderData.filter((o) => o.render)
     const requiredMap = displayRenderData.filter(
       (item) => item?.slotId === currentItem?.slotId || item?.slotId === currentItem?.parentId
     )
     const daySet = new Set(currentItem?.workDays)
     const timeOffSet = new Set(currentItem?.timeOff)
-    let flattenArray
-    if (currentItem?.weeklyAssignedHours) {
-      const assignedHourArray = currentItem?.weeklyAssignedHours.map(
-        (item) => item?.unassigned_dates
-      )
-      flattenArray = assignedHourArray.flat(1)
-    }
+    const flattenArray = currentItem?.weeklyAssignedHours?.map((item) => item?.unassigned_dates)
     const wrokingDatesSet = new Set(flattenArray)
-    let tableRows = requiredMap.map(() => {
+    const tableRows = requiredMap.map(() => {
       const requiredArray = getRequiredArray(headers)
       const headerMap = getHeaderMap(requiredArray)
       const headerMapArray = Array.from(headerMap)
       const keys = uuid()
-
       return (
         <div
           key={keys}
@@ -71,9 +64,7 @@ class BodyView extends Component {
         </div>
       )
     })
-
     return tableRows
   }
 }
-
 export default BodyView

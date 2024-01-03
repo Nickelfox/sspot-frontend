@@ -75,6 +75,7 @@ export const useSchedulerController = () => {
   }
   const updateSchedules = async (params, body) => {
     const responseData = await model.updateSchedule(params, body)
+    Loader.hide()
     return responseData
   }
   const addEvents = async (body) => {

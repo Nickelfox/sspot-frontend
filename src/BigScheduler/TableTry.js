@@ -71,7 +71,9 @@ const TableTry = (props) => {
       Loader.hide()
     } else if (schedulerData?.events?.length > 0) {
       Loader.hide()
-    } else Loader.hide()
+    } else {
+      Loader.show()
+    }
   }
   let key = 1
   // let editItems = (items) => {
@@ -278,16 +280,17 @@ const TableTry = (props) => {
                         </div>
                       </div>
                     </div>
-                    {item?.expanded &&
-                      getInnerTable(
-                        displayRenderData,
-                        item?.slotId,
-                        eventDndSource,
-                        DndResourceEvents,
-                        item,
-                        item?.assignedProjects,
-                        projects
-                      )}
+                    {item?.expanded
+                      ? getInnerTable(
+                          displayRenderData,
+                          item?.slotId,
+                          eventDndSource,
+                          DndResourceEvents,
+                          item,
+                          item?.assignedProjects,
+                          projects
+                        )
+                      : null}
                   </div>
                 )}
               </Box>

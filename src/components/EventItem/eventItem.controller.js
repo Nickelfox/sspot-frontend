@@ -3,12 +3,16 @@ export const useEventItemController = () => {
   const theme = useTheme()
   const getBackground = (parentObject, bColor) => {
     let str
-
+    if (parentObject?.name === "TIME_OFF") {
+      str = parentObject?.color
+      str = str.slice(0, -2)
+      return str
+    }
     if (parentObject?.parentId === undefined) {
       return bColor
     } else {
       str = parentObject?.color
-      str = str.slice(0, -2)
+      // str = str.slice(0, -2)
       return str
     }
   }

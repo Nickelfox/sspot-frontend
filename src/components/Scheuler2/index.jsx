@@ -221,7 +221,6 @@ const Calender = (props) => {
     const flatArray = [...weeklyAssignMentMap.values()].flat()
     const filteredArray = flatArray.filter((item) => item?.title !== 0)
     if (resoureMap.size) {
-      schedulerData.setEvents([])
       schedulerData.setEvents([...events, ...filteredArray])
     }
   }

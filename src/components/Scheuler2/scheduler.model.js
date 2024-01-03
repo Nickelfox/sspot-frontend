@@ -11,9 +11,10 @@ export const useSchedulerModel = () => {
     return dataReturner(response)
   }
   const fetchTeamMembers = async (params) => {
-    // Loader.show()
+    Loader.show()
     const instance = NetworkManager(API.SCHEDULER.TEAM_MEMBERS)
     const response = await instance.request({}, params)
+    Loader.hide()
     return dataReturner(response)
   }
 
@@ -21,13 +22,14 @@ export const useSchedulerModel = () => {
     Loader.show()
     const instance = NetworkManager(API.SCHEDULER.SCHEDULE)
     const response = await instance.request({}, params)
+    Loader.hide()
     return { data: dataReturner(response), success: response?.success }
   }
   const updateSchedule = async (params, body) => {
     Loader.show()
     const instance = NetworkManager(API.SCHEDULER.SCHEDULE_UPDATE)
     const response = await instance.request(body, params)
-    Loader.show()
+    Loader.hide()
     return { data: dataReturner(response), success: response?.success }
   }
 

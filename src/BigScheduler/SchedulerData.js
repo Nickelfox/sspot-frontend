@@ -10,9 +10,6 @@ import config from "./config"
 import behaviors from "./behaviors"
 import { CellUnit, DATE_FORMAT, DATETIME_FORMAT } from "./index"
 import { ViewTypes as ViewType } from "./helpers"
-import { months } from "../helpers/Months/months"
-import { getReplaceArr } from "helpers/conversionFunctions/resourceMap"
-import { Loader } from "redux/dispatcher/Loader"
 
 export default class SchedulerData {
   constructor(
@@ -176,21 +173,18 @@ export default class SchedulerData {
   }
 
   prev() {
-    this.events = []
     this._resolveDate(-1)
     this._createHeaders()
     this._createRenderData()
   }
 
   next() {
-    this.events = []
     this._resolveDate(1)
     this._createHeaders()
     this._createRenderData()
   }
 
   setDate(date = dayjs(new Date())) {
-    this.events = []
     this._resolveDate(0, date)
     this._createHeaders()
     this._createRenderData()
@@ -694,18 +688,20 @@ export default class SchedulerData {
   _createHeaders() {
     const now = new Date(this.startDate)
     let headers = [],
-      start = this.localeDayjs(new Date(this.startDate)).startOf("week"),
+      start = dayjs(new Date(this.startDate)).startOf("week"),
       header = start
-    /**Check
-     * Here it is going to bet end of year
-     */
+
+    // Check if the end date is the end of the year.
+    // If so, adjust the end date to be the start of the next year.
+
     // let end = this.localeDayjs(new Date(new Date(this.startDate).getFullYear(), 11, 31))
     // if (now.getMonth() == 11) {
     //   end = this.localeDayjs(new Date(now.getFullYear() + 1, 0, 1))
     // } else {
     //   end = this.localeDayjs(new Date(new Date(this.startDate).getFullYear(), 11, 31))
     // }
-    let end = this.localeDayjs(new Date(this.startDate)).add(4, "w").endOf("w")
+
+    let end = dayjs(new Date(this.startDate)).add(4, "w").endOf("w")
 
     if (this.showAgenda) {
       headers.push({
@@ -717,7 +713,6 @@ export default class SchedulerData {
         start = start.add(this.config.dayStartFrom, "hours")
         end = end.add(this.config.dayStopTo, "hours")
         header = start
-
         while (header >= start && header <= end) {
           let minuteSteps = this.getMinuteStepsInHour()
           for (let i = 0; i < minuteSteps; i++) {
@@ -727,7 +722,6 @@ export default class SchedulerData {
               let nonWorkingTime = this.behaviors.isNonWorkingTimeFunc(this, time)
               headers.push({ time: time, nonWorkingTime: nonWorkingTime })
             }
-
             header = header.add(this.config.minuteStep, "minutes")
           }
         }
@@ -745,7 +739,6 @@ export default class SchedulerData {
               let nonWorkingTime = this.behaviors.isNonWorkingTimeFunc(this, time)
               headers.push({ time: time, nonWorkingTime: nonWorkingTime })
             }
-
             header = header.add(1, "days")
           }
         }
@@ -842,18 +835,14 @@ export default class SchedulerData {
   }
 
   _createInitRenderData(resources, headers, department) {
-    /**
-     * @description
-     * This function will be created newly and requires whole day
-     */
-    let slots = resources.filter((resource) => resource.department === department)
-    let slotTree = [],
-      slotMap = new Map()
+    const slots = resources.filter((resource) => resource.department === department)
+    const slotTree = []
+    const slotMap = new Map()
     slots.forEach((slot) => {
-      let headerEvents = headers.map((header) => {
+      const headerEvents = headers.map((header) => {
         return this._createInitHeaderEvents(header)
       })
-      let slotRenderData = {
+      const slotRenderData = {
         slotId: slot.id,
         slotName: slot.name,
         parentId: slot.parentId,
@@ -882,37 +871,14 @@ export default class SchedulerData {
         weeklyTimeOff: slot?.weeklyTimeOff,
         weeklyAssignedHours: slot?.weeklyAssignedHours
       }
-      let id = slot.id
+      const id = slot.id
       if (slotMap.has(id)) {
         slotMap.set(id, [...slotMap.get(id), slotRenderData])
       } else {
         slotMap.set(id, [slotRenderData])
       }
     })
-    let slotStack = []
-    let i
-    for (i = slotTree.length - 1; i >= 0; i--) {
-      slotStack.push(slotTree[i])
-    }
-    let initRenderData = []
-    let currentNode = undefined
-    while (slotStack.length > 0) {
-      currentNode = slotStack.pop()
-      if (currentNode.data.indent > 0) {
-        currentNode.data.render = this.config.defaultExpanded
-      }
-      if (currentNode.children.length > 0) {
-        currentNode.data.hasChildren = true
-        // currentNode.data.expanded = false;
-        // currentNode.data.expanded = this.config.defaultExpanded;
-      }
-      initRenderData.push(currentNode.data)
 
-      for (i = currentNode.children.length - 1; i >= 0; i--) {
-        currentNode.children[i].data.indent = currentNode.data.indent + 1
-        slotStack.push(currentNode.children[i])
-      }
-    }
     return Array.from(slotMap.values()).flat()
   }
 
@@ -1111,119 +1077,116 @@ export default class SchedulerData {
     const flatArray = ArrayValue.flat()
     let cellMaxEventsCount = this.getCellMaxEvents()
     const cellMaxEventsCountValue = 30
-    this.events.forEach((item) => {
-      let resourceEventsList = this.getItem(flatArray, item)
-      // let resourceEventsList = flatArray.filter((x) => x?.parentId === item?.resourceParentID)
+    for (const item of this.events) {
+      const resourceEventsList = this.getItem(flatArray, item)
       if (resourceEventsList.length > 0) {
-        let resourceEvents = resourceEventsList[0]
-        let span = this._getSpan(item.start, item.end, this.headers)
-        let eventStart = new Date(item.start),
-          eventEnd = new Date(item.end)
+        const resourceEvents = resourceEventsList[0]
+        const span = this._getSpan(item.start, item.end, this.headers)
+        const eventStart = new Date(item.start).getTime()
+        const eventEnd = new Date(item.end).getTime()
         let pos = -1
-
-        resourceEvents.headerItems.forEach((header, index) => {
-          let headerStart = new Date(header.start),
-            headerEnd = new Date(header.end)
+        for (let index = 0; index < resourceEvents.headerItems.length; index++) {
+          const header = resourceEvents.headerItems[index]
+          const headerStart = new Date(header.start).getTime()
+          const headerEnd = new Date(header.end).getTime()
           if (headerEnd > eventStart && headerStart < eventEnd) {
-            header.count = header.count + 1
+            header.count++
             if (header.count > resourceEvents.rowMaxCount) {
               resourceEvents.rowMaxCount = header.count
-              let rowsCount =
+              const rowsCount =
                 cellMaxEventsCount <= cellMaxEventsCountValue &&
                 resourceEvents.rowMaxCount > cellMaxEventsCount
                   ? cellMaxEventsCount
                   : resourceEvents.rowMaxCount
-              let newRowHeight =
+              const newRowHeight =
                 rowsCount * this.config.eventItemLineHeight +
                 (this.config.creatable && this.config.checkConflict === false ? 20 : 2)
               if (newRowHeight > resourceEvents.rowHeight) resourceEvents.rowHeight = newRowHeight
             }
-
             if (pos === -1) {
               let tmp = 0
               while (header.events[tmp] !== undefined) tmp++
-
               pos = tmp
             }
             let render = headerStart <= eventStart || index === 0
-            if (render === false) {
-              let previousHeader = resourceEvents.headerItems[index - 1]
-              let previousHeaderStart = new Date(previousHeader.start),
-                previousHeaderEnd = new Date(previousHeader.end)
+            if (!render) {
+              const previousHeader = resourceEvents.headerItems[index - 1]
+              const previousHeaderStart = new Date(previousHeader.start).getTime()
+              const previousHeaderEnd = new Date(previousHeader.end).getTime()
               if (previousHeaderEnd <= eventStart || previousHeaderStart >= eventEnd) render = true
             }
             header.events[pos] = this._createHeaderEvent(render, span, item)
           }
-        })
-      }
-    })
-
-    if (
-      cellMaxEventsCount <= cellMaxEventsCountValue ||
-      this.behaviors.getSummaryFunc !== undefined
-    ) {
-      flatArray.forEach((resourceEvents) => {
-        let hasSummary = false
-
-        resourceEvents.headerItems.forEach((headerItem) => {
-          if (cellMaxEventsCount <= cellMaxEventsCountValue) {
-            let renderItemsCount = 0,
-              addMoreIndex = 0,
-              index = 0
-            while (index < cellMaxEventsCount - 1) {
-              if (headerItem.events[index] !== undefined) {
-                renderItemsCount++
-                addMoreIndex = index + 1
-              }
-
-              index++
-            }
-
-            if (headerItem.events[index] !== undefined) {
-              if (renderItemsCount + 1 < headerItem.count) {
-                headerItem.addMore = headerItem.count - renderItemsCount
-                headerItem.addMoreIndex = addMoreIndex
-              }
-            } else {
-              if (renderItemsCount < headerItem.count) {
-                headerItem.addMore = headerItem.count - renderItemsCount
-                headerItem.addMoreIndex = addMoreIndex
-              }
-            }
-          }
-
-          if (this.behaviors.getSummaryFunc !== undefined) {
-            let events = []
-            headerItem.events.forEach((e) => {
-              if (!!e && !!e.eventItem) events.push(e.eventItem)
-            })
-
-            headerItem.summary = this.behaviors.getSummaryFunc(
-              this,
-              events,
-              resourceEvents.slotId,
-              resourceEvents.slotName,
-              headerItem.start,
-              headerItem.end
-            )
-            if (!!headerItem.summary && headerItem.summary.text != undefined) hasSummary = true
-          }
-        })
-
-        resourceEvents.hasSummary = hasSummary
-        if (hasSummary) {
-          let rowsCount =
-            cellMaxEventsCount <= cellMaxEventsCountValue &&
-            resourceEvents.rowMaxCount > cellMaxEventsCount
-              ? cellMaxEventsCount
-              : resourceEvents.rowMaxCount
-          let newRowHeight =
-            (rowsCount + 1) * this.config.eventItemLineHeight +
-            (this.config.creatable && this.config.checkConflict === false ? 20 : 2)
-          if (newRowHeight > resourceEvents.rowHeight) resourceEvents.rowHeight = newRowHeight
         }
-      })
+      }
     }
+
+    // if (
+    //   cellMaxEventsCount <= cellMaxEventsCountValue ||
+    //   this.behaviors.getSummaryFunc !== undefined
+    // ) {
+    //   flatArray.forEach((resourceEvents) => {
+    //     let hasSummary = false
+
+    //     resourceEvents.headerItems.forEach((headerItem) => {
+    //       if (cellMaxEventsCount <= cellMaxEventsCountValue) {
+    //         let renderItemsCount = 0,
+    //           addMoreIndex = 0,
+    //           index = 0
+    //         while (index < cellMaxEventsCount - 1) {
+    //           if (headerItem.events[index] !== undefined) {
+    //             renderItemsCount++
+    //             addMoreIndex = index + 1
+    //           }
+
+    //           index++
+    //         }
+
+    //         if (headerItem.events[index] !== undefined) {
+    //           if (renderItemsCount + 1 < headerItem.count) {
+    //             headerItem.addMore = headerItem.count - renderItemsCount
+    //             headerItem.addMoreIndex = addMoreIndex
+    //           }
+    //         } else {
+    //           if (renderItemsCount < headerItem.count) {
+    //             headerItem.addMore = headerItem.count - renderItemsCount
+    //             headerItem.addMoreIndex = addMoreIndex
+    //           }
+    //         }
+    //       }
+
+    //       if (this.behaviors.getSummaryFunc !== undefined) {
+    //         let events = []
+    //         headerItem.events.forEach((e) => {
+    //           if (!!e && !!e.eventItem) events.push(e.eventItem)
+    //         })
+
+    //         headerItem.summary = this.behaviors.getSummaryFunc(
+    //           this,
+    //           events,
+    //           resourceEvents.slotId,
+    //           resourceEvents.slotName,
+    //           headerItem.start,
+    //           headerItem.end
+    //         )
+    //         if (!!headerItem.summary && headerItem.summary.text != undefined) hasSummary = true
+    //       }
+    //     })
+
+    //     resourceEvents.hasSummary = hasSummary
+    //     if (hasSummary) {
+    //       let rowsCount =
+    //         cellMaxEventsCount <= cellMaxEventsCountValue &&
+    //         resourceEvents.rowMaxCount > cellMaxEventsCount
+    //           ? cellMaxEventsCount
+    //           : resourceEvents.rowMaxCount
+    //       let newRowHeight =
+    //         (rowsCount + 1) * this.config.eventItemLineHeight +
+    //         (this.config.creatable && this.config.checkConflict === false ? 20 : 2)
+    //       if (newRowHeight > resourceEvents.rowHeight) resourceEvents.rowHeight = newRowHeight
+    //     }
+    //   })
+    // }
     this.renderData = flatArray
   }
 
