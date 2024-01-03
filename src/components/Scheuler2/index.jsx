@@ -104,7 +104,7 @@ const Calender = (props) => {
     getSchedulerData()
     fetchDepartments()
     fetchClients()
-    fetchTeamList()
+    // fetchTeamList()
     setFetchEvents(false)
     fetchProjects()
   }, [])
@@ -660,7 +660,9 @@ const Calender = (props) => {
         department: i?.department,
         color: i?.color,
         assignedProjects: getProjects(i, newProject),
-        timeOff: i?.timeOff
+        timeOff: i?.timeOff,
+        weeklyTimeOff: i?.weeklyTimeOff,
+        weeklyAssignedHours: i?.weeklyAssignedHours
       }
     })
     schedulerData.setResources(replaceArr)

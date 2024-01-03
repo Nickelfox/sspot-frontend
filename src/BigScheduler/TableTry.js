@@ -23,7 +23,6 @@ import CustomAutoComplete from "./schedulerComponents/AutoComplete"
 import { v4 as uuid } from "uuid"
 import { Loader } from "redux/dispatcher/Loader"
 import useScehdulerController from "./scheduler.controller"
-// import AppLoader from "components/Loader/AppLoader"
 
 const editItemObject = [
   /**

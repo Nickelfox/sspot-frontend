@@ -5,23 +5,28 @@ import moment from "moment"
 import { v4 as uuid } from "uuid"
 import { Box } from "@mui/material"
 import timeoff from "assets/images/backgrounds/confliict.svg"
-
+import childTimeOff from "assets/images/backgrounds/Strip.jpg"
 const Rows = (props) => {
-  const { requiredArray, daySet, currentItem, timeOffSet } = props
+  const { requiredArray, daySet, currentItem, timeOffSet, wrokingDatesSet } = props
   return requiredArray.map((childrenItem) => {
     const currentDate = dayjs(new Date()).format("DD-MM")
     const itemDate = dayjs(childrenItem?.time).format("DD-MM")
     const timeOffDate = dayjs(childrenItem?.time).format("DD-MM-YYYY")
+    const workDate = dayjs(childrenItem?.time).format("YYYY-MM-DD")
     const childrenDay = moment(childrenItem?.time).format("dddd").substring(0, 3).toUpperCase()
+    const zIndex = childrenDay === "MON" ? 9999 : 11000
+    const workDaysCheck = getWorkDaysCheck(wrokingDatesSet, workDate)
     const timeOffCheck = timeOffSet.has(timeOffDate) ? (
       <Box
-        height={"100%"}
+        height={currentItem?.parentId ? 35 : "100%"}
         width={"100%"}
         sx={{
-          background: `url(${timeoff})`,
-          opacity: 0.8,
-          zIndex: currentItem?.parentId ? 9999 : 110000,
-          backgroundColor: currentItem?.parentId ? "#c2c2c2" : "#000"
+          background: currentItem?.parentId ? `url(${childTimeOff})` : workDaysCheck,
+          opacity: currentItem?.parentId ? 0.8 : 0.5,
+          zIndex: currentItem?.parentId ? 9999 : zIndex,
+          backgroundColor: currentItem?.parentId ? "#c2c2c2" : "#000",
+          marginTop: currentItem?.parentId && "-0.5rem",
+          borderRight: currentItem?.parentId ? "1px soli #c2c2c2" : 0
         }}
       />
     ) : null
@@ -64,3 +69,6 @@ const Rows = (props) => {
 }
 
 export default Rows
+function getWorkDaysCheck(wrokingDatesSet, timeOffDate) {
+  return !wrokingDatesSet.has(timeOffDate) ? `url(${timeoff})` : null
+}

@@ -37,8 +37,9 @@ const EventItemTemplateResolver = (props) => {
     ...styles?.divStyles
   }
   const title = item?.title === 100 ? "Full" : `${JSON.parse(item?.title).toFixed(1)} %`
+  const timeOffHours = item?.timeOffHours && `${JSON.parse(item?.timeOffHours).toFixed(0)}`
   return (
-    <div key={item.id} style={{ height: 43, marginLeft: 2, position: "relative" }}>
+    <div key={item.id} style={{ height: 43, position: "relative" }}>
       <div key={item.id} className={`${mustAddCssClass} `} style={divStyle}>
         <span
           style={{
@@ -46,10 +47,17 @@ const EventItemTemplateResolver = (props) => {
             ...styles?.divSpan
           }}>
           <Typography sx={getStyles(item, styles)} style={{ position: "relative" }}>
-            {resourceObjectForEvent?.parentId ? `${item?.title} h/d` : `${title}`}
-            <span style={getSpanStyles(item, styles)}>
-              {item?.assignedhours ? `${item?.assignedhours} hrs` : null}
-            </span>
+            {resources[0]?.name === "TIME_OFF"
+              ? "Off"
+              : resourceObjectForEvent?.parentId
+              ? `${item?.title} h/d`
+              : `${title}`}
+            {resources[0]?.name !== "TIME_OFF" && (
+              <span style={getSpanStyles(item, styles)}>
+                {item?.assignedhours ? `${item?.assignedhours} hrs` : null}
+                {timeOffHours > 0 && `+ ${timeOffHours} hrs`}
+              </span>
+            )}
           </Typography>
         </span>
       </div>

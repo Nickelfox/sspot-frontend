@@ -844,7 +844,6 @@ export default class SchedulerData {
   _createInitRenderData(resources, headers, department) {
     /**
      * @description
-     * TODO: THIS FUNCTION WILL GET CHANGED 100%
      * This function will be created newly and requires whole day
      */
     let slots = resources.filter((resource) => resource.department === department)
@@ -879,7 +878,9 @@ export default class SchedulerData {
         department: slot?.department,
         color: slot?.color ?? null,
         assignedProjects: slot?.assignedProjects,
-        timeOff: slot?.timeOff
+        timeOff: slot?.timeOff,
+        weeklyTimeOff: slot?.weeklyTimeOff,
+        weeklyAssignedHours: slot?.weeklyAssignedHours
       }
       let id = slot.id
       if (slotMap.has(id)) {

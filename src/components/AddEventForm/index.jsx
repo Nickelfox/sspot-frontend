@@ -1,6 +1,14 @@
 /*eslint-disable no-unused-vars */
 /*eslint no-constant-condition: ["error", { "checkLoops": false }]*/
-import { Box, Grid, Typography, useMediaQuery, useTheme } from "@mui/material"
+import {
+  Box,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  Typography,
+  useMediaQuery,
+  useTheme
+} from "@mui/material"
 import React, { useEffect, useState } from "react"
 import { useStyles } from "../AddResource/resourseFormStyles"
 import { Formik } from "formik"
@@ -36,6 +44,7 @@ const AddEvent = (props) => {
   const [date, setDate] = useState(null)
   const [endDate, setEndDate] = useState(null)
   const [dateDiff, setDateDiff] = useState(0)
+  const [allDay, setAllDay] = useState(false)
   useEffect(() => {
     getInitialValues()
   }, [])
@@ -60,8 +69,14 @@ const AddEvent = (props) => {
   }
   const getInitialValues = () => {
     if (isEdit) {
+      setAllDay(
+        eventData?.child?.name === "TIME_OFF" && eventData?.event?.title === "8" ? true : false
+      )
       const initValues = {
-        hours: JSON.parse(eventData?.event?.title),
+        hours:
+          eventData?.child?.name === "TIME_OFF" && eventData?.event?.title === "8"
+            ? "100%"
+            : JSON.parse(eventData?.event?.title),
         totalHours: getTotalHours(
           eventData?.event?.start,
           eventData?.event?.end,
@@ -98,7 +113,7 @@ const AddEvent = (props) => {
         project_member: eventData?.child?.projectId,
         start_at: dayjs(date).format(COMMON_FORMAT_FOR_API),
         end_at: dayjs(endDate).format(COMMON_FORMAT_FOR_API),
-        assigned_hour: values?.hours,
+        assigned_hour: allDay ? "8" : values?.hours,
         schedule_type: workType,
         notes: values.notes,
         project_id: eventData?.event?.resourceId,
@@ -111,7 +126,7 @@ const AddEvent = (props) => {
         member_id: eventData?.parent?.id,
         start_at: dayjs(date).format(COMMON_FORMAT_FOR_API),
         end_at: dayjs(endDate).format(COMMON_FORMAT_FOR_API),
-        assigned_hour: values?.hours,
+        assigned_hour: allDay ? "8" : values?.hours,
         schedule_type: workType,
         notes: values.notes
       }
@@ -130,14 +145,13 @@ const AddEvent = (props) => {
     // Can not select days before today and today
     return current && current < dayjs(date).endOf("day")
   }
-  console.log(eventData, "Here is Event Data")
   const assignmentName = eventData?.child?.name === "TIME_OFF" ? "Time Off" : "Assignment"
   return (
     <Box sx={styles.formDisplay}>
       <Typography
         variant="h6"
-        color="#363636"
-        gutterBottom={1}>{`${eventData?.parent?.name} ${assignmentName}`}</Typography>
+        color="#363636">{`${eventData?.parent?.name} ${assignmentName}`}</Typography>
+
       <Formik
         validateOnMount
         initialValues={initalValues}
@@ -160,6 +174,26 @@ const AddEvent = (props) => {
               padding: "0.2rem",
               maxWidth: maxWidth
             }}>
+            {eventData?.child?.name === "TIME_OFF" && (
+              <Grid container>
+                <Grid item xs={8}>
+                  <Checkbox
+                    name="allDay"
+                    value={allDay}
+                    checked={allDay}
+                    onChange={() => {
+                      setAllDay((prev) => !prev)
+                      allDay ? setFieldValue("hours", "0") : setFieldValue("hours", "100%")
+                      setFieldTouched("hours", true)
+                    }}
+                    // inputProps={{ "aria-label": "controlled" }}
+                  />
+                  <Typography variant="c1" color="#929292">
+                    All Day{" "}
+                  </Typography>
+                </Grid>
+              </Grid>
+            )}
             <Grid
               container
               display={"flex"}
@@ -175,24 +209,29 @@ const AddEvent = (props) => {
                 <InputField
                   name="hours"
                   type="telephone"
-                  placeholder="0"
+                  placeholder={"0"}
                   style={{ ...inputSyles?.input, ...inputSyles?.border }}
                   value={values?.hours}
+                  disabled={!allDay ? false : true}
                   onChange={(e) => {
                     handleChange(e)
                     setHours(e.target.value)
                     setFieldValue("totalHours", e?.target?.value * dateDiff)
                   }}
-                  error={touched.hours && Boolean(errors.hours)}
-                  helperText={touched.hours && errors.hours && <ErrorText text={errors.hours} />}
+                  error={!allDay && touched.hours && Boolean(errors.hours)}
+                  helperText={
+                    !allDay && touched.hours && errors.hours && <ErrorText text={errors.hours} />
+                  }
                 />{" "}
               </Grid>
-              <Grid item xs={3} className="pl-2">
-                <Typography variant="c1" color="#929292">
-                  {getHoursPercent(values?.hours)}% of {eventData?.child?.hoursAssigned}
-                  h/d
-                </Typography>
-              </Grid>
+              {!allDay && (
+                <Grid item xs={3} className="pl-2">
+                  <Typography variant="c1" color="#929292">
+                    {getHoursPercent(values?.hours)}% of {eventData?.child?.hoursAssigned}
+                    h/d
+                  </Typography>
+                </Grid>
+              )}
             </Grid>
             {/* <Grid container alignItems={"center"} paddingBottom={"2rem"}>
               <Grid item xs={3}>

@@ -3,6 +3,7 @@ import { PropTypes } from "prop-types"
 import { getHeaderMap, getRequiredArray } from "../helpers/conversionFunctions/conversion"
 import { v4 as uuid } from "uuid"
 import Rows from "./Rows"
+// import { getDatesInRange } from "helpers/conversionFunctions/getDatesinRange"
 class BodyView extends Component {
   static propTypes = {
     schedulerData: PropTypes.object.isRequired,
@@ -17,6 +18,14 @@ class BodyView extends Component {
     )
     const daySet = new Set(currentItem?.workDays)
     const timeOffSet = new Set(currentItem?.timeOff)
+    let flattenArray
+    if (currentItem?.weeklyAssignedHours) {
+      const assignedHourArray = currentItem?.weeklyAssignedHours.map(
+        (item) => item?.unassigned_dates
+      )
+      flattenArray = assignedHourArray.flat(1)
+    }
+    const wrokingDatesSet = new Set(flattenArray)
     let tableRows = requiredMap.map(() => {
       const requiredArray = getRequiredArray(headers)
       const headerMap = getHeaderMap(requiredArray)
@@ -50,6 +59,7 @@ class BodyView extends Component {
                           daySet={daySet}
                           currentItem={currentItem}
                           timeOffSet={timeOffSet}
+                          wrokingDatesSet={wrokingDatesSet}
                         />
                       )
                     })}
