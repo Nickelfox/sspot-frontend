@@ -29,7 +29,6 @@ import { COMMON_FORMAT_FOR_API, COMMON_FORMAT_FOR_EVENTS } from "helpers/app-dat
 import { getOpenArrays } from "helpers/dropDownListing/openArrays"
 import AddProjectForm from "components/AssignProjectForm"
 import EventItemTemplateResolver from "components/EventItem"
-
 const parentViewArray = [
   { name: "Projects", value: 0 },
   { name: "Team", value: 1 }
@@ -49,7 +48,6 @@ const Calender = (props) => {
     clients,
     createProject,
     assignProject,
-    fetchTeamList,
     addEvents,
     deleteEvent,
     reload,
@@ -81,7 +79,6 @@ const Calender = (props) => {
     isTablet,
     counter,
     setCounter,
-    fetchEvents,
     setFetchEvents,
     rerenderData,
     setRerenderData,
@@ -97,7 +94,8 @@ const Calender = (props) => {
     keepDataOpen,
     toggleExpandFunc,
     getBgColor,
-    handlePopUp
+    handlePopUp,
+    searchValue
   } = useSchedulerController()
   const [localFetcher, setLocalFetcher] = useState(false)
   const [eventsArray, setEventArray] = useState([])
@@ -122,7 +120,7 @@ const Calender = (props) => {
     if (projects?.length > 0) {
       schedulerData && scheduleFetcher()
     }
-  }, [schedulerData, startDate, fetcher, localFetcher, projects?.length, search])
+  }, [schedulerData, startDate, fetcher, localFetcher, projects?.length, searchValue])
   // useEffect(() => {
   //   fetchEvents && getRenderSd(schedulerData)
   // }, [counter])
@@ -146,7 +144,7 @@ const Calender = (props) => {
     const params = {
       start_date: startDate,
       end_date: fourWeeksFromStartDate,
-      search: search
+      search: searchValue
     }
     getTeamMembers(params)
   }
@@ -159,12 +157,12 @@ const Calender = (props) => {
     const params = {
       start_date: startDate,
       end_date: fourWeeksFromStartDate,
-      search: search
+      search: searchValue
     }
     const data = await fetchSchedules(params)
     if (data?.success) {
       // eventsInScheduler(data?.data)
-      setEventArray(data?.data)
+      data?.data?.length > 0 ? setEventArray(data?.data) : setEventArray([])
       teamFetcher()
     }
   }
@@ -190,8 +188,9 @@ const Calender = (props) => {
     noSetting = false
   }
   const teamInScheduler = () => {
-    if (!teamMembers || teamMembers?.length === 0) {
+    if (teamMembers?.length === 0) {
       schedulerData && schedulerData.setResources([])
+      triggerRerender((prevRerender) => prevRerender + 1)
       return
     }
 
@@ -257,9 +256,9 @@ const Calender = (props) => {
     setFetchEvents((prev) => !prev)
     triggerRerender(rerender + 1)
   }
-  const searchFilter = (schedulerData, searchValue) => {
-    schedulerData.search(searchValue)
-    setSearch(searchValue)
+  const searchFilter = (schedulerData, searchVal) => {
+    schedulerData.search(searchVal)
+    setSearch(searchVal)
   }
   const onViewChange = (schedulerData, view) => {
     schedulerData.setViewType(view.viewType, view.showAgenda, view.isEventPerspective)
