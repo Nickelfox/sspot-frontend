@@ -104,7 +104,7 @@ const Calender = (props) => {
     getSchedulerData()
     fetchDepartments()
     fetchClients()
-    fetchTeamList()
+    // fetchTeamList()
     setFetchEvents(false)
     fetchProjects()
   }, [])
@@ -155,7 +155,8 @@ const Calender = (props) => {
       .format(COMMON_FORMAT_FOR_API)
     const params = {
       start_date: startDate,
-      end_date: fourWeeksFromStartDate
+      end_date: fourWeeksFromStartDate,
+      search: search
     }
     const data = await fetchSchedules(params)
     if (data?.success) {
@@ -506,13 +507,14 @@ const Calender = (props) => {
         start: newStart
       }
       const checkDates = getCheckDate(dateRequiredData, schedulerData?.events, "start")
+      const dataObject = resoureMap.get(event?.resourceId)
       if (checkDates) {
         const requiredData = {
           project_member: event?.projectMemberID,
           start_at: dayjs(newStart).format(COMMON_FORMAT_FOR_API),
           end_at: dayjs(event?.end).format(COMMON_FORMAT_FOR_API),
           assigned_hour: event?.title,
-          schedule_type: "WORK",
+          schedule_type: dataObject[0]?.name === "TIME_OFF" ? "TIME_OFF" : "WORK",
           notes: ""
         }
         const parameter = [`${event?.id}/`]
@@ -543,12 +545,13 @@ const Calender = (props) => {
       }
       const checkDates = getCheckDate(dateRequiredData, schedulerData?.events, "end")
       if (checkDates) {
+        const dataObject = resoureMap.get(event?.resourceId)
         const requiredData = {
           project_member: event?.projectMemberID,
           start_at: dayjs(event?.start).format(COMMON_FORMAT_FOR_API),
           end_at: dayjs(newEnd).format(COMMON_FORMAT_FOR_API),
           assigned_hour: event?.title,
-          schedule_type: "WORK",
+          schedule_type: dataObject[0]?.name === "TIME_OFF" ? "TIME_OFF" : "WORK",
           notes: ""
         }
         const parameter = [`${event?.id}/`]
@@ -602,7 +605,7 @@ const Calender = (props) => {
             start_at: dayjs(start).format(COMMON_FORMAT_FOR_API),
             end_at: dayjs(end).format(COMMON_FORMAT_FOR_API),
             assigned_hour: event?.title,
-            schedule_type: "WORK",
+            schedule_type: filteredArray[0]?.name === "TIME_OFF" ? "TIME_OFF" : "WORK",
             notes: ""
           }
           const parameter = [`${event?.id}/`]
@@ -657,7 +660,9 @@ const Calender = (props) => {
         department: i?.department,
         color: i?.color,
         assignedProjects: getProjects(i, newProject),
-        timeOff: i?.timeOff
+        timeOff: i?.timeOff,
+        weeklyTimeOff: i?.weeklyTimeOff,
+        weeklyAssignedHours: i?.weeklyAssignedHours
       }
     })
     schedulerData.setResources(replaceArr)
