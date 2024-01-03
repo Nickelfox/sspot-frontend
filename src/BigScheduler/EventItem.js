@@ -375,11 +375,10 @@ class EventItem extends Component {
     const { headers } = schedulerData
     // let cellWidth = schedulerData.getContentCellWidth()
     let cellWidth = 50
-    let offset = leftIndex > 0 ? 5 : 6
+    let offset = leftIndex > 0 ? 4 : 5
     let minWidth = cellWidth - offset
     let maxWidth = (headers.length - leftIndex) * cellWidth - offset
     const { endX } = this.state
-
     let newWidth = width + clientX - endX
     if (newWidth < minWidth) newWidth = minWidth
     else if (newWidth > maxWidth) newWidth = maxWidth
