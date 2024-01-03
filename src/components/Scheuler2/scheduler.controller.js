@@ -5,6 +5,7 @@ import { useMediaQuery, useTheme } from "@mui/material"
 import dayjs from "dayjs"
 import { DATE_FORMAT } from "BigScheduler"
 import { Loader } from "redux/dispatcher/Loader"
+import { useDebounce } from "hooks/utils"
 export const useSchedulerController = () => {
   const theme = useTheme()
   const [departments, setDepartments] = useState([])
@@ -37,7 +38,7 @@ export const useSchedulerController = () => {
   const [startDate, setStartDate] = useState(new dayjs(new Date()).format(DATE_FORMAT))
   const [fetcher, setFetcher] = useState(false)
   const [search, setSearch] = useState("")
-
+  const searchValue = useDebounce(search, 300)
   const model = useSchedulerModel()
   const fetchDepartments = async () => {
     const data = await model.fetchDepartments()
@@ -301,6 +302,7 @@ export const useSchedulerController = () => {
     keepDataOpen,
     toggleExpandFunc,
     getBgColor,
-    handlePopUp
+    handlePopUp,
+    searchValue
   }
 }
