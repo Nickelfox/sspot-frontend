@@ -11,7 +11,8 @@ export const useStyles = () => {
     },
     divSpan: {
       display: "flex",
-      flexDirection: "column"
+      flexDirection: "column",
+      position: "absolute"
     },
     divText: {
       fontSize: theme?.typography?.p5?.fontSize,

@@ -31,7 +31,12 @@ const EventItemTemplateResolver = (props) => {
   let divStyle = {
     backgroundColor: getBackground(resourceObjectForEvent, bColor),
     borderRadius: getBorderRadius(resourceObjectForEvent),
-    opacity: !item?.resourceParentID ? getOpacity(resourceObjectForEvent, opacity) : 1,
+    opacity:
+      resources[0]?.name === "TIME_OFF"
+        ? 0.9
+        : !item?.resourceParentID
+        ? getOpacity(resourceObjectForEvent, opacity)
+        : 1,
     marginTop: getMarginTop(resourceObjectForEvent),
     height: !item?.resourceParentID ? 43 : 35,
     ...styles?.divStyles
@@ -44,7 +49,8 @@ const EventItemTemplateResolver = (props) => {
         <span
           style={{
             lineHeight: `${eventHeight}px`,
-            ...styles?.divSpan
+            ...styles?.divSpan,
+            paddingLeft: resourceObjectForEvent?.parentId ? 5 : 1
           }}>
           <Typography sx={getStyles(item, styles)} style={{ position: "relative" }}>
             {resources[0]?.name === "TIME_OFF"

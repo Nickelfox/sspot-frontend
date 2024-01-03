@@ -14,17 +14,22 @@ const Rows = (props) => {
     const timeOffDate = dayjs(childrenItem?.time).format("DD-MM-YYYY")
     const workDate = dayjs(childrenItem?.time).format("YYYY-MM-DD")
     const childrenDay = moment(childrenItem?.time).format("dddd").substring(0, 3).toUpperCase()
-    const zIndex = childrenDay === "MON" ? 9999 : 11000
+    const zIndex = childrenDay === "MON" ? 9 : 11
     const workDaysCheck = getWorkDaysCheck(wrokingDatesSet, workDate)
     const timeOffCheck = timeOffSet.has(timeOffDate) ? (
       <Box
         height={currentItem?.parentId ? 35 : "100%"}
         width={"100%"}
         sx={{
-          background: currentItem?.parentId ? `url(${childTimeOff})` : workDaysCheck,
+          background:
+            currentItem?.slotName === "TIME_OFF"
+              ? null
+              : currentItem?.parentId
+              ? `url(${childTimeOff})`
+              : workDaysCheck,
           opacity: currentItem?.parentId ? 0.8 : 0.5,
-          zIndex: currentItem?.parentId ? 9999 : zIndex,
-          backgroundColor: currentItem?.parentId ? "#c2c2c2" : "#000",
+          zIndex: currentItem?.parentId ? 9 : zIndex,
+          backgroundColor: currentItem?.parentId ? "#8f8f8f" : "#000",
           marginTop: currentItem?.parentId && "-0.5rem",
           borderRight: currentItem?.parentId ? "1px soli #c2c2c2" : 0
         }}
@@ -45,9 +50,8 @@ const Rows = (props) => {
         data-resource-id={currentItem.slotId}
         style={{
           width: 50,
-          // height: "5rem",
           opacity: 1,
-          borderLeft: "0.1px solid #c4c4c4",
+          borderLeft: "1px solid rgba(0,0,0,.075) ",
           backgroundColor: itemDate === currentDate ? "#ebf5ff" : "#fff",
           pointerEvents: "none",
           borderTop: 0,

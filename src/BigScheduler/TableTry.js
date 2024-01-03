@@ -260,7 +260,7 @@ const TableTry = (props) => {
 
                                 <div className="scheduler-content">
                                   <div className="scheduler-content-table">
-                                    <div style={{ position: "absolute", zIndex: 10000 }}>
+                                    <div style={{ position: "absolute", zIndex: 10 }}>
                                       {resourceEventsList}
                                     </div>
                                     <BodyView
