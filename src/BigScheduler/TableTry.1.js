@@ -1,52 +1,17 @@
-/*eslint-disable no-unused-vars */
-/*eslint no-constant-condition: ["error", { "checkLoops": false }]*/
 import React, { useEffect } from "react"
 import BodyView from "./BodyView"
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp"
-import { ViewTypes } from "./helpers"
 import UserAvatar from "../components/UserAvatar/UserAvatar"
-import {
-  Box,
-  Grid,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-  Typography
-} from "@mui/material"
+import { Box, Grid, Typography } from "@mui/material"
 import dayjs from "dayjs"
 import { DATETIME_FORMAT } from "."
-import { PropTypes } from "prop-types"
 import CustomAutoComplete from "./schedulerComponents/AutoComplete"
 import { v4 as uuid } from "uuid"
 import { Loader } from "redux/dispatcher/Loader"
 import useScehdulerController from "./scheduler.controller"
 
-const editItemObject = [
-  /**
-   * @Actions
-   * Hidden Edit Action
-   * Will be Used in Future.
-   * @HiddenAfter
-   * Update call with Ravindra Soni
-   */
-  // {
-  //   label: "Edit",
-  //   value: "edit"
-  // },
-  { label: "Calendar Feed", value: "cal" },
-  {
-    label: "Archive",
-    value: "arc"
-  },
-  {
-    label: "Delete",
-    value: "del"
-  }
-]
-const TableTry = (props) => {
+export const TableTry = (props) => {
   const { schedulerData, toggleExpandFunc, dnd, handlePopUp, assignProject, projects } = props
   //eslint-disable-next-line no-unused-vars
   const { renderData, cellUnit, config, headers } = schedulerData
@@ -166,10 +131,7 @@ const TableTry = (props) => {
             )
             const key2 = uuid()
             return (
-              <Box
-                key={key2}
-                // marginTop={index === 0 ? "-0.2rem" : 0}
-              >
+              <Box key={key2}>
                 {!item?.parentId && (
                   <div
                     style={{
@@ -246,19 +208,17 @@ const TableTry = (props) => {
                               onMouseOver={props.onSchedulerContentMouseOver}
                               onFocus={props.onSchedulerContentMouseOver}
                               onMouseOut={props.onSchedulerContentMouseOut}
-                              onBlur={props.onSchedulerContentMouseOut}
-                              // onScroll={props.onSchedulerContentScroll}
-                            >
+                              onBlur={props.onSchedulerContentMouseOut}>
                               <div
                                 style={{
                                   // width: schedulerWidth,
                                   position: "relative"
                                 }}>
                                 {/* <div className="scheduler-content">
-                      <div className="scheduler-content-table">
-                        <div>{resourceEventsList}</div>
-                      </div>
-                    </div> */}
+                              <div className="scheduler-content-table">
+                                <div>{resourceEventsList}</div>
+                              </div>
+                            </div> */}
 
                                 <div className="scheduler-content">
                                   <div className="scheduler-content-table">
@@ -418,19 +378,17 @@ const TableTry = (props) => {
                   onMouseOver={props.onSchedulerContentMouseOver}
                   onFocus={props.onSchedulerContentMouseOver}
                   onMouseOut={props.onSchedulerContentMouseOut}
-                  onBlur={props.onSchedulerContentMouseOut}
-                  // onScroll={props.onSchedulerContentScroll}
-                >
+                  onBlur={props.onSchedulerContentMouseOut}>
                   <div
                     style={{
                       width: schedulerWidth,
                       position: "relative"
                     }}>
                     {/* <div className="scheduler-content">
-                      <div className="scheduler-content-table">
-                        <div>{resourceEventsList}</div>
-                      </div>
-                    </div> */}
+                              <div className="scheduler-content-table">
+                                <div>{resourceEventsList}</div>
+                              </div>
+                            </div> */}
 
                     <div className="scheduler-content">
                       <div className="scheduler-content-table">
@@ -471,26 +429,26 @@ const TableTry = (props) => {
             className="bg-[#fff] stickyCell flex justify-end items-center px-4 pl-2">
             <Box className="flex justify-space w-full">
               {/* <Box
-                className="w-full cursor-pointer pl-2"
-                onClick={openEditItemPopUp.bind(null, item)}>
-                <Typography variant="p2" style={{ color: "#888888", textDecoration: "underline" }}>
-                  Actions <KeyboardArrowDownIcon />
-                  {item?.editPopup && (
-                    <Popover
-                      content={editItems.bind(null, item)}
-                      placement="bottom"
-                      arrow={false}
-                      trigger="click"
-                      open={item?.editPopup}
-                      overlayStyle={{ padding: 0 }}
-                      overlayInnerStyle={{ padding: 0, borderRadius: "8px" }}
-                      onOpenChange={() => {
-                        closePopup()
-                      }}
-                    />
-                  )}
-                </Typography>
-              </Box> */}
+                  className="w-full cursor-pointer pl-2"
+                  onClick={openEditItemPopUp.bind(null, item)}>
+                  <Typography variant="p2" style={{ color: "#888888", textDecoration: "underline" }}>
+                    Actions <KeyboardArrowDownIcon />
+                    {item?.editPopup && (
+                      <Popover
+                        content={editItems.bind(null, item)}
+                        placement="bottom"
+                        arrow={false}
+                        trigger="click"
+                        open={item?.editPopup}
+                        overlayStyle={{ padding: 0 }}
+                        overlayInnerStyle={{ padding: 0, borderRadius: "8px" }}
+                        onOpenChange={() => {
+                          closePopup()
+                        }}
+                      />
+                    )}
+                  </Typography>
+                </Box> */}
               <Box className="w-full px-8">
                 <CustomAutoComplete
                   options={project}
@@ -518,9 +476,7 @@ const TableTry = (props) => {
                 onMouseOver={props.onSchedulerContentMouseOver}
                 onFocus={props.onSchedulerContentMouseOver}
                 onMouseOut={props.onSchedulerContentMouseOut}
-                onBlur={props.onSchedulerContentMouseOut}
-                // onScroll={props.onSchedulerContentScroll}
-              >
+                onBlur={props.onSchedulerContentMouseOut}>
                 <div style={{ width: schedulerWidth, position: "relative" }}>
                   <div className="scheduler-content">
                     <div className="scheduler-content-table">
@@ -543,13 +499,3 @@ const TableTry = (props) => {
   }
   return <div style={{ overflow: "auto", border: "1px solid gray" }}>{getDivs()}</div>
 }
-TableTry.propTypes = {
-  schedulerData: PropTypes.object,
-  toggleExpandFunc: PropTypes.func,
-  dnd: PropTypes.object,
-  handlePopUp: PropTypes.func,
-  assignProject: PropTypes.func,
-  schedulerContentRef: PropTypes.func,
-  schedulerContentBgTableRef: PropTypes.func
-}
-export default TableTry

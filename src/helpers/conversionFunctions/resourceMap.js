@@ -23,7 +23,8 @@ export const getReplaceArr = (displayRenderData) => {
       email: i?.email,
       department: i?.department,
       color: i?.color,
-      assignedProjects: i?.assignedProjects
+      assignedProjects: i?.assignedProjects,
+      timeOff: i?.timeOff
     }
   })
   return requiredArray

@@ -11,13 +11,14 @@ export const useStyles = () => {
     },
     divSpan: {
       display: "flex",
-      flexDirection: "column"
+      flexDirection: "column",
+      position: "absolute"
     },
     divText: {
       fontSize: theme?.typography?.p5?.fontSize,
       fontWeight: theme?.typography?.p3?.fontWeight,
       color: theme?.palette?.text?.white,
-      paddingLeft: "0.5rem"
+      paddingLeft: "0.2rem"
     },
     spanText: {
       fontSize: theme?.typography?.p5?.fontSize,

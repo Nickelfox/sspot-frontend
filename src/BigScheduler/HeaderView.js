@@ -2,7 +2,6 @@
 /*eslint no-extra-boolean-cast: "error"*/
 import React, { Component } from "react"
 import { PropTypes } from "prop-types"
-import { CellUnit, DATETIME_FORMAT, DATE_FORMAT } from "./index"
 import dayjs from "dayjs"
 import OutlinedInputField from "../components/OutlinedInput"
 import { getHeaders } from "../helpers/conversionFunctions/headerMap"
@@ -22,7 +21,8 @@ class HeaderView extends Component {
   //   }
   static propTypes = {
     schedulerData: PropTypes.object.isRequired,
-    nonAgendaCellHeaderTemplateResolver: PropTypes.func
+    // search: PropTypes.string,
+    searchValue: PropTypes.string
   }
   getRows = (array) => {
     return array.map((childrenItem, childrenIndex) => {
@@ -50,7 +50,9 @@ class HeaderView extends Component {
               border: itemDate === currentDate ? "2px solid #336BAB" : "2px solid #fff"
             }}
           />
-          <Typography variant={itemDate === currentDate ? "p3" : "p5"}>
+          <Typography
+            variant={itemDate === currentDate ? "p3" : "p5"}
+            color={itemDate === currentDate && "#336BAB"}>
             {dayjs(childrenItem?.time).format("DD")}
           </Typography>
           <Box sx={{ height: "0.3rem", width: "100%", display: "hidden" }} />
@@ -69,19 +71,9 @@ class HeaderView extends Component {
     )
   }
   render() {
-    const {
-      schedulerData,
-      nonAgendaCellHeaderTemplateResolver,
-      scroller,
-      scrollBarWidth,
-      searchValue,
-      search
-    } = this.props
-    let resourceTableWidth = schedulerData.getResourceTableWidth()
-    const { headers, cellUnit, config, localeDayjs } = schedulerData
-    let headerHeight = schedulerData.getTableHeaderHeight()
+    const { schedulerData, searchValue, search } = this.props
+    const { headers } = schedulerData
     let cellWidth = schedulerData.getContentCellWidth()
-    let minuteStepsInHour = schedulerData.getMinuteStepsInHour()
 
     let headerList = []
     let style = {}
@@ -124,9 +116,15 @@ class HeaderView extends Component {
           {headerMapArray.map((item, parentIndex) => {
             let currentDate = new Date(new Date())
             const weekNumber = dayjs(currentDate).format("w")
+            const yearNumber = dayjs(currentDate).format("YYYY")
             const itemArray1 = Array.from(item[1])
             const keysArray1 = Array.from(item[1].keys())
-            const borderLeftStyle = item[0] === weekNumber ? "2px solid #366BAB" : "2px solid #FFF"
+            const yearCheck = JSON.stringify(item[0]) === `${yearNumber}`
+            const borderLeftStyle =
+              item[0] === weekNumber || yearCheck ? "2px solid #366BAB" : "2px solid #FFF"
+            const fontWeight = item[0] === weekNumber || yearCheck ? 600 : 500
+            const fontSize = "1.2rem"
+            const color = item[0] === weekNumber || yearCheck ? "#366BAB" : "#888888"
             const key2 = uuid()
             return (
               <Box key={key2}>
@@ -139,8 +137,8 @@ class HeaderView extends Component {
                           borderRight:
                             keysArray1?.length === 2 && childIndex === 0 ? 0 : "1px solid #e4e4e4",
                           borderBottom: "1px solid #e4e4e4",
-                          maxHeight: "fit-content"
-                          // borderTop: borderLeftStyle
+                          maxHeight: "fit-content",
+                          borderTop: borderLeftStyle
                           // width: 80
                         }}
                         key={key3}
@@ -155,13 +153,19 @@ class HeaderView extends Component {
                         <Box className="flex" style={{ height: "3rem" }}>
                           {childIndex === 0 && (
                             <Box className="h-8 bg-[#eeeeee] min-w-[2rem] w-fit px-1">
-                              {item[0]}
+                              <Typography variant="p">{item[0]}</Typography>
                             </Box>
                           )}
                           <Box className="w-full flex justify-center items-center">
-                            {keysArray1?.length === 2
-                              ? childIndex === 0 && `${keysArray1[0]}-${keysArray1[1]}`
-                              : childItem[0]}
+                            <Typography
+                              fontWeight={fontWeight}
+                              fontSize={fontSize}
+                              color={color}
+                              className="w-full flex justify-center items-center">
+                              {keysArray1?.length === 2
+                                ? childIndex === 0 && `${keysArray1[0]}-${keysArray1[1]}`
+                                : childItem[0]}
+                            </Typography>
                           </Box>
                         </Box>
                         <Box className="flex">{this.getRows(Array.from(childItem[1]))}</Box>

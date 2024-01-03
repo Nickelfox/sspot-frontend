@@ -11,6 +11,7 @@ import { Typography } from "@mui/material"
 import { PropTypes } from "prop-types"
 import { useEventItemController } from "./eventItem.controller"
 import { useStyles } from "components/EventItem/eventItemStyles"
+import dayjs from "dayjs"
 const EventItemTemplateResolver = (props) => {
   const { resourceMap, item, mustAddCssClass, eventHeight } = props
   const {
@@ -28,29 +29,38 @@ const EventItemTemplateResolver = (props) => {
   const resourceObjectForEvent = filterItem[0]
   let bColor = getBColor(item)
   let opacity = getItemOpacity(item)
+  const itemStartDate = dayjs(item?.start).format("DD-MM-YYYY")
+  const itemEndDate = dayjs(item?.end).format("DD-MM-YYYY")
+
+  const checkOpacity = !item?.resourceParentID ? getOpacity(resourceObjectForEvent, opacity) : 1
   let divStyle = {
     backgroundColor: getBackground(resourceObjectForEvent, bColor),
     borderRadius: getBorderRadius(resourceObjectForEvent),
-    opacity: !item?.resourceParentID ? getOpacity(resourceObjectForEvent, opacity) : 1,
+    opacity: resources[0]?.name === "TIME_OFF" ? 0.9 : checkOpacity,
     marginTop: getMarginTop(resourceObjectForEvent),
     height: !item?.resourceParentID ? 43 : 35,
     ...styles?.divStyles
   }
+  const title = item?.title === 100 ? "Full" : `${JSON.parse(item?.title).toFixed(1)} %`
+  const timeOffHours = item?.timeOffHours && `${JSON.parse(item?.timeOffHours).toFixed(0)}`
+  const checkTitle = resourceObjectForEvent?.parentId ? `${item?.title} h/d` : `${title}`
   return (
-    <div key={item.id} style={{ height: 43 }}>
+    <div key={item.id} style={{ height: 43, position: "relative" }}>
       <div key={item.id} className={`${mustAddCssClass} `} style={divStyle}>
         <span
           style={{
             lineHeight: `${eventHeight}px`,
-            ...styles?.divSpan
+            ...styles?.divSpan,
+            paddingLeft: resourceObjectForEvent?.parentId ? 5 : 1
           }}>
-          <Typography sx={getStyles(item, styles)}>
-            {resourceObjectForEvent?.parentId
-              ? `${item?.title} h/d`
-              : `${JSON.parse(item?.title).toFixed(1)} %`}
-            <span style={getSpanStyles(item, styles)}>
-              {item?.assignedhours ? `${item?.assignedhours} hrs` : null}
-            </span>
+          <Typography sx={getStyles(item, styles)} style={{ position: "relative" }}>
+            {resources[0]?.name === "TIME_OFF" ? "Off" : checkTitle}
+            {itemEndDate !== itemStartDate && resources[0]?.name !== "TIME_OFF" && (
+              <span style={getSpanStyles(item, styles)}>
+                {item?.assignedhours ? `${item?.assignedhours} hrs` : null}
+                {timeOffHours > 0 && `+ ${timeOffHours} hrs`}
+              </span>
+            )}
           </Typography>
         </span>
       </div>

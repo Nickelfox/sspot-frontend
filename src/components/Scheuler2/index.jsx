@@ -100,29 +100,32 @@ const Calender = (props) => {
     handlePopUp
   } = useSchedulerController()
   const [localFetcher, setLocalFetcher] = useState(false)
+  const [eventsArray, setEventArray] = useState([])
   useEffect(() => {
     getSchedulerData()
     fetchDepartments()
     fetchClients()
-    fetchTeamList()
+    // fetchTeamList()
     setFetchEvents(false)
     fetchProjects()
   }, [])
 
-  useEffect(() => {
-    if (projects?.length > 0) {
-      schedulerData && teamFetcher()
-    }
-  }, [schedulerData, projects?.length, startDate, fetcher, search, localFetcher])
+  // useEffect(() => {
+  //   if (projects?.length > 0) {
+  //     schedulerData && teamFetcher()
+  //   }
+  // }, [schedulerData, projects?.length, startDate, fetcher, search, localFetcher])
   useEffect(() => {
     teamInScheduler()
   }, [reload])
   useEffect(() => {
-    scheduleFetcher()
-  }, [fetchEvents])
-  useEffect(() => {
-    fetchEvents && getRenderSd(schedulerData)
-  }, [counter])
+    if (projects?.length > 0) {
+      schedulerData && scheduleFetcher()
+    }
+  }, [schedulerData, startDate, fetcher, localFetcher, projects?.length, search])
+  // useEffect(() => {
+  //   fetchEvents && getRenderSd(schedulerData)
+  // }, [counter])
   useEffect(() => {
     triggerRerender(render + 1)
   }, [triger])
@@ -155,11 +158,14 @@ const Calender = (props) => {
       .format(COMMON_FORMAT_FOR_API)
     const params = {
       start_date: startDate,
-      end_date: fourWeeksFromStartDate
+      end_date: fourWeeksFromStartDate,
+      search: search
     }
     const data = await fetchSchedules(params)
     if (data?.success) {
-      eventsInScheduler(data?.data)
+      // eventsInScheduler(data?.data)
+      setEventArray(data?.data)
+      teamFetcher()
     }
   }
 
@@ -184,45 +190,59 @@ const Calender = (props) => {
     noSetting = false
   }
   const teamInScheduler = () => {
-    if (teamMembers?.length > 0) {
-      const dataArray = teamMembers
-      const projectsArray = dataArray.map((item) => item?.projects)
-      const filteredArray = projectsArray.filter((item) => item !== undefined)
-      const newArray = [...dataArray, ...filteredArray]
-      const requiredArray = newArray.flat()
-      if (schedulerData?.resources?.length > 0) {
-        const { renderData } = schedulerData
-        let displayRenderData = renderData.filter((o) => o.render)
-        const getUniqueMap = getUniqueMapFn(displayRenderData, requiredArray, projects)
-        schedulerData.setResources(getUniqueMap)
-      } else {
-        schedulerData.setResources(requiredArray)
-        setCounter(counter + 1)
-        triggerRerender(rerender + 1)
-      }
-      setResourceMap(convertArrayToMap(requiredArray))
-      setFetchEvents((prev) => !prev)
-      setRerenderData(true)
-    } else if (schedulerData) {
-      schedulerData.setResources([])
+    if (!teamMembers || teamMembers?.length === 0) {
+      schedulerData && schedulerData.setResources([])
+      return
     }
+
+    const dataArray = teamMembers
+    const projectsArray = dataArray.map((item) => item?.projects).filter(Boolean)
+    const requiredArray = dataArray.concat(...projectsArray)
+
+    if (schedulerData.resources.length > 0) {
+      const { renderData } = schedulerData
+      const getUniqueMap = getUniqueMapFn(
+        renderData.filter((o) => o.render),
+        requiredArray,
+        projects
+      )
+      schedulerData && schedulerData.setResources(getUniqueMap)
+    } else {
+      schedulerData && schedulerData.setResources(requiredArray)
+      setCounter((prevCounter) => prevCounter + 1)
+      triggerRerender((prevRerender) => prevRerender + 1)
+    }
+
+    setResourceMap(convertArrayToMap(requiredArray))
+    setRerenderData(true)
+
+    const weeklyAssignMentMap = new Map()
+
+    for (const member of dataArray) {
+      weeklyAssignMentMap.set(member.id, getWeeklyAssignedHours(member))
+    }
+
+    const filteredArray = Array.from(weeklyAssignMentMap.values()).flatMap((hours) =>
+      hours.filter((item) => item?.title !== 0)
+    )
+    schedulerData.setEvents([...eventsArray, ...filteredArray])
   }
+
   const eventsInScheduler = (data) => {
     setEventsMap(convertEventsToMap(data))
-    makeResourceEvents(data)
+    // makeResourceEvents(data)
   }
   const makeResourceEvents = (events) => {
-    const resourceArray = teamMembers
-    const weeklyAssignMentMap = new Map()
-    resourceArray.forEach((member) => {
-      weeklyAssignMentMap.set(member.id, getWeeklyAssignedHours(member))
-    })
-    const flatArray = [...weeklyAssignMentMap.values()].flat()
-    const filteredArray = flatArray.filter((item) => item?.title !== 0)
-    if (resoureMap.size) {
-      schedulerData.setEvents([])
-      schedulerData.setEvents([...events, ...filteredArray])
-    }
+    // const resourceArray = teamMembers
+    // const weeklyAssignMentMap = new Map()
+    // resourceArray.forEach((member) => {
+    //   weeklyAssignMentMap.set(member.id, getWeeklyAssignedHours(member))
+    // })
+    // const flatArray = [...weeklyAssignMentMap.values()].flat()
+    // const filteredArray = flatArray.filter((item) => item?.title !== 0)
+    // if (resoureMap.size) {
+    // schedulerData.setEvents(events)
+    // }
   }
   const prevClick = (schedulerData) => {
     schedulerData.prev()
@@ -258,7 +278,8 @@ const Calender = (props) => {
         workDays: item?.workDays,
         editPopup: item?.slotId === itemToEdit?.slotId ? !item?.editPopup : false,
         email: item?.email,
-        department: item?.department
+        department: item?.department,
+        timeOff: item?.timeOff
       }
     })
     setSelectedObject(itemToEdit)
@@ -505,13 +526,14 @@ const Calender = (props) => {
         start: newStart
       }
       const checkDates = getCheckDate(dateRequiredData, schedulerData?.events, "start")
+      const dataObject = resoureMap.get(event?.resourceId)
       if (checkDates) {
         const requiredData = {
           project_member: event?.projectMemberID,
           start_at: dayjs(newStart).format(COMMON_FORMAT_FOR_API),
           end_at: dayjs(event?.end).format(COMMON_FORMAT_FOR_API),
           assigned_hour: event?.title,
-          schedule_type: "WORK",
+          schedule_type: dataObject[0]?.name === "TIME_OFF" ? "TIME_OFF" : "WORK",
           notes: ""
         }
         const parameter = [`${event?.id}/`]
@@ -542,12 +564,13 @@ const Calender = (props) => {
       }
       const checkDates = getCheckDate(dateRequiredData, schedulerData?.events, "end")
       if (checkDates) {
+        const dataObject = resoureMap.get(event?.resourceId)
         const requiredData = {
           project_member: event?.projectMemberID,
           start_at: dayjs(event?.start).format(COMMON_FORMAT_FOR_API),
           end_at: dayjs(newEnd).format(COMMON_FORMAT_FOR_API),
           assigned_hour: event?.title,
-          schedule_type: "WORK",
+          schedule_type: dataObject[0]?.name === "TIME_OFF" ? "TIME_OFF" : "WORK",
           notes: ""
         }
         const parameter = [`${event?.id}/`]
@@ -601,7 +624,7 @@ const Calender = (props) => {
             start_at: dayjs(start).format(COMMON_FORMAT_FOR_API),
             end_at: dayjs(end).format(COMMON_FORMAT_FOR_API),
             assigned_hour: event?.title,
-            schedule_type: "WORK",
+            schedule_type: filteredArray[0]?.name === "TIME_OFF" ? "TIME_OFF" : "WORK",
             notes: ""
           }
           const parameter = [`${event?.id}/`]
@@ -655,7 +678,10 @@ const Calender = (props) => {
         email: i?.email,
         department: i?.department,
         color: i?.color,
-        assignedProjects: getProjects(i, newProject)
+        assignedProjects: getProjects(i, newProject),
+        timeOff: i?.timeOff,
+        weeklyTimeOff: i?.weeklyTimeOff,
+        weeklyAssignedHours: i?.weeklyAssignedHours
       }
     })
     schedulerData.setResources(replaceArr)

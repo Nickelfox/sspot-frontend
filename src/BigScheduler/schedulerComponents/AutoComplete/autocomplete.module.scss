@@ -51,7 +51,7 @@
 .matrix_box {
   box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
   padding: 1rem;
-  width: 18rem
+  min-width: "fit-content"
 }
 
 .add_new {

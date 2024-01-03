@@ -1,5 +1,5 @@
 import { useTheme } from "@mui/system"
-import SideBanner from "assets/images/icons/SquadSpot.webp"
+import SideBanner from "assets/images/backgrounds/Nickelfox.webp"
 
 export const useStyles = () => {
   const theme = useTheme()
