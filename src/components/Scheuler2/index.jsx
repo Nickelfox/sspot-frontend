@@ -119,8 +119,10 @@ const Calender = (props) => {
     teamInScheduler()
   }, [reload])
   useEffect(() => {
-    schedulerData && scheduleFetcher()
-  }, [schedulerData, startDate])
+    if (projects?.length > 0) {
+      schedulerData && scheduleFetcher()
+    }
+  }, [schedulerData, startDate, fetcher, localFetcher, projects?.length, search])
   // useEffect(() => {
   //   fetchEvents && getRenderSd(schedulerData)
   // }, [counter])
@@ -188,40 +190,44 @@ const Calender = (props) => {
     noSetting = false
   }
   const teamInScheduler = () => {
-    if (teamMembers?.length > 0) {
-      const dataArray = teamMembers
-      const projectsArray = dataArray.map((item) => item?.projects)
-      const filteredArray = projectsArray.filter((item) => item !== undefined)
-      const newArray = [...dataArray, ...filteredArray]
-      const requiredArray = newArray.flat()
-      if (schedulerData?.resources?.length > 0) {
-        const { renderData } = schedulerData
-        let displayRenderData = renderData.filter((o) => o.render)
-        const getUniqueMap = getUniqueMapFn(displayRenderData, requiredArray, projects)
-        schedulerData.setResources(getUniqueMap)
-      } else {
-        schedulerData.setResources(requiredArray)
-        setCounter(counter + 1)
-        triggerRerender(rerender + 1)
-      }
-      setResourceMap(convertArrayToMap(requiredArray))
-      // setFetchEvents((prev) => !prev)
-      setRerenderData(true)
-    } else if (schedulerData) {
-      schedulerData.setResources([])
+    if (!teamMembers || teamMembers?.length === 0) {
+      schedulerData && schedulerData.setResources([])
+      return
     }
-    const resourceArray = teamMembers
+
+    const dataArray = teamMembers
+    const projectsArray = dataArray.map((item) => item?.projects).filter(Boolean)
+    const requiredArray = dataArray.concat(...projectsArray)
+
+    if (schedulerData.resources.length > 0) {
+      const { renderData } = schedulerData
+      const getUniqueMap = getUniqueMapFn(
+        renderData.filter((o) => o.render),
+        requiredArray,
+        projects
+      )
+      schedulerData && schedulerData.setResources(getUniqueMap)
+    } else {
+      schedulerData && schedulerData.setResources(requiredArray)
+      setCounter((prevCounter) => prevCounter + 1)
+      triggerRerender((prevRerender) => prevRerender + 1)
+    }
+
+    setResourceMap(convertArrayToMap(requiredArray))
+    setRerenderData(true)
+
     const weeklyAssignMentMap = new Map()
-    resourceArray.forEach((member) => {
+
+    for (const member of dataArray) {
       weeklyAssignMentMap.set(member.id, getWeeklyAssignedHours(member))
-    })
-    const flatArray = [...weeklyAssignMentMap.values()].flat()
-    const filteredArray = flatArray.filter((item) => item?.title !== 0)
-    // filteredArray.forEach((item) => schedulerData.addEvent(item))
-    // setRerenderData(rerenderData + 1)
-    // triggerRerender(rerender + 1)
-    schedulerData && schedulerData.setEvents([...eventsArray, ...filteredArray])
+    }
+
+    const filteredArray = Array.from(weeklyAssignMentMap.values()).flatMap((hours) =>
+      hours.filter((item) => item?.title !== 0)
+    )
+    schedulerData.setEvents([...eventsArray, ...filteredArray])
   }
+
   const eventsInScheduler = (data) => {
     setEventsMap(convertEventsToMap(data))
     // makeResourceEvents(data)
