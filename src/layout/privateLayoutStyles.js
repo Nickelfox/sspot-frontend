@@ -75,7 +75,7 @@ export const useStyles = () => {
       boxShadow: "0px -1px 16px 0px #564AA93D"
     },
     logo: {
-      width: "4rem",
+      width: "fit-content",
       height: "4rem"
     }
   }
