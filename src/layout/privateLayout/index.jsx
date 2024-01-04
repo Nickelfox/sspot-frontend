@@ -7,7 +7,7 @@ import { Outlet } from "react-router-dom"
 import LogoutIcon from "@mui/icons-material/Logout"
 import { usePrivateLayoutController } from "./privateLayout.controller"
 import { useStyles } from "layout/privateLayoutStyles"
-import Logo from "assets/images/icons/SquadSpot.webp"
+import Logo from "assets/images/placeholders/logo.png"
 const drawerWidth = 270
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -54,7 +54,7 @@ export default function PrivateLayout(props) {
             width: "100%",
             height: "4rem",
             borderColor: "transparent",
-            backgroundColor: theme.palette.background.gray,
+            backgroundColor: theme.palette.background.black,
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between"

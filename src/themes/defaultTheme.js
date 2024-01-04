@@ -17,6 +17,7 @@ export const defaultTheme = {
       default: "#FFFFFF",
       secondary: "#f4f4f4",
       gray: "#666666",
+      black: "#222222",
       overTime: "#d20a0acc",
       limitTime: "#4ba33b"
     },
