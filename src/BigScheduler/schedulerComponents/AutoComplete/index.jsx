@@ -86,7 +86,7 @@ const CustomAutoComplete = (props) => {
       )}
       groupBy={(option) => option?.client?.name}
       onChange={(event, newValue) => {
-        handleChange(newValue?.id)
+        event?.type === "click" && newValue?.id && handleChange(newValue?.id)
         if (event?.type === "click") {
           setValue("")
         }
