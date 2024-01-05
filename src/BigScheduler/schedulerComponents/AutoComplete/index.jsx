@@ -39,7 +39,6 @@ const CustomAutoComplete = (props) => {
   const [value, setValue] = useState("")
   /*eslint-disable-next-line no-unused-vars*/
   const handleChange = (newValue) => {
-    console.log(newValue)
     // const filterProjects = projects.filter((item) => item?.value !== newValue)
     // setProjects(filterProjects)
     const payLoad = {
